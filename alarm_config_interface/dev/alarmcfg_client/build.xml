@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ENIQ Web Portal 5.x Client API" default="create build" basedir=".">
+	 <!-- ENIQ Jars -->
+	  <property name="eniq.common.dir" value="C:/cc_storage/eeipca_eniq_dev_latest/common_utilities/build/common_utilities"/>
+	
+	<property name="build.home" 	value="build" />
+	<property name="javadoc.home"   value="doc" />
+
+	<target name="javadoc">
+		<mkdir dir="${javadoc.home}"/>
+		<javadoc sourcepath="src" packagenames="*" destdir="${javadoc.home}"/>
+	</target>	
+	
+	<target name="create build">
+
+		<buildnumber/>
+		<tstamp>
+			<format property="build.time" pattern="MM/dd/yyyy HH:mm"
+					unit="hour"/>
+		</tstamp>
+		
+		<mkdir  dir="classes"/>
+
+		<javac srcdir="src" destdir="classes" 
+			debug="on" optimize="off" deprecation="on">
+			<exclude name="**/ExampleClient.java" />
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<fileset dir=".">
+					<include name="*.jar"/>
+				</fileset>
+		    	<fileset dir="${eniq.common.dir}">
+						<include name="**/*.jar"/>
+				 </fileset>
+			</classpath>
+		</javac>
+
+		<mkdir  dir="${build.home}" />
+		<jar jarfile="${build.home}/alarmcfgAPI.jar" basedir="classes">
+		    <manifest>
+		        <section name="Versioning Info">		    	
+					<attribute name="Built-By" value="${user.name}"/>
+	        <attribute name="Number" value="${build.number}"/>
+					<attribute name="Build-time" value="${build.time}"/>		    		
+		        </section>
+		    </manifest>
+		</jar>
+		
+		<delete dir="classes"/>
+	</target>
+
+</project>

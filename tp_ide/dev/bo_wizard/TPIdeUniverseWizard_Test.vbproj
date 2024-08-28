@@ -1,0 +1,338 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CB80DDC3-5C15-4B7C-8FCB-3E5ED59D58B5}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>ericsson.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>TPIDE_BOIntf</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Exe</OutputType>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>Off</OptionStrict>
+    <RootNamespace>TPIdeUniverseWizard</RootNamespace>
+    <StartupObject>TPIdeUniverseWizard.frmMain</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <MyType>Console</MyType>
+    <OldToolsVersion>0.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>executable\</OutputPath>
+    <DocumentationFile>TPIDE_BOIntf.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin_test\</OutputPath>
+    <DocumentationFile>TPIDE_BOIntf.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <COMReference Include="busobj">
+      <Guid>{A2AD6F00-5766-11D0-AF14-00A0C912DCDD}</Guid>
+      <VersionMajor>12</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="Designer">
+      <Guid>{F7B2D53E-16DF-472C-BEA1-24791A5F881F}</Guid>
+      <VersionMajor>14</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="Office">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="VBScript_RegExp_10">
+      <Guid>{3F4DACA7-160D-11D2-A8E9-00104B365C9F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <Reference Include="NMock2, Version=2.0.0.44, Culture=neutral, PublicKeyToken=37d3be0adc87c2b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\My Tools\NMock\bin\NMock2.dll</HintPath>
+    </Reference>
+    <Reference Include="NMock2.AcceptanceTests, Version=1.0.2951.30477, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\My Tools\NMock\bin\NMock2.AcceptanceTests.dll</HintPath>
+    </Reference>
+    <Reference Include="NMock2.Test, Version=1.0.2951.30477, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\My Tools\NMock\bin\NMock2.Test.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\My Tools\NUnit-2.5.5.10112\bin\net-2.0\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BHObjects.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BHTypes.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOClassesTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOComputedObjectTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOConditionsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOContextsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOJoins.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOLatestConditionsTPIde.vb" />
+    <Compile Include="BOObjectsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BOTablesTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusyHours.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfigSettings.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CountersKeysTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CountersTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CreateDocOp.vb" />
+    <Compile Include="CreateRepOp.vb" />
+    <Compile Include="CreateUnvOp.vb" />
+    <Compile Include="DatabaseFacade.vb" />
+    <Compile Include="DatabaseFacadeInterface.vb" />
+    <Compile Include="DatabaseProxy.vb" />
+    <Compile Include="DBProxy.vb" />
+    <Compile Include="DBProxyFactory.vb" />
+    <Compile Include="DBProxyFactoryImpl.vb" />
+    <Compile Include="DocumentFunctionsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GetDomainListOp.vb" />
+    <Compile Include="GetDomainUnvListOp.vb" />
+    <Compile Include="IBOObjectsTPIde.vb" />
+    <Compile Include="IDocumentWriter.vb" />
+    <Compile Include="InvalidBOVersionException.vb" />
+    <Compile Include="AbstractOperation.vb" />
+    <Compile Include="IOperationFactory.vb" />
+    <Compile Include="IReportProxy.vb" />
+    <Compile Include="ITPUtilitiesTPIde.vb" />
+    <Compile Include="IUniverseProxy.vb" />
+    <Compile Include="ListUniversesOp.vb" />
+    <Compile Include="MeasurementTypesTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OperationFactory.vb" />
+    <Compile Include="PublicKeysTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReferenceDatasTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReferenceTypesTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportConditionsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportObjectsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReportProxy.vb" />
+    <Compile Include="test\BOComputedObjectTPIdeTest.vb" />
+    <Compile Include="test\BOConditionsTPIdeTest.vb" />
+    <Compile Include="test\BOObjectsTPIdeTest.vb" />
+    <Compile Include="test\DocumentFunctionsTPIdeTest.vb" />
+    <Compile Include="test\TPUtilitiesTPIdeTest.vb" />
+    <Compile Include="test\UniverseFunctionsTPIdeTest.vb" />
+    <Compile Include="test\UniverseMeasurementsTPIdeTest.vb" />
+    <Compile Include="TPInstallFunctionsTPIDE.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TPKPIs.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TPReports.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TPUtilitiesTPIde.vb" />
+    <Compile Include="UnivClassesTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UniverseDocumentWriter.vb" />
+    <Compile Include="UniverseFunctionsTPIde.vb" />
+    <Compile Include="UniverseMeasurementsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UniverseProxy.vb" />
+    <Compile Include="UnivIncombatiblesTPIDE.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnivJoinsTPIde.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkedUnvOp.vb" />
+    <Compile Include="UpdateUnvOp.vb" />
+    <Content Include="ericsson.ico" />
+    <EmbeddedResource Include="frmMain.resX">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

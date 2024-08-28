@@ -1,0 +1,88 @@
+ERICSSON-MPE-DCD-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeDcdPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events of the Dynamic Content 
+                    Delivery."
+::= { mpeModules 23 }
+
+dcdPmObjects  OBJECT IDENTIFIER ::= { mpeDcdPmModule 1 }
+
+dcdAgg  OBJECT IDENTIFIER ::= { dcdPmObjects 1 }
+
+dcdPmConformance  OBJECT IDENTIFIER ::= { mpeDcdPmModule 3 }
+
+dcdPmGroups  OBJECT IDENTIFIER ::= { dcdPmConformance 1 }
+
+dcdPmCompliances  OBJECT IDENTIFIER ::= { dcdPmConformance 2 }
+
+dcdAggRecReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of received feed aggregation 
+                    requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dcdAgg 1 }
+
+dcdAggOpmlReqFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of errors when getting Opml lists.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dcdAgg 2 }
+
+dcdAggOutFeedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of outgoing feed requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dcdAgg 3 }
+
+-- Compliance Statements
+
+dcdCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for dcd."
+   MODULE          -- this module
+   MANDATORY-GROUPS {dcdConfGroup}
+::= { dcdPmCompliances 1 }
+
+-- Units of Conformance
+
+dcdConfGroup OBJECT-GROUP
+   OBJECTS { dcdAggRecReq,
+             dcdAggOpmlReqFail,
+             dcdAggOutFeedReq}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a dcd."
+::= { dcdPmGroups 1 }
+END

@@ -1,0 +1,21 @@
+cleartool findmerge . -d -fver /main/at_eniq/13 -log /dev/null -merge -cqe
+cleartool findmerge ./3GPP32435/3GPP32435.jar -fver /main/at_eniq/156 -log /dev/null -merge -cqe
+cleartool findmerge ./ascii/ascii.jar -fver /main/at_eniq/3 -log /dev/null -merge -cqe
+cleartool findmerge ./asn1/asn1.jar -fver /main/at_eniq/9 -log /dev/null -merge -cqe
+cleartool findmerge ./bcd/bcd.jar -fver /main/at_eniq/4 -log /dev/null -merge -cqe
+cleartool findmerge ./csexport/csexport.jar -fver /main/at_eniq/41 -log /dev/null -merge -cqe
+cleartool findmerge ./ctparser/ct.jar -fver /main/at_eniq/12 -log /dev/null -merge -cqe
+cleartool findmerge ./ebs/ebs.jar -fver /main/at_eniq/5 -log /dev/null -merge -cqe
+cleartool findmerge ./mdc/MDC.jar -fver /main/at_eniq/48 -log /dev/null -merge -cqe
+cleartool findmerge ./nascii/nascii.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./nossdb/nossdb.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./omes/omes.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./omes2/omes2.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./parser/parser.jar -fver /main/at_eniq/237 -log /dev/null -merge -cqe
+cleartool findmerge ./raml/raml.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./redback/redback.jar -fver /main/at_eniq/11 -log /dev/null -merge -cqe
+cleartool findmerge ./sasn/sasn.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./stfiop/stfiop.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+cleartool findmerge ./xml/xml.jar -fver /main/at_eniq/2 -log /dev/null -merge -cqe
+# Directory merges were necessary but not performed.
+# Unable to evaluate all possible merge candidates under those directories.

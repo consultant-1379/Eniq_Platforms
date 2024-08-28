@@ -1,0 +1,29 @@
+How to build install exe
+========================
+
+Prerequisites
+-------------
+- Windows client with InnoSetup QuickStart Pack installed (http://www.jrsoftware.org/isdl.php)
+
+Get build files
+---------------
+- copy tmp file with subfolders from configtool build site into windows system
+   eg. C:\> pscp -p -r cvs:./dc5000/build/tmp c:\temp\configtool\.
+
+Compile
+-------
+- open configtool/setup folder
+   eg. C:\> cd C:\temp\configtool\dc5000\src\etl\configtool\setup
+- open configTool.iss with InnoSetup (or ISTool)
+   eg. C:\temp\configtool\dc5000\src\etl\configtool\setup> configTool.iss
+- use editor to change setup name to match current build (_bNNN_)
+   #define SetupExeName         "eniq_configtool_5-0-0_b369_setup"
+- select "Compile"
+- wait until "eniq_configtool_5-0-0_b369_setup.exe" is ready and test it!
+
+
+
+
+
+
+

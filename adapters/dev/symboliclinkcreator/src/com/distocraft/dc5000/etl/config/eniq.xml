@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE InterfaceData SYSTEM "eniqmifconfig.dtd">
+<InterfaceData>
+	<Interface>
+		<neType>Rnc</neType>
+		<maxNumLinks>20000</maxNumLinks>
+		<nodeTypeDir>rnc</nodeTypeDir>
+		<subdir>dir1</subdir>
+		<subdir>dir2</subdir>
+	</Interface>
+	<Interface>
+		<neType>Rbs</neType>
+		<maxNumLinks>20000</maxNumLinks>
+		<nodeTypeDir>rbs</nodeTypeDir>
+		<subdir>dir1</subdir>
+		<subdir>dir2</subdir>
+	</Interface>
+	<Interface>
+		<neType>Mgw</neType>
+		<maxNumLinks>20000</maxNumLinks>
+		<nodeTypeDir>mgw</nodeTypeDir>
+		<subdir>dir1</subdir>
+		<subdir>dir2</subdir>
+	</Interface>
+	<Interface>
+		<neType>Erbs</neType>
+		<maxNumLinks>20000</maxNumLinks>
+		<nodeTypeDir>erbs</nodeTypeDir>
+		<subdir>dir1</subdir>
+		<subdir>dir2</subdir>
+	</Interface>
+</InterfaceData>

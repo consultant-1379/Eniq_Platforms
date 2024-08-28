@@ -1,0 +1,181 @@
+-- File Name : BW-DatabaseServerFault.mib
+BW-DatabaseServerFault-MIB DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npError, npDatabaseObjectType, npObjectId, npUserId, npDate, npMessage
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201001180000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the Database Server."
+    -- MIB history
+    REVISION      "201001180000Z"
+    DESCRIPTION   "Initial Revision"    
+    -- End of MIB history
+    ::=  {  common  1  }
+
+   -- See http://wiki-eng.int.broadsoft.com/eng-wiki/index.php/MIB_-_OID_definitions#Notification_Id_Range for OID range
+  bwDbMonitorDbUnavailable   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DbMonitor process is unable to query the database for performance counters.
+@severity:medium
+@subcomponent:dbMonitor"
+    ::=  {  systemFaults 6201  }
+
+  bwDbaErrorDetected   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npError, npDatabaseObjectType, npObjectId, npUserId }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DbMonitor has detected a new entry in the DBA_ERRORS table.
+@severity:medium
+@subcomponent:dbMonitor"
+    ::=  {  systemFaults 6202  }
+
+  bwDbaAlertDetected   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npDatabaseObjectType, npObjectId, npDate, npMessage }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DbMonitor has detected a new entry in the DBA_OUTSTANDING_ALERT table.
+@severity:medium
+@subcomponent:dbMonitor"
+    ::=  {  systemFaults 6203  }
+
+  bwAlertLogEntry   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npDate, npError, npMessage }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DbMonitor has detected a new log entry in the alert log file.
+@severity:medium
+@subcomponent:dbMonitor"
+    ::=  {  systemFaults 6204  }
+
+bwFastStartFailOverUnsynchronized   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates an unsynchronized fast-start failover configuration. In this state, the DBS Observer is not able to perform automatic failover.
+@severity:high
+@subcomponent:dbMonitor"
+-- @feature:162023
+    ::=  {  systemFaults 6205  }
+    
+ bwPMDbMonitorLaunched  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification indicates that the DBMonitor process has been started.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbMonitorLaunched, bwPMDbMonitorShutDown, bwPMDbMonitorRestarted, bwPMDbMonitorDeath and bwPMDbMonitorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbMonitor process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6206  }
+ 
+   bwPMDbMonitorShutDown  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification indicates that the DBMonitor process has been manually shut down.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbMonitorLaunched, bwPMDbMonitorShutDown, bwPMDbMonitorRestarted, bwPMDbMonitorDeath and bwPMDbMonitorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbMonitor process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6207  }
+ 
+   bwPMDbMonitorRestarted  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time of the DBMonitor process restart.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbMonitorLaunched, bwPMDbMonitorShutDown, bwPMDbMonitorRestarted, bwPMDbMonitorDeath and bwPMDbMonitorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbMonitor process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6208  }
+ 
+   bwPMDbMonitorDeath  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time of the DBMonitor process death.
+ @severity:critical
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbMonitorLaunched, bwPMDbMonitorShutDown, bwPMDbMonitorRestarted, bwPMDbMonitorDeath and bwPMDbMonitorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbMonitor process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6209  }
+     
+ bwPMDbMonitorOutOfMemory  NOTIFICATION-TYPE
+      OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+      STATUS      current
+      DESCRIPTION
+          "This notification provides the date and time when the DBMonitor process ran out of memory.
+  @severity:high
+  @subcomponent:processmonitor
+  @correlationrules:bwPMDbMonitorLaunched, bwPMDbMonitorShutDown, bwPMDbMonitorRestarted, bwPMDbMonitorDeath, and bwPMDbMonitorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbMonitor process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6210  }  
+     
+ bwPMDbManagementLaunched  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification indicates that the DbManagement process has been started.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbManagementLaunched, bwPMDbManagementShutDown, bwPMDbManagementRestarted, and bwPMDbManagementDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbManagement process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6211  }
+ 
+   bwPMDbManagementShutDown  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification indicates that the DbManagement process has been manually shut down.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbManagementLaunched, bwPMDbManagementShutDown, bwPMDbManagementRestarted, and bwPMDbManagementDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbManagement process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6212  }
+ 
+   bwPMDbManagementRestarted  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time of the DbManagement process restart.
+ @severity:informational
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbManagementLaunched, bwPMDbManagementShutDown, bwPMDbManagementRestarted, and bwPMDbManagementDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbManagement process running on the BroadWorks Database Server"
+-- @feature:165352
+     ::=  {  systemFaults 6213  }
+ 
+   bwPMDbManagementDeath  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time of the DbManagement process death.
+ @severity:critical
+ @subcomponent:processmonitor
+ @correlationrules:bwPMDbManagementLaunched, bwPMDbManagementShutDown, bwPMDbManagementRestarted, and bwPMDbManagementDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DbManagement process running on the BroadWorks Database Server"
+-- @feature:165352
+    ::=  {  systemFaults 6214  }
+
+ bwDbMonitorHungEmonProcess   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates that an Oracle EMON process is hung.
+@severity:medium-high
+@subcomponent:dbMonitor"
+    ::=  {  systemFaults 6215  }
+    
+
+END

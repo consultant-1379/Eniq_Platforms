@@ -1,0 +1,61 @@
+<project name="alarmcfg" default="compile">
+
+	<property name="pack.name" value="alarmcfg"/>
+	<property name="pack.version" value="2-0-0"/>
+	<property name="pack.dir" value="/vobs/eniq/design/plat/alarm_config_interface/dev/alarmcfg"/>
+
+	<!-- LIBRARY PATHS -->
+	<property name="3pp.dir" value="/vobs/eniq/3pp"/>
+
+	<property name="repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+	<property name="licensing.dir" value="/vobs/eniq/design/plat/licensing/build/licensing"/>
+	<property name="engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+	<property name="common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+	<property name="bosdk.dir" value="${3pp.dir}/business_objects/bosdk/v4.1_SP8/prod"/>
+	<property name="jconn.dir" value="${3pp.dir}/sybase/sybase_iq"/><!-- jconn jar -->
+	
+	<!-- LIBRARIES USED FOR BUILDING ONLY! -->
+	<property name="servlet.jar" value="${3pp.dir}/apache/tomcat/v7_0_32/prod/servlet-api.jar"/>
+	
+	<target name="precompile"/>
+
+	<target name="compile" depends="create_war"/>
+
+	<target name="create_war" depends="compile_java">
+		<war destfile="${pack.dir}/install/alarmcfg.war" webxml="${pack.dir}/web/WEB-INF/web.xml">
+			<classes dir="${pack.dir}/classes"/>
+			<fileset dir="${pack.dir}/web" excludes="WEB-INF/web.xml"/>
+			<lib dir="${bosdk.dir}"/>
+			<fileset dir="${jconn.dir}">
+			<include name="**/*.jar" />
+			</fileset>
+			<!-- install.xml takes care of deploying ENIQ jars! -->
+			<!-- <lib file="${repository.dir}/repository.jar" /> -->
+			<!-- <lib file="${licensing.dir}/licensing.jar" /> -->
+		</war>
+
+	</target>
+
+	<target name="compile_java">
+		<mkdir dir="${pack.dir}/classes"/>
+		<javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<pathelement path="${repository.dir}/repository.jar"/>
+				<fileset dir="${jconn.dir}">
+				<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${licensing.dir}/licensing.jar"/>
+				<pathelement path="${engine.dir}/engine.jar"/>
+				<pathelement path="${common.dir}/common.jar"/>
+				<fileset dir="${bosdk.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<pathelement path="${servlet.jar}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="postcompile"/>
+
+</project>

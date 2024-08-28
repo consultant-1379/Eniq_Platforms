@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>SOEM_ConfigData_Plugin</comment>
+<entry key="fileNamePattern">.*_Configuration_Data_.*</entry>
+<entry key="mainClass"/>
+<entry key="comparator">com.ericsson.navigator.esm.model.pm.file.remote.comparator.SoemTopComparator</entry>
+<entry key="port">22</entry>
+<entry key="user">USERNAME</entry>
+<entry key="directDownload">0</entry>
+<entry key="remoteDirectory">/home/ftpuser/eniq_storage</entry>
+<entry key="remoteSubDirectory"/>
+<entry key="northBoundDirectory">/eniq/mediator/data/soem/dim_e_soem_picxml</entry>
+<entry key="northBoundSubDirectory">false</entry>
+<entry key="filePerDay">false</entry>
+<entry key="filePerDayExt"/>
+<entry key="enableHashCode">false</entry>
+<entry key="nameComponents">%N-%F</entry>
+<entry key="filePrefix"/>
+<entry key="maxFileTransfersPerRop">24</entry>
+</properties>

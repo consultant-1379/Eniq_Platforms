@@ -1,0 +1,102 @@
+<project name="symboliclinkcreator" default="compile">
+
+  <property name="pack.name" value="symboliclinkcreator"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/etl_controller/dev/symboliclinkcreator"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+  <property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/dev/engine"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.ant.dir" value="/vobs/eniq/3pp/apache/ant/v1_6_2/prod"/>
+  <property name="3pp.commons_codec.dir" value="/vobs/eniq/3pp/apache/comm_codec/v1_9/prod"/>
+  <property name="3pp.jersey.dir" value="/vobs/eniq/3pp/jersey"/>
+  <property name="3pp.httpclient.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.httpcore.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.httpclient1.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v3_0/prod"/>
+  <property name="3pp.logging.dir" value="/vobs/eniq/3pp/apache/comm_logging/v1_2/prod"/>
+  <property name="3pp.jconn.dir" value="/vobs/eniq/3pp/sybase/sybase_iq/v15_1/client/prod"/>
+  <property name="3pp.junit.dir" value="/vobs/eniq/3pp/junit/v4_5/prod"/>
+  <property name="3pp.jmock.dir" value="/vobs/eniq/3pp/jmock-2.5.1"/>
+  <property name="3pp.log4j.dir" value="/vobs/eniq/3pp/apache/log4j/v1_2_6/prod"/>
+  <property name="3pp.commons_logging.dir" value="/vobs/eniq/3pp/apache/comm_logging/v1_0_2/prod"/>
+  <property name="3pp.velocity.dir" value="/vobs/eniq/3pp/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.hsqldb.dir" value="/vobs/eniq/3pp/hsqldb/prod"/>
+  <property name="3pp.xerces.dir" value="/vobs/eniq/3pp/apache/xerces_parser/v2_6_2/prod"/>
+
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="off"
+           optimize="off" 
+           deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		<fileset dir="${eniq.common.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${eniq.repository.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+		<fileset dir="${eniq.engine.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+	<fileset dir="${3pp.ant.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.commons_codec.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.jersey.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.httpclient.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.httpcore.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.httpclient1.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.logging.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.jconn.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.junit.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.jmock.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.log4j.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.commons_logging.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.velocity.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+<fileset dir="${3pp.hsqldb.dir}">
+	<include name="**/*.jar"/>
+</fileset>
+		<fileset dir="${3pp.xerces.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="postcompile"/>
+
+</project>

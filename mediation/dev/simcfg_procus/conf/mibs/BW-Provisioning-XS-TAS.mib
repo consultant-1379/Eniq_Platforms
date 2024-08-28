@@ -1,0 +1,3268 @@
+-- File Name : BW-Provisioning-XS-TAS.mib
+
+BW-Provisioning-XS-TAS DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201303050000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201303050000Z"
+      DESCRIPTION "Creating Provisioning XS-TAS application from Provisioning application."
+    REVISION "200909100000Z"
+      DESCRIPTION "Added counters for FR95361 - Diameter Stack"
+    REVISION "200907210000Z"
+      DESCRIPTION "Creation of the Provisioning MIB based on the defunct BW-BroadworksApplicationServer MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  provisioningServerXSTAS OBJECT IDENTIFIER
+    ::= { broadworks 34 }
+
+-- Provisioning Server Modules ............................
+  psDatabaseModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 1 }
+
+  psDatabaseStats OBJECT IDENTIFIER
+    ::= { psDatabaseModule 1 }
+
+  ldapModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 5 }
+
+  cpeDevicesModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 6 }
+
+  cpeDevicesStats OBJECT IDENTIFIER
+    ::= { cpeDevicesModule 1 }
+
+  psExternalCallLogsModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 7 }
+
+  psExternalCallLogsStats OBJECT IDENTIFIER
+    ::= { psExternalCallLogsModule 1 }
+
+  psOciModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 8 }
+
+  psOciStats OBJECT IDENTIFIER
+    ::= { psOciModule 1 }
+
+  psSystemModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 9 }
+
+  psInternalStats OBJECT IDENTIFIER
+    ::= { psSystemModule 1 }
+
+  psCommonCommModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 10 }
+
+  psCommonCommStats OBJECT IDENTIFIER
+    ::= { psCommonCommModule 1 }
+
+  psTcpModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 11 }
+
+  psTcpStats OBJECT IDENTIFIER
+    ::= { psTcpModule 1 }
+
+  psConcurrentModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 12 }
+
+  psConcurrentStats OBJECT IDENTIFIER
+    ::= { psConcurrentModule 1 }
+
+  psActivatableFeatureModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 13 }
+
+  psActivatableFeatureStats OBJECT IDENTIFIER
+    ::= { psActivatableFeatureModule 1 }
+
+  psShInterfaceModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 14 }
+
+  psShInterfaceStats OBJECT IDENTIFIER
+    ::= { psShInterfaceModule 1 }
+
+  psServices OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 15 }
+
+  psVoiceMessaging OBJECT IDENTIFIER
+    ::= { psServices 1 }
+
+  polycomPhoneServices OBJECT IDENTIFIER
+    ::= { psServices 2 }
+
+  bwProvCallCenter OBJECT IDENTIFIER
+    ::= { psServices 3 }
+
+  psDiameterModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 16 }
+
+  psDiameterStats OBJECT IDENTIFIER
+    ::= { psDiameterModule 1 }
+
+  psManagement OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 17 }
+
+  psMobileManagerModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 18 }
+
+  psMobileManagerStats OBJECT IDENTIFIER
+    ::= { psMobileManagerModule 1 }
+
+  psBroadCloud OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 19 }
+
+  psLicenseStats OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 20 }
+
+  psSystemLicenseStats OBJECT IDENTIFIER
+    ::= { psLicenseStats 1 }
+
+  psReservedModule OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 999 }
+
+  bwProvMibConformance OBJECT IDENTIFIER
+    ::= { provisioningServerXSTAS 1000 }
+
+
+-- PS :: Persistence :: TimesTen  ...........................................
+
+  psTimesTen OBJECT IDENTIFIER
+    ::= { psDatabaseStats 1 }
+
+  bwProvTtNbConnectionsCreated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of total transaction created to the database"
+    ::= { psTimesTen 1 }
+
+  bwProvTtConnectionPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Current size of the database connection pool"
+    ::= { psTimesTen 2 }
+
+  psRemoteXla OBJECT IDENTIFIER
+    ::= { psTimesTen 5 }
+
+  bwProvRemoteXlaNbTimesConnected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of times a connection was made to the RemoteXla server"
+    ::= { psRemoteXla 1 }
+
+  bwProvRemoteXlaNbTimesDisconnected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of times the process was disconnected from the RemoteXla server"
+    ::= { psRemoteXla 2 }
+
+  bwProvRemoteXlaUpdatesProcessed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of XLA updates processed"
+    ::= { psRemoteXla 3 }
+
+  bwProvRemoteXlaUpdatesPending OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of XLA updates pending to be processed"
+    ::= { psRemoteXla 4 }
+
+  bwProvAvgUpdateTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Average DB update time in milliseconds"
+    ::= { psTimesTen 6 }
+
+  bwProvAvgRowsUpdated OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Average number of rows affected in DB updates"
+    ::= { psTimesTen 7 }
+
+  bwProvAvgQueryTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Average DB query time in milliseconds"
+    ::= { psTimesTen 8 }
+
+  bwProvAvgRowsQueried OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Average number of rows processed in DB queries"
+    ::= { psTimesTen 9 }
+
+  bwProvUpdateCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of DB updates performed since the application started"
+    ::= { psTimesTen 10 }
+
+  bwProvQueryCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of DB queries performed since the application started"
+    ::= { psTimesTen 11 }
+
+  bwProvTTHWMTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwPSTTHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for the PS TimesTen high water marks."
+    ::= { psTimesTen 12 }
+
+  bwProvTTHWMEntry OBJECT-TYPE
+    SYNTAX      BwPSTTHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwProvTTHWMTable."
+    INDEX       { bwProvTTHWMIndex }
+    ::= { bwProvTTHWMTable 1 }
+
+  BwPSTTHWMEntry ::= SEQUENCE {
+    bwProvTTHWMIndex          Unsigned32,
+    bwProvTTHWMName           DisplayString,
+    bwProvTTHWMValue          Gauge32,
+    bwProvTTHWMTimestamp      DisplayString,
+    bwProvTTHWMStackTrace     DisplayString
+  }
+
+  bwProvTTHWMIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwProvTTHWMTable. This is the index to a specific high water mark."
+    ::= { bwProvTTHWMEntry 1 }
+
+  bwProvTTHWMName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of an PS TimesTen high water mark."
+    ::= { bwProvTTHWMEntry 2 }
+
+  bwProvTTHWMValue OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The value of an PS TimesTen high water mark."
+    ::= { bwProvTTHWMEntry 3 }
+
+  bwProvTTHWMTimestamp OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The timestamp of an PS TimesTen high water mark."
+    ::= { bwProvTTHWMEntry 4 }
+
+  bwProvTTHWMStackTrace OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The stack trace of an PS TimesTen high water mark."
+    ::= { bwProvTTHWMEntry 5 }
+
+  bwProvTimesTenNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of opened transaction with the timesten database"
+    ::= { psTimesTen 13 }
+
+  bwProvTimesTenNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of committed transactions to the timesten database since the last restart"
+    ::= { psTimesTen 14 }
+
+  bwProvTimesTenNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of failed transactions with the timesten database"
+    ::= { psTimesTen 15 }
+
+  bwProvTimesTenNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of critical errors encountered during processing with the timesten database"
+    ::= { psTimesTen 16 }
+
+  bwProvPerNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Number of opened transaction with the database"
+    ::= { psDatabaseStats 2 }
+
+  bwProvPerNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Total number of committed transactions to the database since the last restart"
+    ::= { psDatabaseStats 3 }
+
+  bwProvPerNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of failed transactions with the database"
+    ::= { psDatabaseStats 4 }
+
+  bwProvPerNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Total number of critical errors encountered during processing with the database"
+    ::= { psDatabaseStats 5 }
+
+-- oracle ...........................................
+
+  bwProvOracle OBJECT IDENTIFIER
+    ::= { psDatabaseStats 6 }
+
+  bwProvOracleNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of opened transaction with the oracle database"
+    ::= { bwProvOracle 1 }
+
+  bwProvOracleNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of committed transactions to the oracle database since the last restart"
+    ::= { bwProvOracle 2 }
+
+  bwProvOracleNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of failed transactions with the oracle database"
+    ::= { bwProvOracle 3 }
+
+  bwProvOracleNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of critical errors encountered during processing with the oracle database"
+    ::= { bwProvOracle 4 }
+    
+  bwProvOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application."
+-- @feature:162466              
+    ::= { bwProvOracle 5 }
+  
+  bwProvOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwProvOracleDbCount."
+-- @feature:162466              
+    ::= { bwProvOracle 6 }
+  
+  bwProvOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwProvOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwProvOracleDbStatsIndex }
+-- @feature:162466            
+    ::= { bwProvOracleDbStatsTable 1 }
+    
+  BwProvOracleDbStatsEntry ::= SEQUENCE {
+    bwProvOracleDbStatsIndex           Unsigned32,
+    bwProvOracleDbName                 DisplayString,
+    bwProvOracleDbNbConnectionsCreated Counter32,
+    bwProvOracleDbConnectionPoolSize   Gauge32,
+    bwProvOracleDbAvgUpdateTime        Gauge32,
+    bwProvOracleDbAvgRowsUpdated       Gauge32,
+    bwProvOracleDbAvgQueryTime         Gauge32,
+    bwProvOracleDbAvgRowsQueried       Gauge32,
+    bwProvOracleDbUpdateCount          Counter32,
+    bwProvOracleDbQueryCount           Counter32
+  }
+  
+   bwProvOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:162466               
+   ::= { bwProvOracleDbStatsEntry 1 }
+   
+   bwProvOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:162466               
+   ::= { bwProvOracleDbStatsEntry 2 }
+   
+   bwProvOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 3 }
+   
+   bwProvOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 4 }
+   
+   bwProvOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 5 }
+   
+   bwProvOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 6 }
+   
+   bwProvOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 7 }
+   
+   bwProvOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 8 }
+   
+   bwProvOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 9 }
+   
+   bwProvOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:162466                
+   ::= { bwProvOracleDbStatsEntry 10 }
+      
+   bwProvOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwProvOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwProvOracleDbCount."
+-- @feature:162466                 
+       ::= { bwProvOracle 7 }
+     
+     bwProvOracleDbHWMEntry OBJECT-TYPE
+         SYNTAX      BwProvOracleDbHWMEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "An entry containing high water mark information applicable to a particular oracle database."
+         INDEX   { bwProvOracleDbHWMIndex }
+-- @feature:162466               
+    ::= { bwProvOracleDbHWMTable 1 }
+    
+    BwProvOracleDbHWMEntry ::= SEQUENCE {
+        bwProvOracleDbHWMIndex           Unsigned32,
+        bwProvOracleDbHWMDbName          DisplayString,
+        bwProvOracleDbHWMStatName        DisplayString,
+        bwProvOracleDbHWMStatValue       Gauge32,
+        bwProvOracleDbHWMTimestamp       DisplayString,
+        bwProvOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwProvOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:162466                   
+    ::= { bwProvOracleDbHWMEntry 1 }
+       
+    bwProvOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:162466                   
+    ::= { bwProvOracleDbHWMEntry 2 }
+    
+    bwProvOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:162466                   
+   ::= { bwProvOracleDbHWMEntry 3 }
+   
+    bwProvOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:162466                   
+   ::= { bwProvOracleDbHWMEntry 4 }
+   
+    bwProvOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:162466                   
+   ::= { bwProvOracleDbHWMEntry 5 }
+   
+    bwProvOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:162466                   
+   ::= { bwProvOracleDbHWMEntry 6 }
+      
+
+-- LDAP module ...........................................
+
+  bwProvLDAPIntegrationNumQueryAttempts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Total number of query attempts to an LDAP server by LDAP Integration feature system-wide."
+    ::= { ldapModule 1 }
+
+  bwProvLDAPIntegrationNumConnectionFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Total number of connection failures to a LDAP server system-wide made by LDAP Integration feature."
+    ::= { ldapModule 2 }
+
+-- CPE devices management...........................................
+
+  bwProvCPEDeviceStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvCPEDeviceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for the managed CPE devices management."
+    ::= { cpeDevicesStats 1 }
+
+  bwProvCPEDeviceStatsEntry OBJECT-TYPE
+    SYNTAX      BwProvCPEDeviceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwProvCPEDeviceStatsTable."
+    INDEX       { bwProvCPEDeviceStatsIndex }
+    ::= { bwProvCPEDeviceStatsTable 1 }
+
+  BwProvCPEDeviceStatsEntry ::= SEQUENCE {
+    bwProvCPEDeviceStatsIndex   Unsigned32,
+    bwProvCPEDeviceName         DisplayString,
+    bwProvCPEDeviceReset        Counter32,
+    bwProvCPEDeviceFileRebuilt  Counter32
+  }
+
+  bwProvCPEDeviceStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a CPE device index in the table"
+    ::= { bwProvCPEDeviceStatsEntry 1 }
+
+  bwProvCPEDeviceName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents CPE device name"
+    ::= { bwProvCPEDeviceStatsEntry 2 }
+
+  bwProvCPEDeviceReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of time the Customer Premise Equipment has been reset. The CPE device is a subscriber IP Phone that can be reset/reloaded via the web portal or CLI. You must have administrative privileges to reset the phone."
+    ::= { bwProvCPEDeviceStatsEntry 3 }
+
+  bwProvCPEDeviceFileRebuilt OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of time the Customer Premise Equipment has had its configuration file regenerated, the file can be regenerated in a number of ways, for example but not limited to - subscriber specific attribute has changed, a new line has been added to the device."
+    ::= { bwProvCPEDeviceStatsEntry 4 }
+
+  bwProvCPEDeviceFileGet OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of time the Application Server retrieves a device file from the file repository, one counter per device."
+    ::= { cpeDevicesStats 2 }
+
+  bwProvCPEDeviceFileDelete OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of time the Application Server deletes a device file from the file repository, one counter per device."
+    ::= { cpeDevicesStats 3 }
+
+  bwProvCPEDeviceFilePut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of time the Application Server saves a device file in the file repository, one counter per device."
+    ::= { cpeDevicesStats 4 }
+
+  bwProvCPEDeviceFileAutomaticRebuildQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of files currently queued for rebuilding in the automatic queue."
+    ::= { cpeDevicesStats 5 }
+
+  bwProvCPEDeviceFileManualRebuildQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of files currently queued for rebuilding in the manual queue."
+    ::= { cpeDevicesStats 6 }
+
+-- PS External Call Logs module ...........................................
+
+  bwProvExternalCallLogsRetrievalAttempts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Incremented each time a request to retrieve call logs from the external call detail server is attempted."
+    ::= { psExternalCallLogsStats 1 }
+
+  bwProvExternalCallLogsRetrievalFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Incremented each time a request to retrieve call logs from the external call detail server has failed."
+    ::= { psExternalCallLogsStats 2 }
+
+-- OCI module ...........................................
+
+  bwProvOciStatsNbUpdateRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented upon receipt of an OCI modification request."
+    ::= { psOciStats 1 }
+
+  bwProvOciStatsNbUpdateRequestFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever processing of an OCI modification request results in an error response."
+    ::= { psOciStats 2 }
+
+  bwProvOciStatsNbQueryRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented upon receipt of an OCI get request."
+    ::= { psOciStats 3 }
+
+  bwProvOciStatsNbQueryRequestFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever processing of an OCI get request results in an error response."
+    ::= { psOciStats 4 }
+
+  bwProvOciStatsNbAuthorizationRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented upon receipt of an OCI login request."
+    ::= { psOciStats 5 }
+
+  bwProvOciStatsNbAuthorizationRequestFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever processing of an OCI login request results in an error response."
+    ::= { psOciStats 6 }
+
+  bwProvOciStatsNbReportingAclViolations OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever an incoming OCI reporting connection is rejected because the external system isn't in access control list."
+    ::= { psOciStats 7 }
+
+  bwProvOciStatsNbReportNotificationsOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever the system transmits an OCIReportingReportNotification."
+    ::= { psOciStats 8 }
+
+  bwProvOciStatsActiveSessions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the number of OCI sessions currently open."
+    ::= { psOciStats 9 }
+
+  bwProvOciStatsSystemRequestsPerHour OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the rate at which the Application Server receives OCI system requests.  It uses the timestamps of the last 100 OCI system requests received to calculate the rate."
+    ::= { psOciStats 10 }
+
+  bwProvOciStatsSystemRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the average time (in milliseconds based on a rolling average of the last 100 samples) it takes to process a system level OCI request."
+    ::= { psOciStats 11 }
+
+  bwProvOciStatsMinSystemRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the shortest OCI system request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 12 }
+
+  bwProvOciStatsMaxSystemRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the longest OCI system request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 13 }
+
+  bwProvOciStatsMaxSystemRequestName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the name of the system level OCI request corresponding to the ociMaxSystemRequestResponseTime gauge."
+    ::= { psOciStats 14 }
+
+  bwProvOciStatsServiceProviderRequestsPerHour OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the rate at which the Application Server receives OCI service provider requests.  It uses the timestamps of the last 100 OCI service provider requests received to calculate the rate."
+    ::= { psOciStats 15 }
+
+  bwProvOciStatsServiceProviderRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the average time (in milliseconds based on a rolling average of the last 100 samples) it takes to process a service provider level OCI request."
+    ::= { psOciStats 16 }
+
+  bwProvOciStatsMinServiceProviderRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the shortest OCI service provider request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 17 }
+
+  bwProvOciStatsMaxServiceProviderRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the longest OCI service provider request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 18 }
+
+  bwProvOciStatsMaxServiceProviderRequestName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the name of the service provider level OCI request corresponding to the ociMaxServiceProviderRequestResponseTime gauge."
+    ::= { psOciStats 19 }
+
+  bwProvOciStatsGroupRequestsPerHour OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the rate at which the Application Server receives OCI group requests.  It uses the timestamps of the last 100 OCI group requests received to calculate the rate."
+    ::= { psOciStats 20 }
+
+  bwProvOciStatsGroupRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the average time (in milliseconds based on a rolling average of the last 100 samples) it takes to process a group level OCI request."
+    ::= { psOciStats 21 }
+
+  bwProvOciStatsMinGroupRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the shortest OCI group request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 22 }
+
+  bwProvOciStatsMaxGroupRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the longest OCI group request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 23 }
+
+  bwProvOciStatsMaxGroupRequestName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the name of the group level OCI request corresponding to the ociMaxGroupRequestResponseTime gauge."
+    ::= { psOciStats 24 }
+
+  bwProvOciStatsUserRequestsPerHour OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the rate at which the Application Server receives OCI user requests.  It uses the timestamps of the last 100 OCI user requests received to calculate the rate."
+    ::= { psOciStats 25 }
+
+  bwProvOciStatsUserRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the average time (in milliseconds based on a rolling average of the last 100 samples) it takes to process a user level OCI request."
+    ::= { psOciStats 26 }
+
+  bwProvOciStatsMinUserRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the shortest OCI user request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 27 }
+
+  bwProvOciStatsMaxUserRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the longest OCI user request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 28 }
+
+  bwProvOciStatsMaxUserRequestName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the name of the user level OCI request corresponding to the ociMaxUserRequestResponseTime gauge."
+    ::= { psOciStats 29 }
+
+  bwProvOciStatsRequestsPerHour OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the rate at which the Application Server receives OCI requests.  It uses the timestamps of the last 100 OCI requests received to calculate the rate."
+    ::= { psOciStats 30 }
+
+  bwProvOciStatsRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the average time (in milliseconds based on a rolling average of the last 100 samples) it takes to process an OCI request."
+    ::= { psOciStats 31 }
+
+  bwProvOciStatsMinRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the shortest OCI request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 32 }
+
+  bwProvOciStatsMaxRequestResponseTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the longest OCI request response time sampled since the system was started or since this measurement was cleared."
+    ::= { psOciStats 33 }
+
+  bwProvOciStatsMaxRequestName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Indicates the name of the OCI request corresponding to the ociMaxRequestResponseTime gauge."
+    ::= { psOciStats 34 }
+
+  bwProvOciReportingBackLogMessageTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvOciReportingBackLogMessageEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the OCI Reporting backlog messages."
+    ::= { psOciStats 35 }
+
+  bwProvOciReportingBackLogMessageEntry OBJECT-TYPE
+    SYNTAX      BwProvOciReportingBackLogMessageEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains statistics about the OCI Reporting backlog messages."
+    INDEX       { bwProvOciReportingBackLogMessageIndex }
+    ::= { bwProvOciReportingBackLogMessageTable 1 }
+
+  BwProvOciReportingBackLogMessageEntry ::= SEQUENCE {
+    bwProvOciReportingBackLogMessageIndex   Unsigned32,
+    bwProvOciReportingBackLogMessageHost    DisplayString,
+    bwProvOciReportingBackLogMessageSaved   Counter32,
+    bwProvOciReportingBackLogMessageSent    Counter32
+  }
+
+  bwProvOciReportingBackLogMessageIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to an OCI Reporting host in the Provisioning Server."
+    ::= { bwProvOciReportingBackLogMessageEntry 1 }
+
+  bwProvOciReportingBackLogMessageHost OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This represents the host name/IP address of a reporting host."
+    ::= { bwProvOciReportingBackLogMessageEntry 2 }
+
+  bwProvOciReportingBackLogMessageSaved OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of OCI reporting message written to the backlog files."
+    ::= { bwProvOciReportingBackLogMessageEntry 3 }
+
+  bwProvOciReportingBackLogMessageSent OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of OCI reporting message sent from the backlog files."
+    ::= { bwProvOciReportingBackLogMessageEntry 4 }
+
+-- system statistics ...........................................
+
+  bwProvSystemInternalQueueResets OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, all the internal queue statistic stored under bwProvSystemInternalQueueTable are reset to 0."
+    ::= { psInternalStats 1 }
+
+  bwProvSystemInternalQueueTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvSystemInternalQueueEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the BroadWorks internal queues"
+    ::= { psInternalStats 2 }
+
+  bwProvSystemInternalQueueEntry OBJECT-TYPE
+    SYNTAX      BwProvSystemInternalQueueEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given internal queue in the system"
+    INDEX       { bwProvSystemInternalQueueIndex }
+    ::= { bwProvSystemInternalQueueTable 1 }
+
+  BwProvSystemInternalQueueEntry ::= SEQUENCE {
+    bwProvSystemInternalQueueIndex                  Unsigned32,
+    bwProvSystemInternalQueueName                   DisplayString,
+    bwProvSystemInternalQueueSize                   Counter32,
+    bwProvSystemInternalQueueTimeAvg                Gauge32,
+    bwProvSystemInternalQueueTimeMin                Gauge32,
+    bwProvSystemInternalQueueTimeMax                Gauge32,
+    bwProvSystemInternalQueueLengthCurrent          Gauge32,
+    bwProvSystemInternalQueueLengthAvg              Gauge32,
+    bwProvSystemInternalQueueLengthMax              Gauge32,
+    bwProvSystemInternalQueueTimeMaxTimestampMSB    Gauge32,
+    bwProvSystemInternalQueueLengthMaxTimestampMSB  Gauge32,
+    bwProvSystemInternalQueueLengthMaxTimestampLSB  Gauge32,
+    bwProvSystemInternalQueueTimeMaxTimestampLSB    Gauge32
+  }
+
+  bwProvSystemInternalQueueIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to an internal queue in the system."
+    ::= { bwProvSystemInternalQueueEntry 1 }
+
+  bwProvSystemInternalQueueName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of an internal queue."
+    ::= { bwProvSystemInternalQueueEntry 2 }
+
+  bwProvSystemInternalQueueSize OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of sample elements that the average, minimum and maximum holding time were calculated from."
+    ::= { bwProvSystemInternalQueueEntry 3 }
+
+  bwProvSystemInternalQueueTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average queue holding time. Note that this value is in 1/1000 of millisec, i.e. divide by 1000 to get the value in milliseconds."
+    ::= { bwProvSystemInternalQueueEntry 4 }
+
+  bwProvSystemInternalQueueTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The smallest queue sample holding time."
+    ::= { bwProvSystemInternalQueueEntry 5 }
+
+  bwProvSystemInternalQueueTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The biggest queue sample holding time."
+    ::= { bwProvSystemInternalQueueEntry 6 }
+
+  bwProvSystemInternalQueueLengthCurrent OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of elements currently hold in the queue."
+    ::= { bwProvSystemInternalQueueEntry 8 }
+
+  bwProvSystemInternalQueueLengthAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average number of elements simultaneously held in the queue multiple by 1000. Divide by 1000 to get the value in units."
+    ::= { bwProvSystemInternalQueueEntry 9 }
+
+  bwProvSystemInternalQueueLengthMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The maximum number of elements simultaneously held in the queue multiple by 1000. Divide by 1000 to get the value in units."
+    ::= { bwProvSystemInternalQueueEntry 10 }
+
+  bwProvSystemInternalQueueTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The most significant part of the timestamp (4 most significant bytes) of when bwProvSystemInternalQueueTimeMax was obtained."
+    ::= { bwProvSystemInternalQueueEntry 12 }
+
+  bwProvSystemInternalQueueLengthMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The most significant part of the timestamp (4 most significant bytes) of when bwProvSystemInternalQueueLengthMax was obtained."
+    ::= { bwProvSystemInternalQueueEntry 13 }
+
+  bwProvSystemInternalQueueLengthMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The least significant part of the timestamp (4 least significant bytes) of when bwProvSystemInternalQueueLengthMax was obtained."
+    ::= { bwProvSystemInternalQueueEntry 14 }
+
+  bwProvSystemInternalQueueTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The least significant part of the timestamp (4 least significant bytes) of when bwProvSystemInternalQueueTimeMax was obtained."
+    ::= { bwProvSystemInternalQueueEntry 15 }
+
+-- PS - BroadWorks Common Communication Protocol ........................
+
+  bwProvCommonCommStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for BCCT for the PS process."
+    ::= { psCommonCommStats 1 }
+
+  bwProvCommonCommStatsEntry OBJECT-TYPE
+    SYNTAX      BwProvCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwProvCommonCommStatsTable."
+    INDEX       { bwProvCommonCommStatsIndex }
+    ::= { bwProvCommonCommStatsTable 1 }
+
+  BwProvCommonCommStatsEntry ::= SEQUENCE {
+    bwProvCommonCommStatsIndex                    Unsigned32,
+    bwProvCommonCommHost                          DisplayString,
+    bwProvCommonCommInterface                     DisplayString,
+    bwProvCommonCommProtocol                      DisplayString,
+    bwProvCommonCommAcceptedOutboundConnections   Counter32,
+    bwProvCommonCommAcceptedInboundConnections    Counter32,
+    bwProvCommonCommRejectedOutboundConnections   Counter32,
+    bwProvCommonCommRejectedInboundConnections    Counter32,
+    bwProvCommonCommOutputMessagesProcessed       Counter32,
+    bwProvCommonCommInputMessagesProcessed        Counter32,
+    bwProvCommonCommOutputCommunicationErrors     Counter32,
+    bwProvCommonCommInputCommunicationErrors      Counter32
+  }
+
+  bwProvCommonCommStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwProvCommonCommStatsTable. The index represents a connection for a specific Host-Interfacece-Protocol combination."
+    ::= { bwProvCommonCommStatsEntry 1 }
+
+  bwProvCommonCommHost OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The address of a host connected to the BroadWorks Common Communication Protocol."
+    ::= { bwProvCommonCommStatsEntry 2 }
+
+  bwProvCommonCommInterface OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The IP address of a local interface that a protocol is bound to."
+    ::= { bwProvCommonCommStatsEntry 3 }
+
+  bwProvCommonCommProtocol OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of a BroadWorks Common Communication Protocol client protocol, e.g. OCI or SyncApi."
+    ::= { bwProvCommonCommStatsEntry 4 }
+
+  bwProvCommonCommAcceptedOutboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client in this process connects to the framework to a remote host, using the interface and protocol."
+    ::= { bwProvCommonCommStatsEntry 5 }
+
+  bwProvCommonCommAcceptedInboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client in this process connects to the framework from a remote host, using the interface and protocol."
+    ::= { bwProvCommonCommStatsEntry 6 }
+
+  bwProvCommonCommRejectedOutboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client connection request going from this process to a remote host and going through this interface has been rejected for a particular protocol."
+    ::= { bwProvCommonCommStatsEntry 7 }
+
+  bwProvCommonCommRejectedInboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client connection request coming to this host and going through this interface has been rejected by the framework for a particular protocol."
+    ::= { bwProvCommonCommStatsEntry 8 }
+
+  bwProvCommonCommOutputMessagesProcessed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been sent and processed for this host, interface and protocol."
+    ::= { bwProvCommonCommStatsEntry 9 }
+
+  bwProvCommonCommInputMessagesProcessed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been received and processed for this host, interface and protocol."
+    ::= { bwProvCommonCommStatsEntry 10 }
+
+  bwProvCommonCommOutputCommunicationErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message could not be read because the TCP stack returned an error."
+    ::= { bwProvCommonCommStatsEntry 11 }
+
+  bwProvCommonCommInputCommunicationErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been sent and processed for this host, interface and protocol."
+    ::= { bwProvCommonCommStatsEntry 12 }
+
+-- PS - TCP Framework ........................
+
+  bwProvTcpServersStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvTcpServersStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for TCP underlying framework for the PS process."
+    ::= { psTcpStats 1 }
+
+  bwProvTcpServersStatsEntry OBJECT-TYPE
+    SYNTAX      BwProvTcpServersStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwProvTcpServersStatsTable."
+    INDEX       { bwProvTcpServersStatsIndex }
+    ::= { bwProvTcpServersStatsTable 1 }
+
+  BwProvTcpServersStatsEntry ::= SEQUENCE {
+    bwProvTcpServersStatsIndex                Unsigned32,
+    bwProvTcpServersName                      DisplayString,
+    bwProvTcpServersNbConnectionsAccepted     Counter32,
+    bwProvTcpServersNbConnectionsRefused      Counter32,
+    bwProvTcpServersNbConnectionsInitiated    Counter32,
+    bwProvTcpServersNbConnectionsClosed       Counter32,
+    bwProvTcpServersNbBytesSent               Gauge32,
+    bwProvTcpServersNbBytesReceived           Gauge32,
+    bwProvTcpServersOutgoingQueueSize         Gauge32,
+    bwProvTcpServersIncomingQueueSize         Gauge32,
+    bwProvTcpServersNbBytesSentSecure         Gauge32,
+    bwProvTcpServersNbBytesReceivedSecure     Gauge32
+  }
+
+  bwProvTcpServersStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwProvTcpServersStatsTable. This is the index to a specific TCP server name."
+    ::= { bwProvTcpServersStatsEntry 1 }
+
+  bwProvTcpServersName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of TCP server - Names are internally defined at at the application level."
+    ::= { bwProvTcpServersStatsEntry 2 }
+
+  bwProvTcpServersNbConnectionsAccepted OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections accepted by the TCP server."
+    ::= { bwProvTcpServersStatsEntry 3 }
+
+  bwProvTcpServersNbConnectionsRefused OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections refused by the TCP server."
+    ::= { bwProvTcpServersStatsEntry 4 }
+
+  bwProvTcpServersNbConnectionsInitiated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections initiated by the TCP server."
+    ::= { bwProvTcpServersStatsEntry 5 }
+
+  bwProvTcpServersNbConnectionsClosed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections closed by the TCP server or remote hosts."
+    ::= { bwProvTcpServersStatsEntry 6 }
+
+  bwProvTcpServersNbBytesSent OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes sent by the TCP server."
+    ::= { bwProvTcpServersStatsEntry 7 }
+
+  bwProvTcpServersNbBytesReceived OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes received by the TCP server."
+    ::= { bwProvTcpServersStatsEntry 8 }
+
+  bwProvTcpServersOutgoingQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes in the outgoing queue."
+    ::= { bwProvTcpServersStatsEntry 9 }
+
+  bwProvTcpServersIncomingQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes in the incoming queue."
+    ::= { bwProvTcpServersStatsEntry 10 }
+
+  bwProvTcpServersNbBytesSentSecure OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes sent by the TCP server over secure connections."
+    ::= { bwProvTcpServersStatsEntry 11 }
+
+  bwProvTcpServersNbBytesReceivedSecure OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes received by the TCP server over secure connections."
+    ::= { bwProvTcpServersStatsEntry 12 }
+
+-- PS - Concurrent Framework ........................
+
+  bwProvMonitoringExecutorTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvMonitoringExecutorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for the concurrent framework."
+    ::= { psConcurrentStats 1 }
+
+  bwProvMonitoringExecutorEntry OBJECT-TYPE
+    SYNTAX      BwProvMonitoringExecutorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwProvMonitoringExecutorTable."
+    INDEX       { bwProvMonitoringExecutorIndex }
+    ::= { bwProvMonitoringExecutorTable 1 }
+
+  BwProvMonitoringExecutorEntry ::= SEQUENCE {
+    bwProvMonitoringExecutorIndex             Unsigned32,
+    bwProvMonitoringExecutorName              DisplayString,
+    bwProvMonitoringExecutorCurrentPoolSize   Gauge32,
+    bwProvMonitoringExecutorMaxPoolSize       Gauge32,
+    bwProvMonitoringExecutorAvgActiveThreads  Gauge32,
+    bwProvMonitoringExecutorTaskQueueSize     Gauge32,
+    bwProvMonitoringExecutorNbTasksRun        Counter32,
+    bwProvMonitoringExecutorNbWarnings        Counter32,
+    bwProvMonitoringExecutorNbErrors          Counter32,
+    bwProvMonitoringExecutorLongestTaskMs     Gauge32,
+    bwProvMonitoringExecutorLongestTaskName   DisplayString
+  }
+
+  bwProvMonitoringExecutorIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwProvMonitoringExecutorTable. This is the index to a specific Monitoring Executor name."
+    ::= { bwProvMonitoringExecutorEntry 1 }
+
+  bwProvMonitoringExecutorName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of the Monitoring Executor - Names are internally defined at the application level."
+    ::= { bwProvMonitoringExecutorEntry 2 }
+
+  bwProvMonitoringExecutorCurrentPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current thread pool size"
+    ::= { bwProvMonitoringExecutorEntry 3 }
+
+  bwProvMonitoringExecutorMaxPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The maximum thread pool size"
+    ::= { bwProvMonitoringExecutorEntry 4 }
+
+  bwProvMonitoringExecutorAvgActiveThreads OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average number of active threads, rounded up"
+    ::= { bwProvMonitoringExecutorEntry 5 }
+
+  bwProvMonitoringExecutorTaskQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Number of tasks in the queue (includes scheduled and recurring tasks)"
+    ::= { bwProvMonitoringExecutorEntry 6 }
+
+  bwProvMonitoringExecutorNbTasksRun OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of tasks run"
+    ::= { bwProvMonitoringExecutorEntry 7 }
+
+  bwProvMonitoringExecutorNbWarnings OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of warnings that occured"
+    ::= { bwProvMonitoringExecutorEntry 8 }
+
+  bwProvMonitoringExecutorNbErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of errors that occured"
+    ::= { bwProvMonitoringExecutorEntry 9 }
+
+  bwProvMonitoringExecutorLongestTaskMs OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Longest completed task execution time in milliseconds"
+    ::= { bwProvMonitoringExecutorEntry 10 }
+
+  bwProvMonitoringExecutorLongestTaskName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Longest completed task name"
+    ::= { bwProvMonitoringExecutorEntry 11 }
+
+-- PS Activatable feature ...........................................
+                
+  bwProvActivatableFeatureTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvActivatableFeatureEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains the activatable feature status."
+    ::= { psActivatableFeatureStats 1 }
+
+  bwProvActivatableFeatureEntry OBJECT-TYPE
+    SYNTAX      BwProvActivatableFeatureEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the activatable feature status."
+    INDEX       { bwProvActivatableFeatureIndex }
+    ::= { bwProvActivatableFeatureTable 1 }
+
+  BwProvActivatableFeatureEntry ::= SEQUENCE {
+    bwProvActivatableFeatureIndex           Unsigned32,
+    bwProvActivatableFeatureId              DisplayString,
+    bwProvActivatableFeatureDescription     DisplayString,
+    bwProvActivatableFeatureActivated       INTEGER
+  }
+
+  bwProvActivatableFeatureIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer is an index of the activatable feature installed on the system."
+    ::= { bwProvActivatableFeatureEntry 1 }
+
+  bwProvActivatableFeatureId OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the activatable feature identifier."
+    ::= { bwProvActivatableFeatureEntry 2 }
+
+  bwProvActivatableFeatureDescription OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string holds the activatable feature's description."
+    ::= { bwProvActivatableFeatureEntry 3 }
+
+  bwProvActivatableFeatureActivated OBJECT-TYPE
+    SYNTAX      INTEGER { notActive(0), active(1) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer holds the state of the activatable feature."
+    ::= { bwProvActivatableFeatureEntry 4 }
+
+-- SH Interface module ...........................................
+
+  bwProvShInterfaceRequestsIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface request is received."
+    ::= { psShInterfaceStats 1 }
+
+  bwProvShInterfaceRequestsOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface request is transmitted."
+    ::= { psShInterfaceStats 2 }
+
+  bwProvShInterfaceResponsesIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface answer is received."
+    ::= { psShInterfaceStats 3 }
+
+  bwProvShInterfaceResponsesOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface answer is transmitted."
+    ::= { psShInterfaceStats 4 }
+
+  bwProvShInterfaceRequestTimeout OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface request timer expired prior to receipt of corresponding answer."
+    ::= { psShInterfaceStats 5 }
+
+  bwProvShInterfaceRequestResourceLimitation OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times an Sh Interface request could not be sent due to local resource limitation."
+    ::= { psShInterfaceStats 6 }
+
+  bwProvShInterfaceUserDataRequest OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times a User-Data-Request is transmitted."
+    ::= { psShInterfaceStats 7 }
+
+  bwProvShInterfaceUserDataRequestFailure OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times the User-Data-Request resulted in a failure."
+    ::= { psShInterfaceStats 8 }
+
+  bwProvShInterfaceSubscribeNotificationsRequest OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times a Subscribe-Notifications-Request is transmitted."
+    ::= { psShInterfaceStats 9 }
+
+  bwProvShInterfaceSubscribeNotificationsRequestFailure OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times the Subscribe-Notifications-Request resulted in a failure."
+    ::= { psShInterfaceStats 10 }
+
+  bwProvShInterfacePushNotificationRequest OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times a Push-Notification-Request is received."
+    ::= { psShInterfaceStats 11 }
+
+  bwProvShInterfacePushNotificationRequestFailure OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter holds the number of times the Push-Notifications-Request resulted in a failure."
+    ::= { psShInterfaceStats 12 }
+
+  bwProvShInterfacePublicIdentityRefreshInitiated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter holds the number of times the Public Identity refresh procedure is dispatched."
+    ::= { psShInterfaceStats 13 }
+
+  bwProvShInterfacePublicIdentityRefreshFailure OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter holds the number of times the Public Identity refresh procedure ended in failure."
+    ::= { psShInterfaceStats 14 }
+
+  bwProvShInterfaceSystemRefreshInitiated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter holds the number of times the system refresh procedure is dispatched."
+    ::= { psShInterfaceStats 15 }
+
+  bwProvShInterfaceServerUnreachable OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of Sh requests not sent because none of the HSSes, Diameter Agents or the Sh XS Relay (if operating in relay mode) is currently connected."
+    ::= { psShInterfaceStats 16 }
+
+-- XSI Support for VoiceXML ..............................................
+  bwProvVMRNumLoginAttempts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the PS receives a request to verify authentication of user by DN and passcode."
+    ::= { psVoiceMessaging 1 }
+
+  bwProvVMRNumLoginFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the request to verify authentication of user by DN and passcode fails."
+    ::= { psVoiceMessaging 2 }
+
+  bwProvVMRSPTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvVMRSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains the counters for PS Voice Messaging measurements for service providers"
+    ::= { psVoiceMessaging 3 }
+
+  bwProvVMRSPEntry OBJECT-TYPE
+    SYNTAX      BwProvVMRSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the voice messaging statistics for a given service provider in the system"
+    INDEX       { bwProvVMRSPIndex }
+    ::= { bwProvVMRSPTable 1 }
+
+  BwProvVMRSPEntry ::= SEQUENCE {
+    bwProvVMRSPIndex              Unsigned32,
+    bwProvVMRSPID                 DisplayString,
+    bwProvVMRSPNumLoginAttempts   Counter32,
+    bwProvVMRSPNumLoginFailures   Counter32
+  }
+
+  bwProvVMRSPIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a service provider index in the system"
+    ::= { bwProvVMRSPEntry 1 }
+
+  bwProvVMRSPID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a Service Provider ID."
+    ::= { bwProvVMRSPEntry 2 }
+
+  bwProvVMRSPNumLoginAttempts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the PS receives a request to verify authentication of user by DN and passcode under the service provider."
+    ::= { bwProvVMRSPEntry 3 }
+
+  bwProvVMRSPNumLoginFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the request to verify authentication of user by DN and passcode fails under the service provider."
+    ::= { bwProvVMRSPEntry 4 }
+
+  bwProvVMRGroupTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvVMRGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains the counters for PS Voice Messaging measurements for groups"
+    ::= { psVoiceMessaging 4 }
+
+  bwProvVMRGroupEntry OBJECT-TYPE
+    SYNTAX      BwProvVMRGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the voice messaging statistics for a given service provider in the system"
+    INDEX       { bwProvVMRGroupIndex }
+    ::= { bwProvVMRGroupTable 1 }
+
+  BwProvVMRGroupEntry ::= SEQUENCE {
+    bwProvVMRGroupIndex               Unsigned32,
+    bwProvVMRGroupID                  DisplayString,
+    bwProvVMRGroupNumLoginAttempts    Counter32,
+    bwProvVMRGroupNumLoginFailures    Counter32
+  }
+
+  bwProvVMRGroupIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a service provider index in the system"
+    ::= { bwProvVMRGroupEntry 1 }
+
+  bwProvVMRGroupID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a Group ID."
+    ::= { bwProvVMRGroupEntry 2 }
+
+  bwProvVMRGroupNumLoginAttempts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the PS receives a request to verify authentication of user by DN and passcode under the group."
+    ::= { bwProvVMRGroupEntry 3 }
+
+  bwProvVMRGroupNumLoginFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented when the request to verify authentication of user by DN and passcode fails under the group."
+    ::= { bwProvVMRGroupEntry 4 }
+
+-- Polycom Phone Service  .........................
+  bwProvPolycomPhoneDirectoryNumDownloads OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of times devices download a Polycom phone directory from the system."
+    ::= { polycomPhoneServices 1 }
+
+  bwProvPolycomSPTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvPolycomSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Polycom Phone service for each service provider in the system"
+    ::= { polycomPhoneServices 2 }
+
+  bwProvPolycomSPEntry OBJECT-TYPE
+    SYNTAX      BwProvPolycomSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Polycom Phone service for each service provider in the system"
+    INDEX       { bwProvPolycomSPIndex }
+    ::= { bwProvPolycomSPTable 1 }
+
+  BwProvPolycomSPEntry ::= SEQUENCE {
+    bwProvPolycomSPIndex                        Unsigned32,
+    bwProvPolycomSPID                           DisplayString,
+    bwProvPolycomPhoneDirectorySPNumDownloads   Counter32
+}
+
+  bwProvPolycomSPIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the index of the Service Provider in the system."
+    ::= { bwProvPolycomSPEntry 1 }
+
+  bwProvPolycomSPID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a Service Provider ID."
+    ::= { bwProvPolycomSPEntry 2 }
+
+  bwProvPolycomPhoneDirectorySPNumDownloads OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of times devices download a Polycom phone directory from the system, one counter per service provider/enterprise."
+    ::= { bwProvPolycomSPEntry 3 }
+
+  bwProvPolycomGroupTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvPolycomGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Polycom Phone service for each group in the system"
+    ::= { polycomPhoneServices 3 }
+
+  bwProvPolycomGroupEntry OBJECT-TYPE
+    SYNTAX      BwProvPolycomGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Polycom Phone service for each group in the system"
+    INDEX       { bwProvPolycomGroupIndex }
+    ::= { bwProvPolycomGroupTable 1 }
+
+  BwProvPolycomGroupEntry ::= SEQUENCE {
+    bwProvPolycomGroupIndex                         Unsigned32,
+    bwProvPolycomGroupID                            DisplayString,
+    bwProvPolycomPhoneDirectoryGroupNumDownloads    Counter32
+  }
+
+  bwProvPolycomGroupIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the index of the Group in the system."
+    ::= { bwProvPolycomGroupEntry 1 }
+
+  bwProvPolycomGroupID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a Group ID."
+    ::= { bwProvPolycomGroupEntry 2 }
+
+  bwProvPolycomPhoneDirectoryGroupNumDownloads OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of times devices download a Polycom phone directory from the system, one counter per group."
+    ::= { bwProvPolycomGroupEntry 3 }
+
+-- Call Center PS Statistics ........................
+  bwProvCallCenterReportEmailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current 
+    DESCRIPTION 
+        "Number of call center statistics reports emailed."
+    ::= { bwProvCallCenter 1 }
+
+  bwProvCallCenterSPTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvCallCenterSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Counters for Call Center service measurements for service providers"
+    ::= { bwProvCallCenter 2 }
+
+  bwProvCallCenterSPEntry OBJECT-TYPE
+    SYNTAX      BwProvCallCenterSPEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Call Center service for each service provider in the system"
+    INDEX       { bwProvCallCenterSPIndex }
+    ::= { bwProvCallCenterSPTable 1 }
+
+  BwProvCallCenterSPEntry ::= SEQUENCE {
+    bwProvCallCenterSPIndex                         Unsigned32,
+    bwProvCallCenterSPID                            DisplayString,
+    bwProvCallCenterSPReportEmailed                 Counter32
+  }
+
+  bwProvCallCenterSPIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the index of the service provider in the system"
+    ::= { bwProvCallCenterSPEntry 1 }
+
+  bwProvCallCenterSPID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a service provider ID"
+    ::= { bwProvCallCenterSPEntry 2 }
+
+  bwProvCallCenterSPReportEmailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of call center statistics reports emailed for a given service provider"
+    ::= { bwProvCallCenterSPEntry 3 }
+
+  bwProvCallCenterGroupTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvCallCenterGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Counters for Call Center service measurements for groups"
+    ::= { bwProvCallCenter 3 }
+
+  bwProvCallCenterGroupEntry OBJECT-TYPE
+    SYNTAX      BwProvCallCenterGroupEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains the service counters for the Call Center service for each group in the system"
+    INDEX       { bwProvCallCenterGroupIndex }
+    ::= { bwProvCallCenterGroupTable 1 }
+
+  BwProvCallCenterGroupEntry ::= SEQUENCE {
+    bwProvCallCenterGroupIndex                          Unsigned32,
+    bwProvCallCenterGroupID                             DisplayString,
+    bwProvCallCenterGroupReportEmailed                  Counter32
+  }
+
+  bwProvCallCenterGroupIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the index of the group in the system"
+    ::= { bwProvCallCenterGroupEntry 1 }
+
+  bwProvCallCenterGroupID OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents a group ID"
+    ::= { bwProvCallCenterGroupEntry 2 }
+
+  bwProvCallCenterGroupReportEmailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Number of call center statistics reports emailed for a given Group"
+    ::= { bwProvCallCenterGroupEntry 3 }
+
+-- Diameter .................
+
+  bwProvTransactionTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvTransactionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the Diameter Stack internal transactions."
+    ::= { psDiameterStats 1 }
+
+  bwProvTransactionEntry OBJECT-TYPE
+    SYNTAX      BwProvTransactionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given internal Diameter transaction."
+    INDEX       { bwProvDiameterCommandCode }
+    ::= { bwProvTransactionTable 1 }
+
+  BwProvTransactionEntry ::= SEQUENCE {
+    bwProvDiameterCommandCode             Unsigned32,
+    bwProvDiameterRequestsOut             Counter32,
+    bwProvDiameterInformationalAnswersIn Counter32,
+    bwProvDiameterSuccessAnswersIn        Counter32,
+    bwProvDiameterFailureAnswersIn        Counter32,
+    bwProvDiameterRequestTimeouts         Counter32,
+    bwProvDiameterRequestsIn              Counter32,
+    bwProvDiameterInformationalAnswersOut Counter32,
+    bwProvDiameterSuccessAnswersOut       Counter32,
+    bwProvDiameterFailureAnswersOut       Counter32
+  }
+
+  bwProvDiameterCommandCode OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the Diameter message's command-code which indexes this table."
+    ::= { bwProvTransactionEntry 1 }
+
+  bwProvDiameterRequestsOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of request sent by the Diameter Stack. This includes both initial transmissions and retransmissions of the same request."
+    ::= { bwProvTransactionEntry 2 }
+
+  bwProvDiameterInformationalAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing an informational Result-Code (value 1xxx)."
+    ::= { bwProvTransactionEntry 3 }
+
+  bwProvDiameterSuccessAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing a successful Result-Code (value 2xxx)."
+    ::= { bwProvTransactionEntry 4 }
+
+  bwProvDiameterFailureAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing a failure Result-Code or Experimental-Result (value >= 3000), malformed answers or answers not matching any outstanding request. Malformed answers are answers that can't be properly decoded or not containing any Result-Code or Experimental-Result AVPs."
+    ::= { bwProvTransactionEntry 5 }
+
+  bwProvDiameterRequestTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of requests for which no response has been received within the specified timeout. The timeout value is application-dependent. If an answer is received afterward, it is treated as an unmatched answer and the bwDiameterStatsFailureAnswersIn is incremented."
+    ::= { bwProvTransactionEntry 6 }
+
+  bwProvDiameterRequestsIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of received requests on the corresponding Diameter stack instance."
+    ::= { bwProvTransactionEntry 7 }
+
+  bwProvDiameterInformationalAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of informational answers (Result-Code value = 1xxx) sent by the corresponding Diameter stack instance."
+    ::= { bwProvTransactionEntry 8 }
+
+  bwProvDiameterSuccessAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of successful answers (Result-Code value = 2xxx) sent by the corresponding Diameter stack instance."
+    ::= { bwProvTransactionEntry 9 }
+
+  bwProvDiameterFailureAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of failure answers (Result-Code/Experimental-Result-Code value >= 3000) sent by the corresponding Diameter stack instance."
+    ::= { bwProvTransactionEntry 10 }
+
+-- Management module ...........................................
+
+  bwProvResetAllCounters OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, all the counters in the system are reset to 0."
+    ::= { psManagement 1 }
+
+-- MobileManager module ...........................................
+
+  bwProvSCFAPIMessageSent OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of times a SCF SOAP API operation is invoked."
+    ::= { psMobileManagerStats 1 }
+
+  bwProvSCFAPIMessageReceived OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of times a SCF SOAP API operation response is received."
+    ::= { psMobileManagerStats 2 }
+
+  bwProvSCFAPIConnectionFailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of times a user connection to SCF SOAP API URLs failed."
+    ::= { psMobileManagerStats 3 }
+
+-- BroadCloud HTTP Requests module ...........................................
+
+  bwProvHttpRequestsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvHttpRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table holds the number of HTTP requests sent to the BroadCloud OSS server for each type of request (DELETE, PUT and POST)."
+    ::= { psBroadCloud 1 }
+
+  bwProvHttpRequestsEntry OBJECT-TYPE
+    SYNTAX      BwProvHttpRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given BroadCloud HTTP requests method."
+    INDEX       { bwProvHttpRequestsIndex }
+    ::= { bwProvHttpRequestsTable 1 }
+
+  BwProvHttpRequestsEntry ::= SEQUENCE {
+    bwProvHttpRequestsIndex         Unsigned32,
+    bwProvHttpRequestsMethod        DisplayString,
+    bwProvHttpRequestsNbOfRequests  Counter32
+  }
+
+  bwProvHttpRequestsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwHttpRequestsTable table.  The index represents the number of requests to BroadCloud for a specific method combination."
+    ::= { bwProvHttpRequestsEntry 1 }
+
+  bwProvHttpRequestsMethod OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The HTTP method, as defined by rfc2616."
+    ::= { bwProvHttpRequestsEntry 2 }
+
+  bwProvHttpRequestsNbOfRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of HTTP requests received."
+    ::= { bwProvHttpRequestsEntry 3 }
+
+-- BroadCloud HTTP Response module ...........................................
+
+  bwProvHttpResponsesTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvHttpResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table holds the number of HTTP responses from BroadCloud for each type of request (PUT, POST and DELETE)."
+    ::= { psBroadCloud 2 }
+
+  bwProvHttpResponsesEntry OBJECT-TYPE
+    SYNTAX      BwProvHttpResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given BroadCloud HTTP response."
+    INDEX       { bwProvHttpResponsesIndex }
+    ::= { bwProvHttpResponsesTable 1 }
+
+  BwProvHttpResponsesEntry ::= SEQUENCE {
+    bwProvHttpResponsesIndex         Unsigned32,
+    bwProvHttpResponsesMethod        DisplayString,
+    bwProvHttpResponsesStatusCode    Unsigned32,
+    bwProvHttpResponsesNbOfResponses Counter32
+  }
+
+  bwProvHttpResponsesIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwProvHttpResponsesTable table.  The index represents the number of responses from BroadCloud for a specific method, and statusCode combination."
+    ::= { bwProvHttpResponsesEntry 1 }
+
+  bwProvHttpResponsesMethod OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The HTTP method, as defined by rfc2616."
+    ::= { bwProvHttpResponsesEntry 2 }
+
+  bwProvHttpResponsesStatusCode OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The status code, as defined by rfc2616.  It takes values such as 500 and 400."
+    ::= { bwProvHttpResponsesEntry 3 }
+
+  bwProvHttpResponsesNbOfResponses OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of HTTP responses received."
+    ::= { bwProvHttpResponsesEntry 4 }
+
+-- BroadWorks Provisioning Server MIB Conformance Definition  ...........................................
+
+  bwProvSystemLicenseExpirationDate OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter gives the license's expiration date. None is returned when there is no expiration date."
+-- @feature:155977
+    ::= { psSystemLicenseStats 1 }
+
+  bwProvSystemLicenseUserLimit OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter gives the maximum number of user that can be added to the system."
+-- @feature:155977
+    ::= { psSystemLicenseStats 2 }
+
+  bwProvSystemLicenseGroupUserLimit OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter gives the maximum number of users that can be added to a group."
+-- @feature:155977
+    ::= { psSystemLicenseStats 3 }
+
+  bwProvSystemLicenseGroupLimit OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter gives the maximum number of group that can be added to the system."
+-- @feature:155977
+    ::= { psSystemLicenseStats 4 }
+
+  bwProvSystemLicenseTrunkUsers OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter gives the total number of trunk users in the system."
+-- @feature:155977
+    ::= { psSystemLicenseStats 5 }
+
+  bwProvSystemLicenseReload OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter, when set to a value different than 0, reload the license information."
+-- @feature:155977
+    ::= { psSystemLicenseStats 6 }
+
+  bwProvSubscriberLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvSubscriberLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains subscriber license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 7 }
+
+  bwProvSubscriberLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvSubscriberLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given subscriber service license."
+    INDEX       { bwProvSubscriberLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseTable 1 }
+
+  BwProvSubscriberLicenseEntry ::= SEQUENCE {
+    bwProvSubscriberLicenseEntryIndex     Unsigned32,
+    bwProvSubscriberLicenseName           DisplayString,
+    bwProvSubscriberLicenseAllocatedCount Gauge32,
+    bwProvSubscriberLicenseUsageCount     Gauge32,
+    bwProvSubscriberLicenseAvailableCount Gauge32
+  }
+
+  bwProvSubscriberLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwSubscriberLicenseTable."
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseEntry 1 }
+
+  bwProvSubscriberLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the license type."
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseEntry 2 }
+
+  bwProvSubscriberLicenseAllocatedCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The allocated license quantity for this subscriber license type."
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseEntry 3 }
+
+  bwProvSubscriberLicenseUsageCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license usage count for this subscriber license type."
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseEntry 4 }
+
+  bwProvSubscriberLicenseAvailableCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current available license count for this subscriber license type."
+-- @feature:155977
+    ::= { bwProvSubscriberLicenseEntry 5 }
+
+  bwProvGroupServiceLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvGroupServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains group license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 8 }
+
+  bwProvGroupServiceLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvGroupServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given group service license."
+    INDEX       { bwProvGroupServiceLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseTable 1 }
+
+  BwProvGroupServiceLicenseEntry ::= SEQUENCE {
+    bwProvGroupServiceLicenseEntryIndex     Unsigned32,
+    bwProvGroupServiceLicenseName           DisplayString,
+    bwProvGroupServiceLicenseAllocatedCount Gauge32,
+    bwProvGroupServiceLicenseUsageCount     Gauge32,
+    bwProvGroupServiceLicenseAvailableCount Gauge32
+  }
+
+  bwProvGroupServiceLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwGroupServiceLicenseTable."
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseEntry 1 }
+
+  bwProvGroupServiceLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of the group service license."
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseEntry 2 }
+
+  bwProvGroupServiceLicenseAllocatedCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The allocated license quantity for this group service license type."
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseEntry 3 }
+
+  bwProvGroupServiceLicenseUsageCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license usage count for this group service license type."
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseEntry 4 }
+
+  bwProvGroupServiceLicenseAvailableCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current available license count for this group service license type."
+-- @feature:155977
+    ::= { bwProvGroupServiceLicenseEntry 5 }
+
+  bwProvUserServiceLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvUserServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains group license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 9 }
+
+  bwProvUserServiceLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvUserServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given group service license."
+    INDEX       { bwProvUserServiceLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseTable 1 }
+
+  BwProvUserServiceLicenseEntry ::= SEQUENCE {
+    bwProvUserServiceLicenseEntryIndex      Unsigned32,
+    bwProvUserServiceLicenseName            DisplayString,
+    bwProvUserServiceLicenseAllocatedCount  Gauge32,
+    bwProvUserServiceLicenseUsageCount      Gauge32,
+    bwProvUserServiceLicenseAvailableCount  Gauge32,
+    bwProvUserServiceLicenseHostedUserCount Gauge32,
+    bwProvUserServiceLicenseTrunkUserCount  Gauge32,
+    bwProvUserServiceLicenseExpirationDate  DisplayString
+  }
+
+  bwProvUserServiceLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwUserServiceLicenseTable."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 1 }
+
+  bwProvUserServiceLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the user license."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 2 }
+
+  bwProvUserServiceLicenseAllocatedCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The allocated license quantity for this user service license type."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 3 }
+
+  bwProvUserServiceLicenseUsageCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license usage count for this user service license type."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 4 }
+
+  bwProvUserServiceLicenseAvailableCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current available license count for this user service license type."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 5 }
+
+  bwProvUserServiceLicenseHostedUserCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license count used by hosted users for this user service."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 6 }
+
+  bwProvUserServiceLicenseTrunkUserCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license count used by trunk users for this user service."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 7 }
+
+  bwProvUserServiceLicenseExpirationDate OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The expiration date for this user service."
+-- @feature:155977
+    ::= { bwProvUserServiceLicenseEntry 8 }
+
+  bwProvVirtualUserServiceLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvVirtualUserServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains group license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 10 }
+
+  bwProvVirtualUserServiceLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvVirtualUserServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given group service license."
+    INDEX       { bwProvVirtualUserServiceLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseTable 1 }
+
+  BwProvVirtualUserServiceLicenseEntry ::= SEQUENCE {
+    bwProvVirtualUserServiceLicenseEntryIndex     Unsigned32,
+    bwProvVirtualUserServiceLicenseName           DisplayString,
+    bwProvVirtualUserServiceLicenseAllocatedCount Gauge32,
+    bwProvVirtualUserServiceLicenseUsageCount     Gauge32,
+    bwProvVirtualUserServiceLicenseAvailableCount Gauge32
+  }
+
+  bwProvVirtualUserServiceLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwVirtualUserServiceLicenseTable."
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseEntry 1 }
+
+  bwProvVirtualUserServiceLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of the virtual user service license."
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseEntry 2 }
+
+  bwProvVirtualUserServiceLicenseAllocatedCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The allocated license quantity for this virtual user service license type."
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseEntry 3 }
+
+  bwProvVirtualUserServiceLicenseUsageCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license usage count for this virtual user service license type."
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseEntry 4 }
+
+  bwProvVirtualUserServiceLicenseAvailableCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current available license count for this virtual user service license type."
+-- @feature:155977
+    ::= { bwProvVirtualUserServiceLicenseEntry 5 }
+
+  bwProvSystemServiceLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvSystemServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains system service license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 11 }
+
+  bwProvSystemServiceLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvSystemServiceLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given system service license."
+    INDEX       { bwProvSystemServiceLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvSystemServiceLicenseTable 1 }
+
+  BwProvSystemServiceLicenseEntry ::= SEQUENCE {
+    bwProvSystemServiceLicenseEntryIndex     Unsigned32,
+    bwProvSystemServiceLicenseName           DisplayString
+  }
+
+  bwProvSystemServiceLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwSystemServiceLicenseTable."
+-- @feature:155977
+    ::= { bwProvSystemServiceLicenseEntry 1 }
+
+  bwProvSystemServiceLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of the system service license."
+-- @feature:155977
+    ::= { bwProvSystemServiceLicenseEntry 2 }
+
+  bwProvSystemParameterLicenseTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwProvSystemParameterLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains group license counters."
+-- @feature:155977
+    ::= { psSystemLicenseStats 12 }
+
+  bwProvSystemParameterLicenseEntry OBJECT-TYPE
+    SYNTAX      BwProvSystemParameterLicenseEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given group service license."
+    INDEX       { bwProvSystemParameterLicenseEntryIndex }
+-- @feature:155977
+    ::= { bwProvSystemParameterLicenseTable 1 }
+
+  BwProvSystemParameterLicenseEntry ::= SEQUENCE {
+    bwProvSystemParameterLicenseEntryIndex     Unsigned32,
+    bwProvSystemParameterLicenseName           DisplayString,
+    bwProvSystemParameterLicenseAllocatedCount Gauge32,
+    bwProvSystemParameterLicenseUsageCount     Gauge32
+  }
+
+  bwProvSystemParameterLicenseEntryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwSystemParameterLicenseTable."
+-- @feature:155977
+    ::= { bwProvSystemParameterLicenseEntry 1 }
+
+  bwProvSystemParameterLicenseName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of the system parameter license."
+-- @feature:155977
+    ::= { bwProvSystemParameterLicenseEntry 2 }
+
+  bwProvSystemParameterLicenseAllocatedCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The allocated license quantity for this system parameter license type."
+-- @feature:155977
+    ::= { bwProvSystemParameterLicenseEntry 3 }
+
+  bwProvSystemParameterLicenseUsageCount OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current license usage count for this system parameter license type."
+-- @feature:155977
+    ::= { bwProvSystemParameterLicenseEntry 4 }
+
+--  bwProductLicenseTable OBJECT-TYPE
+--    SYNTAX      SEQUENCE OF BwProductLicenseEntry
+--    MAX-ACCESS  not-accessible
+--    STATUS      current
+--    DESCRIPTION 
+--        "This table contains product license counters."
+--    ::= { psSystemLicenseStats 13 }
+--
+--  bwProductLicenseEntry OBJECT-TYPE
+--    SYNTAX      BwProductLicenseEntry
+--    MAX-ACCESS  not-accessible
+--    STATUS      current
+--    DESCRIPTION 
+--        "This row contains the statistics for a given product license."
+--    INDEX       { bwProductLicenseEntryIndex }
+--    ::= { bwProductLicenseTable 1 }
+--
+--  BwProductLicenseEntry ::= SEQUENCE {
+--    bwProductLicenseEntryIndex     Unsigned32,
+--    bwProductLicenseName           DisplayString,
+--    bwProductLicenseAllocatedCount Gauge32,
+--    bwProductLicenseUsageCount     Gauge32
+--  }
+--
+--  bwProductLicenseEntryIndex OBJECT-TYPE
+--    SYNTAX      Unsigned32
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION 
+--        "This integer represents an index in table bwProductLicenseTable."
+--    ::= { bwProductLicenseEntry 1 }
+--
+--  bwProductLicenseName OBJECT-TYPE
+--    SYNTAX      DisplayString
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION 
+--        "This string represents the name of the product license."
+--    ::= { bwProductLicenseEntry 2 }
+--
+--  bwProductLicenseAllocatedCount OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION 
+--        "The allocated license quantity for this product license type."
+--    ::= { bwProductLicenseEntry 3 }
+--
+--  bwProductLicenseUsageCount OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION 
+--        "The current license usage count for this product license type."
+--    ::= { bwProductLicenseEntry 4 }
+
+-- BroadWorks Provisioning Server MIB Conformance Definition  ...........................................
+
+  bwProvMibGroups OBJECT IDENTIFIER 
+    ::= { bwProvMibConformance 1 }
+
+  bwProvMibCompliancy OBJECT IDENTIFIER
+    ::= { bwProvMibConformance 2 }
+
+  bwProvPersistencyGroup OBJECT-GROUP
+    OBJECTS     { bwProvPerNbOpenedTransactions, 
+                  bwProvPerNbCommittedTransactions, 
+                  bwProvPerNbFailedTransactions, bwProvPerNbCriticalErrors, 
+                  bwProvTtNbConnectionsCreated, bwProvTtConnectionPoolSize, 
+                  bwProvRemoteXlaNbTimesConnected, 
+                  bwProvRemoteXlaNbTimesDisconnected, 
+                  bwProvRemoteXlaUpdatesProcessed, bwProvRemoteXlaUpdatesPending }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Provisioning Server process persistency."
+    ::= { bwProvMibGroups 1 }
+
+  bwProvDatabaseStatsGroup OBJECT-GROUP
+    OBJECTS     { bwProvAvgUpdateTime, bwProvAvgRowsUpdated, 
+                  bwProvAvgRowsUpdated, bwProvAvgQueryTime, 
+                  bwProvAvgRowsQueried, bwProvUpdateCount, bwProvQueryCount, 
+                  bwProvTTHWMIndex, bwProvTTHWMName, bwProvTTHWMValue, 
+                  bwProvTTHWMTimestamp, bwProvTTHWMStackTrace,
+                  bwProvTimesTenNbOpenedTransactions, bwProvTimesTenNbCommittedTransactions,
+                  bwProvTimesTenNbFailedTransactions, bwProvTimesTenNbCriticalErrors,
+                  bwProvOracleNbOpenedTransactions, bwProvOracleNbCommittedTransactions,
+                  bwProvOracleNbFailedTransactions, bwProvOracleNbCriticalErrors,
+                  bwProvOracleDbCount, bwProvOracleDbStatsIndex,
+                  bwProvOracleDbName, bwProvOracleDbNbConnectionsCreated,
+                  bwProvOracleDbConnectionPoolSize, bwProvOracleDbAvgUpdateTime,
+                  bwProvOracleDbAvgRowsUpdated, bwProvOracleDbAvgQueryTime,
+                  bwProvOracleDbAvgRowsQueried, bwProvOracleDbUpdateCount,
+                  bwProvOracleDbQueryCount, bwProvOracleDbHWMIndex,
+                  bwProvOracleDbHWMDbName, bwProvOracleDbHWMStatName,
+                  bwProvOracleDbHWMStatValue, bwProvOracleDbHWMTimestamp,
+                  bwProvOracleDbHWMStackTrace }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Provisioning Server Database feature."
+    ::= { bwProvMibGroups 2 }
+
+  bwProvLdapGroup OBJECT-GROUP
+    OBJECTS     { bwProvLDAPIntegrationNumQueryAttempts, 
+                  bwProvLDAPIntegrationNumConnectionFailures }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the LDAP protocol."
+    ::= { bwProvMibGroups 3 }
+
+  bwProvBcctGroup OBJECT-GROUP
+    OBJECTS     { bwProvCommonCommStatsIndex, bwProvCommonCommHost, 
+                  bwProvCommonCommInterface, bwProvCommonCommProtocol, 
+                  bwProvCommonCommAcceptedOutboundConnections, 
+                  bwProvCommonCommAcceptedInboundConnections, 
+                  bwProvCommonCommRejectedOutboundConnections, 
+                  bwProvCommonCommRejectedInboundConnections, 
+                  bwProvCommonCommOutputMessagesProcessed, 
+                  bwProvCommonCommInputMessagesProcessed, 
+                  bwProvCommonCommOutputCommunicationErrors, 
+                  bwProvCommonCommInputCommunicationErrors }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the BCCT protocol from the Provisioning Server process."
+    ::= { bwProvMibGroups 4 }
+
+  bwProvCpeDeviceGroup OBJECT-GROUP
+    OBJECTS     { bwProvCPEDeviceStatsIndex, bwProvCPEDeviceName, 
+                  bwProvCPEDeviceReset, bwProvCPEDeviceFileRebuilt, 
+                  bwProvCPEDeviceFileGet, bwProvCPEDeviceFileDelete, 
+                  bwProvCPEDeviceFilePut, bwProvCPEDeviceFileAutomaticRebuildQueueSize,
+                  bwProvCPEDeviceFileManualRebuildQueueSize }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for CPE Device Management."
+    ::= { bwProvMibGroups 5 }
+
+  bwProvExtCallLogsGroup OBJECT-GROUP
+    OBJECTS     { bwProvExternalCallLogsRetrievalAttempts, 
+                  bwProvExternalCallLogsRetrievalFailures }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the External Call Logs service on the Provisioning Server process."
+    ::= { bwProvMibGroups 6 }
+
+  bwProvOciGroup OBJECT-GROUP
+    OBJECTS     { bwProvOciStatsNbUpdateRequests, 
+                  bwProvOciStatsNbUpdateRequestFailures, 
+                  bwProvOciStatsNbQueryRequests, 
+                  bwProvOciStatsNbQueryRequestFailures, 
+                  bwProvOciStatsNbAuthorizationRequests, 
+                  bwProvOciStatsNbAuthorizationRequestFailures, 
+                  bwProvOciStatsNbReportingAclViolations, 
+                  bwProvOciStatsNbReportNotificationsOut, 
+                  bwProvOciStatsActiveSessions, 
+                  bwProvOciStatsSystemRequestsPerHour, 
+                  bwProvOciStatsSystemRequestResponseTime, 
+                  bwProvOciStatsMinSystemRequestResponseTime, 
+                  bwProvOciStatsMaxSystemRequestResponseTime, 
+                  bwProvOciStatsMaxSystemRequestName, 
+                  bwProvOciStatsServiceProviderRequestsPerHour, 
+                  bwProvOciStatsServiceProviderRequestResponseTime, 
+                  bwProvOciStatsMinServiceProviderRequestResponseTime, 
+                  bwProvOciStatsMaxServiceProviderRequestResponseTime, 
+                  bwProvOciStatsMaxServiceProviderRequestName, 
+                  bwProvOciStatsGroupRequestsPerHour, 
+                  bwProvOciStatsGroupRequestResponseTime, 
+                  bwProvOciStatsMinGroupRequestResponseTime, 
+                  bwProvOciStatsMaxGroupRequestResponseTime, 
+                  bwProvOciStatsMaxGroupRequestName, 
+                  bwProvOciStatsUserRequestsPerHour, 
+                  bwProvOciStatsUserRequestResponseTime, 
+                  bwProvOciStatsMinUserRequestResponseTime, 
+                  bwProvOciStatsMaxUserRequestResponseTime, 
+                  bwProvOciStatsMaxUserRequestName, 
+                  bwProvOciStatsRequestsPerHour, 
+                  bwProvOciStatsRequestResponseTime, 
+                  bwProvOciStatsMinRequestResponseTime, 
+                  bwProvOciStatsMaxRequestResponseTime, 
+                  bwProvOciStatsMaxRequestName, 
+                  bwProvOciReportingBackLogMessageIndex, 
+                  bwProvOciReportingBackLogMessageHost, 
+                  bwProvOciReportingBackLogMessageSaved, 
+                  bwProvOciReportingBackLogMessageSent }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the OCI protocol running on Provisioning Server process."
+    ::= { bwProvMibGroups 7 }
+
+  bwProvQueueStatsGroup OBJECT-GROUP
+    OBJECTS     { bwProvSystemInternalQueueResets, 
+                  bwProvSystemInternalQueueIndex, bwProvSystemInternalQueueName, 
+                  bwProvSystemInternalQueueSize, 
+                  bwProvSystemInternalQueueTimeAvg, 
+                  bwProvSystemInternalQueueTimeMin, 
+                  bwProvSystemInternalQueueTimeMax, 
+                  bwProvSystemInternalQueueTimeMaxTimestampMSB, 
+                  bwProvSystemInternalQueueLengthCurrent, 
+                  bwProvSystemInternalQueueLengthAvg, 
+                  bwProvSystemInternalQueueLengthMax, 
+                  bwProvSystemInternalQueueLengthMaxTimestampMSB, 
+                  bwProvSystemInternalQueueLengthMaxTimestampLSB, 
+                  bwProvSystemInternalQueueTimeMaxTimestampLSB }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for interal queues processing for the Provisioning Server process."
+    ::= { bwProvMibGroups 8 }
+
+  bwProvTcpStatsGroup OBJECT-GROUP
+    OBJECTS     { bwProvTcpServersStatsIndex, bwProvTcpServersName, 
+                  bwProvTcpServersNbConnectionsAccepted, 
+                  bwProvTcpServersNbConnectionsRefused, 
+                  bwProvTcpServersNbConnectionsClosed, 
+                  bwProvTcpServersOutgoingQueueSize, 
+                  bwProvTcpServersIncomingQueueSize, 
+                  bwProvTcpServersNbBytesSentSecure, 
+                  bwProvTcpServersNbBytesReceivedSecure, 
+                  bwProvTcpServersNbConnectionsInitiated, 
+                  bwProvTcpServersNbBytesSent, 
+                  bwProvTcpServersNbBytesReceived }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the TCP server."
+    ::= { bwProvMibGroups 9 }
+
+  bwProvConcurrentFrameworkStatsGroup OBJECT-GROUP
+    OBJECTS     { bwProvMonitoringExecutorIndex, 
+                  bwProvMonitoringExecutorName, 
+                  bwProvMonitoringExecutorCurrentPoolSize, 
+                  bwProvMonitoringExecutorMaxPoolSize, 
+                  bwProvMonitoringExecutorAvgActiveThreads, 
+                  bwProvMonitoringExecutorTaskQueueSize, 
+                  bwProvMonitoringExecutorNbTasksRun, 
+                  bwProvMonitoringExecutorNbWarnings, 
+                  bwProvMonitoringExecutorNbErrors, 
+                  bwProvMonitoringExecutorLongestTaskMs, 
+                  bwProvMonitoringExecutorLongestTaskName }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Concurrent Framework."
+    ::= { bwProvMibGroups 10 }
+
+  bwProvActivatableFeatureGroup OBJECT-GROUP
+    OBJECTS     { bwProvActivatableFeatureIndex, bwProvActivatableFeatureId, 
+                  bwProvActivatableFeatureDescription, 
+                  bwProvActivatableFeatureActivated }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for Activatable feature."
+    ::= { bwProvMibGroups 11 }
+
+  bwProvShInterfaceGroup OBJECT-GROUP
+    OBJECTS     { bwProvShInterfaceRequestsIn, bwProvShInterfaceRequestsOut, 
+                  bwProvShInterfaceResponsesIn, bwProvShInterfaceResponsesOut, 
+                  bwProvShInterfaceRequestTimeout, 
+                  bwProvShInterfaceRequestResourceLimitation, 
+                  bwProvShInterfaceUserDataRequest, 
+                  bwProvShInterfaceUserDataRequestFailure, 
+                  bwProvShInterfaceSubscribeNotificationsRequest, 
+                  bwProvShInterfaceSubscribeNotificationsRequestFailure, 
+                  bwProvShInterfacePushNotificationRequest, 
+                  bwProvShInterfacePushNotificationRequestFailure, 
+                  bwProvShInterfacePublicIdentityRefreshInitiated, 
+                  bwProvShInterfacePublicIdentityRefreshFailure, 
+                  bwProvShInterfaceSystemRefreshInitiated, 
+                  bwProvShInterfaceServerUnreachable }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the SH Interface."
+    ::= { bwProvMibGroups 12 }
+
+  bwProvVoiceMessagingGroup OBJECT-GROUP
+    OBJECTS     { bwProvVMRNumLoginAttempts, bwProvVMRNumLoginFailures, 
+                  bwProvVMRSPIndex, bwProvVMRSPID, bwProvVMRSPNumLoginAttempts, 
+                  bwProvVMRSPNumLoginFailures, bwProvVMRGroupIndex, 
+                  bwProvVMRGroupID, bwProvVMRGroupNumLoginAttempts, 
+                  bwProvVMRGroupNumLoginFailures }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the Voice Messaging service."
+    ::= { bwProvMibGroups 13 }
+
+  bwProvPolycomPhoneServiceGroup OBJECT-GROUP
+    OBJECTS     { bwProvPolycomPhoneDirectoryNumDownloads, bwProvPolycomSPIndex, 
+                  bwProvPolycomSPID, bwProvPolycomPhoneDirectorySPNumDownloads, 
+                  bwProvPolycomGroupIndex, bwProvPolycomGroupID, 
+                  bwProvPolycomPhoneDirectoryGroupNumDownloads }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the Polycom Phone service."
+    ::= { bwProvMibGroups 14 }
+
+  bwProvCallCenterServiceGroup OBJECT-GROUP
+    OBJECTS     { bwProvCallCenterSPIndex, 
+                  bwProvCallCenterSPID, 
+                  bwProvCallCenterGroupIndex, bwProvCallCenterGroupID, 
+                  bwProvCallCenterReportEmailed,
+                  bwProvCallCenterSPReportEmailed,
+                  bwProvCallCenterGroupReportEmailed }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Call Center Service."
+    ::= { bwProvMibGroups 15 }
+
+  bwProvDiameterGroup OBJECT-GROUP
+    OBJECTS     { bwProvDiameterCommandCode,
+                  bwProvDiameterRequestsOut,
+                  bwProvDiameterInformationalAnswersIn,
+                  bwProvDiameterSuccessAnswersIn,
+                  bwProvDiameterFailureAnswersIn,
+                  bwProvDiameterRequestTimeouts,
+                  bwProvDiameterRequestsIn,
+                  bwProvDiameterInformationalAnswersOut,
+                  bwProvDiameterSuccessAnswersOut,
+                  bwProvDiameterFailureAnswersOut }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Diameter stack performance management counters."
+    ::= { bwProvMibGroups 16 }
+
+  bwProvCountersGroup OBJECT-GROUP
+    OBJECTS     { bwProvResetAllCounters }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines statistics to perform managed object work for the Provisioning Server."
+    ::= { bwProvMibGroups 17 }
+
+  bwProvMobileManagerGroup OBJECT-GROUP
+    OBJECTS     { bwProvSCFAPIMessageSent, bwProvSCFAPIMessageReceived, bwProvSCFAPIConnectionFailed }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines statistics Mobile Manager counters."
+    ::= { bwProvMibGroups 18 }
+
+  bwProvBroadCloudHTTPGroup OBJECT-GROUP
+    OBJECTS     { bwProvHttpRequestsIndex, bwProvHttpRequestsMethod, bwProvHttpRequestsNbOfRequests,
+                  bwProvHttpResponsesIndex, bwProvHttpResponsesMethod, bwProvHttpResponsesStatusCode,
+                  bwProvHttpResponsesNbOfResponses }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines statistics BroadCloud HTTP counters."
+    ::= { bwProvMibGroups 20 }
+
+  bwProvLicenseGroup OBJECT-GROUP
+    OBJECTS     { bwProvSystemLicenseExpirationDate, bwProvSystemLicenseUserLimit,
+                  bwProvSystemLicenseGroupUserLimit, bwProvSystemLicenseGroupLimit,
+                  bwProvSystemLicenseTrunkUsers, bwProvSystemLicenseReload,
+                  bwProvSubscriberLicenseEntryIndex, bwProvSubscriberLicenseName,
+                  bwProvSubscriberLicenseAllocatedCount, bwProvSubscriberLicenseUsageCount,
+                  bwProvSubscriberLicenseAvailableCount, bwProvGroupServiceLicenseEntryIndex,
+                  bwProvGroupServiceLicenseName, bwProvGroupServiceLicenseAllocatedCount,
+                  bwProvGroupServiceLicenseUsageCount, bwProvGroupServiceLicenseAvailableCount,
+                  bwProvUserServiceLicenseEntryIndex, bwProvUserServiceLicenseName,
+                  bwProvUserServiceLicenseAllocatedCount, bwProvUserServiceLicenseUsageCount,
+                  bwProvUserServiceLicenseAvailableCount, bwProvUserServiceLicenseHostedUserCount, 
+                  bwProvUserServiceLicenseTrunkUserCount, bwProvUserServiceLicenseExpirationDate, 
+                  bwProvVirtualUserServiceLicenseEntryIndex, bwProvVirtualUserServiceLicenseName,
+                  bwProvVirtualUserServiceLicenseAllocatedCount, bwProvVirtualUserServiceLicenseUsageCount, 
+                  bwProvSystemServiceLicenseEntryIndex, bwProvSystemServiceLicenseName,
+                  bwProvVirtualUserServiceLicenseAvailableCount, bwProvSystemParameterLicenseEntryIndex,
+                  bwProvSystemParameterLicenseName, bwProvSystemParameterLicenseAllocatedCount,
+                  bwProvSystemParameterLicenseUsageCount
+--                  , bwProvProductLicenseEntryIndex,
+--                bwProvProductLicenseName, bwProvProductLicenseAllocatedCount, 
+--                  bwProvProductLicenseUsageCount 
+                }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines statistics license counters."
+    ::= { bwProvMibGroups 21 }
+
+  bwProvBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks Provisioning MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS { 
+                  bwProvPersistencyGroup, bwProvDatabaseStatsGroup, 
+                  bwProvLdapGroup, bwProvBcctGroup, 
+                  bwProvCpeDeviceGroup, bwProvExtCallLogsGroup, 
+                  bwProvOciGroup, bwProvQueueStatsGroup, 
+                  bwProvTcpStatsGroup, bwProvConcurrentFrameworkStatsGroup, 
+                  bwProvActivatableFeatureGroup, bwProvShInterfaceGroup,
+                  bwProvVoiceMessagingGroup, bwProvPolycomPhoneServiceGroup, 
+                  bwProvCountersGroup, bwProvDiameterGroup,
+                  bwProvMobileManagerGroup, bwProvBroadCloudHTTPGroup,
+                  bwProvLicenseGroup }
+
+    ::= { bwProvMibCompliancy 1 }
+
+
+END

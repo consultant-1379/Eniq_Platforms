@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/prog_friend/prog_friend/v3_0/prod/pf.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_net/v1_3/prod/commons-net-1.3.0.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod/jsch-0.1.51.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/java_sun/javamail/v1_3_3_01/prod/mail.jar"/>
+	<classpathentry kind="src" path="/engine"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/repository"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

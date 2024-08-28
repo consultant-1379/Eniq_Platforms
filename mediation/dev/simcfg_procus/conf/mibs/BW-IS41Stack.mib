@@ -1,0 +1,658 @@
+-- File Name : BW-IS41Stack.mib
+
+BW-IS41Stack DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201306110000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201306110000Z"
+      DESCRIPTION "Creation of the IS41 Stack MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ss7ProtocolStack OBJECT IDENTIFIER
+    ::= { broadworks 30 }
+
+-- 
+-- Other IDs are defined in the other SS7 applications
+--    
+  ss7Is41Counters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 9 }
+
+  bwIs41MibConformance OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 1003 }
+
+-- ss7Is41Counters  ...........................................
+
+  bwSS7Is41APIStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7Is41APIStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total IS-41 API related statistics."
+-- @feature:177227
+    ::=  {  ss7Is41Counters  1 }
+
+  bwSS7Is41ServiceStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7Is41ServiceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total IS-41 service related statistics."
+-- @feature:177227
+    ::=  {  ss7Is41Counters  2 }
+  
+  bwSS7Is41DialogStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7Is41DialogStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total IS-41 dialog related statistics."
+-- @feature:177227
+    ::=  {  ss7Is41Counters  3 }
+
+  bwSS7Is41ProtocolStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7Is41ProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total IS-41 protocol related statistics."
+-- @feature:177227
+    ::=  {  ss7Is41Counters  4 }
+    
+  bwSS7Is41ErrorStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7Is41ErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total IS-41 Error related statistics."
+-- @feature:177227
+    ::=  {  ss7Is41Counters  5 }
+
+-- ss7Is41Counters bwSS7Is41APIStatsTable ...........................................
+
+  bwSS7Is41APIStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7Is41APIStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7Is41APIStatsTable."
+    INDEX    {  bwSS7Is41APIStatsIndex  }
+-- @feature:177227
+    ::=  { bwSS7Is41APIStatsTable 1 }
+
+  BwSS7Is41APIStatsEntry  ::=  SEQUENCE {
+    bwSS7Is41APIStatsIndex             Unsigned32,
+    bwSS7Is41APIStatsInstanceId        Unsigned32,
+    bwSS7Is41APIStatsAPIId             Unsigned32,
+    bwSS7Is41APIStatsRequestCount      Unsigned32,
+    bwSS7Is41APIStatsIndicationCount   Unsigned32,
+    bwSS7Is41APIStatsResponseCount     Unsigned32,
+    bwSS7Is41APIStatsConfirmationCount Unsigned32,
+    bwSS7Is41APIStatsTableReset        INTEGER
+   }
+
+  bwSS7Is41APIStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an unque row identifier for this table (bwSS7Is41APIStatsTable). The index is a unique representation of the combination of bwSS7Is41APIStatsInstanceId and bwSS7Is41APIStatsAPIId."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  1  }
+
+  bwSS7Is41APIStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  2  }
+    
+  bwSS7Is41APIStatsAPIId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a IS-41 API ID ."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  3  }
+    
+  bwSS7Is41APIStatsRequestCount    OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 requests."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  4  }
+
+  bwSS7Is41APIStatsIndicationCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 indications."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  5  }
+    
+  bwSS7Is41APIStatsResponseCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 reponses."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  6  }
+
+  bwSS7Is41APIStatsConfirmationCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 confirmations."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  7  }
+
+  bwSS7Is41APIStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7Is41APIStatsTable by setting the counter to 1."
+-- @feature:177227
+    ::=  {  bwSS7Is41APIStatsEntry  8  }
+    
+-- ss7Is41Counters bwSS7Is41APIStatsTable ...........................................
+
+  bwSS7Is41ServiceStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7Is41ServiceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7Is41ServiceStatsTable."
+    INDEX    {  bwSS7Is41ServiceStatsIndex  }
+-- @feature:177227
+    ::=  { bwSS7Is41ServiceStatsTable 1 }
+
+  BwSS7Is41ServiceStatsEntry  ::=  SEQUENCE {
+    bwSS7Is41ServiceStatsIndex                   Unsigned32,  
+    bwSS7Is41ServiceStatsInstanceId              Unsigned32,
+    bwSS7Is41ServiceStatsAPIId                   Unsigned32,
+    bwSS7Is41ServiceStatsUserId                  Unsigned32,
+    bwSS7Is41ServiceStatsServicesPerformedCount  Unsigned32,
+    bwSS7Is41ServiceStatsServicesRequestedCount  Unsigned32,
+    bwSS7Is41ServiceStatsTableReset              INTEGER
+  }
+
+  bwSS7Is41ServiceStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7Is41ServiceStatsTable). The index is a unique representation of the combination of bwSS7Is41ServiceStatsInstanceId, bwSS7Is41ServiceStatsAPIId and bwSS7Is41ServiceStatsUserId."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  1  }
+    
+  bwSS7Is41ServiceStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  2  }
+    
+  bwSS7Is41ServiceStatsAPIId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a IS-41 API ID ."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  3  }
+    
+  bwSS7Is41ServiceStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a IS-41 User ID ."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  4  }
+    
+  bwSS7Is41ServiceStatsServicesPerformedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 service performed."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  5  }
+    
+  bwSS7Is41ServiceStatsServicesRequestedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 service requested."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  6  }
+
+  bwSS7Is41ServiceStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7Is41ServiceStatsTable by setting the counter to 1."
+-- @feature:177227
+    ::=  {  bwSS7Is41ServiceStatsEntry  7  }
+    
+-- ss7Is41Counters bwSS7Is41DialogStatsTable ...........................................
+
+  bwSS7Is41DialogStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7Is41DialogStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7Is41DialogStatsTable."
+    INDEX    {  bwSS7Is41DialogStatsIndex  }
+-- @feature:177227
+    ::=  { bwSS7Is41DialogStatsTable 1 }
+
+  BwSS7Is41DialogStatsEntry  ::=  SEQUENCE {
+    bwSS7Is41DialogStatsIndex            Unsigned32,
+    bwSS7Is41DialogStatsInstanceId       Unsigned32,
+    bwSS7Is41DialogStatsUserId           Unsigned32,
+    bwSS7Is41DialogStatsOriginatedCount  Unsigned32,
+    bwSS7Is41DialogStatsTerminatedCount  Unsigned32,
+    bwSS7Is41DialogStatsTableReset       INTEGER
+ }
+
+  bwSS7Is41DialogStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7Is41DialogStatsTable). The index is a unique representation of the combination of bwSS7Is41DialogStatsInstanceId and bwSS7Is41DialogStatsUserId."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  1  }
+    
+  bwSS7Is41DialogStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  2  }
+    
+  bwSS7Is41DialogStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a IS-41 User ID."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  3  }
+    
+  bwSS7Is41DialogStatsOriginatedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 originated dialogs."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  4  }
+    
+  bwSS7Is41DialogStatsTerminatedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 terminated dialogs."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  5  }
+
+  bwSS7Is41DialogStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7Is41DialogStatsTable by setting the counter to 1."
+-- @feature:177227
+    ::=  {  bwSS7Is41DialogStatsEntry  6  }
+
+-- ss7Is41Counters bwSS7Is41ProtocolStatsTable ...........................................
+
+  bwSS7Is41ProtocolStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7Is41ProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7Is41ProtocolStatsTable."
+    INDEX    {  bwSS7Is41ProtocolStatsIndex  }
+-- @feature:177227
+    ::=  { bwSS7Is41ProtocolStatsTable 1 }
+
+  BwSS7Is41ProtocolStatsEntry  ::=  SEQUENCE {
+    bwSS7Is41ProtocolStatsIndex                         Unsigned32,
+    bwSS7Is41ProtocolStatsInstanceId                    Unsigned32,
+    bwSS7Is41ProtocolStatsUserId                        Unsigned32,
+    bwSS7Is41ProtocolStatsDialogRefByPeerCount          Unsigned32,
+    bwSS7Is41ProtocolStatsDialogRefLocallyCount         Unsigned32,
+    bwSS7Is41ProtocolStatsOperationRejectedByPeerCount  Unsigned32,
+    bwSS7Is41ProtocolStatsOperationRejectedLocallyCount Unsigned32,
+    bwSS7Is41ProtocolStatsInvalidUserAPICount           Unsigned32,
+    bwSS7Is41ProtocolStatsInvalidPeerPDUCount           Unsigned32,
+    bwSS7Is41ProtocolStatsLocalPDUCount                 Unsigned32,
+    bwSS7Is41ProtocolStatsTableReset                    INTEGER
+ }
+
+  bwSS7Is41ProtocolStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7Is41ProtocolStatsTable). The index is a unique representation of the combination of bwSS7Is41ProtocolStatsInstanceId and bwIs41ProtocolStatsUserId."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  1  }
+    
+  bwSS7Is41ProtocolStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  2  }
+    
+  bwSS7Is41ProtocolStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a IS-41 User ID."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  3  }
+    
+  bwSS7Is41ProtocolStatsDialogRefByPeerCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 dialogs that are referenced by peer."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  4  }
+
+  bwSS7Is41ProtocolStatsDialogRefLocallyCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 dialogs that are referenced locally."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  5  }
+
+  bwSS7Is41ProtocolStatsOperationRejectedByPeerCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 operations that were rejected by peer."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  6  }
+
+  bwSS7Is41ProtocolStatsOperationRejectedLocallyCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 operations that were rejected locally."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  7  }
+
+  bwSS7Is41ProtocolStatsInvalidUserAPICount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 invalid user API."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  8  }
+
+  bwSS7Is41ProtocolStatsInvalidPeerPDUCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 invalid peer PDU."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  9  }
+
+  bwSS7Is41ProtocolStatsLocalPDUCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of IS-41 local PDU."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  10  }
+
+  bwSS7Is41ProtocolStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7Is41ProtocolStatsTable by setting the counter to 1."
+-- @feature:177227
+    ::=  {  bwSS7Is41ProtocolStatsEntry  11  }
+
+-- bwSS7Is41ErrorStatsTable  ...........................................
+
+  bwSS7Is41ErrorStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7Is41ErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7Is41ErrorStatsTable."
+    INDEX    {  bwSS7Is41ErrorStatsIndex  }
+-- @feature:177227
+    ::=  { bwSS7Is41ErrorStatsTable 1 }
+
+  BwSS7Is41ErrorStatsEntry  ::=  SEQUENCE {
+    bwSS7Is41ErrorStatsIndex                Unsigned32,
+    bwSS7Is41ErrorStatsInstanceId           Unsigned32,
+    bwSS7Is41ErrorStatsASNEncodeErrorCount  Unsigned32,
+    bwSS7Is41ErrorStatsASNDecodeErrorCount  Unsigned32,
+    bwSS7Is41ErrorStatsMallocErrorCount     Unsigned32,
+    bwSS7Is41ErrorStatsTimerErrorCount      Unsigned32,
+    bwSS7Is41ErrorStatsMiscErrorCount       Unsigned32,
+    bwSS7Is41ErrorStatsDatabaseErrorCount   Unsigned32,
+    bwSS7Is41ErrorStatsPortErrorCount       Unsigned32,
+    bwSS7Is41ErrorStatsDsmErrorCount        Unsigned32,
+    bwSS7Is41ErrorStatsSsmErrorCount        Unsigned32,
+    bwSS7Is41ErrorStatsTableReset           INTEGER
+  }
+
+  bwSS7Is41ErrorStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  1  }
+
+  bwSS7Is41ErrorStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  2  }
+
+  bwSS7Is41ErrorStatsASNEncodeErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 ASN encode errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  3  }
+
+  bwSS7Is41ErrorStatsASNDecodeErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 ASN decode errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  4  }
+
+  bwSS7Is41ErrorStatsMallocErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 memory allocation errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  5  }
+
+  bwSS7Is41ErrorStatsTimerErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 timer allocation errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  6  }
+
+  bwSS7Is41ErrorStatsMiscErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 miscellanous errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  7  }
+
+  bwSS7Is41ErrorStatsDatabaseErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 database errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  8  }
+
+  bwSS7Is41ErrorStatsPortErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 port errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  9  }
+
+  bwSS7Is41ErrorStatsDsmErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 dsm errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  10  }
+
+  bwSS7Is41ErrorStatsSsmErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of IS-41 ssm errors."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  11  }
+
+  bwSS7Is41ErrorStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7Is41ErrorStatsTable by setting the counter to 1."
+-- @feature:177227
+    ::=  {  bwSS7Is41ErrorStatsEntry  12  }
+
+-- BroadWorks SS7 IS-41 MIB Conformance Definition  ......................................
+
+  bwIs41MibGroups OBJECT IDENTIFIER 
+    ::= { bwIs41MibConformance 1 }
+
+  bwIs41MibCompliancy OBJECT IDENTIFIER
+    ::= { bwIs41MibConformance 2 }
+
+  bwSS7Is41APIStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7Is41APIStatsIndex, bwSS7Is41APIStatsInstanceId, bwSS7Is41APIStatsAPIId, bwSS7Is41APIStatsRequestCount, bwSS7Is41APIStatsIndicationCount, bwSS7Is41APIStatsResponseCount, bwSS7Is41APIStatsConfirmationCount, bwSS7Is41APIStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the  API statistics."
+    ::= { bwIs41MibGroups 1 }
+   
+  bwSS7Is41ServiceStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7Is41ServiceStatsIndex, bwSS7Is41ServiceStatsInstanceId, bwSS7Is41ServiceStatsAPIId, bwSS7Is41ServiceStatsUserId, bwSS7Is41ServiceStatsServicesPerformedCount, bwSS7Is41ServiceStatsServicesRequestedCount, bwSS7Is41ServiceStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the IS-41 Service statistics."
+    ::= { bwIs41MibGroups 2 }
+   
+  bwSS7Is41DialogStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7Is41DialogStatsIndex, bwSS7Is41DialogStatsInstanceId, bwSS7Is41DialogStatsUserId, bwSS7Is41DialogStatsOriginatedCount, bwSS7Is41DialogStatsTerminatedCount, bwSS7Is41DialogStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the IS-41 Dialog statistics."
+    ::= { bwIs41MibGroups 3 }
+   
+   bwSS7Is41ProtocolStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7Is41ProtocolStatsIndex, bwSS7Is41ProtocolStatsInstanceId, bwSS7Is41ProtocolStatsUserId, bwSS7Is41ProtocolStatsDialogRefByPeerCount, bwSS7Is41ProtocolStatsDialogRefLocallyCount, bwSS7Is41ProtocolStatsOperationRejectedByPeerCount, bwSS7Is41ProtocolStatsOperationRejectedLocallyCount, bwSS7Is41ProtocolStatsInvalidUserAPICount, bwSS7Is41ProtocolStatsInvalidPeerPDUCount, bwSS7Is41ProtocolStatsLocalPDUCount, bwSS7Is41ProtocolStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the IS-41 Protocol statistics."
+    ::= { bwIs41MibGroups 4 }
+   
+    bwSS7Is41ErrorStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7Is41ErrorStatsIndex, bwSS7Is41ErrorStatsInstanceId, bwSS7Is41ErrorStatsASNEncodeErrorCount, bwSS7Is41ErrorStatsASNDecodeErrorCount, bwSS7Is41ErrorStatsMallocErrorCount, bwSS7Is41ErrorStatsTimerErrorCount, bwSS7Is41ErrorStatsMiscErrorCount, bwSS7Is41ErrorStatsDatabaseErrorCount, bwSS7Is41ErrorStatsPortErrorCount, bwSS7Is41ErrorStatsDsmErrorCount, bwSS7Is41ErrorStatsSsmErrorCount, bwSS7Is41ErrorStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the IS-41 Error statistics."
+    ::= { bwIs41MibGroups 5 }
+
+  bwSCFProcBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks SS7 Protocol Stack MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwSS7Is41APIStatsGroup, bwSS7Is41ServiceStatsGroup, bwSS7Is41DialogStatsGroup, bwSS7Is41ProtocolStatsGroup, bwSS7Is41ErrorStatsGroup }
+
+    ::= { bwIs41MibCompliancy 1 }
+END

@@ -1,0 +1,88 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Events script for checking if it is possible to connect to the IQ database. 
+#
+# 
+# Usage:  checkDBCon ${1} ${2}
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2011 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+PATH=${RT_DIR}/java/bin/amd64:${PATH}
+export PATH
+
+if [ -f ${CONF_DIR}/dwh.ini ] ; then
+	INI=${CONF_DIR}/dwh.ini
+elif [ -f ${CONF_DIR}/niq.ini ] ; then
+	INI=${CONF_DIR}/niq.ini
+else
+  echo "Configuration INI file not found"
+  exit 30
+fi
+
+if [ "${1}" == "" ] || [ "${2}" == ""  ]; then
+  echo "Usage is: checkDBCon \${LOG_FILE} \${SERVICE_NAME}"
+  exit 1
+fi
+
+#Check if it is possible to connect to the IQ database. 
+log_File=${1}
+GLASSFISH_PORT=`${ADMIN_BIN}/iniget GLASSFISH_DB -v PortNumber -f ${INI}`
+GLASSFISH_ENG=`${ADMIN_BIN}/iniget GLASSFISH_DB -v GF_ServerName -f ${INI}`
+GLASSFISH_HOST=`${ADMIN_BIN}/iniget GLASSFISH_DB -v Host -f ${INI}`
+DBA_PASSWORD=`${INSTALLER_DIR}/dbusers DBA dwh`
+TEMP_LOG_FILE=/tmp/dwh_status_${2}.log
+
+dbping -c "con=dwhdb;eng=${GLASSFISH_ENG};links=tcpip{host=${GLASSFISH_HOST};port=${GLASSFISH_PORT};dobroadcast=none;verify=no};uid=dba;pwd=${DBA_PASSWORD}" > ${TEMP_LOG_FILE} 2>&1
+
+SUC=`cat ${TEMP_LOG_FILE} | grep "Ping server successful"`
+
+if [ -z "${SUC}" ] ; then
+  xPS=`ps -ef | grep iqsrv | grep ${GLASSFISH_HOST}`
+  if [ -z "${xPS}" ] ; then
+    echo "${GLASSFISH_HOST} is not running" | tee -a ${log_File}
+  
+    DWH_PORT=`${ADMIN_BIN}/iniget DWH -v PortNumber -f ${INI}`
+    DWH_ENG=`${ADMIN_BIN}/iniget DWH -v ServerName -f ${INI}`
+
+    dbping -c "con=dwhdb;eng=${DWH_ENG};links=tcpip{host=${DWH_ENG};port=${DWH_PORT};dobroadcast=none;verify=no};uid=dba;pwd=${DBA_PASSWORD}" | tee -a ${TEMP_LOG_FILE} 2>&1
+    SUC=`cat ${TEMP_LOG_FILE} | grep "Ping server successful"`
+
+    if [ -z "${SUC}" ] ; then
+      xPS=`ps -ef | grep iqsrv | grep ${DWH_ENG}`
+      if [ -z "${xPS}" ] ; then
+        echo "${DWH_ENG} is not running" | tee -a ${log_File}
+      else
+        echo "${DWH_ENG} is running but does not accept requests" | tee -a ${log_File}
+      fi
+        
+      rm ${TEMP_LOG_FILE}
+      exit 1
+        
+    else
+      echo "${DWH_ENG} is running OK" | tee -a ${log_File}
+      echo "Database connection available" | tee -a ${log_File}
+    fi
+  else
+    echo "${GLASSFISH_HOST} is running but does not accept requests" | tee -a ${log_File}
+    rm ${TEMP_LOG_FILE}
+    exit 1
+  fi
+else
+  echo "${GLASSFISH_HOST} is running OK" | tee -a ${log_File}
+  echo "Database connection available" | tee -a ${log_File}
+fi
+
+rm ${TEMP_LOG_FILE}
+exit 0

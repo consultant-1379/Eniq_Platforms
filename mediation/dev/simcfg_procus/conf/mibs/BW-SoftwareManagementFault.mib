@@ -1,0 +1,185 @@
+--===============================================================
+-- File Name : BW-SoftwareManagementFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-SoftwareManagementFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+    alarmName, alarmState, common, component, correlationParameter, identifier, npExecutorType, npListOfNodes, npNetAddress, npOperation, npPatchTitle, npPort, npReason, npSWManagerVersion, npUserName, problemText, recommendedActionsText, severity, subcomponent, systemName, timeStamp
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks Software Management Application."
+    REVISION    "201409100000Z"
+                DESCRIPTION    "Creation of the Fault MIB."
+    ::=  {  common 1  }
+
+
+  bwPMSoftwareControllerLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the Software Controller has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMSoftwareControllerLaunched, bwPMSoftwareControllerShutDown, bwPMSoftwareControllerRestarted, bwPMSoftwareControllerDeath, and bwPMSoftwareControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Software Controller process"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17901  }
+
+  bwPMSoftwareControllerShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the Software Controller has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMSoftwareControllerLaunched, bwPMSoftwareControllerShutDown, bwPMSoftwareControllerRestarted, bwPMSoftwareControllerDeath, and bwPMSoftwareControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Software Controller process"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17902  }
+
+  bwPMSoftwareControllerRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the Software Controller restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMSoftwareControllerLaunched, bwPMSoftwareControllerShutDown, bwPMSoftwareControllerRestarted, bwPMSoftwareControllerDeath, and bwPMSoftwareControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Software Controller process"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17903  }
+
+  bwPMSoftwareControllerDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the Software Controller death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMSoftwareControllerLaunched, bwPMSoftwareControllerShutDown, bwPMSoftwareControllerRestarted, bwPMSoftwareControllerDeath, and bwPMSoftwareControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Software Controller process"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17904  }
+
+  bwPMSoftwareControllerOutOfMemory  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time when the Software Controller application ran out of memory.
+@severity:high
+@subcomponent:processmonitor
+@correlationrules:bwPMSoftwareControllerLaunched, bwPMSoftwareControllerShutDown, bwPMSoftwareControllerRestarted, bwPMSoftwareControllerDeath, and bwPMSoftwareControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Software Controller process."
+-- @feature:BW-7266
+    ::=  {  systemFaults 17905  }
+
+  bwSoftwareManagementDistributionCenterConnectivityFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npNetAddress, npPort, npUserName }
+    STATUS      current
+    DESCRIPTION
+        "The SoftwareManagement application is not able to connect to the configured software distribution center.
+@severity:high
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17906  }
+
+  bwSoftwareManagementNewCriticalPatchReleased  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npPatchTitle, npListOfNodes }
+    STATUS      current
+    DESCRIPTION
+        "A new critical patch is released and missing on certain nodes.
+@severity:medium
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17907  }
+
+  bwSoftwareManagementNewDeprecatedPatch  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npPatchTitle, npListOfNodes }
+    STATUS      current
+    DESCRIPTION
+        "A deprecated patch is applied on certain nodes.
+@severity:medium
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17908  }
+
+  bwSoftwareManagementReReleasedPatch  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npPatchTitle, npListOfNodes }
+    STATUS      current
+    DESCRIPTION
+        "A patch has been rereleased and must be re-applied on certain nodes.
+@severity:medium
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17909  }
+
+  bwSoftwareManagementAdditionalPatchMissing  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npPatchTitle, npListOfNodes }
+    STATUS      current
+    DESCRIPTION
+        "A patch needs an additional patch to completely fix the issue.
+@severity:informational
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17910  }
+
+  bwSoftwareManagementSWManagerInstallationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npSWManagerVersion, npListOfNodes }
+    STATUS      current
+    DESCRIPTION
+        "An error occurred while upgrading the SWManager.
+@severity:high
+@subcomponent:softwareManagement"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17911  }
+
+  bwSoftwareManagementExecutorQueueUsageExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates the usage ratio of the executor queue exceeded the threshold level.
+@severity:high
+@subcomponent:softwareController"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17912  }
+
+  bwSoftwareManagementExecutorQueueLatencyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates that the executor queue latency exceeded the threshold level.
+@severity:high
+@subcomponent:softwareController"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17913  }
+
+  bwSoftwareManagementExecutorThreadPoolProcessingTimeExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "The alarm indicates that the executor thread pool processing time exceeded the threshold level.
+@severity:high
+@subcomponent:softwareController"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17914  }
+
+  bwSoftwareManagementExecutorThreadPoolBusyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "The alarm indicates that the executor thread pool busy ratio exceeded the threshold level.
+@severity:high
+@subcomponent:softwareController"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17915  }
+
+
+END

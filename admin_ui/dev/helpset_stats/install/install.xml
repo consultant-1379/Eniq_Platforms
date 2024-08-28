@@ -1,0 +1,63 @@
+<project name="helpset_stats" basedir=".">
+
+	<target name="install">
+
+		<!-- Shutdown if we have a running webserver -->
+
+		<if>
+			<available file="${dc.bin.dir}/webserver" />
+			<then>
+				<exec dir="${dc.bin.dir}" executable="webserver">
+					<arg line="stop" />
+				</exec>
+			</then>
+		</if>
+
+		<!-- Try remove previous version if it exists -->
+
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/webapps/adminui/manual" type="dir" />
+			<then>
+				<delete dir="${dc.runtime.dir}/tomcat/webapps/adminui/manual" failonerror="false" />
+			</then>
+		</if>
+
+		<!-- Create dir for manual files -->
+
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/adminui/manual/" />
+
+		<!-- Extract manual files from the war package -->
+
+		<unwar src="${dc.installer.dir}/tmp/install/helpset_stats.war" dest="${dc.runtime.dir}/tomcat/webapps/adminui/manual/">
+			<patternset>
+				<exclude name="META-INF/MANIFEST.MF" />
+				<exclude name="META-INF" />
+			</patternset>
+		</unwar>
+
+		<!-- Starting up webserver -->
+
+		<if>
+			<available file="${dc.bin.dir}/webserver" />
+			<then>
+				<exec dir="${dc.bin.dir}" executable="webserver">
+					<arg line="start" />
+				</exec>
+			</then>
+		</if>
+
+	</target>
+
+	<target name="update">
+		<!-- Remove the Tomcat JSP cache. -->
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/work/Catalina" type="dir" />
+			<then>
+				<delete dir="${dc.runtime.dir}/tomcat/work/Catalina" failonerror="false" />
+			</then>
+		</if>
+
+		<antcall target="install" />
+	</target>
+
+</project>

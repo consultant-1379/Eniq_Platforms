@@ -1,0 +1,527 @@
+ERICSSON-MPE-HTTP-CLIENT-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeHttpClientPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201511200053Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The HTTP Client counters and events."
+::= { mpeModules 5 }
+
+httpClientPmObjects  OBJECT IDENTIFIER ::= { mpeHttpClientPmModule 1 }
+
+httpClientCom  OBJECT IDENTIFIER ::= { httpClientPmObjects 1 }
+
+httpClientFreq  OBJECT IDENTIFIER ::= { httpClientPmObjects 2 }
+
+httpClientPmConformance  OBJECT IDENTIFIER ::= { mpeHttpClientPmModule 3 }
+
+httpClientPmGroups  OBJECT IDENTIFIER ::= { httpClientPmConformance 1 }
+
+httpClientPmCompliances  OBJECT IDENTIFIER ::= { httpClientPmConformance 2 }
+
+httpClientComTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF HttpClientComEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the HTTP client module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    6=Push Request Server,
+                    7=Push Delivery, 8=Certificate Handler, 34=TCP 
+                    Proxy)."
+::= { httpClientCom 1 } 
+
+httpClientComEntry OBJECT-TYPE
+   SYNTAX          HttpClientComEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The HTTP Client counters and events that require less 
+                    frequent updating."
+   INDEX { applIndex }
+::= { httpClientComTable  1 }
+
+HttpClientComEntry  ::= SEQUENCE
+{
+   httpClientComConfigError         ItuPerceivedSeverity,
+   httpClientComConfigParamMissing  ItuPerceivedSeverity,
+   httpClientComNonSecureHttpReq    Counter32,
+   httpClientComSecureHttpReq       Counter32,
+   httpClientComTlsTunnelingReq     Counter32,
+   httpClientComConnections         Gauge32,
+   httpClientComIdleConnections     Gauge32,
+   httpClientComSuccessfulReq       Counter32,
+   httpClientComUnsuccessfulReq     Counter32,
+   httpClientComSuccessfulCacheHit  Counter32,
+   httpClientComFromCacheAfterValid Counter32,
+   httpClientComIPv4HttpRequests    Counter32,
+   httpClientComIPv6HttpRequests    Counter32,
+   httpClientComIPv4PipHttpReq      Counter32,
+   httpClientComIPv6PipHttpReq      Counter32,
+   httpClientComIPv4Connections     Counter32,
+   httpClientComIPv6Connections     Counter32,
+   httpClientComIPv4TlsConn         Counter32,
+   httpClientComIPv6TlsConn         Counter32,
+   httpClientComIPv4TlsReq          Counter32,
+   httpClientComIPv6TlsReq          Counter32,
+   httpClientComIPv4Closures        Counter32,
+   httpClientComIPv6Closures        Counter32,
+   httpClientComIPv4TlsClo          Counter32,
+   httpClientComIPv6TlsClo          Counter32,
+   httpClientComNonHttpRes          Counter32,
+   httpClientComNumOfIdleConn       Gauge32,
+   httpClientComConnReusedFrmPool   Counter32,
+   httpClientComNewConnInReuse      Counter32
+}
+
+httpClientComConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Unexpected type for a configuration data parameter."
+::= { httpClientComEntry 1 }
+
+httpClientComConfigParamMissing  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A configuration parameter is missing."
+::= { httpClientComEntry 2 }
+
+httpClientComNonSecureHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of non-secure HTTP requests handled 
+                    during the specified period.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 3 }
+
+httpClientComSecureHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of secure HTTP requests handled 
+                    during the specified period.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 4 }
+
+httpClientComTlsTunnelingReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is depricated and is not used. Use 
+                    IPv4TlsConnections, IPv6TlsConnections, IPv4TlsReq and 
+                    IPv4TlsReq instead.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 5 }
+
+httpClientComConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of established non-TLS TCP/IP 
+                    connections between the HTTP client module and the content 
+                    servers or intermediary proxy servers."
+::= { httpClientComEntry 6 }
+
+httpClientComIdleConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of established TCP/IP connections, 
+                    which are not in use, between the HTTP client module 
+                    and the content servers or intermediary proxy servers."
+::= { httpClientComEntry 7 }
+
+httpClientComSuccessfulReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of successful requests handled 
+                    during the specified period, including the secure, 
+                    non-secure, and TLS tunnelling traffic.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 8 }
+
+httpClientComUnsuccessfulReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of unsuccessful requests handled 
+                    during the specified period, including the secure, 
+                    non-secure, and TLS tunnelling attempts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 9 }
+
+httpClientComSuccessfulCacheHit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of requests that could be handled 
+                    by the internal cache.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 10 }
+
+httpClientComFromCacheAfterValid  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of requests that could be handled 
+                    by the internal cache after validation.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 11 }
+
+httpClientComIPv4HttpRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 outgoing requests to other 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 12 }
+
+httpClientComIPv6HttpRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 outgoing requests to other 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 13 }
+
+httpClientComIPv4PipHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Pipelined IPv4 outgoing requests 
+                    to other server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 14 }
+
+httpClientComIPv6PipHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Pipelined IPv6 outgoing requests 
+                    to other server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 15 }
+
+httpClientComIPv4Connections  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 connection establishments.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 16 }
+
+httpClientComIPv6Connections  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 connection establishments.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 17 }
+
+httpClientComIPv4TlsConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 TLS connection 
+                    establishments.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 18 }
+
+httpClientComIPv6TlsConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 TLS connection 
+                    establishments.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 19 }
+
+httpClientComIPv4TlsReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 outgoing TLS requests 
+                    (CONNECT to intermediate proxies).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 20 }
+
+httpClientComIPv6TlsReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 outgoing TLS requests 
+                    (CONNECT to intermediate proxies).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 21 }
+
+httpClientComIPv4Closures  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 connections closed by the 
+                    origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 22 }
+
+httpClientComIPv6Closures  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 connections closed by the 
+                    origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 23 }
+
+httpClientComIPv4TlsClo  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv4 TLS connections closed by 
+                    the origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 24 }
+
+httpClientComIPv6TlsClo  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of IPv6 TLS connections closed by 
+                    the origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 25 }
+
+httpClientComNonHttpRes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of times response is detected as 
+                    Non-Http and then fallback to Non-Http mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 26 }
+
+httpClientComNumOfIdleConn  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of idle connections in the 
+                    connection reuse pool."
+::= { httpClientComEntry 27 }
+
+httpClientComConnReusedFrmPool  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of times connections reused from 
+                    the pool.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 28 }
+
+httpClientComNewConnInReuse  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of times new connection created in 
+                    reuse process.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientComEntry 29 }
+
+httpClientFreqTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF HttpClientFreqEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the HTTP client module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    6=Push Request Server,
+                    7=Push Delivery, 8=Certificate Handler)."
+::= { httpClientFreq 1 } 
+
+httpClientFreqEntry OBJECT-TYPE
+   SYNTAX          HttpClientFreqEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The HTTP Client counters and events that require 
+                    frequent updating."
+   INDEX { applIndex }
+::= { httpClientFreqTable  1 }
+
+HttpClientFreqEntry  ::= SEQUENCE
+{
+   httpClientFreqSocketError     ItuPerceivedSeverity,
+   httpClientFreqOngoingReq      Gauge32,
+   httpClientFreqIncorrSslCert   ItuPerceivedSeverity,
+   httpClientFreqAddrNotResolved Counter32,
+   httpClientFreqDnsResponseTime Gauge32,
+   httpClientFreqServerInstances Gauge32,
+   httpClientFreqSlowDnsError    ItuPerceivedSeverity
+}
+
+httpClientFreqSocketError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "One or more TCP socket creations have failed, 
+                    possibly because socket resources are low."
+::= { httpClientFreqEntry 1 }
+
+httpClientFreqOngoingReq  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of ongoing HTTP requests."
+::= { httpClientFreqEntry 2 }
+
+httpClientFreqIncorrSslCert  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "One or more client certificates are missing or have 
+                    expired."
+::= { httpClientFreqEntry 3 }
+
+httpClientFreqAddrNotResolved  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the unresolved address lookups during the 
+                    specified period.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpClientFreqEntry 4 }
+
+httpClientFreqDnsResponseTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Hold the average response time (in milliseconds) for 
+                    DNS lookup calls."
+::= { httpClientFreqEntry 5 }
+
+httpClientFreqServerInstances  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of server object instances. Every 
+                    instance represents an origin server to which an active 
+                    connection is established."
+::= { httpClientFreqEntry 6 }
+
+httpClientFreqSlowDnsError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The DNS lookup is slow and this will affect the 
+                    performance of the system. Check the status of the 
+                    configured DNS server."
+::= { httpClientFreqEntry 7 }
+
+-- Compliance Statements
+
+httpClientCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for http client."
+   MODULE          -- this module
+   MANDATORY-GROUPS {httpClientConfGroup}
+::= { httpClientPmCompliances 1 }
+
+-- Units of Conformance
+
+httpClientConfGroup OBJECT-GROUP
+   OBJECTS { httpClientComConfigError,
+             httpClientComConfigParamMissing,
+             httpClientComNonSecureHttpReq,
+             httpClientComSecureHttpReq,
+             httpClientComTlsTunnelingReq,
+             httpClientComConnections,
+             httpClientComIdleConnections,
+             httpClientComSuccessfulReq,
+             httpClientComUnsuccessfulReq,
+             httpClientComSuccessfulCacheHit,
+             httpClientComFromCacheAfterValid,
+             httpClientComIPv4HttpRequests,
+             httpClientComIPv6HttpRequests,
+             httpClientComIPv4PipHttpReq,
+             httpClientComIPv6PipHttpReq,
+             httpClientComIPv4Connections,
+             httpClientComIPv6Connections,
+             httpClientComIPv4TlsConn,
+             httpClientComIPv6TlsConn,
+             httpClientComIPv4TlsReq,
+             httpClientComIPv6TlsReq,
+             httpClientComIPv4Closures,
+             httpClientComIPv6Closures,
+             httpClientComIPv4TlsClo,
+             httpClientComIPv6TlsClo,
+             httpClientComNonHttpRes,
+             httpClientComNumOfIdleConn,
+             httpClientComConnReusedFrmPool,
+             httpClientComNewConnInReuse,
+             httpClientFreqSocketError,
+             httpClientFreqOngoingReq,
+             httpClientFreqIncorrSslCert,
+             httpClientFreqAddrNotResolved,
+             httpClientFreqDnsResponseTime,
+             httpClientFreqServerInstances,
+             httpClientFreqSlowDnsError}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a http client."
+::= { httpClientPmGroups 1 }
+END

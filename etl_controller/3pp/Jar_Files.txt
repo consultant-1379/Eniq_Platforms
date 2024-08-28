@@ -1,0 +1,23 @@
+etl_controller/schedular	-	engine		-	engine_5-0-0b438.jar	-	vobs/eniq_design/plat/etl_controller/build/engine
+etl_controller/schedular	-	jconn3		-	jconn3.jar		-	/vobs/eniq_3pp/sybase/sybase/v127/prod/client
+etl_controller/schedular	-	repository	-	repository_5-0-0b125.jar	-	vobs/eniq_design/plat/installer/build/repository
+
+
+etl_controller/engine	-	alarm		-	alarm_5-0-0b75.jar	-	vobs/eniq_design/plat/alarm_module/build/alarm_module
+etl_controller/engine	-	asn1		-	asn1_5-0-0b47.jar	-	vobs/eniq_design/plat/adapters/build/asn1
+etl_controller/engine	-	common		-	common_5-0-0b106.jar	-	vobs/eniq_design/plat/common_utilities/build/common_utilities
+etl_controller/engine	-	diskmanager	-	diskmanager_5-0-0b11.jar	-	vobs/eniq_design/plat/management/build/disk_manager
+etl_controller/engine	-	dwhmanager	-	dwhmanager_5-0-0b148.jar	-	vobs/eniq_design/plat/management/build/dwhmanager
+etl_controller/engine	-	export		-	export_5-0-0b10.jar	-	vobs/eniq_design/plat/mediation/build/export
+etl_controller/engine	-	jconn3		-	jconn3.jar		-	vobs/eniq_3pp/sybase/sybase/v127/prod/client
+etl_controller/engine	-	junit		-	junit.jar		-	Nothing in the 3pp for this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+etl_controller/engine	-	log4j		-	log4j-1.2.11.jar	-	vobs/eniq_3pp/apache/log4j/v1211/prod
+etl_controller/engine	-	mdc		-	MDC_5-0-0b12.jar	-	vobs/eniq_design/plat/adapters/build/mdc
+etl_controller/engine	-	mediation	-	mediation_5-0-0b22.jar	-	vobs/eniq_design/plat/mediation/build/mediation
+etl_controller/engine	-	monitoring	-	monitoring_5-0-0b77.jar	-	vobs/eniq_design/plat/monitoring_aggregation/build/monitoring
+etl_controller/engine	-	parser		-	parser_5-0-0b253.jar	-	vobs/eniq_design/plat/adapters/build/parser
+etl_controller/engine	-	repository	-	repository_5-0-0b184.jar	-	vobs/eniq_design/plat/installer/build/repository
+etl_controller/engine	-	scheduler	-	scheduler_5-0-0b36.jar		-	vobs/eniq_design/plat/etl_controller/build/scheduler
+etl_controller/engine	-	uncompress	-	uncompress_5-0-0b4.jar		-	vobs/eniq_design/plat/mediation/build/uncompress
+etl_controller/engine	-	velocity	-	velocity-dep-1.4.jar		-	vobs/eniq_3pp/apache/jakarta_velocity/v14/prod
+etl_controller/engine	-	xerces		-	xercesImpl.jar		-	vobs/eniq_3pp/apache/xerces_parser/v262/prod

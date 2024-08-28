@@ -1,0 +1,122 @@
+ERICSSON-MPE-SDR-SERVICE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeSdrServicePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201603231116Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Alarms for SES Database data Replication service."
+::= { mpeModules 36 }
+
+sdrServicePmObjects  OBJECT IDENTIFIER ::= { mpeSdrServicePmModule 1 }
+
+sdrAlarm  OBJECT IDENTIFIER ::= { sdrServicePmObjects 1 }
+
+sdrServicePmConformance  OBJECT IDENTIFIER ::= { mpeSdrServicePmModule 3 }
+
+sdrServicePmGroups  OBJECT IDENTIFIER ::= { sdrServicePmConformance 1 }
+
+sdrServicePmCompliances  OBJECT IDENTIFIER ::= { sdrServicePmConformance 2 }
+
+sdrAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SdrAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { sdrAlarm 1 } 
+
+sdrAlarmEntry OBJECT-TYPE
+   SYNTAX          SdrAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarms for SES Database data Replication service."
+   INDEX { applIndex }
+::= { sdrAlarmTable  1 }
+
+SdrAlarmEntry  ::= SEQUENCE
+{
+   sdrAlarmConfErr     ItuPerceivedSeverity,
+   sdrAlarmCommErr     ItuPerceivedSeverity,
+   sdrAlarmSyncDown    ItuPerceivedSeverity,
+   sdrAlarmExitCluster ItuPerceivedSeverity
+}
+
+sdrAlarmConfErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Configuration error between the Replication Server 
+                    and SES sites."
+::= { sdrAlarmEntry 2 }
+
+sdrAlarmCommErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Communication error between the Replication Server 
+                    and SES sites."
+::= { sdrAlarmEntry 3 }
+
+sdrAlarmSyncDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Synchronization process bucardo is down."
+::= { sdrAlarmEntry 4 }
+
+sdrAlarmExitCluster  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SDR exits from cluster state."
+::= { sdrAlarmEntry 5 }
+
+-- Compliance Statements
+
+sdrServiceCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for sdr service."
+   MODULE          -- this module
+   MANDATORY-GROUPS {sdrServiceConfGroup}
+::= { sdrServicePmCompliances 1 }
+
+-- Units of Conformance
+
+sdrServiceConfGroup OBJECT-GROUP
+   OBJECTS { sdrAlarmConfErr,
+             sdrAlarmCommErr,
+             sdrAlarmSyncDown,
+             sdrAlarmExitCluster}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a sdr service."
+::= { sdrServicePmGroups 1 }
+END

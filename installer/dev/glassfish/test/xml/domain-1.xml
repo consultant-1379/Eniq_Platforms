@@ -1,0 +1,32 @@
+<domain application-root="${com.sun.aas.instanceRoot}/applications" log-root="${com.sun.aas.instanceRoot}/logs" version="74.2">
+  <system-applications/>
+  <applications/>
+  <resources>
+    <jdbc-resource jndi-name="jdbc/__TimerPool" object-type="system-admin" pool-name="__TimerPool"/>
+    <jdbc-resource jndi-name="jdbc/__default" pool-name="DerbyPool"/>
+    <jdbc-connection-pool datasource-classname="org.apache.derby.jdbc.EmbeddedXADataSource" name="__TimerPool" res-type="javax.sql.XADataSource">
+      <property name="databaseName" value="${com.sun.aas.instanceRoot}/lib/databases/ejbtimer"/>
+      <property name="connectionAttributes" value=";create=true"/>
+    </jdbc-connection-pool>
+  </resources>
+  <configs>
+    <config name="server-config">
+      <http-service>
+        <virtual-server id="__asadmin" network-listeners="admin-listener"/>
+      </http-service>
+      <java-config classpath-suffix="" debug-options="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9009" system-classpath="">
+		<jvm-options>-XX:+LogVMOutput</jvm-options>
+		<jvm-options>-XX:LogFile=${com.sun.aas.instanceRoot}/logs/jvm.log</jvm-options>
+		<jvm-options>-DANTLR_USE_DIRECT_CLASS_LOADING=true</jvm-options>
+		<jvm-options>-XX:MaxPermSize=128m</jvm-options>
+		<jvm-options>-d32</jvm-options>
+		<jvm-options>-client</jvm-options>
+		<profiler classpath="/home/appserver/" enabled="false" name="sample_profiler">
+          <property name="password" value="woioooooooooooo"/>
+          <property name="defaultuser" value="admin"/>
+        </profiler>
+      </java-config>
+
+    </config>
+  </configs>
+</domain>

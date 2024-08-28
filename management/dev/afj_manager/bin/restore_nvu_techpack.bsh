@@ -1,0 +1,104 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ NVU restore Script
+#
+# Usage: restore_nvu_techpack -t TECHPACK_NAME
+#
+# Author: EHEIJUN
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2010 AB LM Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+unalias stop 2> /dev/null
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 2
+fi
+
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME="/eniq/sw/runtime/java"
+
+CPATH="${PLATFORM_DIR}"
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in ${DIRS}
+do
+  if [ -d ${PLATFORM_DIR}/${file}/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/${file}/dclib/*.jar`
+
+    for jar in ${JARS}
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+runcmd() {
+
+  echo "Restore removes all NVU measurement types and/or counters from the tech pack."
+  echo "During the restore loading will be stopped and Engine/Scheduler will be restarted."
+  echo "Are you sure you wish to continue (Y/n)"
+
+  read USER_CONF
+
+  if [ "${USER_CONF}" == "Y" ]
+  then
+
+    ${JAVA_HOME}/bin/java -d64 -Xmx64M -Djava.util.logging.config.file=${CONF_DIR}/afjmanagerRestoreLogging.properties -Ddc5000.config.directory=${CONF_DIR} -DCONF_DIR=${CONF_DIR} -DLOG_DIR=${LOG_DIR} -classpath ${CPATH} com.ericsson.eniq.afj.AFJRestorer ${X1}
+    
+    ECODE=$?
+
+    if [ ${ECODE} -ne 0 ] ; then
+      if [ "${X1}" != "" ] ; then
+          echo "Execute failed"
+      fi
+    fi
+
+    exit ${ECODE}
+
+  else
+
+    echo "Restore canceled"
+    exit 0
+
+  fi
+
+}
+
+
+usage_msg() {
+
+  echo "Usage: `basename $0` -t  <tech_pack_name>"
+  echo "option:"
+  echo "-t  : Name of the tech pack to restore. For example DC_E_STN, DC_E_BSS."
+
+}
+
+case "$1" in
+
+-t)
+     X1=$2
+     # If the techpack name is not specified, flag error in usage 
+     if [ "${X1}" == "" ] ; then
+       echo "Please provide the techpack name."
+       usage_msg
+       exit 3
+     fi
+     runcmd
+     ;;
+
+*)
+     usage_msg
+     exit 3
+     ;;
+esac

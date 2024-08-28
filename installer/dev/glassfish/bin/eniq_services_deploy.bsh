@@ -1,0 +1,456 @@
+#!/bin/bash
+# ********************************************************************
+# Ericsson Radio Systems AB                                     
+# ********************************************************************
+#
+#
+# (c) Ericsson Radio Systems AB 2013 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ********************************************************************
+# Name    : eniq_services_deploy.bsh
+# Date    : 28/08/2013
+# Revision: A.2
+# Purpose : Script to redeploy the services available on glassfish
+#
+# Usage   : bash eniq_services_deploy.bsh <Log File>
+
+
+#############################################
+#											#
+# 	Command Section							#
+#											#
+#############################################
+ECHO=/usr/bin/echo
+GREP=/bin/grep
+LS=/bin/ls
+RM=/usr/bin/rm
+TOUCH=/usr/bin/touch
+CUT=/usr/bin/cut
+MV=/usr/bin/mv
+
+############## Function: logit ##############################################
+#                                                                           #
+# Description:	Echos the output to screen and appeands this to a log file	#
+#                                                                           #
+# Arguments:                                                                #
+# Text to display                                                    		#
+#                                                                           #
+#############################################################################
+logit()
+{
+   $ECHO "$*"
+   $ECHO `date '+%Y%m%d_%H%M%S': ` $* >> $LOG
+}
+
+############## Function: usage ##############################################
+#                                                                           #
+# Description:	Prints out the usage										#
+#                                                                           #
+#############################################################################
+usage()
+{
+	$ECHO "Usage: bash eniq_services_deploy.bsh <Log File>"
+}
+
+############## Function: import_niq_rc ######################################
+#                                                                           #
+# Description:	Imports the niq.rc file which exports needed directories	#
+#                                                                           #
+#############################################################################
+import_niq_rc()
+{
+	NIQ_RC=${CONF_DIR}/niq.rc
+	if [ -f $NIQ_RC ]
+	then
+		. $NIQ_RC
+	else
+		logit "Error: $NIQ_RC missing, this is required for this script, exiting!!!!" 
+		exit 3
+	fi
+}
+
+############## Function: set_variables ##################################################
+#                                                                              		    #
+# Description:	Sets the variables needed for the script								#
+#                                                                                	    #							                                       	    
+#########################################################################################
+set_variables()
+{
+	AUTODEPLOY_DIR=${GLASSFISH_DIR}/glassfish3/glassfish/domains/$1/autodeploy
+	APPLICATIONS_DIR=${GLASSFISH_DIR}/glassfish3/glassfish/domains/$1/applications
+	AUTODEPLOY_STATUS_DIR=${AUTODEPLOY_DIR}/.autodeploystatus
+	DEPLOYED_FAILED='_deployFailed'
+	DEPLOYED='_deployed'
+	
+	if [ $1 == "domain1" ]
+	then
+		GF_ADMIN_PORT=`iniget GLASSFISH -f ${ENIQ_INI} -v GF_HostAdminPort`
+	elif [ $domainName == "domain2" ]
+	then
+		GF_ADMIN_PORT="15050"
+	fi
+
+	get_all_services
+	get_failed_services
+	get_deployed_services
+}
+
+############## Function: get_all_services ###############################################
+#                                                                              		    #
+# Description:	gets all the available services and the number of services				#
+#                                                                                	    #
+#########################################################################################
+get_all_services()
+{
+	ALL_SERVICES=`ls $AUTODEPLOY_DIR | grep -v war_ | grep war`
+	ALL_SERVICE_COUNT=0
+	for tmp_service in $ALL_SERVICES 
+	do
+		ALL_SERVICE_COUNT=$(($ALL_SERVICE_COUNT + 1))
+	done
+}
+
+############## Function: get_failed_services ############################################
+#                                                                              		    #
+# Description:	gets a list of the failed services										#
+#                                                                                	    #
+#########################################################################################
+get_failed_services()
+{
+	FAILED_SERVICES=`ls $AUTODEPLOY_DIR | grep $DEPLOYED_FAILED | cut -d '_' -f1`
+}
+
+############## Function: get_deployed_services ##########################################
+#                                                                              		    #
+# Description:	gets all the deployed services and the number of services				#
+#                                                                                	    #
+#########################################################################################
+get_deployed_services()
+{
+	DEPLOYED_SERVICES=`ls $AUTODEPLOY_DIR | grep deployed | grep -v _deployedFailed | cut -d '_' -f1`
+	DEPLOYED_SERVICES_COUNT=0
+	for tmp_service in $DEPLOYED_SERVICES 
+	do
+		DEPLOYED_SERVICES_COUNT=$(($DEPLOYED_SERVICES_COUNT + 1))
+	done
+}
+
+############## Function: setup ##########################################################
+#                                                                              		    #
+# Description:	Sets up necessary functions for the script to run						#
+#                                                                                	    #
+#########################################################################################
+setup()
+{
+	set_variables $1
+}
+
+############## Function: remove_file ########################################
+#                                                                           #
+# Description:	Removes the file 											#
+#                                                                           #
+# Arguments:                                                                #
+# $1 - File to remove                                                  		#
+#                                                                           #
+#############################################################################
+remove_file()
+{	
+	file=$1
+	if [ -f $file ];then
+		$RM $file
+		if [ $? -ne 0 ] ; then
+			logit "Could not remove file $file"
+			exit 1
+		fi
+	fi
+}
+
+############## Function: touch_file #########################################
+#                                                                           #
+# Description:	Touches the file 											#
+#                                                                           #
+# Arguments:                                                                #
+# $1 - File to touch                                                  		#
+#                                                                           #
+#############################################################################
+touch_file()
+{
+	file=$1
+	if [ -f $file ]; then
+		$TOUCH $file
+		if [ $? -ne 0 ] ; then
+			logit "Could not update file $file"
+			exit 2
+		fi
+	else
+		logit "Deployed service does not exist - $file"
+		exit 4
+	fi
+}
+
+############## Function: rename_application_directory ###################################
+#                                                                                       #
+# Description:  Renames the service application directory.                              #
+#                                                                                       #
+# Arguments:                                                                            #
+# $1 - service application directory name to be renamed                                 #
+#                                                                                       #
+#########################################################################################
+rename_application_directory()
+{
+	if [ -z "$1" ]; then
+		logit "No parameter specified for the function."
+		exit 2;
+	fi
+
+	service_application_dir="$APPLICATIONS_DIR/$1"
+
+	$RM -rf $service_application_dir"_"* >> /dev/null 2>&1
+
+	if [ -d $service_application_dir ]; then
+		renamed_dir=$service_application_dir"_""$($ECHO $RANDOM)"
+		$MV $service_application_dir $renamed_dir
+
+		if [ -d $service_application_dir ]; then
+			logit "Unable to rename directory $service_application_dir"
+			exit 2;
+		fi
+	fi
+}
+
+############## Function: redeploy_services ##############################################
+#                                                                              		    #
+# Description:	Redeploys the failed services											#
+#                                                                                	    #
+#########################################################################################
+redeploy_services()
+{
+	logit "Attempting to re-deploying the following services"
+	logit $FAILED_SERVICES
+	logit ""
+	for service_name in $FAILED_SERVICES
+	do
+		failed_war="${AUTODEPLOY_DIR}/${service_name}${DEPLOYED_FAILED}"
+		
+		autodeploy_war="${AUTODEPLOY_STATUS_DIR}/${service_name}"
+		if [ -f $failed_war ]; then
+			logit "Redeploying ${service_name}"
+			logit ""
+			remove_file "$autodeploy_war"
+			remove_file "$failed_war"
+			touch_file "${AUTODEPLOY_DIR}/${service_name}"
+			logit ""
+		fi
+	done
+}
+
+############## Function: verify_services_deployed #######################################
+#                                                                              		    #
+# Description:	Verifies that the services are deployed									#
+#                                                                                	    #
+#########################################################################################
+verify_services_deployed()
+{
+	get_deployed_services
+	if [ $DEPLOYED_SERVICES_COUNT -lt $ALL_SERVICE_COUNT ]
+	then	
+		MAX_ATTEMPTS=20
+		WAIT_TIME=30
+		CURRENT_ATTEMPTS=0
+		services_left_to_deploy=$(($ALL_SERVICE_COUNT - $DEPLOYED_SERVICES_COUNT)) ;
+		
+		logit ""
+		logit "Please wait for the server to redeploy the following service(s)"
+		logit $FAILED_SERVICES
+		logit ""
+		logit "This may take a few minutes"
+		logit ""
+		while (( $CURRENT_ATTEMPTS < $MAX_ATTEMPTS )); do
+			get_deployed_services
+			if [ $DEPLOYED_SERVICES_COUNT -lt $ALL_SERVICE_COUNT ]
+			then			
+				logit "Waiting for services to Auto Deploy....."
+				CURRENT_ATTEMPTS=$(($CURRENT_ATTEMPTS + 1))
+				sleep $WAIT_TIME
+			else
+				logit ""
+				logit "All services are deployed"
+				logit $ALL_SERVICES
+				break;
+			fi		
+		done
+		
+		if [ $CURRENT_ATTEMPTS -eq $MAX_ATTEMPTS ];
+		then
+			get_failed_services
+			logit "The folowing Service(s) were not autodeployed."
+			logit $FAILED_SERVICES
+			logit "Please check Glassfish logs for details: /eniq/log/sw_log/glassfish/server.log"
+			logit ""
+		fi
+	else
+		logit ""
+		logit "All services are deployed"
+		logit $ALL_SERVICES
+	fi
+
+}
+
+############## Function: undeploy_service  ##############################################
+#                                                                                       #
+# Description:  Executes glassfish asadmin utility and undeploys provided service.      #
+#                                                                                       #
+# Arguments:                                                                            #
+# $1 - service to be undeployed.                                                        #
+#                                                                                       #
+#########################################################################################
+undeploy_service()
+{
+	if [ -z "$1" ]
+	then
+		logit "No parameter specified for undeploy_service"
+		exit 2
+	else
+		GF_ADMIN_PASSWORD_FILE="/tmp/glassfishpwdfile.txt"
+		GF_ADMIN_USER=`iniget GLASSFISH -f ${ENIQ_INI} -v GF_HostUser`
+
+		$ECHO "AS_ADMIN_PASSWORD=admin" > ${GF_ADMIN_PASSWORD_FILE}
+
+		logit "\nChecking if service $1 is already deployed."
+
+		/eniq/glassfish/glassfish/bin/asadmin --port ${GF_ADMIN_PORT} -u ${GF_ADMIN_USER} --passwordfile ${GF_ADMIN_PASSWORD_FILE} list-applications | grep -i "$1" >> /dev/null 2>&1
+		asadmin_call_status=`$ECHO $?`
+
+		if [ $asadmin_call_status -eq 0 ]; then
+
+			logit "Executing $1 undeploy"
+
+			/eniq/glassfish/glassfish/bin/asadmin --port ${GF_ADMIN_PORT} -u ${GF_ADMIN_USER} --passwordfile ${GF_ADMIN_PASSWORD_FILE} undeploy $1
+			asadmin_call_status=`$ECHO $?`
+
+			if [ $asadmin_call_status -ne 0 ]; then
+				logit "Problem running asadmin command: $1 "
+			else
+				rename_application_directory $1
+			fi
+		else
+			logit "Problem running asadmin command or service is not deployed.\n"
+		fi
+
+		$RM ${GF_ADMIN_PASSWORD_FILE}
+	fi
+}
+
+############## Function: manage_redeployment ################################
+#                                                                           #
+# Description:	Manages the redeployment of the services					#
+#                                                                           #
+#############################################################################
+manage_redeployment()
+{
+	logit "Service(s) currently deployed"
+	logit $DEPLOYED_SERVICES
+	logit ""
+	if [ "$FAILED_SERVICES" != "" ]
+	then
+		logit "The following Service(s) have failed to deploy"
+		logit $FAILED_SERVICES
+		logit ""
+		redeploy_services
+		verify_services_deployed
+	else
+		if [ $DEPLOYED_SERVICES_COUNT -eq $ALL_SERVICE_COUNT ]
+		then 
+			logit ""
+			logit "All available Services are deployed."
+		else 
+			for undeployed_service in $ALL_SERVICES
+			do
+				service="$($ECHO $undeployed_service | $CUT -f1 -d ".")"
+				undeploy_service "$service"
+				touch_file "${AUTODEPLOY_DIR}/${undeployed_service}"
+			done
+			verify_services_deployed
+		fi		
+	fi
+}
+
+############## Function: source_functions ###############################################
+#                                                                                       #
+# Description:  To source comman functions.                                             #
+#                                                                                       #
+#########################################################################################
+source_functions()
+{
+	COMMON_FUNCTIONS="/eniq/installation/core_install/lib/common_functions.lib"
+
+	# Source the common functions
+	if [ -s ${COMMON_FUNCTIONS} ]
+	then
+		. ${COMMON_FUNCTIONS}
+	else
+		logit "File ${COMMON_FUNCTIONS} not found"
+		exit 2;
+	fi
+}
+
+############## Function: check_deployed_services ############################
+#                                                                           #
+# Description:  Manages undeployed services                                 #
+#                                                                           #
+#############################################################################
+check_deployed_services()
+{
+	get_deployed_services
+	WAIT_TIME=30
+	for service_name in $DEPLOYED_SERVICES
+	do
+		if [ ${AUTODEPLOY_DIR}/${service_name} -nt ${AUTODEPLOY_DIR}/${service_name}${DEPLOYED} ];
+		then
+			logit "The following Service is not deployed : ${service_name}"
+			touch_file "${AUTODEPLOY_DIR}/${service_name}"
+			logit "Waiting for services to Auto Deploy....."
+			sleep $WAIT_TIME
+		fi
+	done
+}
+
+############## Function: Main ###############################################
+#                                                                           #
+# Description:	Runs the script												#
+#                                                                           #
+# Arguments:                                                                #
+#       $1 - LOG: Location and name of log file                             #
+# Return Values:                                                            #
+#       none																#
+#############################################################################
+
+if [ $# -eq 1 ]
+then
+	LOG=$1
+	
+	import_niq_rc
+
+	source_functions
+
+	DOMAINS=`ls ${GLASSFISH_DIR}/glassfish/glassfish/domains/`
+	ENIQ_INI="/eniq/sw/conf/niq.ini"
+	
+	for domainName in $DOMAINS;
+	do
+		logit "------------------------"        
+		logit "Domain Name: $domainName"
+		setup $domainName
+		check_deployed_services
+		manage_redeployment
+	done
+else
+	usage
+fi

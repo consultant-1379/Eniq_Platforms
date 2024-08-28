@@ -1,0 +1,63 @@
+<project name="mediation" default="compile">
+
+  <property name="pack.name" value="mediation"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/mediation/dev/mediation"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+
+  <!-- 3PP Jars -->  
+  <property name="3pp.activation.dir" value="/vobs/eniq/3pp/java_sun/beans_activation/v1_0_2/prod"/>
+  <property name="3pp.commons_net.dir" value="/vobs/eniq/3pp/apache/comm_net/v1_3/prod"/>
+  <property name="3pp.jakarataoro.dir" value="/vobs/eniq/3pp/apache/jakarta_oro/v2_0_8/prod"/>
+  <property name="3pp.jsch.dir" value="/vobs/eniq/3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod"/>
+  <property name="3pp.mail.dir" value="/vobs/eniq/3pp/java_sun/javamail/v1_3_3_01/prod"/>
+  <property name="3pp.prog_friend.dir" value="/vobs/eniq/3pp/prog_friend/prog_friend/v3_0/prod"/>
+  
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="off"
+           optimize="off" 
+           deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		 <fileset dir="${eniq.engine.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.repository.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.activation.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.commons_net.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.jakarataoro.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.jsch.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.mail.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.prog_friend.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+      </classpath>
+    </javac>
+
+  </target>
+
+  <target name="postcompile"/>
+
+</project>

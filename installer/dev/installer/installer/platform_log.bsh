@@ -1,0 +1,205 @@
+#!/bin/bash
+
+GEGREP=/usr/sfw/bin/gegrep
+SED=/usr/bin/sed
+NAWK=/usr/bin/nawk
+CONF=/eniq/sw/conf
+HOSTS=/etc/hosts
+LOG=/eniq/log/sw_log
+ENGINE_LOG=$LOG/engine
+SCHEDULER_LOG=$LOG/scheduler
+DWHDB_LOGS=/eniq/local_logs/iq
+CURR_SERVER_TYPE=`cat /eniq/installation/config/installed_server_type | $GEGREP -v '^[[:blank:]]*#' | $SED -e 's/ //g'`
+
+DIR=`pwd`
+SCP=/usr/bin/scp
+
+abort_script(){
+   echo "Script aborting..." | tee -a ${LOG_FILE}
+   echo $* | tee -a ${LOG_FILE}
+   exit $1
+}
+
+copy (){
+if [ -f $1 ]; then
+	echo "Log $1 copied" | tee -a ${LOG_FILE}
+	cp $1 $2
+else
+	echo "Log $1 not available" | tee -a ${LOG_FILE}
+fi
+}
+
+engine_logs(){
+copy $ENGINE_LOG/engine-$DATE.log $LOG_DIR/CO
+copy $ENGINE_LOG/error-$DATE.log $LOG_DIR/CO
+copy $ENGINE_LOG/file-$DATE.log $LOG_DIR/CO
+copy $ENGINE_LOG/start_engine_$NEWDATE*.log $LOG_DIR/CO
+copy $ENGINE_LOG/stop_engine_$NEWDATE*.log $LOG_DIR/CO
+copy $ENGINE_LOG/start_webserver_$NEWDATE*.log $LOG_DIR/CO
+copy $ENGINE_LOG/stop_webserver_$NEWDATE*.log $LOG_DIR/CO
+}
+
+scheduler_logs(){
+copy $SCHEDULER_LOG/scheduler-*$DATE.log $LOG_DIR/CO
+copy $SCHEDULER_LOG/start_scheduler_$NEWDATE*.log $LOG_DIR/CO
+copy $SCHEDULER_LOG/stop_scheduler_$NEWDATE*.log $LOG_DIR/CO
+copy $SCHEDULER_LOG/error-*$DATE.log $LOG_DIR/CO
+}
+
+svc_logs(){
+echo "Collecting $1 svc logs..." | tee -a ${LOG_FILE}
+BLADE=`cat /etc/hosts | grep -i $1 | $NAWK -F" " '{print $2}'` >> ${LOG_FILE}
+$SCP -p root@$BLADE:/var/svc/log/eniq* $LOG_DIR/$2 >> ${LOG_FILE}
+$SCP -p root@$BLADE:/var/svc/log/*NAS* $LOG_DIR/$2 >> ${LOG_FILE}
+$SCP -p root@$BLADE:/var/svc/log/*ddc* $LOG_DIR/$2 >> ${LOG_FILE}
+}
+
+dwhdb_logs_co(){
+echo "Collecting IQ logs from COOR..." | tee -a ${LOG_FILE}
+DATE=${MONTH}/${DAY}
+if [ -f $DWHDB_LOGS/dwhdb.iqmsg* ]; then
+for FILE in $DWHDB_LOGS/dwhdb.iqmsg*
+do
+        LIST=`cat $FILE | grep "$DATE " | wc -l` >> ${LOG_FILE}
+        if [ $LIST != 0 ];then
+        copy $FILE $LOG_DIR/CO | tee -a ${LOG_FILE}
+        fi
+done
+fi
+}
+
+dwhdb_logs_rd(){
+echo "Collecting IQ logs from $1 ..." | tee -a ${LOG_FILE}
+RE=`cat /etc/hosts | grep -i $1 | $NAWK -F" " '{print $2}'` >> ${LOG_FILE}
+$SCP -p root@$RE:/eniq/local_logs/iq/$1.iqmsg* $LOG_DIR/$2 >> ${LOG_FILE}
+DATE=${MONTH}/${DAY}
+if [ -f $LOG_DIR/RE/$1.iqmsg* ]; then
+for FILE in $LOG_DIR/RE/$1.iqmsg*
+do
+        LIST=`cat $FILE | grep "$DATE " | wc -l` >> ${LOG_FILE}
+        if [ $LIST == 0 ];then
+        rm $FILE  | tee -a ${LOG_FILE}
+        fi
+done
+fi
+}
+
+NASd_logs(){
+echo "Collecting $1 NASd logs..." | tee -a ${LOG_FILE}
+BLADE=`cat /etc/hosts | grep -i $1 | $NAWK -F" " '{print $2}'` >> ${LOG_FILE}
+$SCP -p root@$BLADE:/eniq/local_logs/NASd/* $LOG_DIR/$2 >> ${LOG_FILE}
+}
+
+if [ ${LOGNAME} != "root" ] ; then
+    abort_script 32 "This script has to be run as 'root'. You are currently logged in as '${LOGNAME}'"
+fi
+LOG_FILE=$DIR/platform_log.log
+#echo $LOG_FILE
+if [ -f $LOG_FILE ];then
+rm $LOG_FILE
+fi
+touch ${LOG_FILE}
+
+#echo $DATE
+DATE=$1
+
+#echo $YEAR
+YEAR=`echo $DATE | cut -d"_" -f1`
+
+#echo $MONTH
+MONTH=`echo $DATE | cut -d"_" -f2`
+if [ ${MONTH} -gt 12 ]; then
+        abort_script 40 "Not a valid Month.."
+fi
+
+#echo $DAY
+DAY=`echo $DATE | cut -d"_" -f3`
+if [ $DAY -gt 31 ]; then
+        abort_script 41 "Not a valid date..."
+fi
+
+NEWYEAR=`date +"%y"`
+NEWDATE=${NEWYEAR}${MONTH}${DAY}
+
+echo "Are you ready to proceed with $DATE? (YES/no)" | tee -a ${LOG_FILE}
+        read -e option
+        option=`echo $option | tr "[:lower:]" "[:upper:]"`
+        if [ "${option}" != "YES" ] ; then
+                abort_script 35 "Not ready to proceed..."
+        fi
+
+	
+LOG_DIR=$DIR/$DATE
+if [ -f $LOG_DIR.tar* ];then
+rm $LOG_DIR.tar*
+fi
+if [ -d $LOG_DIR ];then
+rm -rf $LOG_DIR
+fi
+
+if [ ${CURR_SERVER_TYPE} == "eniq_stats" ] ; then
+        echo "Single Blade"  | tee -a ${LOG_FILE}
+  		mkdir -p $LOG_DIR
+		mkdir -p $LOG_DIR/CO
+else
+        echo "Multi Blade"  | tee -a ${LOG_FILE}
+  		mkdir -p $LOG_DIR
+		mkdir -p $LOG_DIR/CO
+		mkdir -p $LOG_DIR/EN
+		mkdir -p $LOG_DIR/RD1
+		mkdir -p $LOG_DIR/RD2
+fi
+
+echo "=============Collecting engine logs=============" | tee -a ${LOG_FILE}
+engine_logs
+echo "Engine logs collected." | tee -a ${LOG_FILE}
+
+echo "=============Collecting scheduler logs=============" | tee -a ${LOG_FILE}
+scheduler_logs
+echo "Scheduler logs collected." | tee -a ${LOG_FILE}
+
+echo "=============Collecting svc logs=============" | tee -a ${LOG_FILE}
+if [ ${CURR_SERVER_TYPE} == "eniq_stats" ]; then
+svc_logs dwhdb CO
+else
+svc_logs dwhdb CO
+svc_logs engine EN
+svc_logs dwh_reader_1 RD1
+svc_logs dwh_reader_2 RD2
+fi
+echo "/var/svc logs collected." | tee -a ${LOG_FILE}
+
+echo "=============Collecting IQ logs=============" | tee -a ${LOG_FILE}
+if [ ${CURR_SERVER_TYPE} == "eniq_stats" ]; then
+dwhdb_logs_co
+else
+dwhdb_logs_co
+dwhdb_logs_rd dwh_reader_1 RD1
+dwhdb_logs_rd dwh_reader_2 RD2
+fi
+echo "IQ logs collected." | tee -a ${LOG_FILE}
+
+echo "=============Collecting NASd logs=============" | tee -a ${LOG_FILE}
+if [ ${CURR_SERVER_TYPE} == "eniq_stats" ]; then
+NASd_logs dwhdb CO
+else
+NASd_logs dwhdb CO
+NASd_logs engine EN
+NASd_logs dwh_reader_1 RD1
+NASd_logs dwh_reader_2 RD2
+fi
+echo "NASd logs collected." | tee -a ${LOG_FILE}
+
+echo "=============================================" | tee -a ${LOG_FILE}
+
+copy ${LOG_FILE} $LOG_DIR/
+
+tar cvf $LOG_DIR.tar $LOG_DIR/ >> ${LOG_FILE}
+if [ $? != 0 ];then
+        abort_script 33 "tar operation not successfull.Please run the script again."
+else
+echo "gzip the tar. Please wait...." | tee -a ${LOG_FILE}
+gzip $LOG_DIR.tar
+echo "After sending the $LOG_DIR.tar.gz to requester for analysis please remove $LOG_DIR.tar.gz from the server" | tee -a ${LOG_FILE}
+fi
+#rm -rf $LOG_DIR

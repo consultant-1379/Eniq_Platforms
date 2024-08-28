@@ -1,0 +1,92 @@
+#!/bin/bash
+ECHO=/usr/bin/echo
+MKDIR=/usr/bin/mkdir
+TOUCH=/usr/bin/touch
+NAWK=/usr/bin/nawk
+
+sybase_log_dir=$1
+if [ $sybase_log_dir ]; then
+   $TOUCH $sybase_log_dir/collect_sybase_log.txt
+    $ECHO "Directory used for log collector : $sybase_log_dir" | tee -a $sybase_log_dir/collect_sybase_log.txt
+else 
+    sybase_log_dir=/eniq/local_logs/sybase_log_collector 
+    /usr/bin/rm -rf $sybase_log_dir
+     $MKDIR -p 777 $sybase_log_dir
+     if [ $? -eq 0 ]; then
+         $TOUCH  $sybase_log_dir/collect_sybase_log.txt
+         $ECHO "$sybase_log_dir created Sucessfully" | tee -a $sybase_log_dir/collect_sybase_log.txt
+         $ECHO "Directory used for log collector : $sybase_log_dir" | tee -a $sybase_log_dir/collect_sybase_log.txt 
+    else
+         $ECHO "Failed to create $sybase_log_dir" 
+    exit 1 
+    fi
+fi
+ 
+
+$ECHO "Copying syslog and messages files to $sybase_log_dir" |tee -a $sybase_log_dir/collect_sybase_log.txt
+cp /var/log/syslog* $sybase_log_dir
+cp /var/adm/messages* $sybase_log_dir
+
+$ECHO "Find out the Solaris OS version of server" |tee -a $sybase_log_dir/collect_sybase_log.txt
+uname -a >> $sybase_log_dir/solaris_version.txt
+version=`cat $sybase_log_dir/solaris_version.txt`
+$ECHO "Solaris OS version of server is $version" |tee -a $sybase_log_dir/collect_sybase_log.txt
+
+$ECHO "Find out the SQL Anywhere Database version of server" |tee -a $sybase_log_dir/collect_sybase_log.txt
+su - dcuser -c "dbversion /eniq/sql_anywhere/bin32/dbversion" >$sybase_log_dir/database_version.txt 2>&1
+dbversion=`cat $sybase_log_dir/database_version.txt`
+$ECHO "Database version of server is $dbversion"  |tee -a $sybase_log_dir/collect_sybase_log.txt
+
+$ECHO "Copying repdb.cfg to $sybase_log_dir" |tee -a $sybase_log_dir/collect_sybase_log.txt
+cp /eniq/database/rep_main/repdb.cfg $sybase_log_dir
+
+$ECHO "Find out the repdb database startup script" |tee -a $sybase_log_dir/collect_sybase_log.txt
+grep -i 'dbspawn' /eniq/admin/bin/repdb >>$sybase_log_dir/database_startup.txt
+startup_script=`cat $sybase_log_dir/database_startup.txt`
+$ECHO "repdb database startup script is $startup_script " |tee -a $sybase_log_dir/collect_sybase_log.txt
+
+$ECHO "Find out the process id of repdb process" |tee -a $sybase_log_dir/collect_sybase_log.txt
+pid=`ps -ef|grep dbsrv11|grep dcuser|$NAWK '{print $2}'`
+$ECHO "Process id is $pid" |tee -a $sybase_log_dir/collect_sybase_log.txt
+
+$ECHO "creating directory $sybase_log_dir/repdb_core" |tee -a $sybase_log_dir/collect_sybase_log.txt
+$MKDIR -p 777 $sybase_log_dir/repdb_core
+if [ $? -eq 0 ]; then
+ $ECHO "$sybase_log_dir/repdb_core created Sucessfully" |tee -a $sybase_log_dir/collect_sybase_log.txt
+else
+  $ECHO "Failed to create $sybase_log_dir/repdb_core" |tee -a $sybase_log_dir/collect_sybase_log.txt
+  exit 1
+fi
+
+$ECHO "Generating the three core files in 30 seconds interval" |tee -a $sybase_log_dir/collect_sybase_log.txt
+for i in 1 2 3
+do
+gcore -o $sybase_log_dir/repdb_core/dbsrv11.core_`date '+%y%m%d_%H%M%S'` $pid
+sleep 30
+done
+
+$ECHO "Executed the pmap,pstack,pflags commands" |tee -a $sybase_log_dir/collect_sybase_log.txt
+list=$sybase_log_dir/repdb_core
+for file in `ls $list`
+do
+pmap $list/$file >>$sybase_log_dir/pmap$file.txt
+pstack $list/$file >>$sybase_log_dir/pstack$file.txt
+pflags $list/$file >>$sybase_log_dir/pflags$file.txt
+done
+
+file_list="/usr/lib/librtld_db.so.1 /usr/lib/libC.so.5 /usr/lib/libCrun.so.1 /usr/lib/libaio.so.1 /usr/lib/libc.so.1 /usr/lib/libdl.so.1 /usr/lib/libdoor.so.1 /usr/lib/libgen.so.1 /usr/lib/libm.so.1 /usr/lib/libm.so.2 /usr/lib/libmd.so.1 /usr/lib/libmp.so.2 /usr/lib/libnsl.so.1 /usr/lib/librt.so.1 /usr/lib/libscf.so.1 /usr/lib/libsocket.so.1 /usr/lib/libthread.so.1 /usr/lib/libuutil.so.1 /usr/lib/libw.so.1  /usr/lib/libthread_db.so.1 /usr/lib/libthread_db.so"
+for file in $file_list
+do
+$ECHO "Copying $file file to $sybase_log_dir" |tee -a $sybase_log_dir/collect_sybase_log.txt
+cp $file $sybase_log_dir
+done 
+
+$ECHO "Creating the pstack log" |tee -a $sybase_log_dir/collect_sybase_log.txt 
+for i in 1 2 3
+do
+pstack $pid >> $sybase_log_dir/pstack_`date '+%y%m%d_%H%M%S'`
+sleep 300
+done
+
+tar -cvf /eniq/local_logs/sybase_log.tar $sybase_log_dir 
+ 

@@ -1,0 +1,62 @@
+--===============================================================
+-- File Name : BW-WebRTCServer.mib 
+-- Date      : 17/06/2013
+-- Author    : BroadSoft Inc.
+--===============================================================
+
+BW-WebRTCServer DEFINITIONS ::= BEGIN
+	IMPORTS
+		enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Counter32, Gauge32, Counter64, Integer32
+			FROM SNMPv2-SMI
+		MODULE-COMPLIANCE, OBJECT-GROUP          
+			FROM SNMPv2-CONF
+		DateAndTime, DisplayString
+			FROM SNMPv2-TC;
+
+	broadsoft	MODULE-IDENTITY
+		LAST-UPDATED  "201306170000Z"
+		ORGANIZATION	"Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+		DESCRIPTION
+				"This is the System Management Information structure for the
+				Broadsoft enterprise."
+		REVISION    "201306170000Z"
+                DESCRIPTION     "WebRTC Server MIB creation"
+		::=  {  enterprises  6431  }
+		
+  broadworks	OBJECT IDENTIFIER
+		::=  {  broadsoft  1  }		
+	
+	webRTC	OBJECT IDENTIFIER
+		::=  {  broadworks  39  }
+	
+	bwWRSMibConformance	OBJECT IDENTIFIER
+		::=  {  webRTC  100  }
+
+-- ################### ...............................
+--                     ...............................
+-- ################### ...............................
+
+	
+-- BroadWorks WebRTC Server MIB Conformance Definition  ...........................................
+
+bwWRSMibGroups		OBJECT IDENTIFIER ::= { bwWRSMibConformance 1 }
+bwWRSMibCompliancy	OBJECT IDENTIFIER ::= { bwWRSMibConformance 2 }
+
+-- units of conformance
+
+
+bwWRSBasicCompliance MODULE-COMPLIANCE
+	STATUS current
+     	DESCRIPTION
+		"BroadWorks WebRTC Server MIB compliance"
+	MODULE -- this module
+	::= { bwWRSMibCompliancy 1 }		
+	    
+-- End of MIB file - Do not put anything behind this line ...........................................
+
+END

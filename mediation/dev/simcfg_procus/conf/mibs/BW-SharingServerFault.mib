@@ -1,0 +1,119 @@
+-- File Name : BW-SharingServerFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2016, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-SharingServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npUserId, npNetAddress, npRoomId, npReason
+      FROM BroadworksFault;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201308110000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+        "This MIB defines management information for the Sharing Server."
+    REVISION    "201308110000Z"
+                DESCRIPTION     "Creating the mib."
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  common  OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  systemFaults  OBJECT IDENTIFIER
+    ::=  {  common  1  }
+
+  bwPMUSSLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the USS process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUSSLaunched, bwPMUSSShutDown, bwPMUSSStarted, and bwPMUSSDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the USS process running on some of the BroadWorks servers."
+-- @feature:203921
+    ::=  {  systemFaults 12701  }
+
+  bwPMUSSShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the USS process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUSSLaunched, bwPMUSSShutDown, bwPMUSSStarted, and bwPMUSSDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the USS process running on some of the BroadWorks servers."
+-- @feature:203921
+    ::=  {  systemFaults 12702  }
+
+  bwPMUSSRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the USS process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUSSLaunched, bwPMUSSShutDown, bwPMUSSStarted, and bwPMUSSDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the USS process running on some of the BroadWorks servers."
+-- @feature:203921
+    ::=  {  systemFaults 12703  }
+
+  bwPMUSSDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the USS process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMUSSLaunched, bwPMUSSShutDown, bwPMUSSStarted, and bwPMUSSDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the USS process running on some of the BroadWorks servers."
+-- @feature:203921
+    ::=  {  systemFaults 12704  }
+   
+  bwUMSProvisioningUnreachable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npNetAddress }
+    STATUS      current
+    DESCRIPTION
+        "The Provisioning Cluster is unreachable. The alarm is cleared once a response is received.
+@severity:high
+@subcomponent:uss"
+-- @feature:203921
+    ::=  {  systemFaults 12705  }
+
+  bwUSSBandwidthExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npUserId, npNetAddress }
+    STATUS      current
+    DESCRIPTION
+        "An UC-One client has exceeded the allowed bandwidth for a room. The UC-One client was disconnected.
+@severity:informational
+@subcomponent:uss"
+-- @feature:203921
+    ::=  {  systemFaults 12706  }
+
+  bwUSSRoomDestroyed  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npRoomId, npUserId, npReason }
+    STATUS      current
+    DESCRIPTION
+        "A room was destroyed by the system. 
+@severity:informational
+@subcomponent:uss"
+-- @feature:203921
+    ::=  {  systemFaults 12707  }
+
+  bwUSSBusy  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npRoomId, npUserId, npReason }
+    STATUS      current
+    DESCRIPTION
+        "A connection request from an end-user was refused because the server is too busy. 
+@severity:informational
+@subcomponent:uss"
+-- @feature:203921
+    ::=  {  systemFaults 12708  }
+
+END

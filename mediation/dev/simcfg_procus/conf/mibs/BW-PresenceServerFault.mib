@@ -1,0 +1,80 @@
+-- File Name : BW-PresenceServerFault.mib
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+BW-PresenceServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npExecutorType, npOperation, npReason
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks presence server Application."
+    REVISION    "201409100000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMPresenceServerLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the presence server has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMPresenceServerLaunched, bwPMPresenceServerShutDown, bwPMPresenceServerRestarted, bwPMPresenceServerDeath, and bwPMPresenceServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the presence server process"
+-- @feature:217550
+    ::=  {  systemFaults 16001  }
+
+  bwPMPresenceServerShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the presence server has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMPresenceServerLaunched, bwPMPresenceServerShutDown, bwPMPresenceServerRestarted, bwPMPresenceServerDeath, and bwPMPresenceServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the presence server process"
+-- @feature:217550
+    ::=  {  systemFaults 16002  }
+
+  bwPMPresenceServerRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the presence server restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMPresenceServerLaunched, bwPMPresenceServerShutDown, bwPMPresenceServerRestarted, bwPMPresenceServerDeath, and bwPMPresenceServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the presence server process"
+-- @feature:217550
+    ::=  {  systemFaults 16003  }
+
+  bwPMPresenceServerDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the presence server death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMPresenceServerLaunched, bwPMPresenceServerShutDown, bwPMPresenceServerRestarted, bwPMPresenceServerDeath, and bwPMPresenceServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the presence server process"
+-- @feature:217550
+    ::=  {  systemFaults 16004  }
+    
+bwPMPresenceServerOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the presence server application ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMPresenceServerLaunched, bwPMPresenceServerShutDown, bwPMPresenceServerRestarted, bwPMPresenceServerDeath, and bwPMPresenceServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the presence server process."
+-- @feature:217550
+    ::=  {  systemFaults 16005  }
+    
+END

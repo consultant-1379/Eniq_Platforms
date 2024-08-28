@@ -1,0 +1,80 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ ETLC engine control script for SMF to use
+#
+# 
+# Usage: webstart start|stop
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2010 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+PATH=${RT_DIR}/java/bin/amd64:${PATH}
+export PATH
+
+if [ ! -f ${CONF_DIR}/niq.ini ] ; then
+  echo "Panic: Configuration file niq.ini not found"
+  exit 30
+fi
+
+GF_DIR=${GLASSFISH_DIR}/glassfish3
+GF_BIN=${GF_DIR}/glassfish/bin
+DOMAINS_DIR=${GF_DIR}/glassfish/domains
+
+
+start() {
+
+  ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s glassfish -a start
+
+}
+
+stop() {
+
+  ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s glassfish -a stop
+
+}
+
+status() {
+
+  if [ -d ${GF_BIN} ] ; then
+	  ${GF_BIN}/asadmin --user admin list-domains
+  fi
+  
+  ECODE=$?
+
+  if [ ${ECODE} -ne 0 ] ; then
+      echo "Glassfish is not running"
+  fi
+
+  exit ${ECODE}
+}
+
+case "$1" in
+start)
+      start
+      ;;
+stop)
+      stop
+      ;;
+restart) 
+      stop
+      start	
+      ;;
+status)
+      status
+      ;;
+*)
+      echo "Usage: glassfish start|stop|restart|status"
+      exit 10
+      ;;
+esac

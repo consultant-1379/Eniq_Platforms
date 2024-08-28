@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--This DTD defines the schema for XML 1.0 Documents representing EriNMS specific CIM Element Messages.
+
+     Author: LXR/SC Enda Murphy
+     Docno: 1/002 02-CNA 403 2052 
+     Date: 2010-11-18
+     Rev: A
+-->
+<!--
+==========================================================================================================================
+Element: EricssonNMSCIM
+==========================================================================================================================
+This element is the root element in the topology.
+
+Attribute: CIMVERSION
+Simply use "2.4". It is kept in the DTD due to backward compatibility reasons. The content of this element is not used.
+
+Attribute: DTDVERSION
+Simply use "1.0". It is kept in the DTD due to backward compatibility reasons. The content of this element is not used.
+==========================================================================================================================
+-->
+<!ELEMENT EricssonNMSCIM (OPERATION)>
+<!ATTLIST EricssonNMSCIM
+	CIMVERSION CDATA #IMPLIED
+	DTDVERSION CDATA #IMPLIED
+>
+<!--
+==========================================================================================================================
+Element: OPERATION
+==========================================================================================================================
+This element is kept for backward compatibility reasons.
+
+Attribute: TYPE:
+Simply use "purge". It is kept in the DTD due to backward compatibility reasons. The content of this element is actually not used.
+
+Attribute: PROTOCOLVERSION
+Simply use "1.0".
+==========================================================================================================================
+-->
+<!ELEMENT OPERATION (EricssonNMS)>
+<!ATTLIST OPERATION
+	PROTOCOLVERSION CDATA #REQUIRED
+	TYPE (purge | modify | add | delete) #IMPLIED
+>
+<!--
+==========================================================================================================================
+Element: EricssonNMS
+==========================================================================================================================
+This element is kept for backward compatibility reasons.
+
+Attribute: (No attributes!)
+-->
+<!ELEMENT EricssonNMS (EriNMSSubNW)>
+<!--
+==========================================================================================================================
+Element: EriNMSSubNW
+==========================================================================================================================
+This element represent a sub network, but is actually not used anymore. It is kept for backward compatibility reasons.
+
+Attribute: cimname
+This is the name of the sub network. Simply use "Service Network".
+-->
+<!ELEMENT EriNMSSubNW (SNOSNE*)>
+<!ATTLIST EriNMSSubNW
+	cimname CDATA #REQUIRED
+>
+<!--
+==========================================================================================================================
+Element: SNOSNE
+==========================================================================================================================
+This element represent an object in the system topology, for example subsystem, component or function.
+
+Attribute cimname:
+The name of the object. Use an abbreviation, for example EMA for the Ericsson 
+Multi Activation. The cimName must be unique for a system.
+
+Attribute cimdescription:
+This is a description of the object.
+
+Attribute cimcaption:
+The full name of the object. For example Ericsson Multi Activation for EMA.
+
+Attribute cimotheridentifyinginfo:
+This is the resource identity of an alarming resource using the SNF SNMP protocol. 
+The resource identity must start with 1, 2 or 3, is in format x.x.x... and 
+have a minimum value length of 2 (for example 1.4.28). This is used for mapping 
+of alarms to objects. This attribute is optional for all systems not using the 
+SNF SNMP protocol.
+
+Attribute cimidentifyingdescription:
+This is a description of the resource identity in 'cimotheridentifyinginfo'.
+
+Attribute syscontact:
+This is the name of the person responsible for a system.
+
+Attribute syslocation:
+This is the geographical location of a system.
+
+Attribute snoshostip:
+This is the IP address of the host where the System/Component resides.
+
+Attribute snosversion:
+This is the version of the System/Component.
+
+Attribute snoshostname:
+This is the hostname of the host where the System/Component resides.
+
+Attribute snossnmpcommunity:
+This is the SNMP community string to use when connecting to the SNMP agent on 
+the host.
+
+Attribute snossnmpport:
+This is the SNMP port to use when connecting to the SNMP agent on the host.
+
+Attribute snosalarmmoi:
+The alarmManagedObjectInstance for a system sending alarms according to the 
+ERICSSON-ALARM-IRP-MIB. It is used to identify an alarming resource in a 
+system supporting the ERICSSON-ALARM-IRP-MIB. The combination of SNOSHostIP 
+and SNOSAlarmMOI must be unique. Note: This optional attribute is mandatory 
+when using the ERICSSON-ALARM-IRP-MIB, for example when SNMS is integrated with OSS-RC FM.
+
+Attribute snosprotocoltype:
+The type of SNMP protocol used by the system. Valid values are SNF, IRP, MST, SNMP, TXF.
+
+Attribute snostype:
+The type of system. Used for example by the MST solution to find the correct 
+trap translations. Examples: MMC, MIEP, SDP(ESA) or SunMC. This attribute 
+is required when snosprotocoltype is set to MST. Also used by the TXF interface to 
+find the correct TXF translate map.
+-->
+
+<!ELEMENT SNOSNE (SNOSNE | SNOSOP | SnmpCounterSet | IrpXmlCounterSet | RemoteFileFetch)* >
+<!ATTLIST SNOSNE
+	cimname CDATA #REQUIRED
+	cimdescription CDATA #IMPLIED
+	cimcaption CDATA #IMPLIED
+	cimotheridentifyinginfo CDATA #IMPLIED
+	cimidentifyingdescription CDATA #IMPLIED
+	syscontact CDATA #IMPLIED
+	syslocation CDATA #IMPLIED
+	snoshostip CDATA #REQUIRED
+	snosbackupip CDATA #IMPLIED
+	snosversion CDATA #IMPLIED
+	snoshostname CDATA #IMPLIED
+	snossnmpcommunity CDATA #IMPLIED
+	snossnmpport CDATA #IMPLIED
+	snosalarmmoi CDATA #IMPLIED
+	snosprotocoltype (SNF | IRP | MST | SNMP | TXF | MVMALARM) #IMPLIED
+	snostype CDATA #REQUIRED
+>
+
+<!--
+==========================================================================================================================
+Element: SnmpCounterSet
+==========================================================================================================================
+This element represent an SNMP based PM counter set.
+-->
+<!ELEMENT SnmpCounterSet EMPTY>
+<!ATTLIST SnmpCounterSet
+	fileName CDATA #REQUIRED
+	ROP ( 1 | 5 | 15 | 60 ) #REQUIRED
+>
+
+<!--
+==========================================================================================================================
+Element: IrpXmlCounterSet
+==========================================================================================================================
+This element represent an IRP XML based PM counter set.
+-->
+<!ELEMENT IrpXmlCounterSet EMPTY>
+<!ATTLIST IrpXmlCounterSet
+	fileName CDATA #REQUIRED
+	regExp CDATA #REQUIRED
+	ROP ( 1 | 5 | 15 | 60 ) #REQUIRED
+>
+
+
+<!--
+==========================================================================================================================
+Element: RemoteFileFetch
+==========================================================================================================================
+This element represent an Remote File Fetch.
+-->
+<!ELEMENT RemoteFileFetch (RemoteFileCounterSet+)>
+<!ATTLIST RemoteFileFetch
+	pluginDir CDATA #REQUIRED
+	ROP ( 5 | 15 | 60 | 120 | 1440) #REQUIRED
+	ProtocolType ( SFTP ) #REQUIRED
+	Offset CDATA #IMPLIED
+>
+
+
+<!--
+==========================================================================================================================
+Element: RemoteFileCounterSet
+==========================================================================================================================
+This element represent an Remote file based PM counter set.
+-->
+<!ELEMENT RemoteFileCounterSet EMPTY>
+<!ATTLIST RemoteFileCounterSet
+	fileName CDATA #IMPLIED
+	regExp CDATA #IMPLIED
+ >
+
+
+<!--
+==========================================================================================================================
+Element: SNOSOP
+==========================================================================================================================
+This element represent an operation possible to run on the object in the topology, 
+for example subsystem, component or function.
+
+A number of operations (start, stop, restart, status, config) may be supported by a 
+system/component. If a system/component supports any of these operations, the access 
+to these operations shall be stored in the O&M data model.
+
+The operation config gives the possibility to store the access to a number of 
+configuration tools for a system/component in the O&M data model.
+
+Attribute cimname:
+The name of the operation. If the operation config is chosen, then cimName 
+should contain the name of the configuration tool.
+
+Attribute cimdescription:
+This is a description of the object.
+
+Attribute cimcaption:
+The full name of the object. For example Ericsson Multi Activation for EMA.
+
+Attribute snosopname:
+Indicates an operation on a system/component. Type & range: start, stop, restart, 
+status, enableautostart,
+
+disableautostart, lock, unlock, shutdown, state, config
+
+Attribute snosoptype:
+Indicates how to execute the chosen operation.
+
+Attribute snosopargument:
+Indicates the command to execute the chosen operation, for example a web link 
+or a CLI command string.
+
+Attribute snosopuser:
+Indicates the user to execute the chosen operation. If this attribute is 
+left out, user root is used.
+-->
+<!ELEMENT SNOSOP EMPTY>
+<!ATTLIST SNOSOP
+	cimname CDATA #REQUIRED
+	cimdescription CDATA #IMPLIED
+	cimcaption CDATA #IMPLIED
+	snosopname (start | stop | restart | status | enableautostart | disableautostart | lock | unlock | shutdown | state | config) #REQUIRED
+	snosoptype (URL | script) #REQUIRED
+	snosopargument CDATA #REQUIRED
+	snosopuser CDATA #IMPLIED
+>

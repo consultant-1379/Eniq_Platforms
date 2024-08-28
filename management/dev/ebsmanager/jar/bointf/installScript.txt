@@ -1,0 +1,18 @@
+# Install script file for universe updater application
+#
+# The install directives are defined in the following form: 
+#
+# [resource], [destination file], EXECUTE (optional), [argument 1] (optional), [argument 2] (optional) ...
+#
+# Comma (',') is used as the delimiter, and white space between tokens is ignored.
+#
+bointf/Interop.busobj.dll, C:\temp\TPIDE_BOIntf\Interop.busobj.dll
+bointf/Interop.Designer.dll, C:\temp\TPIDE_BOIntf\Interop.Designer.dll
+bointf/readme.txt, C:\temp\TPIDE_BOIntf\readme.txt
+bointf/TPIDE_BOIntf.exe, C:\temp\TPIDE_BOIntf\TPIDE_BOIntf.exe, EXECUTE
+bointf/TPIDE_BOIntf.pdb, C:\temp\TPIDE_BOIntf\TPIDE_BOIntf.pdb
+bointf/Verification_BH_Template.ret, %USERHOME%\Documents\My Business Objects Documents\templates\Verification_BH_Template.ret
+bointf/Verification_CM_Template.ret, %USERHOME%\Documents\My Business Objects Documents\templates\Verification_CM_Template.ret
+bointf/Verification_Count_Template.ret, %USERHOME%\Documents\My Business Objects Documents\templates\Verification_Count_Template.ret
+bointf/Verification_Template.ret, %USERHOME%\Documents\My Business Objects Documents\templates\Verification_Template.ret
+bointf/Verification_RANKBH_Template_XI.ret, %USERHOME%\Documents\My Business Objects Documents\templates\Verification_RANKBH_Template_XI.ret

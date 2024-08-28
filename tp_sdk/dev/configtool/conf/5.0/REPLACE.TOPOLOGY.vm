@@ -1,0 +1,37 @@
+## 
+## REPLACE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+trg.STATUS = 'Replaced'
+FROM $TABLE_CURRENT src
+WHERE 
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 2)
+#if($first)  
+NOT EXISTS (SELECT tbl.$ref.getDataname FROM ${TABLE}_CURRENT tbl
+WHERE tbl.$ref.getDataname() = trg.$ref.getDataname()
+#set($first = false)
+#else 
+AND tbl.$ref.getDataname() = trg.$ref.getDataname()
+#end
+#end
+#end
+)
+AND 
+EXISTS 
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if($first)  
+(SELECT tbl.$ref.getDataname FROM ${TABLE}_CURRENT tbl
+WHERE tbl.$ref.getDataname() = trg.$ref.getDataname()
+#set($first = false)
+#else 
+AND tbl.$ref.getDataname() = trg.$ref.getDataname()
+#end
+#end
+#end
+)
+;
+commit;

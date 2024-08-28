@@ -1,0 +1,66 @@
+<project name="install" basedir="." default="all">
+
+	<property name="dcinstall.require.common" value="> 5-0-0b85" />
+	<property name="dcinstall.require.engine" value="> 5-0-0b304" />
+	<property name="dcinstall.require.repository" value="> 5-0-0b104" />	
+	<property name="stn.basepath" value="/eniq/data/pmdata/NVU/DC_E_STN" />
+	<property name="stn.archive" value="/eniq/archive/NVU/DC_E_STN/archive" />
+	<property name="bss.basepath" value="/eniq/data/pmdata/NVU/DC_E_BSS" />
+	<property name="bss.archive" value="/eniq/archive/NVU/DC_E_BSS/archive" />
+	<property name="ims.basepath" value="/eniq/data/pmdata/NVU/DC_E_IMS" />
+	<property name="ims.archive" value="/eniq/archive/NVU/DC_E_IMS/archive" />
+	<property name="hss.basepath" value="/eniq/data/pmdata/NVU/DC_E_HSS" />
+	<property name="hss.archive" value="/eniq/archive/NVU/DC_E_HSS/archive" />
+	<property name="mtas.basepath" value="/eniq/data/pmdata/NVU/DC_E_MTAS" />
+	<property name="mtas.archive" value="/eniq/archive/NVU/DC_E_MTAS/archive" />
+
+	<target name="install" depends="copyTmpToDeploy">
+	
+		<mkdir dir="${dc.log.dir}/afj_manager"/>
+		
+	    <copy file="${dc.installer.dir}/tmp/conf/AFJManager.properties" toFile="${dc.conf.dir}/AFJManager.properties" overwrite="true" />
+		<copy file="${dc.installer.dir}/tmp/xsd/oss_rc_pm_mim_PA5.xsd" toFile="${dc.conf.dir}/dtd/oss_rc_pm_mim_PA5.xsd" overwrite="true" />
+		<copy file="${dc.installer.dir}/tmp/xsd/pm_mim_xsd.xsd" toFile="${dc.conf.dir}/dtd/pm_mim_xsd.xsd" overwrite="true" />
+	    <if>
+	      <available file="${dc.conf.dir}/afjmanagerRestoreLogging.properties"/>
+	      <then/>
+	      <else>
+	        <copy file="${dc.installer.dir}/tmp/conf/afjmanagerRestoreLogging.properties" toFile="${dc.conf.dir}/afjmanagerRestoreLogging.properties"/>
+	      </else>
+	    </if>
+		<!-- Create the directory /eniq/data/pmdata/NVU/TP_Name -->
+		<mkdir dir="${stn.basepath}"/>
+		<mkdir dir="${bss.basepath}"/>
+		<mkdir dir="${ims.basepath}"/>
+		<mkdir dir="${hss.basepath}"/>
+		<mkdir dir="${mtas.basepath}"/>
+		
+		<!-- Create the archive directory /eniq/archive/NVU/TP_Name/archive -->
+		<mkdir dir="${stn.archive}"/>
+		<mkdir dir="${bss.archive}"/>
+		<mkdir dir="${ims.archive}"/>
+		<mkdir dir="${hss.archive}"/>
+		<mkdir dir="${mtas.archive}"/>
+		
+		<!-- Uninstall previous restore techpack command version -->
+	  	<if>
+	  	  <available file="${dc.bin.dir}/restore_nvu_techpack.bsh"/>
+	  	  <then>
+	  	    <delete file="${dc.bin.dir}/restore_nvu_techpack.bsh"/>
+	  	  </then>
+	  	</if>
+
+		<!-- Install latest version of the restore techpack command -->
+	  	<copy file="${dc.installer.dir}/tmp/bin/restore_nvu_techpack.bsh" toFile="${dc.bin.dir}/restore_nvu_techpack.bsh"/>
+	  	<chmod perm="ug+x" file="${dc.bin.dir}/restore_nvu_techpack.bsh"/>
+			
+		<!-- Starting up webserver -->
+
+        <exec dir="${dc.bin.dir}" executable="webserver">
+		  <arg line="restart"/>
+		</exec>
+	</target>
+
+	<target name="update" depends="moveToObsolete,install" />
+
+</project>

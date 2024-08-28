@@ -1,0 +1,74 @@
+<project name="alarm" default="compile">
+
+  <property name="pack.name" value="alarm"/>
+  <property name="pack.version" value="2-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/alarm_module/dev"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+  <property name="eniq.parser.dir" value="/vobs/eniq/design/plat/adapters/build/parser"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+
+
+   <!-- 3PP Jars -->
+<!-- ANT JAR with no version number -->
+  <property name="3pp.commons_codec.dir" value="/vobs/eniq/3pp/apache/comm_codec/v1_9/prod"/>
+  <property name="3pp.httpclient.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.httpcore.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.commons_logging.dir" value="/vobs/eniq/3pp/apache/comm_logging/v1_2/prod"/>
+  <property name="3pp.velocity.dir" value="/vobs/eniq/3pp/apache/jakarta_velocity/v1_5/prod"/>
+   <property name="3pp.jersey.dir" value="/vobs/eniq/3pp/jersey"/>
+
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		<pathelement path="${eniq.repository.dir}/repository.jar"/>
+      	<fileset dir="${eniq.common.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.engine.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.parser.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.commons_codec.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.httpclient.dir}">
+				<include name="**/httpclient-4.4.1.jar"/>
+		 </fileset>
+      	<fileset dir="${3pp.httpcore.dir}">
+      					<include name="**/httpcore-4.4.1.jar"/>
+      			 </fileset>
+		 <fileset dir="${3pp.commons_logging.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.velocity.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 		 <fileset dir="${3pp.jersey.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+      </classpath>
+    </javac>
+
+  </target>
+
+	<target name="postcompile">
+	  <mkdir dir="${pack.dir}/connectionlib"/>
+	  <jar destfile="${pack.dir}/connectionlib/ETLCAlarm_b${build.number}.jar">
+	    <fileset dir="${pack.dir}/classes">
+	    	<include name="**/connectionlib/*"/>
+	    </fileset>
+	  </jar>
+	</target>
+
+</project>

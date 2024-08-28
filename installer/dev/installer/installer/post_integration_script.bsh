@@ -1,0 +1,192 @@
+#!/bin/bash
+# ********************************************************************
+# LMI Ericsson                                      SCRIPT
+# ********************************************************************
+#
+#
+# (c) LMI Ericsson  2001 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of LMI Ericsson , Ireland. The programs may be used 
+# and/or copied only with the written permission from LMI Ericsson  
+# or in accordance with the terms and conditions stipulated 
+# in the agreement/contract under which the program(s) have been 
+# supplied.
+#
+# ********************************************************************
+# Name    : post_integration_script.bsh
+# written : XSARAVE
+# Date    : 2016
+# Revision: A
+# Purpose : This script is for getting the details of the ENM server and to add the certicates to the keystore.  
+#
+# Usage   : ./post_integration_script.bsh
+#
+# ********************************************************************
+# ********************************************************************
+#
+# 	Execution
+#
+# ********************************************************************
+
+# Commands
+ECHO=/usr/bin/echo
+KEYTOOL=/usr/bin/keytool
+CLEAR=/usr/bin/clear
+SU=/usr/bin/su
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+CONF_DIR=/eniq/sw/conf
+TRUST_STORE=/eniq/sw/runtime/jdk/jre/lib/security/truststore.ts
+ENM_SERVER_DETAIL=${CONF_DIR}/enmserverdetail
+ETC_HOSTS=/etc/hosts
+ENIQHOSTNAME=$(/usr/bin/hostname)
+ENM="ENM"
+ENMCERTIFICATE=/eniq/home/dcuser/enmcertificate/
+PK_ALIAS=pki
+INFRA_ALIAS=infra
+UI_ALIAS=ui
+
+if [ ${LOGNAME} != "root"  ] ; then
+  $ECHO "This script must be executed as root"
+  exit 1
+fi
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+get_enm_server_details()
+{
+
+while :; do
+	unset hostname
+	$ECHO "Enter the hostname of the ENM server:"
+	read hostname
+	# If the User hit nothing...Loop
+    if [ ! "${hostname}" ]; then
+        continue
+    fi
+	HOSTNAME=${hostname}
+	break
+done
+
+while :; do
+	unset ipaddress
+	$ECHO "Enter the NAS IP Address of the ENM server:"
+	read ipaddress
+	# If the User hit nothing...Loop
+    if [ ! "${ipaddress}" ]; then
+        continue
+    fi
+	validate_ip ${ipaddress}
+	if [ $? -ne 0 ]; then
+        continue
+    fi
+	IPADDRESS=${ipaddress}
+	break
+done
+
+while :; do
+	unset username
+	$ECHO "Enter the Username:"
+	read username
+	# If the User hit nothing...Loop
+    if [ ! "${username}" ]; then
+        continue
+    fi
+	USERNAME=${username}
+	break
+done
+
+while :; do
+	unset password
+	$ECHO "Enter the Password:"
+	read -s password
+	# If the User hit nothing...Loop
+    if [ ! "${password}" ]; then
+        continue
+    fi
+	PASSWORD=$($ECHO $password | /usr/sfw/bin/openssl enc -base64)
+	break
+done
+
+$SU - dcuser -c "${ECHO} ${IPADDRESS} ${HOSTNAME} ${ENM} ${USERNAME} ${PASSWORD} ${ENIQHOSTNAME} >> ${ENM_SERVER_DETAIL}"
+if [ $? == 0 ] ; then
+	$ECHO "ENM server details are added into enmserverdetail successfully"
+else
+	$ECHO "Error in adding the ENM server details in enmserverdetail file."
+fi
+}
+
+get_hosts_details()
+{
+
+while :; do
+	unset apache_ipaddress
+	$ECHO "Enter the Apache IP Address of the ENM server:"
+	read apache_ipaddress
+	# If the User hit nothing...Loop
+    if [ ! "${apache_ipaddress}" ]; then
+        continue
+    fi
+	validate_ip ${apache_ipaddress}
+	if [ $? -ne 0 ]; then
+        continue
+    fi
+	APACHEIPADDRESS=${apache_ipaddress}
+	break
+done
+
+$ECHO $APACHEIPADDRESS $HOSTNAME >> "${ETC_HOSTS}"
+if [ $? == 0 ] ; then
+	$ECHO "Details are added into /etc/hosts file successfully"
+else
+	$ECHO "Error in adding details in /etc/hosts file."
+fi
+}
+
+get_certificate_details()
+{
+
+KEYSTORE_PASSWORD=`inigetpassword KEYSTOREPASS -v keyStorePassValue -f ${CONF_DIR}/niq.ini`
+PK_FILE=`ls ${ENMCERTIFICATE} | grep ENM_PKI_Root_CA`
+
+
+PK_FILE_PATH=/eniq/home/dcuser/enmcertificate/$PK_FILE
+ 
+
+
+
+$SU - dcuser -c ""yes" | ${KEYTOOL} -import -file ${PK_FILE_PATH} -alias ${PK_ALIAS} -keystore ${TRUST_STORE} -storepass ${KEYSTORE_PASSWORD}"
+
+
+INFRA_FILE=`ls ${ENMCERTIFICATE} | grep ENM_Infrastructure_CA`
+
+INFRA_FILE_PATH=${ENMCERTIFICATE}/$INFRA_FILE
+
+
+$SU - dcuser -c ""yes" | ${KEYTOOL} -import -file ${INFRA_FILE_PATH} -alias ${INFRA_ALIAS} -keystore ${TRUST_STORE} -storepass ${KEYSTORE_PASSWORD}"
+
+
+UI_FILE=`ls ${ENMCERTIFICATE}/ | grep ENM_UI_CA`
+UI_FILE_PATH=${ENMCERTIFICATE}/$UI_FILE
+
+
+
+$SU - dcuser -c ""yes" | ${KEYTOOL} -import -file ${UI_FILE_PATH} -alias ${UI_ALIAS} -keystore ${TRUST_STORE} -storepass ${KEYSTORE_PASSWORD}"
+
+}
+
+######MAIN PROGRAM###
+$CLEAR
+get_enm_server_details
+
+get_hosts_details
+
+get_certificate_details

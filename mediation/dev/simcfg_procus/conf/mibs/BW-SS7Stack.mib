@@ -1,0 +1,3196 @@
+-- File Name : BW-SS7Stack.mib
+
+BW-SS7Stack DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201202230000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201202230000Z"
+      DESCRIPTION "Creation of the SS7 Protocol Stack MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ss7ProtocolStack OBJECT IDENTIFIER
+    ::= { broadworks 30 }
+
+  bwSS7ProtocolStackMibConformance OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 1000 }
+
+-- SS7 Protocol Stack modules  ...........................................
+
+  ss7M3uaCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 1 }
+
+  ss7SccpCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 3 }
+
+  ss7SctpCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 4 }
+
+  ss7TcapCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 6 }
+   
+-- SS7 m3ua Counters  ...........................................
+
+  bwSS7M3UAProtocolStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UAProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Protocol related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  1 }
+
+  bwSS7M3UATrafficStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UATrafficStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Traffic related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  2 }
+
+  bwSS7M3UAConnStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UAConnStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Connection related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  3 }
+
+  bwSS7M3UARemoteASStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UARemoteASStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Remote AS related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  4 }
+
+  bwSS7M3UARemotePCStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UARemotePCStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Remote Point Code (PC) related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  5 }
+
+  bwSS7M3UAErrorStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7M3UAErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes M3UA Error related statistics"
+-- @feature:158606
+    ::=  {  ss7M3uaCounters  6 }
+
+-- bwSS7M3UAProtocolStatsTable  ...........................................
+
+  bwSS7M3UAProtocolStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UAProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UAProtocolStatsTable."
+    INDEX    {  bwSS7M3UAProtocolStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UAProtocolStatsTable 1 }
+
+  BwSS7M3UAProtocolStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UAProtocolStatsIndex  Unsigned32,
+    bwSS7M3UAProtocolStatsInstanceId  Unsigned32,
+    bwSS7M3UAProtocolStatsLastResetTimeGauge  Gauge32,
+    bwSS7M3UAProtocolStatsCount  Unsigned32,
+    bwSS7M3UAProtocolStatsReset  INTEGER
+   }
+
+  bwSS7M3UAProtocolStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7M3UAProtocolStatsEntry  1  }
+
+  bwSS7M3UAProtocolStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UAProtocolStatsEntry  2  }
+    
+  bwSS7M3UAProtocolStatsLastResetTimeGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA protocol last reset time."
+-- @feature:158606
+    ::=  {  bwSS7M3UAProtocolStatsEntry  3  }
+    
+  bwSS7M3UAProtocolStatsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA count."
+-- @feature:158606
+    ::=  {  bwSS7M3UAProtocolStatsEntry  4  }
+
+  bwSS7M3UAProtocolStatsReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UAProtocolStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UAProtocolStatsEntry  5  }
+             
+-- bwSS7M3UATrafficStatsTable  ...........................................
+
+  bwSS7M3UATrafficStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UATrafficStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UATrafficStatsTable."
+    INDEX    {  bwSS7M3UATrafficStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UATrafficStatsTable 1 }
+
+  BwSS7M3UATrafficStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UATrafficStatsIndex  Unsigned32,
+    bwSS7M3UATrafficStatsInstanceId  Unsigned32,
+    bwSS7M3UATrafficStatsLastResetTimeGauge  Gauge32,
+    bwSS7M3UATrafficStatsPduSentCount  Unsigned32,
+    bwSS7M3UATrafficStatsPduReceivedCount  Unsigned32,
+    bwSS7M3UATrafficStatsCtrlMessageSentCount  Unsigned32,
+    bwSS7M3UATrafficStatsCtrlMessageReceivedCount  Unsigned32,
+    bwSS7M3UATrafficStatsByteSentCount  Unsigned32,
+    bwSS7M3UATrafficStatsByteReceivedCount  Unsigned32,
+    bwSS7M3UATrafficStatsTableReset  INTEGER
+   }
+
+  bwSS7M3UATrafficStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  1  }
+
+  bwSS7M3UATrafficStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  2  }
+
+  bwSS7M3UATrafficStatsLastResetTimeGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA traffic last reset time."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  3  }
+        
+  bwSS7M3UATrafficStatsPduSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP pdu sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  4  }
+    
+  bwSS7M3UATrafficStatsPduReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP pdu received."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  5  }
+    
+  bwSS7M3UATrafficStatsCtrlMessageSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP control message sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  6  }
+
+  bwSS7M3UATrafficStatsCtrlMessageReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP control message received."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  7  }
+    
+  bwSS7M3UATrafficStatsByteSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP byte sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  8  }
+
+  bwSS7M3UATrafficStatsByteReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP byte received."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  9  }
+
+  bwSS7M3UATrafficStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UATrafficStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UATrafficStatsEntry  10  }
+
+-- bwSS7M3UAConnStatsTable  ...........................................
+
+  bwSS7M3UAConnStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UAConnStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UAConnStatsTable."
+    INDEX    {  bwSS7M3UAConnStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UAConnStatsTable 1 }
+
+  BwSS7M3UAConnStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UAConnStatsIndex  Unsigned32,
+    bwSS7M3UAConnStatsInstanceId  Unsigned32,
+    bwSS7M3UAConnStatsLocalSPId  Unsigned32,
+    bwSS7M3UAConnStatsRemoteSPId  Unsigned32,
+    bwSS7M3UAConnStatsPduSentCount  Unsigned32,
+    bwSS7M3UAConnStatsPduReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsByteSentCount  Unsigned32,
+    bwSS7M3UAConnStatsByteReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspUpSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspUpAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspDownSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspDownAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspUpReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspUpAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspDownReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspDownAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspAcSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspAcAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspIaSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspIaAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsAspAcReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspAcAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspIaReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsAspIaAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMAnoDunaSentCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDavaSentCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDupuSentCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMSconSentCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDauadSentCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMAnoDunaReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDavaReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDupuReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMSconReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsSSNMDauadReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMRegisterSentCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMRegisterAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMDeregisterSentCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMDeregisterAckSentCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMRegisterReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMRegisterAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMDeregisterReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsRKMDeregisterAckReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsMgmtNotifySentCount  Unsigned32,
+    bwSS7M3UAConnStatsMgmtErrorSentCount  Unsigned32,
+    bwSS7M3UAConnStatsMgmtNotifyReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsMgmtErrorReceivedCount  Unsigned32,
+    bwSS7M3UAConnStatsMiscTimerExpiredCount  Unsigned32,
+    bwSS7M3UAConnStatsMiscAspmFailedCount  Unsigned32,
+    bwSS7M3UAConnStatsMiscActiveTime  Gauge32,
+    bwSS7M3UAConnStatsMiscStartTime  Gauge32,
+    bwSS7M3UAConnStatsMiscUpTime  Gauge32,
+    bwSS7M3UAConnStatsTableReset  INTEGER
+   }
+
+  bwSS7M3UAConnStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7M3UAConnStatsTable). The index is a unique representation of the combination of bwSS7M3UAConnStatsInstanceId, bwSS7M3UAConnStatsLocalSPId and bwSS7M3UAConnStatsRemoteSPId."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  1  }
+    
+  bwSS7M3UAConnStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  2  }
+
+  bwSS7M3UAConnStatsLocalSPId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a local SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  3  }
+    
+  bwSS7M3UAConnStatsRemoteSPId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a remote SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  4  }
+    
+  bwSS7M3UAConnStatsPduSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection pdu sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  5  }
+    
+  bwSS7M3UAConnStatsPduReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection pdu received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  6  }
+    
+  bwSS7M3UAConnStatsByteSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection byte sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  7  }
+
+  bwSS7M3UAConnStatsByteReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection byte received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  8  }
+
+  bwSS7M3UAConnStatsAspUpSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP UP sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  9  }
+
+  bwSS7M3UAConnStatsAspUpAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP UP Acknowledgements sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  10  }
+
+  bwSS7M3UAConnStatsAspDownSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP DOWN sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  11  }
+
+  bwSS7M3UAConnStatsAspDownAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP DOWN Acknowledgements sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  12  }
+
+  bwSS7M3UAConnStatsAspUpReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP UP received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  13  }
+
+  bwSS7M3UAConnStatsAspUpAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP UP Acknowledgements received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  14  }
+
+  bwSS7M3UAConnStatsAspDownReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP DOWN received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  15  }
+
+  bwSS7M3UAConnStatsAspDownAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP DOWN Acknowledgements received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  16  }
+
+  bwSS7M3UAConnStatsAspAcSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP AC sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  17  }
+
+  bwSS7M3UAConnStatsAspAcAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP AC Acknowledgements sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  18  }
+
+  bwSS7M3UAConnStatsAspIaSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP IA sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  19  }
+
+  bwSS7M3UAConnStatsAspIaAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP IA Acknowledgements sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  20  }
+
+  bwSS7M3UAConnStatsAspAcReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP AC received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  21  }
+
+  bwSS7M3UAConnStatsAspAcAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP AC Acknowledgements received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  22  }
+
+  bwSS7M3UAConnStatsAspIaReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection IA DOWN received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  23  }
+
+  bwSS7M3UAConnStatsAspIaAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection ASP IA Acknowledgements received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  24  }
+
+  bwSS7M3UAConnStatsSSNMAnoDunaSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM ano duna sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  25  }
+
+  bwSS7M3UAConnStatsSSNMDavaSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dava sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  26  }
+
+  bwSS7M3UAConnStatsSSNMDupuSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dupu sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  27  }
+
+  bwSS7M3UAConnStatsSSNMSconSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM scon sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  28  }
+
+  bwSS7M3UAConnStatsSSNMDauadSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dauad sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  29  }
+
+  bwSS7M3UAConnStatsSSNMAnoDunaReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM ano duna received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  30  }
+
+  bwSS7M3UAConnStatsSSNMDavaReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dava received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  31  }
+
+  bwSS7M3UAConnStatsSSNMDupuReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dupu received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  32  }
+
+  bwSS7M3UAConnStatsSSNMSconReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM scon received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  33  }
+
+  bwSS7M3UAConnStatsSSNMDauadReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection SSNM dauad received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  34  }
+
+  bwSS7M3UAConnStatsRKMRegisterSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM register sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  35  }
+
+  bwSS7M3UAConnStatsRKMRegisterAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM register acknowledge sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  36  }
+
+  bwSS7M3UAConnStatsRKMDeregisterSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM deregister sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  37  }
+
+  bwSS7M3UAConnStatsRKMDeregisterAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM deregister acknowledge sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  38  }
+
+  bwSS7M3UAConnStatsRKMRegisterReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM register received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  39  }
+
+  bwSS7M3UAConnStatsRKMRegisterAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM register acknowledge received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  40  }
+
+  bwSS7M3UAConnStatsRKMDeregisterReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM deregister received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  41  }
+
+  bwSS7M3UAConnStatsRKMDeregisterAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection RKM deregister acknowledge received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  42  }
+
+  bwSS7M3UAConnStatsMgmtNotifySentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MANAGEMENT notify sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  43  }
+
+  bwSS7M3UAConnStatsMgmtErrorSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MANAGEMENT error sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  44  }
+
+  bwSS7M3UAConnStatsMgmtNotifyReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MANAGEMENT notify received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  45  }
+
+  bwSS7M3UAConnStatsMgmtErrorReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MANAGEMENT error received."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  46  }
+
+  bwSS7M3UAConnStatsMiscTimerExpiredCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MISC timer expired."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  47  }
+
+  bwSS7M3UAConnStatsMiscAspmFailedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection MISC aspm failed."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  48  }
+
+  bwSS7M3UAConnStatsMiscActiveTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection active time."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  49  }
+
+  bwSS7M3UAConnStatsMiscStartTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection start time."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  50  }
+
+  bwSS7M3UAConnStatsMiscUpTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Connection active time duration."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  51  }
+
+  bwSS7M3UAConnStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UAConnStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UAConnStatsEntry  52  }
+
+-- bwSS7M3UARemoteASStatsTable  ...........................................
+
+  bwSS7M3UARemoteASStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UARemoteASStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UARemoteASStatsTable."
+    INDEX    {  bwSS7M3UARemoteASStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UARemoteASStatsTable 1 }
+
+  BwSS7M3UARemoteASStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UARemoteASStatsIndex  Unsigned32,
+    bwSS7M3UARemoteASStatsInstanceId  Unsigned32,
+    bwSS7M3UARemoteASStatsLocalSPId  Unsigned32,
+    bwSS7M3UARemoteASStatsRemoteSPId  Unsigned32,
+    bwSS7M3UARemoteASStatsLastResetTimeGauge  Gauge32,
+    bwSS7M3UARemoteASStatsTimesInactiveCount  Gauge32,
+    bwSS7M3UARemoteASStatsTimesActiveCount  Gauge32,
+    bwSS7M3UARemoteASStatsPduSentCount  Gauge32,
+    bwSS7M3UARemoteASStatsActiveStartTime  Gauge32,
+    bwSS7M3UARemoteASStatsActiveUpTime  Gauge32,
+    bwSS7M3UARemoteASStatsInactiveStartTime  Gauge32,
+    bwSS7M3UARemoteASStatsInactiveUpTime  Gauge32,
+    bwSS7M3UARemoteASStatsTableReset  INTEGER
+   }
+
+  bwSS7M3UARemoteASStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7M3UARemoteASStatsTable). The index is a unique representation of the combination of bwSS7M3UARemoteASStatsInstanceId, bwSS7M3UARemoteASStatsLocalSPId and bwSS7M3UARemoteASStatsRemoteSPId."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  1  }
+    
+  bwSS7M3UARemoteASStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  2  }
+
+  bwSS7M3UARemoteASStatsLocalSPId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a local SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  3  }
+    
+  bwSS7M3UARemoteASStatsRemoteSPId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a remote SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  4  }
+
+  bwSS7M3UARemoteASStatsLastResetTimeGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA remote AS last reset time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  5  }
+
+  bwSS7M3UARemoteASStatsTimesInactiveCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of times AS set as inactive."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  6  }
+        
+  bwSS7M3UARemoteASStatsTimesActiveCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of times AS set as Active."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  7  }
+        
+  bwSS7M3UARemoteASStatsPduSentCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS pdu sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  8  }
+        
+ bwSS7M3UARemoteASStatsActiveStartTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS active start time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  9  }
+
+ bwSS7M3UARemoteASStatsActiveUpTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS active time duration."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  10  }
+    
+ bwSS7M3UARemoteASStatsInactiveStartTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS inactive start time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  11  }
+
+ bwSS7M3UARemoteASStatsInactiveUpTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS inactive time duration."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  12  }
+    
+  bwSS7M3UARemoteASStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UARemoteASStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemoteASStatsEntry  13  }
+
+-- bwSS7M3UARemotePCStatsTable  ...........................................
+
+  bwSS7M3UARemotePCStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UARemotePCStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UARemotePCStatsTable."
+    INDEX    {  bwSS7M3UARemotePCStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UARemotePCStatsTable 1 }
+
+  BwSS7M3UARemotePCStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UARemotePCStatsIndex  Unsigned32,
+    bwSS7M3UARemotePCStatsInstanceId  Unsigned32,
+    bwSS7M3UARemotePCStatsPointCodeId  Unsigned32,
+    bwSS7M3UARemotePCStatsNetworkAppearanceId  Unsigned32,
+    bwSS7M3UARemotePCStatsLastResetTimeGauge  Gauge32,
+    bwSS7M3UARemotePCStatsPduSentCount  Unsigned32,
+    bwSS7M3UARemotePCStatsPduDiscardedCount  Unsigned32,
+    bwSS7M3UARemotePCStatsDownCount  Unsigned32,
+    bwSS7M3UARemotePCStatsUpCount  Unsigned32,
+    bwSS7M3UARemotePCStatsUpStartTime  Gauge32,
+    bwSS7M3UARemotePCStatsUpTime  Gauge32,
+    bwSS7M3UARemotePCStatsDownStartTime  Gauge32,
+    bwSS7M3UARemotePCStatsDownTime  Gauge32,
+    bwSS7M3UARemotePCStatsTableReset  INTEGER
+  }
+
+  bwSS7M3UARemotePCStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7M3UARemotePCStatsTable). The index is a unique representation of the combination of bwSS7M3UARemotePCStatsInstanceId, bwSS7M3UARemotePCStatsPointCodeId and bwSS7M3UARemotePCStatsNetworkAppearanceId."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  1  }
+    
+  bwSS7M3UARemotePCStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  2  }
+
+  bwSS7M3UARemotePCStatsPointCodeId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a local SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  3  }
+    
+  bwSS7M3UARemotePCStatsNetworkAppearanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a remote SP Id."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  4  }
+
+  bwSS7M3UARemotePCStatsLastResetTimeGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA remote PClast reset time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  5  }
+
+  bwSS7M3UARemotePCStatsPduSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote PC pdu sent."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  6  }
+
+  bwSS7M3UARemotePCStatsPduDiscardedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote PC pdu discarded."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  7  }
+    
+  bwSS7M3UARemotePCStatsDownCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of times M3UA remote PC was down."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  8  }
+    
+  bwSS7M3UARemotePCStatsUpCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of times M3UA remote PC was up."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  9  }
+    
+  bwSS7M3UARemotePCStatsUpStartTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS UP start time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  10  }
+
+  bwSS7M3UARemotePCStatsUpTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS UP time duration."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  11  }
+    
+  bwSS7M3UARemotePCStatsDownStartTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS DOWN start time."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  12  }
+
+  bwSS7M3UARemotePCStatsDownTime  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA remote AS DOWN time duration."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  13  }
+    
+  bwSS7M3UARemotePCStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UARemotePCStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UARemotePCStatsEntry  14  }
+
+-- bwSS7M3UAErrorStatsTable  ...........................................
+
+  bwSS7M3UAErrorStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7M3UAErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7M3UAErrorStatsTable."
+    INDEX    {  bwSS7M3UAErrorStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7M3UAErrorStatsTable 1 }
+
+  BwSS7M3UAErrorStatsEntry  ::=  SEQUENCE {
+    bwSS7M3UAErrorStatsIndex  Unsigned32,
+    bwSS7M3UAErrorStatsInstanceId  Unsigned32,
+    bwSS7M3UAErrorStatsLastResetTimeGauge  Gauge32,
+    bwSS7M3UAErrorStatsOsTimerFailedErrorCount  Unsigned32,
+    bwSS7M3UAErrorStatsOsMemoryErrorCount  Unsigned32,
+    bwSS7M3UAErrorStatsResourceNoMoreASCount  Unsigned32,
+    bwSS7M3UAErrorStatsResourceNoMoreASPCount  Unsigned32,
+    bwSS7M3UAErrorStatsResourceNoMoreSgpCount  Unsigned32,
+    bwSS7M3UAErrorStatsSuApiErrorCount  Unsigned32,
+    bwSS7M3UAErrorStatsSmApiErrorCount  Unsigned32,
+    bwSS7M3UAErrorStatsSctpApiErrorCount  Unsigned32,
+    bwSS7M3UAErrorStatsTableReset  INTEGER
+  }
+
+  bwSS7M3UAErrorStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  1  }
+
+  bwSS7M3UAErrorStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  2  }
+    
+  bwSS7M3UAErrorStatsLastResetTimeGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The M3UA remote AS last reset time."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  3  }
+
+  bwSS7M3UAErrorStatsOsTimerFailedErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to OS timer failed."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  4  }
+    
+  bwSS7M3UAErrorStatsOsMemoryErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to OS memory error failed."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  5  }
+    
+  bwSS7M3UAErrorStatsResourceNoMoreASCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to resource - No more AS error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  6  }
+    
+   bwSS7M3UAErrorStatsResourceNoMoreASPCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to resource - No more ASP error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  7  }
+    
+   bwSS7M3UAErrorStatsResourceNoMoreSgpCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to resource - No more SGP error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  8  }
+    
+   bwSS7M3UAErrorStatsSuApiErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to SU API error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  9  }
+    
+   bwSS7M3UAErrorStatsSmApiErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to SM API error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  10  }
+    
+   bwSS7M3UAErrorStatsSctpApiErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of M3UA Error related to SCTP API error."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  11  }
+
+  bwSS7M3UAErrorStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7M3UAErrorStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7M3UAErrorStatsEntry  12  }
+
+-- SS7 sccp Counters  ...........................................
+
+  bwSS7SccpStatsAPITable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SccpStatsAPIEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCCP API related statistics"
+-- @feature:158606
+    ::=  {  ss7SccpCounters  1 }
+
+  bwSS7SccpStatsTrafficTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SccpStatsTrafficEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCCP Traffic related statistics"
+-- @feature:158606
+    ::=  {  ss7SccpCounters  2 }
+
+  bwSS7SccpStatsErrorTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SccpStatsErrorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCCP Error related statistics"
+-- @feature:158606
+    ::=  {  ss7SccpCounters  3 }
+
+-- bwSS7SccpStatsAPITable  ...........................................
+
+  bwSS7SccpStatsAPIEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SccpStatsAPIEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SccpStatsAPITable."
+    INDEX    {  bwSS7SccpStatsAPIIndex  }
+-- @feature:158606
+    ::=  { bwSS7SccpStatsAPITable 1 }
+
+  BwSS7SccpStatsAPIEntry  ::=  SEQUENCE {
+    bwSS7SccpStatsAPIIndex  Unsigned32,
+    bwSS7SccpStatsAPIInstanceId Unsigned32,
+    bwSS7SccpStatsAPIIncomingSvcUserRequestsCount Unsigned32,
+    bwSS7SccpStatsAPIOutgoingSvcUserRequestsCount Unsigned32,
+    bwSS7SccpStatsAPISvcUserErrorCount Unsigned32,
+    bwSS7SccpStatsAPIIncomingLowerLayerRequestsCount Unsigned32,
+    bwSS7SccpStatsAPIOutgoingLowerLayerRequestsCount Unsigned32,
+    bwSS7SccpStatsAPILowerLayerErrorCount Unsigned32,
+    bwSS7SccpStatsAPIIncomingSMRequestsCount Unsigned32,
+    bwSS7SccpStatsAPIOutgoingSMRequestsCount Unsigned32,
+    bwSS7SccpStatsAPISMErrorCount Unsigned32,
+    bwSS7SccpStatsAPIOutgoingAPIErrorCount Unsigned32,
+    bwSS7SccpStatsAPIMiscErrorCount Unsigned32,
+    bwSS7SccpStatsAPITableReset INTEGER
+  }
+
+  bwSS7SccpStatsAPIIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  1  }
+
+  bwSS7SccpStatsAPIInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  2  }
+    
+  bwSS7SccpStatsAPIIncomingSvcUserRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming SCCP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  3  }
+    
+  bwSS7SccpStatsAPIOutgoingSvcUserRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing SCCP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  4  }
+
+  bwSS7SccpStatsAPISvcUserErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to SCCP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  5  }
+    
+  bwSS7SccpStatsAPIIncomingLowerLayerRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming SCCP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  6  }
+    
+  bwSS7SccpStatsAPIOutgoingLowerLayerRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing SCCP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  7  }
+
+  bwSS7SccpStatsAPILowerLayerErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to SCCP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  8  }
+
+  bwSS7SccpStatsAPIIncomingSMRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming SCCP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  9  }
+    
+  bwSS7SccpStatsAPIOutgoingSMRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing SCCP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  10  }
+
+  bwSS7SccpStatsAPISMErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to SCCP SM API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  11  }
+
+  bwSS7SccpStatsAPIOutgoingAPIErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to outgoing SCCP API requests."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  12  }
+
+  bwSS7SccpStatsAPIMiscErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related SCCP to miscellaneous request processing."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  13  }
+
+  bwSS7SccpStatsAPITableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SccpStatsAPITable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsAPIEntry  14  }
+             
+-- bwSS7SccpStatsTrafficTable  ...........................................
+
+  bwSS7SccpStatsTrafficEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SccpStatsTrafficEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SccpStatsAPITable."
+    INDEX    {  bwSS7SccpStatsTrafficIndex  }
+-- @feature:158606
+    ::=  { bwSS7SccpStatsTrafficTable 1 }
+
+  BwSS7SccpStatsTrafficEntry  ::=  SEQUENCE {
+    bwSS7SccpStatsTrafficIndex Unsigned32,  
+    bwSS7SccpStatsTrafficInstanceId Unsigned32,  
+    bwSS7SccpStatsTrafficPacketSentCount Unsigned32,  
+    bwSS7SccpStatsTrafficPacketReceivedCount Unsigned32,
+    bwSS7SccpStatsTrafficPacketDroppedCount Unsigned32,
+    bwSS7SccpStatsTrafficPacketInvalidCount Unsigned32,
+    bwSS7SccpStatsTrafficPacketGTTXlationFailureCount Unsigned32,
+    bwSS7SccpStatsTrafficTableReset INTEGER
+  }
+
+  bwSS7SccpStatsTrafficIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  1  }
+    
+  bwSS7SccpStatsTrafficInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  2  }
+
+  bwSS7SccpStatsTrafficPacketSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP packets that were sent out by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  3  }
+    
+  bwSS7SccpStatsTrafficPacketReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP packets that were received by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  4  }
+
+  bwSS7SccpStatsTrafficPacketDroppedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP packets that were dropped by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  5  }
+
+  bwSS7SccpStatsTrafficPacketInvalidCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP packets that were received and considered invalid by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  6  }
+  
+  bwSS7SccpStatsTrafficPacketGTTXlationFailureCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP GTT translation failure."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  7  }
+
+  bwSS7SccpStatsTrafficTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SccpStatsTrafficTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsTrafficEntry  8  }
+
+
+-- bwSS7SccpStatsErrorTable  ...........................................
+
+  bwSS7SccpStatsErrorEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SccpStatsErrorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SccpStatsAPITable."
+    INDEX    {  bwSS7SccpStatsErrorIndex  }
+-- @feature:158606
+    ::=  { bwSS7SccpStatsErrorTable 1 }
+
+  BwSS7SccpStatsErrorEntry  ::=  SEQUENCE {
+    bwSS7SccpStatsErrorIndex Unsigned32,
+    bwSS7SccpStatsErrorInstanceId Unsigned32,
+    bwSS7SccpStatsErrorAPICount Unsigned32,
+    bwSS7SccpStatsErrorProtocolCount Unsigned32,
+    bwSS7SccpStatsErrorSystemCount Unsigned32,
+    bwSS7SccpStatsErrorResourceCount Unsigned32,
+    bwSS7SccpStatsErrorTableReset INTEGER
+  }
+
+  bwSS7SccpStatsErrorIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  1  }
+
+  bwSS7SccpStatsErrorInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  2  }
+
+  bwSS7SccpStatsErrorAPICount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP API error stats count."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  3  }
+
+  bwSS7SccpStatsErrorProtocolCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP Protocol error stats count."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  4  }
+
+  bwSS7SccpStatsErrorSystemCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP System error stats count."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  5  }
+
+  bwSS7SccpStatsErrorResourceCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCCP Resource error stats count."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  6  }
+
+  bwSS7SccpStatsErrorTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SccpStatsErrorTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SccpStatsErrorEntry  7  }
+
+-- SS7 sctp Counters  ...........................................
+
+  bwSS7SCTPInternalStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SCTPInternalStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCTP internal statistics"
+-- @feature:158606
+    ::=  {  ss7SctpCounters  1 }
+
+  bwSS7SCTPGlobalStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SCTPGlobalStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCTP global statistics"
+-- @feature:158606
+    ::=  {  ss7SctpCounters  2 }
+
+  bwSS7SCTPAssociationStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SCTPAssociationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCTP association statistics"
+-- @feature:158606
+    ::=  {  ss7SctpCounters  3 }
+
+  bwSS7SCTPAssociationPerAddressStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SCTPAssociationPerAddressStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCTP association per address statistics"
+-- @feature:158606
+    ::=  {  ss7SctpCounters  4 }
+
+  bwSS7SCTPErrorStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7SCTPErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes SCTP error statistics"
+-- @feature:158606
+    ::=  {  ss7SctpCounters  5 }
+
+-- bwSS7SCTPInternalStatsTable  ...........................................
+
+  bwSS7SCTPInternalStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SCTPInternalStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SCTPInternalStatsTable."
+    INDEX    {  bwSS7SCTPInternalStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7SCTPInternalStatsTable 1 }
+
+  BwSS7SCTPInternalStatsEntry  ::=  SEQUENCE {
+    bwSS7SCTPInternalStatsIndex  Unsigned32,
+    bwSS7SCTPInternalStatsInstanceId  Unsigned32,
+    bwSS7SCTPInternalStatsAssociationId  Unsigned32,
+    bwSS7SCTPInternalStatsApplicationRegisteredCount  Unsigned32,
+    bwSS7SCTPInternalStatsApplicationOpenedCount  Unsigned32,
+    bwSS7SCTPInternalStatsDestMarkedActiveCount  Unsigned32,
+    bwSS7SCTPInternalStatsDestMarkedInactiveCount  Unsigned32,
+    bwSS7SCTPInternalStatsDestMarkedUpCount  Unsigned32,
+    bwSS7SCTPInternalStatsDestMarkedDownCount  Unsigned32,
+    bwSS7SCTPInternalStatsTableReset  INTEGER
+  }
+
+  bwSS7SCTPInternalStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7SCTPInternalStatsTable). The index is a unique representation of the combination of bwSS7SCTPInternalStatsInstanceId and bwSS7SCTPInternalStatsAssociationId."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  1  }
+
+  bwSS7SCTPInternalStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  2  }
+
+  bwSS7SCTPInternalStatsAssociationId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an association id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  3  }
+
+  bwSS7SCTPInternalStatsApplicationRegisteredCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal applications registered."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  4  }
+
+  bwSS7SCTPInternalStatsApplicationOpenedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal applications opened."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  5  }
+
+  bwSS7SCTPInternalStatsDestMarkedActiveCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal destinations marked active."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  6  }
+
+  bwSS7SCTPInternalStatsDestMarkedInactiveCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal destinations marked Inactive."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  7  }
+
+  bwSS7SCTPInternalStatsDestMarkedUpCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal destinations marked UP."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  8  }
+
+  bwSS7SCTPInternalStatsDestMarkedDownCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP internal destinations marked DOWN."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  9  }
+
+  bwSS7SCTPInternalStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SCTPInternalStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SCTPInternalStatsEntry  10  }
+
+-- bwSS7SCTPGlobalStatsTable  ...........................................
+
+  bwSS7SCTPGlobalStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SCTPGlobalStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SCTPGlobalStatsTable."
+    INDEX    {  bwSS7SCTPGlobalStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7SCTPGlobalStatsTable 1 }
+
+  BwSS7SCTPGlobalStatsEntry  ::=  SEQUENCE {
+    bwSS7SCTPGlobalStatsIndex  Unsigned32,
+    bwSS7SCTPGlobalStatsInstanceId  Unsigned32,
+    bwSS7SCTPGlobalStatsAssociationId  Unsigned32,
+    bwSS7SCTPGlobalStatsAssociationAcceptedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsAssociationInitiatedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsAssociationGracefulShutdownCount  Unsigned32,
+    bwSS7SCTPGlobalStatsAssociationUngracefulShutdownCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkOrderedSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkUnorderedSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkUnAcknowledgementCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkOrderedReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDataChunkUnorderedReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsBytesSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsBytesReservedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsInitSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsIInitReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsInitAckSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsInitAckReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsCookieSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsICookieReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsCookieAckSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsCookieAckReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsHeartbeatSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsIHeartbeatReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsHeartbeatAckSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsHeartbeatAckReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsSackSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsSackReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsAbortSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsAbortReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsShutSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsIShutReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsShutAckSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsShutAckReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsErrorSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsIErrorReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsEcneSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsIEcneReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsCwrSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsICwrReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsDatagramReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsChecksumErrorReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsOotbReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsFragUserMsgReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsReassembeUserMessageCount  Unsigned32,
+    bwSS7SCTPGlobalStatsPacketSentCount  Unsigned32,
+    bwSS7SCTPGlobalStatsPacketReceivedCount  Unsigned32,
+    bwSS7SCTPGlobalStatsTableReset  INTEGER
+  }
+
+  bwSS7SCTPGlobalStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7SCTPGlobalStatsTable). The index is a unique representation of the combination of bwSS7SCTPGlobalStatsInstanceId and bwSS7SCTPGlobalStatsAssociationId."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  1  }
+
+  bwSS7SCTPGlobalStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  2  }
+
+  bwSS7SCTPGlobalStatsAssociationId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an association id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  3  }
+
+  bwSS7SCTPGlobalStatsAssociationAcceptedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global association accepted."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  4  }
+
+  bwSS7SCTPGlobalStatsAssociationInitiatedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global association initiated."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  5  }
+
+  bwSS7SCTPGlobalStatsAssociationGracefulShutdownCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global association gracefully shutdown."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  6  }
+
+  bwSS7SCTPGlobalStatsAssociationUngracefulShutdownCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global association ungracefully shutdown."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  7  }
+
+  bwSS7SCTPGlobalStatsDataChunkSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global data chunk sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  8  }
+
+  bwSS7SCTPGlobalStatsDataChunkOrderedSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global ordered data chunk sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  9  }
+
+  bwSS7SCTPGlobalStatsDataChunkUnorderedSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global unordered data chunk sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  10  }
+
+  bwSS7SCTPGlobalStatsDataChunkUnAcknowledgementCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global unacknowledge data chunk."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  11  }
+
+  bwSS7SCTPGlobalStatsDataChunkReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global received data chunk."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  12  }
+
+  bwSS7SCTPGlobalStatsDataChunkOrderedReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global received ordered data chunk."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  13  }
+
+  bwSS7SCTPGlobalStatsDataChunkUnorderedReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global received unordered data chunk."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  14  }
+
+  bwSS7SCTPGlobalStatsBytesSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global byte sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  15  }
+
+  bwSS7SCTPGlobalStatsBytesReservedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global byte reserved."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  16  }
+
+  bwSS7SCTPGlobalStatsInitSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global init sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  17  }
+
+  bwSS7SCTPGlobalStatsIInitReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global init received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  18  }
+
+  bwSS7SCTPGlobalStatsInitAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global init acknowledged sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  19  }
+
+  bwSS7SCTPGlobalStatsInitAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global init acknowledged received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  20  }
+
+  bwSS7SCTPGlobalStatsCookieSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global cookie sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  21  }
+
+  bwSS7SCTPGlobalStatsICookieReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global cookie received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  22  }
+
+  bwSS7SCTPGlobalStatsCookieAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global cookie acknowledged sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  23  }
+
+  bwSS7SCTPGlobalStatsCookieAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global cookie acknowledged received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  24  }
+
+  bwSS7SCTPGlobalStatsHeartbeatSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global heartbeat sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  25  }
+
+  bwSS7SCTPGlobalStatsIHeartbeatReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global heartbeat received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  26  }
+
+  bwSS7SCTPGlobalStatsHeartbeatAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global heartbeat acknowledged sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  27  }
+
+  bwSS7SCTPGlobalStatsHeartbeatAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global heartbeat acknowledged received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  28  }
+
+  bwSS7SCTPGlobalStatsSackSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global sack sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  29  }
+
+  bwSS7SCTPGlobalStatsSackReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global sack received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  30  }
+
+  bwSS7SCTPGlobalStatsAbortSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global abort sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  31  }
+
+  bwSS7SCTPGlobalStatsAbortReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global abort received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  32  }
+
+  bwSS7SCTPGlobalStatsShutSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global shut sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  33  }
+
+  bwSS7SCTPGlobalStatsIShutReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global shut received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  34  }
+
+  bwSS7SCTPGlobalStatsShutAckSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global shut acknowledged sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  35  }
+
+  bwSS7SCTPGlobalStatsShutAckReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global shut acknowledged received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  36  }
+
+  bwSS7SCTPGlobalStatsErrorSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global error sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  37  }
+
+  bwSS7SCTPGlobalStatsIErrorReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global error received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  38  }
+
+  bwSS7SCTPGlobalStatsEcneSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global ecne sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  39  }
+
+  bwSS7SCTPGlobalStatsIEcneReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global ecne received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  40  }
+
+  bwSS7SCTPGlobalStatsCwrSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global CWR sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  41  }
+
+  bwSS7SCTPGlobalStatsICwrReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global CWR received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  42  }
+
+  bwSS7SCTPGlobalStatsDatagramReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global datagram received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  43  }
+
+  bwSS7SCTPGlobalStatsChecksumErrorReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global checksum error recieved."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  44  }
+
+  bwSS7SCTPGlobalStatsOotbReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global Ootb recieved."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  45  }
+
+  bwSS7SCTPGlobalStatsFragUserMsgReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global fragmented user message recieved."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  46  }
+
+  bwSS7SCTPGlobalStatsReassembeUserMessageCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global reassemble user message."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  47  }
+
+  bwSS7SCTPGlobalStatsPacketSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global packet sent."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  48  }
+
+   bwSS7SCTPGlobalStatsPacketReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of SCTP global packet received."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  49  }
+
+  bwSS7SCTPGlobalStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SCTPGlobalStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SCTPGlobalStatsEntry  50  }
+
+-- bwSS7SCTPAssociationStatsTable  ...........................................
+
+  bwSS7SCTPAssociationStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SCTPAssociationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SCTPAssociationStatsTable."
+    INDEX    {  bwSS7SCTPAssociationStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7SCTPAssociationStatsTable 1 }
+
+  BwSS7SCTPAssociationStatsEntry  ::=  SEQUENCE {
+    bwSS7SCTPAssociationStatsIndex  Unsigned32,
+    bwSS7SCTPAssociationStatsInstanceId  Unsigned32,
+    bwSS7SCTPAssociationStatsAssociationId  Unsigned32,
+    bwSS7SCTPAssociationStatsStartTimeInSecCount  Gauge32,
+    bwSS7SCTPAssociationStatsStartTimeInMilliSecCount  Gauge32,
+    bwSS7SCTPAssociationStatsChunkRestransmitCount  Gauge32,
+    bwSS7SCTPAssociationStatsT1ExpiredCount  Gauge32,
+    bwSS7SCTPAssociationStatsT2ExpiredCount  Gauge32,
+    bwSS7SCTPAssociationStatsDestinationAddressCount  Gauge32,
+    bwSS7SCTPAssociationStatsTableReset  INTEGER
+  }
+
+  bwSS7SCTPAssociationStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7SCTPAssociationStatsTable). The index is a unique representation of the combination of bwSS7SCTPAssociationStatsInstanceId and bwSS7SCTPAssociationStatsAssociationId."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  1  }
+
+  bwSS7SCTPAssociationStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  2  }
+
+  bwSS7SCTPAssociationStatsAssociationId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an association id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  3  }
+
+  bwSS7SCTPAssociationStatsStartTimeInSecCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The SCTP Association start time in seconds."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  4  }
+
+  bwSS7SCTPAssociationStatsStartTimeInMilliSecCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The SCTP Association start time in milliseconds."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  5  }
+
+  bwSS7SCTPAssociationStatsChunkRestransmitCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number SCTP Association chunks restransmit."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  6  }
+
+  bwSS7SCTPAssociationStatsT1ExpiredCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number SCTP Association T1 expirations."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  7  }
+
+  bwSS7SCTPAssociationStatsT2ExpiredCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number SCTP Association T2 expirations."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  8  }
+
+  bwSS7SCTPAssociationStatsDestinationAddressCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number SCTP Association destination addresses."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  9  }
+
+  bwSS7SCTPAssociationStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SCTPAssociationStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationStatsEntry  10  }
+
+-- bwSS7SCTPAssociationPerAddressStatsTable  ...........................................
+
+  bwSS7SCTPAssociationPerAddressStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SCTPAssociationPerAddressStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SCTPAssociationPerAddressStatsTable."
+    INDEX    {  bwSS7SCTPAssociationPerAddressStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7SCTPAssociationPerAddressStatsTable 1 }
+
+  BwSS7SCTPAssociationPerAddressStatsEntry  ::=  SEQUENCE {
+    bwSS7SCTPAssociationPerAddressStatsIndex  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsInstanceId  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsAssociationId  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsAddressId  DisplayString,
+    bwSS7SCTPAssociationPerAddressStatsAddressFamilyCount  Gauge32,
+    bwSS7SCTPAssociationPerAddressStatsDatagramSentCount  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsDatagramUnacknowledgeCount  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsDatagramReceivedCount  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsByteSentCount  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsByteReceivedCount  Unsigned32,
+    bwSS7SCTPAssociationPerAddressStatsTableReset  INTEGER
+  }
+
+  bwSS7SCTPAssociationPerAddressStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7SCTPAssociationPerAddressStatsTable). The index is a unique representation of the combination of bwSS7SCTPAssociationPerAddressStatsInstanceId, bwSS7SCTPAssociationPerAddressStatsAssociationId and bwSS7SCTPAssociationPerAddressStatsAddressId."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  1  }
+
+  bwSS7SCTPAssociationPerAddressStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  2  }
+
+  bwSS7SCTPAssociationPerAddressStatsAssociationId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an association id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  3  }
+
+  bwSS7SCTPAssociationPerAddressStatsAddressId  OBJECT-TYPE  
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This address of a destination peer."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  4  }
+
+  bwSS7SCTPAssociationPerAddressStatsAddressFamilyCount  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The SCTP Association addresses family."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  5  }
+
+  bwSS7SCTPAssociationPerAddressStatsDatagramSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of datagram sent for an SCTP Association address."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  6  }
+
+  bwSS7SCTPAssociationPerAddressStatsDatagramUnacknowledgeCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of datagram unacknowledged for an SCTP Association address."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  7  }
+
+  bwSS7SCTPAssociationPerAddressStatsDatagramReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of datagram received for an SCTP Association address."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  8  }
+
+  bwSS7SCTPAssociationPerAddressStatsByteSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of byte sent to an SCTP Association address."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  9  }
+
+  bwSS7SCTPAssociationPerAddressStatsByteReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of byte received from an SCTP Association address."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  10  }
+
+  bwSS7SCTPAssociationPerAddressStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SCTPAssociationPerAddressStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SCTPAssociationPerAddressStatsEntry  11  }
+
+-- bwSS7SCTPErrorStatsTable  ...........................................
+
+  bwSS7SCTPErrorStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7SCTPErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7SCTPErrorStatsTable."
+    INDEX    {  bwSS7SCTPErrorStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7SCTPErrorStatsTable 1 }
+
+  BwSS7SCTPErrorStatsEntry  ::=  SEQUENCE {
+    bwSS7SCTPErrorStatsIndex  Unsigned32,
+    bwSS7SCTPErrorStatsInstanceId  Unsigned32,
+    bwSS7SCTPErrorStatsAssociationId  Unsigned32,
+    bwSS7SCTPErrorStatsProtocolErrorCount  Unsigned32,
+    bwSS7SCTPErrorStatsSystemErrorCount  Unsigned32,
+    bwSS7SCTPErrorStatsSystemResourceErrorCount  Unsigned32,
+    bwSS7SCTPErrorStatsInternalErrorCount  Unsigned32,
+    bwSS7SCTPErrorStatsAPIErrorCount Unsigned32,
+    bwSS7SCTPErrorStatsTableReset  INTEGER
+  }
+
+  bwSS7SCTPErrorStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7SCTPErrorStatsTable). The index is a unique representation of the combination of bwSS7SCTPErrorStatsInstanceId and bwSS7SCTPErrorStatsAssociationId."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  1  }
+
+  bwSS7SCTPErrorStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  2  }
+
+  bwSS7SCTPErrorStatsAssociationId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an association id."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  3  }
+
+  bwSS7SCTPErrorStatsProtocolErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of Protocol Error Stats from an SCTP Association."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  4  }
+
+  bwSS7SCTPErrorStatsSystemErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of System Error Stats from an SCTP Association."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  5  }
+
+  bwSS7SCTPErrorStatsSystemResourceErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of System Resource Error Stats from an SCTP Association."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  6  }
+
+  bwSS7SCTPErrorStatsInternalErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of Internal Error Stats from an SCTP Association."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  7  }
+
+  bwSS7SCTPErrorStatsAPIErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of API errors SCTP Association."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  8  }
+
+  bwSS7SCTPErrorStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7SCTPErrorStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7SCTPErrorStatsEntry  9  }
+
+-- SS7 tcap Counters  ...........................................
+
+  bwSS7TcapStatsAPITable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7TcapStatsAPIEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes TCAP API related statistics"
+-- @feature:158606
+    ::=  {  ss7TcapCounters  1 }
+
+  bwSS7TcapStatsTrafficTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7TcapStatsTrafficEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes TCAP Traffic related statistics"
+-- @feature:158606
+    ::=  {  ss7TcapCounters  2 }
+
+  bwSS7TcapStatsErrorTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7TcapStatsErrorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes TCAP Error related statistics"
+-- @feature:158606
+    ::=  {  ss7TcapCounters  3 }
+
+-- bwSS7TcapStatsAPITable  ...........................................
+
+  bwSS7TcapStatsAPIEntry  OBJECT-TYPE
+    SYNTAX      BwSS7TcapStatsAPIEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7TcapStatsAPITable."
+    INDEX    {  bwSS7TcapStatsAPIIndex  }
+-- @feature:158606
+    ::=  { bwSS7TcapStatsAPITable 1 }
+
+  BwSS7TcapStatsAPIEntry  ::=  SEQUENCE {
+    bwSS7TcapStatsAPIIndex Unsigned32,
+    bwSS7TcapStatsAPIInstanceId Unsigned32,
+    bwSS7TcapStatsAPIIncomingSvcUserRequestsCount Unsigned32,
+    bwSS7TcapStatsAPIOutgoingSvcUserRequestsCount Unsigned32,
+    bwSS7TcapStatsAPISvcUserErrorCount Unsigned32,
+    bwSS7TcapStatsAPIIncomingLowerLayerRequestsCount Unsigned32,
+    bwSS7TcapStatsAPIOutgoingLowerLayerRequestsCount Unsigned32,
+    bwSS7TcapStatsAPILowerLayerErrorCount Unsigned32,
+    bwSS7TcapStatsAPIIncomingSMRequestsCount Unsigned32,
+    bwSS7TcapStatsAPIOutgoingSMRequestsCount Unsigned32,
+    bwSS7TcapStatsAPISMErrorCount Unsigned32,
+    bwSS7TcapStatsAPIOutgoingAPIErrorCount Unsigned32,
+    bwSS7TcapStatsAPIMiscErrorCount Unsigned32,
+    bwSS7TcapStatsAPITableReset INTEGER
+  }
+
+  bwSS7TcapStatsAPIIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  1  }
+    
+  bwSS7TcapStatsAPIInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  2  }
+    
+  bwSS7TcapStatsAPIIncomingSvcUserRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming TCAP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  3  }
+    
+  bwSS7TcapStatsAPIOutgoingSvcUserRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing TCAP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  4  }
+
+  bwSS7TcapStatsAPISvcUserErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to TCAP user service API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  5  }
+    
+  bwSS7TcapStatsAPIIncomingLowerLayerRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming TCAP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  6  }
+    
+  bwSS7TcapStatsAPIOutgoingLowerLayerRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing TCAP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  7  }
+
+  bwSS7TcapStatsAPILowerLayerErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to TCAP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  8  }
+
+  bwSS7TcapStatsAPIIncomingSMRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of incoming TCAP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  9  }
+    
+  bwSS7TcapStatsAPIOutgoingSMRequestsCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of outgoing TCAP lower layer API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  10  }
+
+  bwSS7TcapStatsAPISMErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to TCAP SM API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  11  }
+
+  bwSS7TcapStatsAPIOutgoingAPIErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related to outgoing TCAP API requests."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  12  }
+
+  bwSS7TcapStatsAPIMiscErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of errors detected related TCAP to miscellaneous request processing."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  13  }
+
+  bwSS7TcapStatsAPITableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7TcapStatsAPITable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsAPIEntry  14  }
+             
+-- bwSS7TcapStatsTrafficTable  ...........................................
+
+  bwSS7TcapStatsTrafficEntry  OBJECT-TYPE
+    SYNTAX      BwSS7TcapStatsTrafficEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7TcapStatsAPITable."
+    INDEX    {  bwSS7TcapStatsTrafficIndex  }
+-- @feature:158606
+    ::=  { bwSS7TcapStatsTrafficTable 1 }
+
+  BwSS7TcapStatsTrafficEntry  ::=  SEQUENCE {
+    bwSS7TcapStatsTrafficIndex Unsigned32,
+    bwSS7TcapStatsTrafficInstanceId Unsigned32,  
+    bwSS7TcapStatsTrafficPacketSentCount Unsigned32,  
+    bwSS7TcapStatsTrafficPacketReceivedCount Unsigned32,
+    bwSS7TcapStatsTrafficPacketDroppedCount Unsigned32,
+    bwSS7TcapStatsTrafficPacketInvalidCount Unsigned32,
+    bwSS7TcapStatsTrafficPacketMateSentCount Unsigned32,
+    bwSS7TcapStatsTrafficPacketMateSentFailedCount Unsigned32,  
+    bwSS7TcapStatsTrafficPacketIncorrectInstanceCount Unsigned32,
+    bwSS7TcapStatsTrafficDlgEstablishedSuccessCount  Unsigned32,
+    bwSS7TcapStatsTrafficDlgEstablishedFailureCount  Unsigned32,
+    bwSS7TcapStatsTrafficDlgEstablishedAbortCount  Unsigned32,
+    bwSS7TcapStatsTrafficTableReset INTEGER
+    }
+
+  bwSS7TcapStatsTrafficIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the table index."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  1  }
+    
+  bwSS7TcapStatsTrafficInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  2  }
+    
+  bwSS7TcapStatsTrafficPacketSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets that were sent out by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  3  }
+    
+  bwSS7TcapStatsTrafficPacketReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets that were received by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  4  }
+
+  bwSS7TcapStatsTrafficPacketDroppedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets that were dropped by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  5  }
+
+  bwSS7TcapStatsTrafficPacketInvalidCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets that were received and considered invalid by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  6  }
+
+  bwSS7TcapStatsTrafficPacketMateSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets sent to Mate by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  7  }
+
+  bwSS7TcapStatsTrafficPacketMateSentFailedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets that failed to be sent to Mate by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  8  }
+    
+  bwSS7TcapStatsTrafficPacketIncorrectInstanceCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP packets received with incorrect instance by the SS7 stack."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  9  }
+
+  bwSS7TcapStatsTrafficDlgEstablishedSuccessCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP Dialogs Successfully Established."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  10  }
+
+  bwSS7TcapStatsTrafficDlgEstablishedFailureCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP Number of Failures in Dialog Establishment."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  11  }
+
+  bwSS7TcapStatsTrafficDlgEstablishedAbortCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP Number of Dialog Aborts."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  12  }
+
+  bwSS7TcapStatsTrafficTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7TcapStatsTrafficTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsTrafficEntry  13  }
+
+
+-- bwSS7TcapStatsErrorTable  ...........................................
+
+  bwSS7TcapStatsErrorEntry  OBJECT-TYPE
+    SYNTAX      BwSS7TcapStatsErrorEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7TcapStatsAPITable."
+    INDEX    {  bwSS7TcapStatsErrorIndex  }
+-- @feature:158606
+    ::=  { bwSS7TcapStatsErrorTable 1 }
+
+  BwSS7TcapStatsErrorEntry  ::=  SEQUENCE {
+    bwSS7TcapStatsErrorIndex Unsigned32,
+    bwSS7TcapStatsErrorInstanceId Unsigned32,
+    bwSS7TcapStatsErrorAPICount Unsigned32,
+    bwSS7TcapStatsErrorProtocolCount Unsigned32,
+    bwSS7TcapStatsErrorSystemCount Unsigned32,
+    bwSS7TcapStatsErrorResourceCount Unsigned32,
+    bwSS7TcapStatsErrorTableReset INTEGER
+  }
+
+  bwSS7TcapStatsErrorIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  1  }
+
+  bwSS7TcapStatsErrorInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  2  }
+
+  bwSS7TcapStatsErrorAPICount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP API error stats count."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  3  }
+
+  bwSS7TcapStatsErrorProtocolCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP Protocol error stats count."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  4  }
+
+  bwSS7TcapStatsErrorSystemCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP System error stats count."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  5  }
+
+  bwSS7TcapStatsErrorResourceCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of TCAP Resource error stats count."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  6  }
+
+  bwSS7TcapStatsErrorTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7TcapStatsErrorTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7TcapStatsErrorEntry  7  }
+
+-- BroadWorks SS7 Protocol Stack MIB Conformance Definition  ......................................
+
+  bwSS7ProtocolStackMibGroups OBJECT IDENTIFIER 
+    ::= { bwSS7ProtocolStackMibConformance 1 }
+
+  bwSS7ProtocolStackMibCompliancy OBJECT IDENTIFIER
+    ::= { bwSS7ProtocolStackMibConformance 2 }
+
+  bwSS7M3UAProtocolStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UAProtocolStatsIndex, bwSS7M3UAProtocolStatsInstanceId, bwSS7M3UAProtocolStatsLastResetTimeGauge, bwSS7M3UAProtocolStatsCount, bwSS7M3UAProtocolStatsReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Protocol statistics."
+    ::= { bwSS7ProtocolStackMibGroups 1 }
+
+  bwSS7M3UATrafficStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UATrafficStatsIndex, bwSS7M3UATrafficStatsInstanceId, bwSS7M3UATrafficStatsLastResetTimeGauge, bwSS7M3UATrafficStatsPduSentCount, bwSS7M3UATrafficStatsPduReceivedCount, bwSS7M3UATrafficStatsCtrlMessageSentCount, bwSS7M3UATrafficStatsCtrlMessageReceivedCount, bwSS7M3UATrafficStatsByteSentCount, bwSS7M3UATrafficStatsByteReceivedCount, bwSS7M3UATrafficStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 2 }
+
+  bwSS7M3UAConnStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UAConnStatsIndex, bwSS7M3UAConnStatsInstanceId, bwSS7M3UAConnStatsLocalSPId, bwSS7M3UAConnStatsRemoteSPId, bwSS7M3UAConnStatsPduSentCount, bwSS7M3UAConnStatsPduReceivedCount, bwSS7M3UAConnStatsByteSentCount, bwSS7M3UAConnStatsByteReceivedCount, bwSS7M3UAConnStatsAspUpSentCount, bwSS7M3UAConnStatsAspUpAckSentCount, bwSS7M3UAConnStatsAspDownSentCount, bwSS7M3UAConnStatsAspDownAckSentCount, bwSS7M3UAConnStatsAspUpReceivedCount, bwSS7M3UAConnStatsAspUpAckReceivedCount, bwSS7M3UAConnStatsAspDownReceivedCount, bwSS7M3UAConnStatsAspDownAckReceivedCount, bwSS7M3UAConnStatsAspAcSentCount, bwSS7M3UAConnStatsAspAcAckSentCount, bwSS7M3UAConnStatsAspIaSentCount, bwSS7M3UAConnStatsAspIaAckSentCount, bwSS7M3UAConnStatsAspAcReceivedCount, bwSS7M3UAConnStatsAspAcAckReceivedCount, bwSS7M3UAConnStatsAspIaReceivedCount, bwSS7M3UAConnStatsAspIaAckReceivedCount, bwSS7M3UAConnStatsSSNMAnoDunaSentCount, bwSS7M3UAConnStatsSSNMDavaSentCount, bwSS7M3UAConnStatsSSNMDupuSentCount, bwSS7M3UAConnStatsSSNMSconSentCount, bwSS7M3UAConnStatsSSNMDauadSentCount, bwSS7M3UAConnStatsSSNMAnoDunaReceivedCount, bwSS7M3UAConnStatsSSNMDavaReceivedCount, bwSS7M3UAConnStatsSSNMDupuReceivedCount, bwSS7M3UAConnStatsSSNMSconReceivedCount, bwSS7M3UAConnStatsSSNMDauadReceivedCount, bwSS7M3UAConnStatsRKMRegisterSentCount, bwSS7M3UAConnStatsRKMRegisterAckSentCount, bwSS7M3UAConnStatsRKMDeregisterSentCount, bwSS7M3UAConnStatsRKMDeregisterAckSentCount, bwSS7M3UAConnStatsRKMRegisterReceivedCount, bwSS7M3UAConnStatsRKMRegisterAckReceivedCount, bwSS7M3UAConnStatsRKMDeregisterReceivedCount, bwSS7M3UAConnStatsRKMDeregisterAckReceivedCount, bwSS7M3UAConnStatsMgmtNotifySentCount, bwSS7M3UAConnStatsMgmtErrorSentCount, bwSS7M3UAConnStatsMgmtNotifyReceivedCount, bwSS7M3UAConnStatsMgmtErrorReceivedCount, bwSS7M3UAConnStatsMiscTimerExpiredCount, bwSS7M3UAConnStatsMiscAspmFailedCount, bwSS7M3UAConnStatsMiscActiveTime, bwSS7M3UAConnStatsMiscStartTime, bwSS7M3UAConnStatsMiscUpTime, bwSS7M3UAConnStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 3 }
+
+  bwSS7M3UARemoteASStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UARemoteASStatsIndex, bwSS7M3UARemoteASStatsInstanceId, bwSS7M3UARemoteASStatsLocalSPId, bwSS7M3UARemoteASStatsRemoteSPId, bwSS7M3UARemoteASStatsLastResetTimeGauge, bwSS7M3UARemoteASStatsTimesInactiveCount, bwSS7M3UARemoteASStatsTimesActiveCount, bwSS7M3UARemoteASStatsPduSentCount, bwSS7M3UARemoteASStatsActiveStartTime, bwSS7M3UARemoteASStatsActiveUpTime, bwSS7M3UARemoteASStatsInactiveStartTime, bwSS7M3UARemoteASStatsInactiveUpTime, bwSS7M3UARemoteASStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 4 }
+
+  bwSS7M3UARemotePCStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UARemotePCStatsIndex, bwSS7M3UARemotePCStatsInstanceId, bwSS7M3UARemotePCStatsPointCodeId, bwSS7M3UARemotePCStatsNetworkAppearanceId, bwSS7M3UARemotePCStatsPduSentCount, bwSS7M3UARemotePCStatsLastResetTimeGauge,bwSS7M3UARemotePCStatsPduDiscardedCount, bwSS7M3UARemotePCStatsDownCount, bwSS7M3UARemotePCStatsUpCount, bwSS7M3UARemotePCStatsUpStartTime, bwSS7M3UARemotePCStatsUpTime, bwSS7M3UARemotePCStatsDownStartTime, bwSS7M3UARemotePCStatsDownTime, bwSS7M3UARemotePCStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 5 }
+
+  bwSS7M3UAErrorStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7M3UAErrorStatsIndex, bwSS7M3UAErrorStatsInstanceId, bwSS7M3UAErrorStatsLastResetTimeGauge, bwSS7M3UAErrorStatsOsTimerFailedErrorCount, bwSS7M3UAErrorStatsOsMemoryErrorCount, bwSS7M3UAErrorStatsResourceNoMoreASCount, bwSS7M3UAErrorStatsResourceNoMoreASPCount, bwSS7M3UAErrorStatsResourceNoMoreSgpCount, bwSS7M3UAErrorStatsSuApiErrorCount, bwSS7M3UAErrorStatsSmApiErrorCount, bwSS7M3UAErrorStatsSctpApiErrorCount, bwSS7M3UAErrorStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 6 }
+        
+  bwSS7SccpStatsAPIGroup OBJECT-GROUP
+    OBJECTS { bwSS7SccpStatsAPIIndex, bwSS7SccpStatsAPIInstanceId, bwSS7SccpStatsAPIIncomingSvcUserRequestsCount, bwSS7SccpStatsAPIOutgoingSvcUserRequestsCount, bwSS7SccpStatsAPISvcUserErrorCount, bwSS7SccpStatsAPIIncomingLowerLayerRequestsCount, bwSS7SccpStatsAPIOutgoingLowerLayerRequestsCount, bwSS7SccpStatsAPILowerLayerErrorCount, bwSS7SccpStatsAPIIncomingSMRequestsCount, bwSS7SccpStatsAPIOutgoingSMRequestsCount, bwSS7SccpStatsAPISMErrorCount, bwSS7SccpStatsAPIOutgoingAPIErrorCount, bwSS7SccpStatsAPIMiscErrorCount, bwSS7SccpStatsAPITableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 11 }
+    
+  bwSS7SccpStatsTrafficGroup OBJECT-GROUP
+    OBJECTS { bwSS7SccpStatsTrafficIndex, bwSS7SccpStatsTrafficInstanceId, bwSS7SccpStatsTrafficPacketSentCount, bwSS7SccpStatsTrafficPacketReceivedCount, bwSS7SccpStatsTrafficPacketDroppedCount, bwSS7SccpStatsTrafficPacketInvalidCount, bwSS7SccpStatsTrafficPacketGTTXlationFailureCount, bwSS7SccpStatsTrafficTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 12 }
+   
+  bwSS7SccpStatsErrorGroup OBJECT-GROUP
+    OBJECTS { bwSS7SccpStatsErrorIndex, bwSS7SccpStatsErrorInstanceId, bwSS7SccpStatsErrorAPICount, bwSS7SccpStatsErrorProtocolCount, bwSS7SccpStatsErrorSystemCount, bwSS7SccpStatsErrorResourceCount, bwSS7SccpStatsErrorTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 13 }
+   
+  bwSS7SCTPInternalStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7SCTPInternalStatsIndex, bwSS7SCTPInternalStatsInstanceId, bwSS7SCTPInternalStatsAssociationId, bwSS7SCTPInternalStatsApplicationRegisteredCount, bwSS7SCTPInternalStatsApplicationOpenedCount, bwSS7SCTPInternalStatsDestMarkedActiveCount, bwSS7SCTPInternalStatsDestMarkedInactiveCount, bwSS7SCTPInternalStatsDestMarkedUpCount, bwSS7SCTPInternalStatsDestMarkedDownCount, bwSS7SCTPInternalStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 14 }
+   
+  bwSS7SCTPGlobalStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7SCTPGlobalStatsIndex, bwSS7SCTPGlobalStatsInstanceId, bwSS7SCTPGlobalStatsAssociationId, bwSS7SCTPGlobalStatsAssociationAcceptedCount, bwSS7SCTPGlobalStatsAssociationInitiatedCount, bwSS7SCTPGlobalStatsAssociationGracefulShutdownCount, bwSS7SCTPGlobalStatsAssociationUngracefulShutdownCount, bwSS7SCTPGlobalStatsDataChunkSentCount, bwSS7SCTPGlobalStatsDataChunkOrderedSentCount, bwSS7SCTPGlobalStatsDataChunkUnorderedSentCount, bwSS7SCTPGlobalStatsDataChunkUnAcknowledgementCount, bwSS7SCTPGlobalStatsDataChunkReceivedCount, bwSS7SCTPGlobalStatsDataChunkOrderedReceivedCount, bwSS7SCTPGlobalStatsDataChunkUnorderedReceivedCount, bwSS7SCTPGlobalStatsBytesSentCount, bwSS7SCTPGlobalStatsBytesReservedCount, bwSS7SCTPGlobalStatsInitSentCount, bwSS7SCTPGlobalStatsIInitReceivedCount, bwSS7SCTPGlobalStatsInitAckSentCount, bwSS7SCTPGlobalStatsInitAckReceivedCount, bwSS7SCTPGlobalStatsCookieSentCount, bwSS7SCTPGlobalStatsICookieReceivedCount, bwSS7SCTPGlobalStatsCookieAckSentCount, bwSS7SCTPGlobalStatsCookieAckReceivedCount, bwSS7SCTPGlobalStatsHeartbeatSentCount, bwSS7SCTPGlobalStatsIHeartbeatReceivedCount, bwSS7SCTPGlobalStatsHeartbeatAckSentCount, bwSS7SCTPGlobalStatsHeartbeatAckReceivedCount, bwSS7SCTPGlobalStatsSackSentCount, bwSS7SCTPGlobalStatsSackReceivedCount, bwSS7SCTPGlobalStatsAbortSentCount, bwSS7SCTPGlobalStatsAbortReceivedCount, bwSS7SCTPGlobalStatsShutSentCount, bwSS7SCTPGlobalStatsIShutReceivedCount, bwSS7SCTPGlobalStatsShutAckSentCount, bwSS7SCTPGlobalStatsShutAckReceivedCount, bwSS7SCTPGlobalStatsErrorSentCount, bwSS7SCTPGlobalStatsIErrorReceivedCount, bwSS7SCTPGlobalStatsEcneSentCount, bwSS7SCTPGlobalStatsIEcneReceivedCount, bwSS7SCTPGlobalStatsCwrSentCount, bwSS7SCTPGlobalStatsICwrReceivedCount, bwSS7SCTPGlobalStatsDatagramReceivedCount, bwSS7SCTPGlobalStatsChecksumErrorReceivedCount, bwSS7SCTPGlobalStatsOotbReceivedCount, bwSS7SCTPGlobalStatsFragUserMsgReceivedCount, bwSS7SCTPGlobalStatsReassembeUserMessageCount, bwSS7SCTPGlobalStatsPacketSentCount, bwSS7SCTPGlobalStatsPacketReceivedCount, bwSS7SCTPGlobalStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 15 }
+   
+  bwSS7SCTPAssociationStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7SCTPAssociationStatsIndex, bwSS7SCTPAssociationStatsInstanceId, bwSS7SCTPAssociationStatsAssociationId, bwSS7SCTPAssociationStatsStartTimeInSecCount, bwSS7SCTPAssociationStatsStartTimeInMilliSecCount, bwSS7SCTPAssociationStatsChunkRestransmitCount, bwSS7SCTPAssociationStatsT1ExpiredCount, bwSS7SCTPAssociationStatsT2ExpiredCount, bwSS7SCTPAssociationStatsDestinationAddressCount, bwSS7SCTPAssociationStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 16 }
+   
+  bwSS7SCTPAssociationPerAddressStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7SCTPAssociationPerAddressStatsIndex, bwSS7SCTPAssociationPerAddressStatsInstanceId, bwSS7SCTPAssociationPerAddressStatsAssociationId, bwSS7SCTPAssociationPerAddressStatsAddressId, bwSS7SCTPAssociationPerAddressStatsAddressFamilyCount, bwSS7SCTPAssociationPerAddressStatsDatagramSentCount, bwSS7SCTPAssociationPerAddressStatsDatagramUnacknowledgeCount, bwSS7SCTPAssociationPerAddressStatsDatagramReceivedCount, bwSS7SCTPAssociationPerAddressStatsByteSentCount, bwSS7SCTPAssociationPerAddressStatsByteReceivedCount, bwSS7SCTPAssociationPerAddressStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 17 }
+   
+  bwSS7SCTPErrorStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7SCTPErrorStatsIndex, bwSS7SCTPErrorStatsInstanceId, bwSS7SCTPErrorStatsAssociationId, bwSS7SCTPErrorStatsProtocolErrorCount, bwSS7SCTPErrorStatsSystemErrorCount, bwSS7SCTPErrorStatsSystemResourceErrorCount, bwSS7SCTPErrorStatsInternalErrorCount, bwSS7SCTPErrorStatsAPIErrorCount, bwSS7SCTPErrorStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 18 }
+   
+  bwSS7TcapStatsAPIGroup OBJECT-GROUP
+    OBJECTS { bwSS7TcapStatsAPIIndex, bwSS7TcapStatsAPIInstanceId, bwSS7TcapStatsAPIIncomingSvcUserRequestsCount, bwSS7TcapStatsAPIOutgoingSvcUserRequestsCount, bwSS7TcapStatsAPISvcUserErrorCount, bwSS7TcapStatsAPIIncomingLowerLayerRequestsCount, bwSS7TcapStatsAPIOutgoingLowerLayerRequestsCount, bwSS7TcapStatsAPILowerLayerErrorCount, bwSS7TcapStatsAPIIncomingSMRequestsCount, bwSS7TcapStatsAPIOutgoingSMRequestsCount, bwSS7TcapStatsAPISMErrorCount, bwSS7TcapStatsAPIOutgoingAPIErrorCount, bwSS7TcapStatsAPIMiscErrorCount, bwSS7TcapStatsAPITableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 19 }
+   
+  bwSS7TcapStatsTrafficGroup OBJECT-GROUP
+    OBJECTS { bwSS7TcapStatsTrafficIndex, bwSS7TcapStatsTrafficInstanceId, bwSS7TcapStatsTrafficPacketSentCount, bwSS7TcapStatsTrafficPacketReceivedCount, bwSS7TcapStatsTrafficPacketDroppedCount, bwSS7TcapStatsTrafficPacketInvalidCount, bwSS7TcapStatsTrafficPacketMateSentCount, bwSS7TcapStatsTrafficPacketMateSentFailedCount, bwSS7TcapStatsTrafficPacketIncorrectInstanceCount, bwSS7TcapStatsTrafficDlgEstablishedSuccessCount, bwSS7TcapStatsTrafficDlgEstablishedFailureCount, bwSS7TcapStatsTrafficDlgEstablishedAbortCount,bwSS7TcapStatsTrafficTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 20 }
+   
+  bwSS7TcapStatsErrorGroup OBJECT-GROUP
+    OBJECTS { bwSS7TcapStatsErrorIndex, bwSS7TcapStatsErrorInstanceId, bwSS7TcapStatsErrorAPICount, bwSS7TcapStatsErrorProtocolCount, bwSS7TcapStatsErrorSystemCount, bwSS7TcapStatsErrorResourceCount, bwSS7TcapStatsErrorTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwSS7ProtocolStackMibGroups 21 }
+   
+  bwSCFProcBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks SS7 Protocol Stack MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwSS7M3UAProtocolStatsGroup, bwSS7M3UATrafficStatsGroup, bwSS7M3UAConnStatsGroup, bwSS7M3UARemoteASStatsGroup, bwSS7M3UARemotePCStatsGroup, bwSS7M3UAErrorStatsGroup, bwSS7SccpStatsAPIGroup, bwSS7SccpStatsTrafficGroup, bwSS7SccpStatsErrorGroup, bwSS7SCTPInternalStatsGroup, bwSS7SCTPGlobalStatsGroup, bwSS7SCTPAssociationStatsGroup, bwSS7SCTPAssociationPerAddressStatsGroup, bwSS7SCTPErrorStatsGroup, bwSS7TcapStatsAPIGroup, bwSS7TcapStatsTrafficGroup, bwSS7TcapStatsErrorGroup }
+
+    ::= { bwSS7ProtocolStackMibCompliancy 1 }
+END

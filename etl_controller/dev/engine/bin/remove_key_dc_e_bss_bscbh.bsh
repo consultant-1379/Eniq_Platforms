@@ -1,0 +1,84 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ to make MOID and SN keys Nullable in BSS BSCBH table script
+#
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2012 AB LM Ericsson  All rights reserved.
+# ----------------------------------------------------------------------
+
+# This script will alter DC_E_BSS_BSCBH to make the MOID and SN keys as nullable columns. 
+#
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+ENIQ_BIN_DIR=/eniq/sw/bin
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../../admin/lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../../admin/lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../../admin/lib/common_functions.lib"
+        exit 63
+fi
+
+DBA_PASSWORD=`iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+DWH_PORT=`iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_NAME=`iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+SYBASE_IQ_PATH=/eniq/sybase_iq//OCS-15_0/bin/isql
+
+if [ ! -f ${ENIQ_BIN_DIR}/remove_key_dc_e_bss_bscbh.sql ] ; then
+        echo "${ENIQ_BIN_DIR}/remove_key_dc_e_bss_bscbh.sql does not exist"
+        exit 1
+fi
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dba;pwd=${DBA_PASSWORD};eng=${DWH_NAME};links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Logging into database to remove mandatory key(MOID, SN) from the table."
+
+${IQDIR}/bin64/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q ${ENIQ_BIN_DIR}/remove_key_dc_e_bss_bscbh.sql
+
+if [ $? != 0 ] ; then
+  echo "Creation of Stored Procedure remove_key_dc_e_bss_bscbh failed"
+  exit 10
+else
+  echo "Stored Procedure remove_key_dc_e_bss_bscbh successfully created"
+fi
+
+
+echo "Executing the stored procedure remove_key_dc_e_bss_bscbh"
+
+${SYBASE_IQ_PATH} -Udba -P${DBA_PASSWORD} -S${DWH_NAME} <<EOISQL
+remove_key_dc_e_bss_bscbh
+go
+EOISQL
+echo "Executed the stored procedure remove_key_dc_e_bss_bscbh"
+
+
+
+echo "Droping the stored procedure remove_key_dc_e_bss_bscbh"
+${SYBASE_IQ_PATH} -Udba -P${DBA_PASSWORD} -S${DWH_NAME} <<EOISQL
+drop proc remove_key_dc_e_bss_bscbh
+go
+EOISQL
+echo "Dropped the stored procedure remove_key_dc_e_bss_bscbh"

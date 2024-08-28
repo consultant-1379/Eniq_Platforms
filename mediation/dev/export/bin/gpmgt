@@ -1,0 +1,91 @@
+#!/bin/bash
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME="/eniq/sw/runtime/java"
+
+REPOSITORY_JAR=`echo ${PLATFORM_DIR}/repository-*/dclib/repository.jar`
+DWHMANAGER_JAR=`echo ${PLATFORM_DIR}/dwhmanager-*/dclib/dwhmanager.jar`
+COMMON_JAR=`echo ${PLATFORM_DIR}/common-*/dclib/common.jar`
+EXPORT_CONF=`echo ${PLATFORM_DIR}/export-*/conf`
+EXPORT_JAR=`echo ${PLATFORM_DIR}/export-*/classes`
+SYBASE_DRIVER_JAR=`echo ${PLATFORM_DIR}/libs-*/dclib/jconn*.jar`
+VELOCITY_JAR=`echo ${PLATFORM_DIR}/libs-*/dclib/velocity-dep-*.jar`
+LOG4J_JAR=`echo ${PLATFORM_DIR}/libs-*/dclib/log4j-*.jar`
+
+CLASSPATH=${REPOSITORY_JAR}:${DWHMANAGER_JAR}:${COMMON_JAR}:${SYBASE_DRIVER_JAR}:${VELOCITY_JAR}:${LOG4J_JAR}
+CLASSPATH=${EXPORT_JAR}:${EXPORT_CONF}:${CLASSPATH}
+
+DEBUG=
+VERSIONID=
+DFILE=
+SUSPEND=n
+MAIN_CLASS_EXPORTER=com.distocraft.dc5000.etl.importexport.GroupMgtExporter
+MAIN_CLASS_IMPORTER=com.distocraft.dc5000.etl.importexport.GroupMgtImporter
+MAIN_CLASS=
+ARGS=
+
+usage(){
+	echo "Used to modify and view GroupMgt Data"
+	echo "	Usage: $0 [-i [-add|-delete] | -e] -f <file> [-t <version>]"
+	echo "	To Export all Groups that are defined use the -e option e.g."
+	echo "		$0 -e -f /tmp/tac_exported.xml"
+	echo "	To Export all group instances of a certain type use the -g option e.g."
+	echo "		$0 -e -f /tmp/tac_exported.xml -g APN -g TAC"
+	echo "	To Export explicit group instances use the -g option with the group instance name e.g."
+	echo "		$0 -e -f /tmp/tac_exported.xml -g APN:apngp1,apngp2 -g TAC:exc_gp"
+	echo "	To Import group data e.g."
+	echo "		$0 -i -add -f /tmp/new_apns.xml"
+}
+
+
+execute() {
+	DARG=
+	if [ "$DEBUG" ] ; then
+		DARG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${SUSPEND},address=5005"
+	fi
+	${JAVA_HOME}/bin/java ${DARG} -d64 -Dpwd=$PWD -Dloader.dir=${PWD} -Ddc5000.config.directory=${CONF_DIR} -cp ${CLASSPATH} ${MAIN_CLASS} ${VERSIONID} ${DFILE} ${ARGS}
+	if [ -f ${BIN_DIR}/kpiAdmin ] ; then
+           echo "Refreshing kpi notifications groups cache...."
+           kpiAdmin refreshGroups
+    fi
+
+}
+
+if [ $# -eq 0 ] ; then	
+	usage
+	exit 2;
+fi
+
+while (( "$#" )); do
+	if [ "$1" == "-d" ] ; then
+		DEBUG=1
+	elif [ "$1" == "-s" ] ; then
+		SUSPEND=y
+	elif [ "$1" == "-t" ] ; then
+		VERSIONID="-t $2"
+		shift
+	elif [ "$1" == "-f" ] ; then
+		DFILE="-f $2"
+		shift
+	elif [ "$1" == "-i" ] ; then
+		MAIN_CLASS=$MAIN_CLASS_IMPORTER
+	elif [ "$1" == "-e" ] ; then
+		MAIN_CLASS=$MAIN_CLASS_EXPORTER
+	else
+		ARGS="$ARGS $1"
+	fi
+	shift
+done
+
+if [ "$MAIN_CLASS" == "" ] ; then
+	echo "Missing arguement :  [-i | -e] (-i to import a file, -e to export the exisitng groups)"
+	exit 2;
+fi
+
+execute 
+

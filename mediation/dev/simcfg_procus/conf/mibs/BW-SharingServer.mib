@@ -1,0 +1,516 @@
+--===============================================================
+-- File Name : BW-SharingServer.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2016, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-SharingServer DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Unsigned32, Counter32, Counter64, Gauge32, Integer32
+      FROM SNMPv2-SMI
+    DateAndTime, DisplayString
+      FROM SNMPv2-TC;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201308110000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This is the System Management Information structure for the BroadSoft Sharing Server."
+    REVISION    "201308110000Z"
+                DESCRIPTION    "Creation of the Sharing Server MIB."
+    ::=  {  enterprises 6431  }
+
+  broadworks OBJECT IDENTIFIER
+    ::=  {  broadsoft 1  }
+
+  uss OBJECT IDENTIFIER
+    ::=  {  broadworks 37  }
+
+  rooms OBJECT IDENTIFIER
+    ::=  {  uss 1  }
+
+  users OBJECT IDENTIFIER
+    ::=  {  uss 2  }
+
+  resources OBJECT IDENTIFIER
+    ::=  {  uss 3  }
+
+-- MIB Compliance - Root
+  bwUSSMibConformance OBJECT IDENTIFIER
+    ::=  {  uss 1000  }
+
+  imageprocessing OBJECT IDENTIFIER
+    ::=  {  resources 1  }
+
+  connections OBJECT IDENTIFIER
+    ::=  {  resources 2  }
+
+  transcoding OBJECT IDENTIFIER
+    ::=  {  resources 3  }
+
+-- MIB Compliance - Groups
+  bwUSSMibGroups OBJECT IDENTIFIER
+    ::=  {  bwUSSMibConformance 1  }
+
+-- MIB Compliance - Module
+  bwUSSMibCompliancy OBJECT IDENTIFIER
+    ::=  {  bwUSSMibConformance 2  }
+
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).uss(37).rooms(1)
+-- ################### ...............................
+
+  bwUSSRoomsNumInUse OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge reports the number of rooms that are currently in use."
+-- @feature:203921
+    ::=  {  rooms 1  }
+
+  bwUSSRoomsMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge reports the maximum number of rooms that can be allocated simultaneously."
+-- @feature:203921
+    ::=  {  rooms 2  }
+
+  bwUSSRoomsNumCreated OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room was successfully created."
+-- @feature:203921
+    ::=  {  rooms 3  }
+
+  bwUSSRoomsNumCreationFailedAuthenticationFailure OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room creation failed because the authentication of the end-user failed."
+-- @feature:203921
+    ::=  {  rooms 4  }
+
+  bwUSSRoomsNumCreationFailedServerCapacityExceeded OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room creation failed because the server maximum capacity was exceeded."
+-- @feature:203921
+    ::=  {  rooms 5  }
+
+  bwUSSRoomsNumCreationFailedOther OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room creation failed for other reasons."
+-- @feature:203921
+    ::=  {  rooms 6  }
+
+  bwUSSRoomsTotalDuration OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the total duration of all rooms, in seconds."
+-- @feature:203921
+    ::=  {  rooms 7  }
+
+  bwUSSRoomsTotalDataReceived OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the total number of bytes transmitted by floor holders to rooms."
+-- @feature:203921
+    ::=  {  rooms 8  }
+
+  bwUSSRoomsTotalDataTransmitted OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the total number of bytes transmitted by rooms to participants."
+-- @feature:203921
+    ::=  {  rooms 9  }
+
+  bwUSSRoomsNumDestroyedInactive OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room was destroyed by the system due to inactivity."
+-- @feature:203921
+    ::=  {  rooms 10  }
+
+  bwUSSRoomsNumDestroyedMaximumDurationExceeded OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a room was destroyed by the system due the room maximum duration being reached."
+-- @feature:203921
+    ::=  {  rooms 11  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).uss(37).users(2)
+-- ################### ...............................
+
+  bwUSSUsersNumConnected OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge reports the number of end-users who are currently connected to the server."
+-- @feature:203921
+    ::=  {  users 1  }
+
+  bwUSSUsersMaxConnected OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge reports the maximum number of users that can be connected simultaneously."
+-- @feature:203921
+    ::=  {  users 2  }
+
+  bwUSSUsersTotalConnected OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a user successfully connected to a room."
+-- @feature:203921
+    ::=  {  users 3  }
+
+  bwUSSUsersTotalConnectionFailedServerCapacityExceeded OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a user could not connect because the server is busy."
+-- @feature:203921
+    ::=  {  users 4  }
+
+  bwUSSUsersTotalConnectionFailedInvalidRoomId OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a user could not join a room because an invalid room identifier was provided."
+-- @feature:203921
+    ::=  {  users 5  }
+
+  bwUSSUsersTotalConnectionFailedOther OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a user could not connect to a room for other reasons."
+-- @feature:203921
+    ::=  {  users 6  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).uss(37).resources(3).imageprocessing(1)
+-- ################### ...............................
+
+  bwUSSImageProcessingQueueCapacity OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the capacity of the image processing queue."
+-- @feature:203921
+    ::=  {  imageprocessing 1  }
+
+  bwUSSImageProcessingQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current size of the image processing queue."
+-- @feature:203921
+    ::=  {  imageprocessing 2  }
+
+  bwUSSImageProcessingThreadsBusy OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the approximate number of threads that are actively executing tasks."
+-- @feature:203921
+    ::=  {  imageprocessing 3  }
+
+  bwUSSImageProcessingThreadsAlive OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current number of threads instantiated."
+-- @feature:203921
+    ::=  {  imageprocessing 4  }
+
+  bwUSSImageProcessingThreadsAliveMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads that can be allocated at the same time."
+-- @feature:203921
+    ::=  {  imageprocessing 5  }
+
+  bwUSSImageProcessingWebP2JpegConversionAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times an attempt was made to convert an image from the WebP image format to the JPEG image format."
+-- @feature:BW-7433
+    ::=  {  imageprocessing 6  }
+
+  bwUSSImageProcessingWebP2JpegConversionFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times converting an image from the WebP image format to the JPEG image format failed."
+-- @feature:BW-7433
+    ::=  {  imageprocessing 7  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).uss(37).resources(3).connections(2)
+-- ################### ...............................
+
+  bwUSSConnectionsThreadsAlive OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current number of threads instantiated."
+-- @feature:203921
+    ::=  {  connections 1  }
+
+  bwUSSConnectionsThreadsAliveMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads that can be allocated at the same time."
+-- @feature:203921
+    ::=  {  connections 2  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).uss(37).resources(3).transcoding(3)
+-- ################### ...............................
+
+  bwUSSTranscodingStreamFastUsers OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a connection is switched to the fast transcoded share stream that transcodes the main stream to a lower quality at the same framerate."
+-- @feature:BW-8572
+    ::=  {  transcoding 1  }
+
+  bwUSSTranscodingStreamActiveFastUsers OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge tracks the number of connections currently listening to the fast transcoded share stream that transcodes the main stream to a lower quality at the same framerate."
+-- @feature:BW-8572
+    ::=  {  transcoding 2  }
+
+  bwUSSTranscodingStreamMediumUsers OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a connection is switched to the medium transcoded share stream that updates once per second."
+-- @feature:BW-8572
+    ::=  {  transcoding 3  }
+
+  bwUSSTranscodingStreamActiveMediumUsers OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge tracks the number of connections currently listening to the medium transcoded share stream that updates once per second."
+-- @feature:BW-8572
+    ::=  {  transcoding 4  }
+
+  bwUSSTranscodingStreamActiveSlowUsers OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This gauge tracks the number of connections currently listening to the slow transcoded share stream that updates every two seconds."
+-- @feature:BW-8572
+    ::=  {  transcoding 5  }
+
+  bwUSSTranscodingStreamSlowUsers OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a connection is switched to the slow transcoded share stream that updates every two seconds."
+-- @feature:BW-8572
+    ::=  {  transcoding 6  }
+
+  bwUSSTranscodingStreamSpeedIncreased OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times a connection is switched to a faster share stream than it was previously using."
+-- @feature:BW-8572
+    ::=  {  transcoding 7  }
+
+  bwUSSTranscodingJpegEncodingAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder tries to encode an image using JPEG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 8  }
+
+  bwUSSTranscodingJpegEncodingFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder fails to encode an image using JPEG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 9  }
+
+  bwUSSTranscodingWebPEncodingAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder tries to encode an image using WebP compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 10  }
+
+  bwUSSTranscodingWebPEncodingFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder fails to encode an image using WebP compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 11  }
+
+  bwUSSTranscodingJpegDecodingAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder tries to decode an image using JPEG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 12  }
+
+  bwUSSTranscodingJpegDecodingFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder fails to decode an image using JPEG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 13  }
+
+  bwUSSTranscodingWebPDecodingAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder tries to decode an image using WebP compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 14  }
+
+  bwUSSTranscodingWebPDecodingFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder fails to decode an image using WebP compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 15  }
+
+  bwUSSTranscodingPngDecodingAttempts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder tries to decode an image using PNG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 16  }
+
+  bwUSSTranscodingPngDecodingFailed OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This counter tracks the number of times the transcoder fails to decode an image using PNG compression."
+-- @feature:BW-8572
+    ::=  {  transcoding 17  }
+
+-- BroadWorks MIB Conformance Definition  ...........................................
+
+  bwsharingserverRoomsGroup OBJECT-GROUP
+    OBJECTS { bwUSSRoomsNumInUse, bwUSSRoomsMax, bwUSSRoomsNumCreated, bwUSSRoomsNumCreationFailedAuthenticationFailure, bwUSSRoomsNumCreationFailedServerCapacityExceeded, bwUSSRoomsNumCreationFailedOther, bwUSSRoomsTotalDuration, bwUSSRoomsTotalDataReceived, bwUSSRoomsTotalDataTransmitted, bwUSSRoomsNumDestroyedInactive, bwUSSRoomsNumDestroyedMaximumDurationExceeded }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for uss rooms."
+    ::=  {  bwUSSMibGroups 1  }
+
+  bwsharingserverUsersGroup OBJECT-GROUP
+    OBJECTS { bwUSSUsersNumConnected, bwUSSUsersMaxConnected, bwUSSUsersTotalConnected, bwUSSUsersTotalConnectionFailedServerCapacityExceeded, bwUSSUsersTotalConnectionFailedInvalidRoomId, bwUSSUsersTotalConnectionFailedOther }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for uss users."
+    ::=  {  bwUSSMibGroups 2  }
+
+  bwsharingserverImageprocessingGroup OBJECT-GROUP
+    OBJECTS { bwUSSImageProcessingQueueCapacity, bwUSSImageProcessingQueueSize, bwUSSImageProcessingThreadsBusy, bwUSSImageProcessingThreadsAlive, bwUSSImageProcessingThreadsAliveMax, bwUSSImageProcessingWebP2JpegConversionAttempts, bwUSSImageProcessingWebP2JpegConversionFailed }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for uss resources imageprocessing."
+    ::=  {  bwUSSMibGroups 3  }
+
+  bwsharingserverConnectionsGroup OBJECT-GROUP
+    OBJECTS { bwUSSConnectionsThreadsAlive, bwUSSConnectionsThreadsAliveMax }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for uss resources connections."
+    ::=  {  bwUSSMibGroups 4  }
+
+  bwsharingserverTranscodingGroup OBJECT-GROUP
+    OBJECTS { bwUSSTranscodingStreamFastUsers, bwUSSTranscodingStreamActiveFastUsers, bwUSSTranscodingStreamMediumUsers, bwUSSTranscodingStreamActiveMediumUsers, bwUSSTranscodingStreamActiveSlowUsers, bwUSSTranscodingStreamSlowUsers, bwUSSTranscodingStreamSpeedIncreased, bwUSSTranscodingJpegEncodingAttempts, bwUSSTranscodingJpegEncodingFailed, bwUSSTranscodingWebPEncodingAttempts, bwUSSTranscodingWebPEncodingFailed, bwUSSTranscodingJpegDecodingAttempts, bwUSSTranscodingJpegDecodingFailed, bwUSSTranscodingWebPDecodingAttempts, bwUSSTranscodingWebPDecodingFailed, bwUSSTranscodingPngDecodingAttempts, bwUSSTranscodingPngDecodingFailed }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for uss resources transcoding."
+    ::=  {  bwUSSMibGroups 5  }
+
+  bwUSSBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "BW-SharingServer MIB compliance."
+    MODULE
+      MANDATORY-GROUPS { bwsharingserverRoomsGroup, bwsharingserverUsersGroup,
+                         bwsharingserverImageprocessingGroup, bwsharingserverConnectionsGroup,
+                         bwsharingserverTranscodingGroup }
+    ::=  {  bwUSSMibCompliancy 1  }
+
+END

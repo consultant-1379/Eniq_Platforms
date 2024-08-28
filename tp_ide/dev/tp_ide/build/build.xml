@@ -1,0 +1,318 @@
+<project name="TechPackIDE" default="compile">
+
+	<property name="pack.name" value="techpackide"/>
+	<property name="pack.version" value="6-0-0"/>
+	<property name="pack.dir" value="/vobs/eniq/design/plat/tp_ide/dev/tp_ide"/>
+
+	<!-- 20110216, eanguan, HN65194 :: To get the current year while building TechPack IDE package-->
+	<tstamp>
+	      <format property="yearOfBuild" pattern="yyyy" unit="year"/>
+	</tstamp>
+	
+	<!-- ENIQ Jars -->
+	<property name="eniq.3gpp32435.dir" value="/vobs/eniq/design/plat/adapters/build/3GPP32435"/>
+	<property name="eniq.alarm.dir" value="/vobs/eniq/design/plat/alarm_module/build/alarm_module"/>
+	<property name="eniq.ascii.dir" value="/vobs/eniq/design/plat/adapters/build/ascii"/>
+	<property name="eniq.asn1.dir" value="/vobs/eniq/design/plat/adapters/build/asn1"/>
+	<property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+	<property name="eniq.csexport.dir" value="/vobs/eniq/design/plat/adapters/build/csexport"/>
+	<property name="eniq.dwhmanager.dir" value="/vobs/eniq/design/plat/management/build/dwh_manager"/>
+	<property name="eniq.ebs.dir" value="/vobs/eniq/design/plat/adapters/build/ebs"/>
+	<property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+	<property name="eniq.export.dir" value="/vobs/eniq/design/plat/mediation/build/export"/>
+	<property name="eniq.mdc.dir" value="/vobs/eniq/design/plat/adapters/build/mdc"/>
+	<property name="eniq.nossdb.dir" value="/vobs/eniq/design/plat/adapters/build/nossdb"/>
+	<property name="eniq.parser.dir" value="/vobs/eniq/design/plat/adapters/build/parser"/>
+	<property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+	<property name="eniq.sasn.dir" value="/vobs/eniq/design/plat/adapters/build/sasn"/>
+	<property name="eniq.scheduler.dir" value="/vobs/eniq/design/plat/etl_controller/build/scheduler"/>
+	<property name="eniq.stfiop.dir" value="/vobs/eniq/design/plat/adapters/build/stfiop"/>
+	<property name="eniq.xml.dir" value="/vobs/eniq/design/plat/adapters/build/xml"/>
+	<property name="eniq.installer.dir" value="/vobs/eniq/design/plat/installer/build/installer"/>
+
+	<!-- DC5000 Jars -->
+	<property name="eniq.alcatellucent.dir" value="/vobs/eniq/design/plat/tp_ide/3pp/dc5000"/>
+	<property name="eniq.ct.dir" value="/vobs/eniq/design/plat/tp_ide/3pp/dc5000"/>
+	<property name="eniq.spf.dir" value="/vobs/eniq/design/plat/tp_ide/3pp/dc5000"/>
+
+	<!-- 3PP Jars -->
+	<property name="3pp.ant.dir" value="/vobs/eniq/3pp/apache/ant/v1_6_2/prod"/>
+	<property name="3pp.appframework.dir" value="/vobs/eniq/3pp/appframework/prod"/>
+	<property name="3pp.dbunit.dir" value="/vobs/eniq/3pp/dbunit/dbunit/v2_1/prod"/>
+	<property name="3pp.jcalendar.dir" value="/vobs/eniq/3pp/toedter/jcalendar/prod"/>
+	<property name="3pp.jconn.dir" value="/vobs/eniq/3pp/sybase/sybase_iq"/>
+	<property name="3pp.sybase.dir" value="/vobs/eniq/3pp/sybase/sybase_iq"/>
+	<property name="3pp.swingworker.dir" value="/vobs/eniq/3pp/idk/swing_worker/prod"/>
+	<property name="3pp.velocity.dir" value="/vobs/eniq/3pp/apache/jakarta_velocity/v1_5/prod"/>
+	<property name="3pp.xerces.dir" value="/vobs/eniq/3pp/apache/xerces_parser/v2_6_2/prod"/>
+	<property name="3pp.xmlapi.dir" value="/vobs/eniq/3pp/apache/xml_commons/v1_1/prod"/>
+	<property name="3pp.common_net.dir" value="/vobs/eniq/3pp/apache/comm_net/v3_0"/>
+	<property name="3pp.common_io.dir" value="/vobs/eniq/3pp/apache/common_io/v2_0"/>
+	<property name="3pp.jsch_ssh2.dir" value="/vobs/eniq/3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod"/>
+
+	<!-- TPIDE Components -->
+	<property name="tpide.pdc.dir" value="/vobs/eniq/design/plat/tp_ide/build/parser_debugger_component"/>
+	<property name="tpide.ttc.dir" value="/vobs/eniq/design/plat/tp_ide/build/table_tree_component"/>
+
+	<target name="precompile"/>
+
+	<target name="compile">
+
+		<!-- Copy the ENIQ jar files to the buildlib directory -->
+		<mkdir dir="${pack.dir}/buildlib"/>
+		<copy todir="${pack.dir}/buildlib" overwrite="true">
+
+			<!-- ENIQ -->
+			<fileset dir="${eniq.3gpp32435.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.alarm.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.ascii.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.asn1.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.common.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.csexport.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.dwhmanager.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.ebs.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.engine.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.export.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.mdc.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.nossdb.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.parser.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.repository.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.sasn.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.scheduler.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.stfiop.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.xml.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+
+		<!-- Copy the needed jar files to the lib directory -->
+		<mkdir dir="${pack.dir}/lib"/>
+		<copy todir="${pack.dir}/lib" overwrite="true">
+
+			<!-- 3PP -->
+			<fileset dir="${3pp.ant.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.appframework.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.dbunit.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.jcalendar.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.swingworker.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.velocity.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.xerces.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.xmlapi.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.common_net.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.common_io.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.jsch_ssh2.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+
+			<!-- DC5000 -->
+			<fileset dir="${eniq.alcatellucent.dir}">
+				<include name="**/alcatellucent.jar"/>
+			</fileset>
+			<fileset dir="${eniq.ct.dir}">
+				<include name="**/ct.jar"/>
+			</fileset>
+			<fileset dir="${eniq.spf.dir}">
+				<include name="**/spf.jar"/>
+			</fileset>
+
+			<!-- TechPackIDE components -->
+			<!-- 20111015 eanguan, Removing the dependency of IDE on TTC and PDC
+			<fileset dir="${tpide.ttc.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${tpide.pdc.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			-->
+			
+			<!-- ENIQ -->
+			<fileset dir="${eniq.installer.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+
+		</copy>
+		<copy flatten="true" todir="${pack.dir}/lib" overwrite="true">
+		 	 <fileset dir="${3pp.sybase.dir}" includes="**/*.jar">
+		  	 </fileset>
+		</copy>
+		<path id="pack.classpath">
+			<fileset dir="${pack.dir}/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+		<pathconvert property="pack.manifest.classpath" pathsep=" " refid="pack.classpath">
+			<chainedmapper>
+				<flattenmapper/>
+				<globmapper from="*" to="../lib/*"/>
+			</chainedmapper>
+		</pathconvert>
+
+		<mkdir dir="${pack.dir}/classes"/>
+
+		<!-- Compile -->
+		<javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="off" optimize="off" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<!-- Include the copied jars from the build lib directory -->
+				<fileset dir="${pack.dir}/buildlib">
+					<include name="*.jar"/>
+				</fileset>
+				<!-- Include the copied jars from the lib directory -->
+				<fileset dir="${pack.dir}/lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+
+		<!-- Update the version number in the build.properties file -->
+		<ccmklabel viewpath="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" replace="true" typename="${build.label}"/>
+		<cccheckout viewpath="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" reserved="true"/>
+		<ccmklabel viewpath="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" replace="true" typename="${build.label}"/>
+		<replaceregexp file="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" match="Application.version = (.*)" replace="Application.version = b${build.number}" byline="true"/>
+		<!-- 20110216, eanguan, HN65194 :: Change to show the correct product number and build revision of TechPack IDE package. -->
+		<replaceregexp file="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" match="AboutIDEDialog.heading = (.*)" replace="AboutIDEDialog.heading = TECHPACK IDE FOR ENIQ ${product.number} ${build.revision}" byline="true"/>
+		<!-- 20110216, eanguan, HN65194 :: Change to show the correct release information of TechPack IDE package. -->
+		<property name="BuildLabel" value="${build.label}"/>
+		<if>
+			<contains string="${BuildLabel}" substring="-ENIQ"/>
+			<then>
+				<propertyregex property="Version" input="${BuildLabel}" regexp="(.*)-(E.*)" select="\2"/>
+			</then>
+			<else>
+				<property name="Version" value="${BuildLabel}"/>
+			</else>
+		</if>
+		<if>
+		   <contains string="${Version}" substring="ENIQ"/>
+		   <then>
+		   	<property name="Version0" value="${Version}"/>
+		   </then>
+		   <else>
+		    <property name="Version0" value="${BuildLabel}"/>
+		   </else>
+		</if>
+		<if>
+			<contains string="${Version0}" substring="_"/>
+			<then>
+				<propertyregex property="Version1" input="${Version0}" regexp="\_" replace="." global="true"/>
+			</then>
+			<else>
+				<property name="Version1" value="${Version0}"/>
+			</else>
+		</if>
+		<if>
+			<contains string="${Version1}" substring="-"/>
+			<then>
+				<propertyregex property="Version2" input="${Version1}" regexp="\-" replace=" " global="true"/>
+			</then>
+			<else>
+				<property name="Version2" value="${Version1}"/>
+			</else>
+		</if>
+		<if>
+		  <contains string="${Version2}" substring="SH"/>
+		  <then>
+		   <propertyregex property="Version3" input="${Version2}" regexp="SH[a-zA-Z]*" replace="" global="true"/>
+		  </then>
+		  <else>
+		   <property name="Version3" value="${Version2}"/>
+		  </else>
+		</if>
+		<property name="ReqLabel" value="${Version3}"/>
+		<if>
+		  <contains string="${ReqLabel}" substring="ENIQ" casesensitive="false"/>
+		  <then>
+		   <!-- Do nothing -->
+		  </then>
+		  <else>
+		  	<property name="ReqLabel" value="${BuildLabel}"/>
+		  </else>
+		</if>
+		<replaceregexp file="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" match="AboutIDEDialog.currentreleaselabel = (.*)" replace="AboutIDEDialog.currentreleaselabel = ${ReqLabel} b${build.number}" byline="true"/>		
+		<!-- 20110216, eanguan, HN65194 :: Change to relace the year with the year of building TechPack IDE package. -->
+		<replaceregexp file="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties" match="AboutIDEDialog.copyright = (.*)" replace="AboutIDEDialog.copyright = COPYRIGHT ERICSSON ${yearOfBuild}" byline="true"/>		
+
+		<!-- Create the jar file -->
+		<jar destfile="${pack.dir}/dclib/${pack.name}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.ericsson.eniq.techpacksdk.TechPackIDE"/>
+				<attribute name="Class-Path" value="${pack.manifest.classpath}"/>
+			</manifest>
+			<fileset dir="${pack.dir}/classes"/>
+			<fileset dir="${pack.dir}/jar">
+				<include name="*/**"/>
+			</fileset>
+		</jar>
+		<!--The checkin is placed here to ensure the new version is the one which exisits in the jar file-->
+		<cccheckin viewpath="${pack.dir}/jar/com/ericsson/eniq/techpacksdk/resources/TechPackIDE.properties"/>
+
+		<!-- Remove the generated classes dir -->
+		<delete dir="${pack.dir}/classes"/>
+
+		<!-- Remove the creted buildlib dir -->
+                <delete includeemptydirs="true">
+                  <fileset dir="${pack.dir}/buildlib" includes="**/*"/>
+                </delete>
+
+	</target>
+
+	<!-- Postcompile: create install directory -->
+	<target name="postcompile">
+		<mkdir dir="${pack.dir}/install"/>
+	</target>
+
+</project>

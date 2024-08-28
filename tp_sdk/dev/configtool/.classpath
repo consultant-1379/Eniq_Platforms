@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="../../3PP/commons-lang-1.0.jar"/>
+	<classpathentry kind="lib" path="../../3PP/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="../../3PP/log4j-1.2.6.jar"/>
+	<classpathentry kind="lib" path="../../3PP/velocity-dep-1.4.jar"/>
+	<classpathentry kind="lib" path="../../3PP/xerces-2.6.2.jar"/>
+	<classpathentry kind="lib" path="../../3PP/xml-apis.jar"/>
+	<classpathentry kind="lib" path="../../3PP/jcalendar.jar"/>
+	<classpathentry kind="lib" path="../../3PP/looks-1.2.2.jar"/>
+	<classpathentry kind="lib" path="../../3PP/dbunit-2.1_dc.jar"/>
+	<classpathentry kind="lib" path="../../3PP/jconn3.jar"/>
+	<classpathentry kind="lib" path="lib/scheduler_5-0-0b63.jar"/>
+	<classpathentry kind="lib" path="lib/engine_5-0-0b330.jar"/>
+	<classpathentry kind="lib" path="lib/export_5-0-0b26.jar"/>
+	<classpathentry kind="lib" path="lib/repository_5-0-0b178.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

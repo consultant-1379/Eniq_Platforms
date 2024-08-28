@@ -1,0 +1,24 @@
+## $DEST --> The storage table name e.g GROUP_TYPE_E_IMSI
+## $TMP -- > The temp table name e.g TMP_GROUP_TYPE_E_IMSI
+## $GPN_COL --> The Group Name e.g IMSI
+## $GP_KEY --> List of Keys e.g a, b, c
+## $SCH --> dc.
+
+
+DELETE FROM ${SCH}${DEST}
+WHERE 
+    $GPN_COL
+    #foreach ($keyName in $GP_KEY)
+	||$keyName 
+    #end
+
+    in
+    (
+	select tmp.$GPN_COL
+	#foreach ($keyName in $GP_KEY)
+	    ||tmp.$keyName 
+	#end
+	
+	from 
+	$SCH$TMP tmp
+    )

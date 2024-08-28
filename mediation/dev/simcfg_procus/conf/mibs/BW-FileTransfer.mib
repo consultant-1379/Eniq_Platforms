@@ -1,0 +1,218 @@
+--===============================================================
+-- File Name : BW-FileTransfer.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-FileTransfer DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Unsigned32, Counter32, Gauge32, Integer32
+      FROM SNMPv2-SMI
+    DisplayString
+      FROM SNMPv2-TC;
+
+  broadsoft  MODULE-IDENTITY
+    LAST-UPDATED  "201511060000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB contains the performance measurements related to the BroadWorks FileTransfer application."
+    REVISION    "201511060000Z"
+                DESCRIPTION    "Creation of the MIB"
+    ::=  {  enterprises 6431  }
+
+  broadworks OBJECT IDENTIFIER
+    ::=  {  broadsoft 1  }
+
+  fileTransfer OBJECT IDENTIFIER
+    ::=  {  broadworks 59  }
+
+  repository OBJECT IDENTIFIER
+    ::=  {  fileTransfer 1  }
+
+  replication OBJECT IDENTIFIER
+    ::=  {  fileTransfer 2  }
+
+-- MIB Compliance - Root
+  bwFileTransferMibConformance OBJECT IDENTIFIER
+    ::=  {  fileTransfer 1000  }
+
+-- MIB Compliance - Groups
+  bwFileTransferMibGroups OBJECT IDENTIFIER
+    ::=  {  bwFileTransferMibConformance 1  }
+
+-- MIB Compliance - Module
+  bwFileTransferMibCompliancy OBJECT IDENTIFIER
+    ::=  {  bwFileTransferMibConformance 2  }
+
+
+-- ################### ...............................
+-- broadsoft (6431).broadworks(1).fileTransfer(59).repository(1)
+-- ################### ...............................
+
+  bwFileTransferCacheIndexedDirectories OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the number of indexed subdirectories stored in cached directories."
+-- @feature:BW-7266
+    ::=  {  repository 1  }
+
+  bwFileTransferCacheSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the number of cached directories."
+-- @feature:BW-7266
+    ::=  {  repository 2  }
+
+  bwFileTransferCacheCapacity OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of cached directories."
+-- @feature:BW-7266
+    ::=  {  repository 3  }
+
+  bwFileTransferCacheLookUpCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of lookups performed. It is incremented every time a resource is looked up in the cache."
+-- @feature:BW-7266
+    ::=  {  repository 4  }
+
+  bwFileTransferCacheLookUpHits OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of lookups which returned a match. It is incremented every time a resource is found in the cache."
+-- @feature:BW-7266
+    ::=  {  repository 5  }
+
+  bwFileTransferCacheEvictions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of entries that were evicted from the cache."
+-- @feature:BW-7266
+    ::=  {  repository 6  }
+
+-- ################### ...............................
+-- broadsoft (6431).broadworks(1).fileTransfer(59).replication(2)
+-- ################### ...............................
+
+  bwFileTransferReplicationStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwFileTransferReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table contains counters for FileTransfer replication."
+    ::=  {  replication 1  }
+
+  bwFileTransferReplicationStatsEntry OBJECT-TYPE
+    SYNTAX      BwFileTransferReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "Definition of the entries for bwFileTransferReplicationStatsTable."
+    INDEX       { bwFileTransferReplicationStatsIndex }
+    ::=  {  bwFileTransferReplicationStatsTable 1  }
+
+  BwFileTransferReplicationStatsEntry ::= SEQUENCE {
+    bwFileTransferReplicationStatsIndex  Unsigned32,
+    bwFileTransferReplicationPeer  DisplayString,
+    bwFileTransferReplicationRxSuccessful  Counter32,
+    bwFileTransferReplicationRxFailed  Counter32,
+    bwFileTransferReplicationTxSuccessful  Counter32,
+    bwFileTransferReplicationTxFailed  Counter32
+  }
+
+  bwFileTransferReplicationStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an index in table bwFileTransferReplicationStatsTable. The index represents a peer entry in the table."
+-- @feature:BW-7266
+    ::=  {  bwFileTransferReplicationStatsEntry 1  }
+
+  bwFileTransferReplicationPeer OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the peer IP."
+-- @feature:BW-7266
+    ::=  {  bwFileTransferReplicationStatsEntry 2  }
+
+  bwFileTransferReplicationRxSuccessful OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of successful replication request."
+-- @feature:BW-7266
+    ::=  {  bwFileTransferReplicationStatsEntry 3  }
+
+  bwFileTransferReplicationRxFailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of failed replication request."
+-- @feature:BW-7266
+    ::=  {  bwFileTransferReplicationStatsEntry 4  }
+
+  bwFileTransferReplicationTxSuccessful OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of successful replication attempts."
+-- @feature:BW-7266
+    ::=  {  bwFileTransferReplicationStatsEntry 5  }
+
+  bwFileTransferReplicationTxFailed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "This is the number of failed replication attempts."
+    ::=  {  bwFileTransferReplicationStatsEntry 6  }
+
+-- BroadWorks MIB Conformance Definition  ...........................................
+
+  bwfiletransferRepositoryGroup OBJECT-GROUP
+    OBJECTS { bwFileTransferCacheIndexedDirectories, bwFileTransferCacheSize, bwFileTransferCacheCapacity, bwFileTransferCacheLookUpCount, bwFileTransferCacheLookUpHits, bwFileTransferCacheEvictions }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for fileTransfer repository."
+    ::=  {  bwFileTransferMibGroups 1  }
+
+  bwfiletransferReplicationGroup OBJECT-GROUP
+    OBJECTS { bwFileTransferReplicationStatsIndex, bwFileTransferReplicationPeer, bwFileTransferReplicationRxSuccessful, bwFileTransferReplicationRxFailed, bwFileTransferReplicationTxSuccessful, bwFileTransferReplicationTxFailed }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for fileTransfer replication."
+    ::=  {  bwFileTransferMibGroups 2  }
+
+  bwProvisioningFileTransferBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "BW-FileTransfer MIB compliance."
+    MODULE
+      MANDATORY-GROUPS { bwfiletransferRepositoryGroup, bwfiletransferReplicationGroup }
+    ::=  {  bwFileTransferMibCompliancy 1  }
+
+END

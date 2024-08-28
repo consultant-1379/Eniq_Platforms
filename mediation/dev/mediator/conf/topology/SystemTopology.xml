@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE EricssonNMSCIM SYSTEM "file:///eniq/mediator/conf/properties/model.dtd">
+<EricssonNMSCIM CIMVERSION="2.4" DTDVERSION="1.0">
+	<OPERATION PROTOCOLVERSION="1.0" TYPE="purge">
+		<EricssonNMS>
+			<EriNMSSubNW cimname="Service Network">
+
+				<!-- SOEM configuration -->
+				<SNOSNE cimname="<HOST-NAME>" snoshostip="<IP-ADDRESS>" snosprotocoltype="MVMALARM" snostype="Mediator" cimotheridentifyinginfo="1.1.1.1">
+					<RemoteFileFetch Offset="1" ProtocolType="SFTP" ROP="60" pluginDir="SOEM_ConfigData_Plugin">
+					<RemoteFileCounterSet fileName=" " regExp=" "/>
+					</RemoteFileFetch>
+					<RemoteFileFetch Offset="1" ProtocolType="SFTP" ROP="15" pluginDir="SOEM_PPmXml_Plugin">
+					<RemoteFileCounterSet fileName=" " regExp=" "/>
+					</RemoteFileFetch>
+				</SNOSNE>
+				<!-- End of SOEM configuration -->
+				
+				<!-- IPTNMS configuration -->
+				<SNOSNE cimname="<HOST-NAME>" snoshostip="<IP-ADDRESS>" snosprotocoltype="MVMALARM" snostype="Mediator" cimotheridentifyinginfo="1.1.1.1">
+					<RemoteFileFetch Offset="1" ProtocolType="SFTP" ROP="120" pluginDir="IPTNMS_CS_Plugin">
+					<RemoteFileCounterSet fileName=" " regExp=" "/>
+					</RemoteFileFetch>
+					<RemoteFileFetch Offset="1" ProtocolType="SFTP" ROP="120" pluginDir="IPTNMS_PS_Plugin">
+					<RemoteFileCounterSet fileName=" " regExp=" "/>
+					</RemoteFileFetch>
+				</SNOSNE>
+				<!-- End of IPTNMS configuration -->
+				
+				
+			</EriNMSSubNW>
+		</EricssonNMS>
+	</OPERATION>
+</EricssonNMSCIM>

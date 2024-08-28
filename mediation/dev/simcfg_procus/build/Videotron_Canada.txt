@@ -1,0 +1,2 @@
+MSP_SES_Plugin
+MSP_CORE_Plugin

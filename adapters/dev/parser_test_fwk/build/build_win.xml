@@ -1,0 +1,65 @@
+<project name="parser_test_fwk" default="package">
+
+  <property name="pack.name" value="parser_test_fwk"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <property name="vobs.plat" value="/vobs/eniq/design/plat"/>
+  <property name="vobs.3pp" value="/vobs/eniq/3pp"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there -->
+  <property name="pack.dir" value="${vobs.plat}/adapters/dev/${pack.name}"/>
+  <property name="binary" value="${pack.dir}/build/${pack.name}.jar"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.jar" value="${vobs.plat}/common_utilities/build/common_utilities/common.jar"/>
+  <property name="eniq.parser.jar" value="${vobs.plat}/adapters/build/parser/parser.jar"/>
+  <property name="eniq.testhelper.jar" value="${vobs.plat}/tools/testhelper/build/testhelper.jar"/>
+  <property name="eniq.repository.jar" value="${vobs.plat}/installer/build/repository/repository.jar"/>
+  <property name="eniq.engine.jar" value="${vobs.plat}/etl_controller/build/engine/engine.jar"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.commons-io.jar" value="${vobs.3pp}/apache/common_io/v2_0/commons-io-2.0.1.jar"/>
+  <property name="3pp.junit-4.5.jar" value="${vobs.3pp}/junit/v4_5/prod/junit-4.5.jar"/>
+
+  <path id="classpath">
+    <pathelement location="${eniq.common.jar}"/>
+    <pathelement location="${eniq.parser.jar}"/>
+    <pathelement location="${eniq.testhelper.jar}"/>
+    <pathelement location="${eniq.repository.jar}"/>
+    <pathelement location="${eniq.engine.jar}"/>
+    <pathelement location="${3pp.commons-io.jar}"/>
+    <pathelement location="${3pp.junit-4.5.jar}"/>
+  </path>
+
+  <target name="compile" depends="precompile">
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="true"
+           includeantruntime="false"
+           deprecation="off">
+      <classpath refid="classpath"/>
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <target name="postcompile" depends="compile">
+    <copy todir="${pack.dir}/classes">
+      <fileset dir="${pack.dir}/conf">
+        <include name="*/**"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="precompile">
+    <delete includeemptydirs="true">
+      <fileset dir="${pack.dir}/classes" includes="**/*"/>
+    </delete>
+  </target>
+
+  <target name="package" depends="postcompile">
+    <cccheckout viewpath="${binary}" reserved="false" notco="false"/>
+    <jar destfile="${binary}" basedir="${pack.dir}/classes"/>
+  </target>
+
+
+</project>

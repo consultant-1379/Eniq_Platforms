@@ -1,0 +1,74 @@
+#!/usr/bin/bash
+
+TEE=/usr/bin/tee
+NAWK=/usr/bin/nawk
+CAT=/usr/bin/cat
+GREP=/usr/bin/grep
+ECHO=/usr/bin/echo
+
+LOGFILE="/eniq/log/sw_log/engine/service.log"
+# Arguments:
+#       $1 - Error message from part of program (Not always used)
+# Return Values:
+#       none
+abort_script()
+{
+if [ "$1" ]; then
+    _err_msg_=$1
+else
+    _err_msg_="ERROR : Script aborted.......\n"    
+fi
+$ECHO "\nERROR : $_err_msg_\n" | $TEE -a ${LOGFILE}
+
+if [ "$2" ]; then
+    ${2}
+else
+   exit 1
+fi
+}
+# Base Directory
+ENIQ_BASE_DIR=/eniq
+
+# Configuration file
+SUNOS_INI=SunOS.ini
+
+# ENIQ Install Config Directory
+ENIQ_CONF_DIR=${ENIQ_BASE_DIR}/installation/config
+
+# Get the System User/Group. All directories are owned by this
+SYSUSER=` $CAT $ENIQ_CONF_DIR/$SUNOS_INI| $GREP  -i  ENIQ_SYSUSER| $NAWK -F'=' '{print $2}'`
+
+if [ ! "${SYSUSER}" ]; then
+    _err_msg_="Could not read param SYSUSER from\n${ENIQ_CONF_DIR}/${SUNOS_INI}"
+    abort_script "$_err_msg_"
+fi
+### Function: stop_start_service_sysuser ###
+#
+# Stop/Start the required service as sysuser the required files
+#
+# Arguments:
+#	$1 : Service name
+#	$2 : Service action
+# Return Values:
+#	none
+stop_start_service_sysuser()
+{
+
+ssh ${SYSUSER}@${1}  ". ~/.profile; ${1} ${2}" | $TEE -a ${LOGFILE}
+
+if [  ${PIPESTATUS[0]} -ne 0 ]; then
+    _err_msg_="Could not ${2} ${1} service"
+    abort_script "$_err_msg_"
+fi
+}
+
+# Restart services
+	stop_start_service_sysuser scheduler stop
+	stop_start_service_sysuser engine stop
+	stop_start_service_sysuser repdb stop
+	sleep 120
+	stop_start_service_sysuser repdb start
+	stop_start_service_sysuser engine start
+	sleep 60
+	stop_start_service_sysuser scheduler start
+   

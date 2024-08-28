@@ -1,0 +1,108 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Repository database creation script
+#
+# Usage: create_repdb [-v]
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+VERBOSE=0
+
+if [ "$1" = "-v" ] ; then
+  VERBOSE=1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Checking Repository Database directory..."
+fi
+
+if [ ! -d ${REP_DIR} ]
+then
+  echo "Repository Database directory (${REP_DIR}) does not exist"
+  exit 2
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Populating CREATE DB clause"
+fi
+
+PAGE_SIZE=`${BIN_DIR}/iniget REP -v PageSize -f ${CONF_DIR}/niq.ini`
+COLLATION=`${BIN_DIR}/iniget REP -v Collation -f ${CONF_DIR}/niq.ini`
+IQ_PAGE_SIZE=`${BIN_DIR}/iniget REP -v IQPageSize -f ${CONF_DIR}/niq.ini`
+
+MSTOREID=`${BIN_DIR}/iniget REP_DBSPACES_MAIN -f ${CONF_DIR}/niq.ini | head -1`
+MSTOREPATH=`${BIN_DIR}/iniget ${MSTOREID} -v Path -f ${CONF_DIR}/niq.ini`
+MSTORETYPE=`${BIN_DIR}/iniget ${MSTOREID} -v Type -f ${CONF_DIR}/niq.ini`
+
+MSGPATH=${LOG_DIR}/iq/repdb
+
+TSTOREID=`${BIN_DIR}/iniget REP_DBSPACES_TEMP -f ${CONF_DIR}/niq.ini | head -1`
+TSTOREPATH=`${BIN_DIR}/iniget ${TSTOREID} -v Path -f ${CONF_DIR}/niq.ini`
+TSTORETYPE=`${BIN_DIR}/iniget ${TSTOREID} -v Type -f ${CONF_DIR}/niq.ini`
+
+echo "CREATE DATABASE '${REP_DIR}/repdb.db' CASE IGNORE " > create_repdb.sql
+echo "PAGE SIZE ${PAGE_SIZE} COLLATION '${COLLATION}' " >> create_repdb.sql
+echo "BLANK PADDING ON JAVA ON JCONNECT ON " >> create_repdb.sql
+echo "IQ PATH '${MSTOREPATH}' " >> create_repdb.sql
+echo "MESSAGE PATH '${MSGPATH}' " >> create_repdb.sql
+if [ ${MSTORETYPE} = "fs" ] ; then
+  MSTORESIZE=`${BIN_DIR}/iniget ${MSTOREID} -v Size -f ${CONF_DIR}/niq.ini`
+  echo "IQ SIZE ${MSTORESIZE} " >> create_repdb.sql
+fi
+echo "IQ PAGE SIZE ${IQ_PAGE_SIZE} " >> create_repdb.sql
+echo "TEMPORARY PATH '${TSTOREPATH}'" >> create_repdb.sql
+if [ ${TSTORETYPE} = "fs" ] ; then
+  TSTORESIZE=`${BIN_DIR}/iniget ${TSTOREID} -v Size -f ${CONF_DIR}/niq.ini`
+  echo "TEMPORARY SIZE ${TSTORESIZE} " >> create_repdb.sql
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Creating Repository Database..."
+fi
+
+UTIL_PORT=`${BIN_DIR}/iniget DB -v UtilServerPort -f ${CONF_DIR}/niq.ini`
+DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+UTIL_CONN_STR_USER_DBA="uid=dba;pwd=${DBA_PASSWORD};eng=utility_srv;dbn=utility_db;links=tcpip{host=localhost;port=${UTIL_PORT};dobroadcast=no;verify=no}"
+
+if [ ${VERBOSE} = 1 ] ; then
+  cat create_repdb.sql
+fi
+
+${ASDIR}/bin/dbisqlc -c ${UTIL_CONN_STR_USER_DBA} -q create_repdb.sql
+
+if [ $? != 0 ] ; then
+  echo "Repository Database creation failed"
+  exit 10
+else
+  if [ ! -d ${INSTALLER_DIR}/sqlfiles ] ; then
+    mkdir -p ${INSTALLER_DIR}/sqlfiles
+  fi
+  cp create_repdb.sql ${INSTALLER_DIR}/sqlfiles/dbbaseline_dwhrep_create.sql
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Trying to start Repository Database..."
+fi
+
+${BIN_DIR}/repdb start
+
+if [ $? != 0 ] ; then
+  echo "Repository Database failed to start"
+  exit 51
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Repository Database successfully created"
+fi
+
+exit 0

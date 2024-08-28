@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="com:ericsson:ims:mim" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="com:ericsson:ims:mim">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+               	 Copyright notice: (c) Ericsson AB 2010
+               	 Warning text "All rights reserved. No parts of this program may be reproduced in any form without the written permission of the copyright holder."
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="PM">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description" type="xs:string" default='""'/>
+				<xs:element name="Capabilities" type="CapabilitiesType"/>
+				<xs:element name="data">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="dataType"/>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="pmMimMetadata" type="pmMimMetadataType"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="imsPmConfigType">
+		<xs:choice>
+			<xs:element name="scanFile" type="scanFileType"/>
+			<xs:element name="nPMFConfig">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="pmApplication">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="reportingRootDirectory">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="255"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="enable" type="xs:boolean" default="true"/>
+									<xs:element name="maxMonitorNr" default="300">
+										<xs:simpleType>
+											<xs:restriction base="xs:unsignedInt">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="500"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="measReaderNr" default="3000">
+										<xs:simpleType>
+											<xs:restriction base="xs:unsignedInt"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="timeZone" default="local">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="utc"/>
+												<xs:enumeration value="local"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="maxPmdbMemSize" default="16">
+										<xs:simpleType>
+											<xs:restriction base="xs:unsignedInt">
+												<xs:minInclusive value="4"/>
+												<xs:maxInclusive value="64"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="maxPmdbCpuLoad" default="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:float">
+												<xs:minInclusive value="0.1"/>
+												<xs:maxInclusive value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="maxAlarmPerMeasType" default="10">
+										<xs:simpleType>
+											<xs:restriction base="xs:short">
+												<xs:minInclusive value="3"/>
+												<xs:maxInclusive value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="monitorGroup" type="monitorGroupType" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="monitorGroupType">
+		<xs:sequence>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="measurementJob" type="measurementJobType" maxOccurs="unbounded"/>
+			<xs:element name="thresholdMonitor" type="thresholdMonitorType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArmDisarmlevelType">
+		<xs:sequence>
+			<xs:element name="armLevel" type="xs:float"/>
+			<xs:element name="disarmLevel" type="xs:float"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="scanFileType">
+		<xs:sequence>
+			<xs:element name="identity" type="xs:string"/>
+			<xs:element name="simplescanperiod" type="xs:unsignedInt"/>
+			<xs:element name="intrascanperiod" type="xs:unsignedInt"/>
+			<xs:element name="granularityperiod" type="xs:unsignedInt"/>
+			<xs:element name="applicationpool" type="xs:string"/>
+			<xs:element name="loggingenabled" type="xs:boolean"/>
+			<xs:element name="logfiledirectory" type="xs:string"/>
+			<xs:element name="tracelevel" type="xs:unsignedInt"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ThresholdMonitorReaderType">
+		<xs:sequence>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="enabled" type="xs:boolean" default="true"/>
+			<xs:element name="criticalLevel" type="ArmDisarmlevelType" minOccurs="0"/>
+			<xs:element name="majorLevel" type="ArmDisarmlevelType" minOccurs="0"/>
+			<xs:element name="minorLevel" type="ArmDisarmlevelType" minOccurs="0"/>
+			<xs:element name="warningLevel" type="ArmDisarmlevelType" minOccurs="0"/>
+			<xs:element name="faultId" type="xs:int"/>
+			<xs:element name="alarmDirection">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Up"/>
+						<xs:enumeration value="Down"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="mode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Reached"/>
+						<xs:enumeration value="Crossed"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="type" default="QualityOfService">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Communication"/>
+						<xs:enumeration value="QualityOfService"/>
+						<xs:enumeration value="ProcessingError"/>
+						<xs:enumeration value="Equipment"/>
+						<xs:enumeration value="Environmental"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="specificProblem" default="Performance Management, Threshold Crossed or Reached">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="probableCause" type="xs:int" default="351"/>
+			<xs:element name="alarmObjectClass" type="xs:string"/>
+			<xs:element name="additionalInfo" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CapabilitiesType">
+		<xs:sequence>
+			<xs:element name="alignedReportingPeriod" default="true" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="true"/>
+						<xs:enumeration value="false"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="JobPersistence" default="RESTART" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="NONE"/>
+						<xs:enumeration value="RESTART"/>
+						<xs:enumeration value="UPGRADE"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FileRetention" type="xs:unsignedShort" default="24" minOccurs="0"/>
+			<xs:element name="FileCompression" type="xs:boolean" default="true" minOccurs="0"/>
+			<xs:element name="CounterCapabilities">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OutputFormat" default="3GPP_XML" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="3GPP_XML"/>
+									<xs:enumeration value="3GPP_ASN.1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="OutputVersion" default="32.104 V3.5.0" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="32.104 V3.5.0"/>
+									<xs:enumeration value="32.435 V7.2.0 "/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FileDeliveryProtocol" default="SFTP" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="SFTP"/>
+									<xs:enumeration value="FTP"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FileDeliveryMethod" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="PUSH"/>
+									<xs:enumeration value="PULL"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DeliveryTarget" type="xs:string" default='""'/>
+						<xs:element name="GranularityPeriod" default="15" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:unsignedInt">
+									<xs:enumeration value="5"/>
+									<xs:enumeration value="15"/>
+									<xs:enumeration value="30"/>
+									<xs:enumeration value="60"/>
+									<xs:enumeration value="720"/>
+									<xs:enumeration value="1440"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ReportingPeriod" default="15" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:unsignedInt">
+									<xs:enumeration value="5"/>
+									<xs:enumeration value="15"/>
+									<xs:enumeration value="30"/>
+									<xs:enumeration value="60"/>
+									<xs:enumeration value="720"/>
+									<xs:enumeration value="1440"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:anyAttribute/>
+	</xs:complexType>
+	<xs:complexType name="thresholdMonitorType">
+		<xs:sequence>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="enabled" type="xs:boolean" default="true"/>
+			<xs:element name="granularityPeriod" default="300">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:enumeration value="300"/>
+						<xs:enumeration value="900"/>
+						<xs:enumeration value="1800"/>
+						<xs:enumeration value="3600"/>
+						<xs:enumeration value="43200"/>
+						<xs:enumeration value="86400"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ThresholdMonitorReader" type="ThresholdMonitorReaderType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="measurementJobType">
+		<xs:sequence>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="enabled" type="xs:boolean" default="true"/>
+			<xs:element name="priority" default="64">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="granularityPeriod" default="300">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:enumeration value="300"/>
+						<xs:enumeration value="900"/>
+						<xs:enumeration value="1800"/>
+						<xs:enumeration value="3600"/>
+						<xs:enumeration value="43200"/>
+						<xs:enumeration value="86400"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="notifyMOEvents" type="xs:boolean" default="false"/>
+			<xs:element name="reportingDirectory">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="255"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="notifyFileReady" type="xs:boolean" default="false"/>
+			<xs:element name="reportingFormat" default="XSD">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="XSD"/>
+						<xs:enumeration value="DTD"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="measurementJobReader" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="name">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="64"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="enabled" type="xs:boolean" default="true"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="measurementJobReaderType">
+		<xs:sequence>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="64"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="enabled" type="xs:boolean" default="true"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="mocType">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" default='""'/>
+			<xs:element name="switchingTechnology" default="Packet Switched" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:enumeration value="Packet Switched"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="imsPmConfig" type="imsPmConfigType"/>
+			<xs:element name="group" type="groupType" maxOccurs="unbounded"/>
+			<xs:element name="moc_level" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:enumeration value="0"/>
+						<xs:enumeration value="1"/>
+						<xs:enumeration value="2"/>
+						<xs:enumeration value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="groupType">
+		<xs:sequence>
+			<xs:element name="description"/>
+			<xs:element name="counter" type="counterType" maxOccurs="unbounded"/>
+			<xs:element name="generation" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="IMS"/>
+						<xs:enumeration value=""/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="keyTypesListType">
+		<xs:sequence>
+			<xs:element name="keyType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="dataType">
+		<xs:sequence>
+			<xs:element name="moc" type="mocType" maxOccurs="unbounded"/>
+			<xs:element name="keyTypesList" type="keyTypesListType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="counterType">
+		<xs:sequence>
+			<xs:element name="measurementName" type="xs:string"/>
+			<xs:element name="description" type="xs:string" default='""'/>
+			<xs:element name="condition" type="xs:string" default='""'/>
+			<xs:element name="collectionMethod">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="type">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="CC"/>
+									<xs:enumeration value="SI"/>
+									<xs:enumeration value="GAUGE"/>
+									<xs:enumeration value="DER"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="subtype">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="MIN"/>
+									<xs:enumeration value="MAX"/>
+									<xs:enumeration value="LAST_UPDATE"/>
+									<xs:enumeration value="RAW"/>
+									<xs:enumeration value="MEAN"/>
+									<xs:enumeration value="SUM"/>
+									<xs:enumeration value=""/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="measurementResult">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="outputUnit" type="xs:string"/>
+						<xs:element name="resultType">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="float"/>
+									<xs:enumeration value="integer"/>
+									<xs:enumeration value="numeric"/>
+									<xs:enumeration value="int"/>
+									<xs:enumeration value="tinyint"/>
+									<xs:enumeration value="smallint"/>
+									<xs:enumeration value="unsigned int"/>
+									<xs:enumeration value="long"/>
+									<xs:enumeration value="double"/>
+									<xs:enumeration value="dateTime"/>
+									<xs:enumeration value="date"/>
+									<xs:enumeration value="char"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="status" default="current">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="current"/>
+						<xs:enumeration value="obsolete"/>
+						<xs:enumeration value="deprecated"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="cpiHeading"/>
+			<xs:element name="cardinality" type="xs:integer"/>
+			<xs:element name="std3GPPmeasurementType" type="xs:string"/>
+			<xs:element name="keyTypeName" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="alarm" type="alarmType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="measurementType" type="xs:string" use="required"/>
+		<xs:anyAttribute/>
+	</xs:complexType>
+	<xs:complexType name="alarmType">
+		<xs:sequence>
+			<xs:element name="identity">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="id" type="xs:unsignedInt"/>
+						<xs:element name="eventType">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:enumeration value="Communication"/>
+									<xs:enumeration value="Equipment"/>
+									<xs:enumeration value="Environmental"/>
+									<xs:enumeration value="ProcessingError"/>
+									<xs:enumeration value="QualityOfService"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="IRPCause" type="xs:unsignedInt"/>
+						<xs:element name="cause">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="80"/>
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="severity">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:enumeration value="Warning"/>
+									<xs:enumeration value="Minor"/>
+									<xs:enumeration value="Major"/>
+									<xs:enumeration value="Critical"/>
+									<xs:enumeration value="Indeterminate"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="additionalInfo">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="threshold">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="arm" type="xs:float"/>
+						<xs:element name="disarm" type="xs:float"/>
+						<xs:element name="direction">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:enumeration value="GoesAbove"/>
+									<xs:enumeration value="GoesBelow"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="scan">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="key">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="enabled">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:enumeration value="true"/>
+									<xs:enumeration value="false"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="pmMimMetadataType">
+		<xs:sequence>
+			<xs:element name="nodeType" type="xs:string"/>
+			<xs:element name="nodeSubtype" type="xs:string"/>
+			<xs:element name="MIM_major_version" type="xs:string"/>
+			<xs:element name="MIM_minor_version" type="xs:string"/>
+			<xs:element name="node_major_version" type="xs:string" minOccurs="0"/>
+			<xs:element name="node_minor_version" type="xs:string" minOccurs="0"/>
+			<xs:element name="timestamp" type="xs:dateTime"/>
+			<xs:element name="pmMimVersion" type="xs:string"/>
+			<xs:element name="imsMimVersionDoc" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

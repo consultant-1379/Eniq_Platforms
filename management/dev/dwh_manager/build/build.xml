@@ -1,0 +1,67 @@
+<project name="dwhmanager" default="compile">
+
+  <property name="pack.name" value="dwhmanager"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/management/dev/dwh_manager"/>
+  
+  <!-- Eniq Jars -->
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+  <property name="eniq.licensing.dir" value="/vobs/eniq/design/plat/licensing/build/licensing"/>
+
+  <!-- 3PP Jars -->
+	<property name="3pp.sybase.dir" value="/vobs/eniq/3pp/sybase/sybase_iq"/>
+ <!-- jconn jar -->
+  <property name="3pp.dbunit.dir" value="/vobs/eniq/3pp/dbunit/dbunit/v2_1/prod"/>
+  <property name="3pp.velocity.dir" value="/vobs/eniq/3pp/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.junit.dir" value="/vobs/eniq/3pp/junit/v4_5/prod"/>
+  
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="on"
+           optimize="off" 
+           deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		<fileset dir="${eniq.common.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${eniq.engine.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${eniq.licensing.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${eniq.repository.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${3pp.dbunit.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${3pp.velocity.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+ 		<fileset dir="${3pp.junit.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+        <fileset dir="${3pp.sybase.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+     </classpath>
+    </javac>
+  </target>
+
+  <target name="postcompile">
+	<copy todir="${pack.dir}/classes">
+		<fileset dir="${pack.dir}/jar"/> 
+	</copy>
+  </target>
+
+	
+</project>

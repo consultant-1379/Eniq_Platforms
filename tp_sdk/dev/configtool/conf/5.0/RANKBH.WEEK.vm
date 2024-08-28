@@ -1,0 +1,52 @@
+
+## RANKBH.WEEK.vm
+## UPDATE weekbh to 0
+##
+UPDATE $TargetTable.get("RANKBHCLASS")_IN AS dst 
+SET 
+dst.weekbh = 0
+WHERE dst.date_id between $dateid and dateadd(dd,6,$dateid)
+and dst.bhtype='$Bhtype.get("RANKBHCLASS")'
+
+
+## GET busyhour of week
+##
+
+UPDATE $TargetTable.get("RANKBHCLASS")_IN AS dst 
+SET 
+weekbh = 1 
+where dst.date_id = (select min(a.date_id) from $TargetTable.get("RANKBHCLASS") as a 
+where a.bhvalue = (select max(b.bhvalue) from $TargetTable.get("RANKBHCLASS") as b 
+where a.bhtype = b.bhtype and 
+b.date_id between $dateid and dateadd(dd,6,$dateid) 
+and b.bhtype='$Bhtype.get("RANKBHCLASS")'
+## KEY-COLUMNS
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBHCLASS"))
+#if ($col.getUniquekey() == 0)
+and a.$col.getDataname()= b.$col.getDataname()
+#end
+#end
+)
+and a.date_id between $dateid and dateadd(dd,6,$dateid) 
+and dst.bhtype = a.bhtype 
+and a.bhtype='$Bhtype.get("RANKBHCLASS")'
+## KEY-COLUMNS
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBHCLASS"))
+#if ($col.getUniquekey() == 0)
+and dst.$col.getDataname()= a.$col.getDataname()
+#end
+#end
+)
+and dst.date_id between $dateid and dateadd(dd,6,$dateid)
+
+## UPDATE bhclass
+##
+
+UPDATE $TargetTable.get("RANKBHCLASS")_IN AS dst 
+SET 
+dst.bhclass = (dst.monthbh * 100) + (dst.weekbh * 10) + 1
+WHERE dst.date_id between $dateid and dateadd(dd,6,$dateid)
+and dst.bhtype='$Bhtype.get("RANKBHCLASS")'
+
+
+

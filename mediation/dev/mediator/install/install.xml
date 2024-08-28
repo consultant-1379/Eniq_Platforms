@@ -1,0 +1,71 @@
+<project name="install" basedir="." default="all">
+	<property name="mediator.conf.dir" value="/eniq/mediator/conf"/>
+	<property name="mediator.runtime.dir" value="/eniq/mediator/runtime"/>
+	<property name="mediator.log.dir" value="/eniq/log/sw_log/mediator"/>
+	<target name="install" depends="copyTmpToDeploy">
+		
+		<if>
+			<available file="${mediator.conf.dir}" type="dir" />
+			<then>
+				<if>
+					<available file="${mediator.conf.dir}/properties/SOEMLookupTable"/>
+					<then>
+						<delete file="${mediator.conf.dir}/properties/SOEMLookupTable"/>
+						<copy file="${dc.installer.dir}/tmp/conf/properties/SOEMLookupTable" toFile="${mediator.conf.dir}/properties/SOEMLookupTable"/>
+					</then>
+				</if>
+			</then>
+			<else>
+				<mkdir dir="${mediator.conf.dir}"/>
+					<copy todir="${mediator.conf.dir}">
+						  <fileset dir="${dc.installer.dir}/tmp/conf">
+						  </fileset>
+				 	
+				 </copy>
+				<chmod perm="ug+x" file="${mediator.conf.dir}/scripts/memoryUsageListener.sh"/>
+				<chmod perm="ug+x" file="${mediator.conf.dir}/scripts/ssh_setup.sh"/>
+			</else>
+			</if>
+	    <if>
+		<available file="${mediator.runtime.dir}" type="dir" />
+		<then />
+		  <else>
+			<mkdir dir="${mediator.runtime.dir}"/>
+			<mkdir dir="${mediator.runtime.dir}/sorting"/>
+			<mkdir dir="${mediator.runtime.dir}/failed"/>
+			<mkdir dir="${mediator.runtime.dir}/input"/>
+		</else>
+	    </if>	
+		<if>
+		  	  <available file="${dc.admin.bin}/mediator"/>
+		  	  <then>
+		  	    <delete file="${dc.admin.bin}/mediator"/>
+		  	  </then>
+		</if>
+		
+		<if>
+		  	  <available file="${dc.bin.dir}/mediator"/>
+		  	  <then>
+		  	    <delete file="${dc.bin.dir}/mediator"/>
+		  	  </then>
+		</if>
+			
+		  	<copy file="${dc.installer.dir}/tmp/smf/mediator" toFile="${dc.admin.bin}/mediator"/>
+		  	<chmod perm="ug+x" file="${dc.admin.bin}/mediator"/>
+			
+		    <copy file="${dc.installer.dir}/tmp/bin/mediator" toFile="${dc.bin.dir}/mediator"/>
+		  	<chmod perm="ug+x" file="${dc.bin.dir}/mediator"/>
+		<if>
+		  	  <available file="${mediator.log.dir}" type="dir" />
+		  	  <then/>
+              <else>
+			    <mkdir dir="${mediator.log.dir}"/>
+			 </else>
+		</if>
+
+			
+	</target>
+
+	<target name="update" depends="moveToObsolete,install" />
+
+</project>

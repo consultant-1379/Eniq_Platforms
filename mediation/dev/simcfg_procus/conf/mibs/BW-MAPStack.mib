@@ -1,0 +1,658 @@
+-- File Name : BW-MAPStack.mib
+
+BW-MAPStack DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201202230000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201202230000Z"
+      DESCRIPTION "Creation of the SS7 Protocol Stack MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ss7ProtocolStack OBJECT IDENTIFIER
+    ::= { broadworks 30 }
+
+  bwMAPStackMibConformance OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 1002 }
+
+-- SS7 Protocol Stack modules  ...........................................
+   
+  ss7MapCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 8 }
+     
+-- SS7 MAP Counters  ...........................................
+
+  bwSS7MapAPIStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7MapAPIStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7MapCounters  1 }
+
+  bwSS7MapServiceStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7MapServiceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7MapCounters  2 }
+  
+  bwSS7MapDialogStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7MapDialogStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7MapCounters  3 }
+    
+  bwSS7MapProtocolStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7MapProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7MapCounters  4 }
+    
+  bwSS7MapErrorStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7MapErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7MapCounters  5 }
+
+-- bwSS7MapAPIStatsTable  ...........................................
+
+  bwSS7MapAPIStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7MapAPIStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7MapAPIStatsTable."
+    INDEX    {  bwSS7MapAPIStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7MapAPIStatsTable 1 }
+
+  BwSS7MapAPIStatsEntry  ::=  SEQUENCE {
+    bwSS7MapAPIStatsIndex              Unsigned32,
+    bwSS7MapAPIStatsInstanceId         Unsigned32,
+    bwSS7MapAPIStatsAPIId              Unsigned32,
+    bwSS7MapAPIStatsRequestCount       Unsigned32,
+    bwSS7MapAPIStatsIndicationCount    Unsigned32,
+    bwSS7MapAPIStatsResponseCount      Unsigned32,
+    bwSS7MapAPIStatsConfirmationCount  Unsigned32,
+    bwSS7MapAPIStatsTableReset         INTEGER
+   }
+
+  bwSS7MapAPIStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7MapAPIStatsTable). The index is a unique representation of the combination of bwSS7MapAPIStatsInstanceId and bwSS7MapAPIStatsAPIId."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  1  }
+
+  bwSS7MapAPIStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  2  }
+    
+  bwSS7MapAPIStatsAPIId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a MAP API ID ."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  3  }
+    
+  bwSS7MapAPIStatsRequestCount    OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP requests."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  4  }
+
+  bwSS7MapAPIStatsIndicationCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP indications."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  5  }
+    
+  bwSS7MapAPIStatsResponseCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP reponses."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  6  }
+
+  bwSS7MapAPIStatsConfirmationCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP confirmations."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  7  }
+
+  bwSS7MapAPIStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7MapAPIStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7MapAPIStatsEntry  8  }
+    
+-- bwSS7MapServiceStatsTable  ...........................................
+
+  bwSS7MapServiceStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7MapServiceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7MapServiceStatsTable."
+    INDEX    {  bwSS7MapServiceStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7MapServiceStatsTable 1 }
+
+  BwSS7MapServiceStatsEntry  ::=  SEQUENCE {
+    bwSS7MapServiceStatsIndex                   Unsigned32,  
+    bwSS7MapServiceStatsInstanceId              Unsigned32,
+    bwSS7MapServiceStatsAPIId                   Unsigned32,
+    bwSS7MapServiceStatsUserId                  Unsigned32,
+    bwSS7MapServiceStatsServicesPerformedCount  Unsigned32,
+    bwSS7MapServiceStatsServicesRequestedCount  Unsigned32,
+    bwSS7MapServiceStatsTableReset              INTEGER
+  }
+
+  bwSS7MapServiceStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7MapServiceStatsTable). The index is a unique representation of the combination of bwSS7MapServiceStatsInstanceId, bwSS7MapServiceStatsAPIId and bwSS7MapServiceStatsUserId."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  1  }
+    
+  bwSS7MapServiceStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  2  }
+    
+  bwSS7MapServiceStatsAPIId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a MAP API ID ."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  3  }
+    
+  bwSS7MapServiceStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a MAP User ID ."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  4  }
+    
+  bwSS7MapServiceStatsServicesPerformedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP service performed."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  5  }
+    
+  bwSS7MapServiceStatsServicesRequestedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP service requested."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  6  }
+
+  bwSS7MapServiceStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7MapServiceStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7MapServiceStatsEntry  7  }
+    
+-- bwSS7MapDialogStatsTable  ...........................................
+
+  bwSS7MapDialogStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7MapDialogStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7MapDialogStatsTable."
+    INDEX    {  bwSS7MapDialogStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7MapDialogStatsTable 1 }
+
+  BwSS7MapDialogStatsEntry  ::=  SEQUENCE {
+    bwSS7MapDialogStatsIndex            Unsigned32,
+    bwSS7MapDialogStatsInstanceId       Unsigned32,
+    bwSS7MapDialogStatsUserId           Unsigned32,
+    bwSS7MapDialogStatsOriginatedCount  Unsigned32,
+    bwSS7MapDialogStatsTerminatedCount  Unsigned32,
+    bwSS7MapDialogStatsTableReset       INTEGER
+ }
+
+  bwSS7MapDialogStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7MapDialogStatsTable). The index is a unique representation of the combination of bwSS7MapDialogStatsInstanceId and bwSS7MapDialogStatsUserId."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  1  }
+    
+  bwSS7MapDialogStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  2  }
+    
+  bwSS7MapDialogStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a MAP User ID."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  3  }
+    
+  bwSS7MapDialogStatsOriginatedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP originated dialogs."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  4  }
+    
+  bwSS7MapDialogStatsTerminatedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP terminated dialogs."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  5  }
+
+  bwSS7MapDialogStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7MapDialogStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7MapDialogStatsEntry  6  }
+
+
+-- bwSS7MapProtocolStatsTable  ...........................................
+
+  bwSS7MapProtocolStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7MapProtocolStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7MapProtocolStatsTable."
+    INDEX    {  bwSS7MapProtocolStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7MapProtocolStatsTable 1 }
+
+  BwSS7MapProtocolStatsEntry  ::=  SEQUENCE {
+    bwSS7MapProtocolStatsIndex                         Unsigned32,
+    bwSS7MapProtocolStatsInstanceId                    Unsigned32,
+    bwSS7MapProtocolStatsUserId                        Unsigned32,
+    bwSS7MapProtocolStatsDialogRefByPeerCount          Unsigned32,
+    bwSS7MapProtocolStatsDialogRefLocallyCount         Unsigned32,
+    bwSS7MapProtocolStatsOperationRejectedByPeerCount  Unsigned32,
+    bwSS7MapProtocolStatsOperationRejectedLocallyCount Unsigned32,
+    bwSS7MapProtocolStatsInvalidUserAPICount           Unsigned32,
+    bwSS7MapProtocolStatsInvalidPeerPDUCount           Unsigned32,
+    bwSS7MapProtocolStatsLocalPDUCount                 Unsigned32,
+    bwSS7MapProtocolStatsTableReset                    INTEGER
+ }
+
+  bwSS7MapProtocolStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a unique row identifier for this table (bwSS7MapProtocolStatsTable). The index is a unique representation of the combination of bwSS7MapProtocolStatsInstanceId and bwSS7MapProtocolStatsUserId."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  1  }
+    
+  bwSS7MapProtocolStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  2  }
+    
+  bwSS7MapProtocolStatsUserId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents a MAP User ID."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  3  }
+    
+  bwSS7MapProtocolStatsDialogRefByPeerCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP dialogs that are referenced by peer."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  4  }
+
+  bwSS7MapProtocolStatsDialogRefLocallyCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP dialogs that are referenced locally."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  5  }
+
+  bwSS7MapProtocolStatsOperationRejectedByPeerCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP operations that were rejected by peer."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  6  }
+
+  bwSS7MapProtocolStatsOperationRejectedLocallyCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP operations that were rejected locally."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  7  }
+
+  bwSS7MapProtocolStatsInvalidUserAPICount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP invalid user API."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  8  }
+
+  bwSS7MapProtocolStatsInvalidPeerPDUCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP invalid peer PDU."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  9  }
+
+  bwSS7MapProtocolStatsLocalPDUCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of MAP local PDU."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  10  }
+
+  bwSS7MapProtocolStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7MapProtocolStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7MapProtocolStatsEntry  11  }
+
+-- bwSS7MapErrorStatsTable  ...........................................
+
+  bwSS7MapErrorStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7MapErrorStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7MapErrorStatsTable."
+    INDEX    {  bwSS7MapErrorStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7MapErrorStatsTable 1 }
+
+  BwSS7MapErrorStatsEntry  ::=  SEQUENCE {
+    bwSS7MapErrorStatsIndex               Unsigned32,
+    bwSS7MapErrorStatsInstanceId          Unsigned32,
+    bwSS7MapErrorStatsASNEncodeErrorCount Unsigned32,
+    bwSS7MapErrorStatsASNDecodeErrorCount Unsigned32,
+    bwSS7MapErrorStatsMallocErrorCount    Unsigned32,
+    bwSS7MapErrorStatsTimerErrorCount     Unsigned32,
+    bwSS7MapErrorStatsMiscErrorCount      Unsigned32,
+    bwSS7MapErrorStatsDatabaseErrorCount  Unsigned32,
+    bwSS7MapErrorStatsPortErrorCount      Unsigned32,
+    bwSS7MapErrorStatsDsmErrorCount       Unsigned32,
+    bwSS7MapErrorStatsSsmErrorCount       Unsigned32,
+    bwSS7MapErrorStatsTableReset          INTEGER
+  }
+
+  bwSS7MapErrorStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This table index."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  1  }
+
+  bwSS7MapErrorStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  2  }
+
+  bwSS7MapErrorStatsASNEncodeErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP ASN encode errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  3  }
+
+  bwSS7MapErrorStatsASNDecodeErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP ASN decode errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  4  }
+
+  bwSS7MapErrorStatsMallocErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP memory allocation errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  5  }
+
+  bwSS7MapErrorStatsTimerErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP timer allocation errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  6  }
+
+  bwSS7MapErrorStatsMiscErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP miscellanous errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  7  }
+
+  bwSS7MapErrorStatsDatabaseErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP database errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  8  }
+
+  bwSS7MapErrorStatsPortErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP port errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  9  }
+
+  bwSS7MapErrorStatsDsmErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP dsm errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  10  }
+
+  bwSS7MapErrorStatsSsmErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This number of MAP ssm errors."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  11  }
+
+  bwSS7MapErrorStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7MapErrorStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7MapErrorStatsEntry  12  }
+
+-- BroadWorks SS7 Protocol Stack MIB Conformance Definition  ......................................
+
+  bwMAPStackMibGroups OBJECT IDENTIFIER 
+    ::= { bwMAPStackMibConformance 1 }
+
+  bwMAPStackMibCompliancy OBJECT IDENTIFIER
+    ::= { bwMAPStackMibConformance 2 }
+  
+  bwSS7MapAPIStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapAPIStatsIndex, bwSS7MapAPIStatsInstanceId, bwSS7MapAPIStatsAPIId, bwSS7MapAPIStatsRequestCount, bwSS7MapAPIStatsIndicationCount, bwSS7MapAPIStatsResponseCount, bwSS7MapAPIStatsConfirmationCount, bwSS7MapAPIStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwMAPStackMibGroups 1 }
+   
+  bwSS7MapServiceStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapServiceStatsIndex, bwSS7MapServiceStatsInstanceId, bwSS7MapServiceStatsAPIId, bwSS7MapServiceStatsUserId, bwSS7MapServiceStatsServicesPerformedCount, bwSS7MapServiceStatsServicesRequestedCount, bwSS7MapServiceStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwMAPStackMibGroups 2 }
+   
+  bwSS7MapDialogStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapDialogStatsIndex, bwSS7MapDialogStatsInstanceId, bwSS7MapDialogStatsUserId, bwSS7MapDialogStatsOriginatedCount, bwSS7MapDialogStatsTerminatedCount, bwSS7MapDialogStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwMAPStackMibGroups 3 }
+   
+   bwSS7MapProtocolStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapProtocolStatsIndex, bwSS7MapProtocolStatsInstanceId, bwSS7MapProtocolStatsUserId, bwSS7MapProtocolStatsDialogRefByPeerCount, bwSS7MapProtocolStatsDialogRefLocallyCount, bwSS7MapProtocolStatsOperationRejectedByPeerCount, bwSS7MapProtocolStatsOperationRejectedLocallyCount, bwSS7MapProtocolStatsInvalidUserAPICount, bwSS7MapProtocolStatsInvalidPeerPDUCount, bwSS7MapProtocolStatsLocalPDUCount, bwSS7MapProtocolStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwMAPStackMibGroups 4 }
+   
+    bwSS7MapErrorStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapErrorStatsIndex, bwSS7MapErrorStatsInstanceId, bwSS7MapErrorStatsASNEncodeErrorCount, bwSS7MapErrorStatsASNDecodeErrorCount, bwSS7MapErrorStatsMallocErrorCount, bwSS7MapErrorStatsTimerErrorCount, bwSS7MapErrorStatsMiscErrorCount, bwSS7MapErrorStatsDatabaseErrorCount, bwSS7MapErrorStatsPortErrorCount, bwSS7MapErrorStatsDsmErrorCount, bwSS7MapErrorStatsSsmErrorCount, bwSS7MapErrorStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 M3UA Traffic statistics."
+    ::= { bwMAPStackMibGroups 5 }
+
+  bwMAPBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks MAP Stack MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwSS7MapAPIStatsGroup, bwSS7MapServiceStatsGroup, bwSS7MapDialogStatsGroup, bwSS7MapProtocolStatsGroup, bwSS7MapErrorStatsGroup }
+
+    ::= { bwMAPStackMibCompliancy 1 }
+END

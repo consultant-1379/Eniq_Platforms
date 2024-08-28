@@ -1,0 +1,51 @@
+<project name="repository" default="compile">
+
+  <property name="pack.name" value="repository"/>
+  <property name="pack.version" value="5-0-0"/>
+  
+  <property name="vobs.plat" value="/vobs/eniq/design/plat"/>
+  <property name="vobs.3pp" value="/vobs/eniq/3pp"/>
+  
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="${vobs.plat}/installer/dev/repository"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="${vobs.plat}/common_utilities/build/common_utilities"/>
+  <property name="3pp.admin.dir" value="${vobs.plat}/admin_ui/build/admin_ui"/>
+
+  <!-- 3PP Jars -->  
+  <property name="3pp.velocity.dir" value="${vobs.3pp}/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.appframework.dir" value="${vobs.3pp}/appframework/prod" />
+
+  <target name="precompile">
+  	<!--<delete file="${pack.dir}/RELEASE_NOTES"/>-->
+  </target>
+  
+  <target name="compile">
+     <mkdir dir="${pack.dir}/classes"/>
+     <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+            failonerror="true"
+            debug="true"
+            deprecation="off">
+       <classpath>
+         <pathelement path="${classpath}"/>
+		 <fileset dir="${eniq.common.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.velocity.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+       	<fileset dir="${3pp.appframework.dir}">
+       			<include name="**/*.jar" />
+       	</fileset>
+		<fileset dir="${3pp.admin.dir}">
+       	       	<include name="**/AdminUI.jar" />
+       	</fileset>
+	</classpath>
+     </javac>
+  </target>
+
+  <target name="postcompile">
+  </target>
+
+</project>

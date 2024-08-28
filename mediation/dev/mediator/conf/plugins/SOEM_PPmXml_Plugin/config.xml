@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>PPmXml_Plugin</comment>
+<entry key="fileNamePattern">PPM-R15m.*.xml</entry>
+<entry key="mainClass">com.ericsson.navigator.esm.manager.pm.file.remote.plugin.soem.SoemPmFileParser</entry>
+<entry key="comparator">com.ericsson.navigator.esm.model.pm.file.remote.comparator.PpmXmlComparator</entry>
+<entry key="port">22</entry>
+<entry key="user">USERNAME</entry>
+<entry key="enableSOEMLookup">true</entry>
+<entry key="directDownload">1</entry>
+<entry key="remoteDirectory">/opt/mv36/core/nmc/hist/ppm15m</entry>
+<entry key="remoteSubDirectory"/>
+<entry key="northBoundDirectory">Loaded from lookup table</entry>
+<entry key="northBoundSubDirectory">false</entry>
+<entry key="filePerDay">false</entry>
+<entry key="filePerDayExt"/>
+<entry key="enableHashCode">false</entry>
+<entry key="nameComponents">%N-%F</entry>
+<entry key="filePrefix"/>
+<entry key="maxFileTransfersPerRop">2500</entry>
+</properties>

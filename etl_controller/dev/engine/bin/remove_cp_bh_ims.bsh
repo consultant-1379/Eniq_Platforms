@@ -1,0 +1,68 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Remove Custom busyhours from repdb for IMS/MTAS TP script
+#
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2012 AB LM Ericsson  All rights reserved.
+# ----------------------------------------------------------------------
+
+# This script will update the existing criteria of CPs as empty and disable the flag in Busyhour table and Remove the corresponding CP entries of the TP in BusyhourRankkeys and BusyhourSource.
+#
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+ENIQ_BIN_DIR=/eniq/sw/bin
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../../admin/lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../../admin/lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../../admin/lib/common_functions.lib"
+        exit 63
+fi
+
+SYBASE_IQ_PATH=/eniq/sybase_iq//OCS-15_0/bin/isql
+
+DWHREPUSER=`inigetpassword REP -v DWHREPUsername -f ${CONF_DIR}/niq.ini`
+DWHREPPASSWORD=`inigetpassword REP -v DWHREPPassword -f ${CONF_DIR}/niq.ini`
+REP_PORT=`inigetpassword REP -v PortNumber -f ${CONF_DIR}/niq.ini`
+REP_SERVER_NAME=`inigetpassword REP -v ServerName -f ${CONF_DIR}/niq.ini`
+
+if [ ! -f ${ENIQ_BIN_DIR}/remove_cp_bh_ims.sql ] ; then
+        echo "${ENIQ_BIN_DIR}/remove_cp_bh_ims.sql does not exist"
+        exit 1
+fi
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=${DWHREPUSER};pwd=${DWHREPPASSWORD};eng=${REP_SERVER_NAME};links=tcpip{host=localhost;port=${REP_PORT};dobroadcast=no;verify=no}"
+
+echo "Logging into database to alter the tables."
+
+${IQDIR}/bin64/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q ${ENIQ_BIN_DIR}/remove_cp_bh_ims.sql
+
+if [ $? != 0 ] ; then
+  echo "deletion of custom placeholder from BH tables by remove_cp_bh_ims.sql failed"
+  exit 10
+else
+  echo "CP Busyhours successfully deleted"
+fi

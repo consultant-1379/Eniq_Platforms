@@ -1,0 +1,81 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network script to run directorychecker set for interfaces and techpacks
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB LM Ericsson   All rights reserved.
+# ----------------------------------------------------------------------
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+ETLREPUSER=`inigetpassword REP -v ETLREPUsername -f ${CONF_DIR}/niq.ini`
+ETLREPPASSWORD=`inigetpassword REP -v ETLREPPassword -f ${CONF_DIR}/niq.ini`
+#-----------------------------------------------------------------------
+#function to get installed techpack names	
+#-----------------------------------------------------------------------
+
+get_InstalledTPLIst()
+
+{
+
+echo "getting list of installed techpacks"
+
+/eniq/sw/installer/installed_techpacks -s >TP_LIST
+
+}
+
+get_ActiveInterfaceList()
+
+{
+
+echo "getting list of active interfaces"
+
+dbisql -c "uid=${ETLREPUSER};pwd=${ETLREPPASSWORD};eng=repdb" -host localhost -port 2641 -nogui -onerror exit "SELECT collection_set_name FROM etlrep.meta_collection_sets, etlrep.meta_schedulings WHERE etlrep.meta_collection_sets.collection_set_id = etlrep.meta_schedulings.collection_set_id AND etlrep.meta_collection_sets.enabled_flag = 'y' and etlrep.meta_schedulings.hold_flag = 'N' AND etlrep.meta_schedulings.name like 'TriggerAdapter%' AND etlrep.meta_collection_sets.collection_set_name like '%-%' AND etlrep.meta_collection_sets.type = 'interface' GROUP BY collection_set_name, type" |grep INTF > ACTIVE_INTF_LIST
+
+}
+#-----------------------------------------------------------------------
+#function to run disk manager sets
+#-----------------------------------------------------------------------
+
+run_DirChecker()
+
+{
+
+while read TP_LIST_mm
+do
+echo "triggering directory checker  of ${TP_LIST_mm}"
+if [ "$TP_LIST_mm" == "DWH_BASE" ] ; then
+continue
+fi
+if [ "$TP_LIST_mm" == "AlarmInterfaces" ] ; then
+engine -e startSet DC_Z_ALARM Directory_Checker_AlarmInterface_RD
+else
+engine -e startSet ${TP_LIST_mm} Directory_Checker_${TP_LIST_mm}
+fi
+done < "TP_LIST"
+rm ./TP_LIST
+
+while read INTF_LIST_mm
+do
+#echo ${INTF_LIST_mm}> INTF_tmp
+INTF_tmp_value=`expr match "$INTF_LIST_mm" '\(.*\)-eniq_oss_[[:digit:]]*' `
+
+echo "triggering directory checker  of ${INTF_LIST_mm}"
+engine -e startSet ${INTF_LIST_mm} Directory_Checker_$INTF_tmp_value
+done < "ACTIVE_INTF_LIST"
+rm ./ACTIVE_INTF_LIST
+}
+
+#-----------------------------------------------------------------------
+#main body
+#-----------------------------------------------------------------------
+
+
+get_InstalledTPLIst
+get_ActiveInterfaceList
+run_DirChecker

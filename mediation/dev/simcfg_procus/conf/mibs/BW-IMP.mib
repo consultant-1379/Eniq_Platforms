@@ -1,0 +1,838 @@
+--===============================================================
+-- File Name : BW-IMP.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2014, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-IMP DEFINITIONS ::= BEGIN
+    IMPORTS
+      DisplayString 
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201412050000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the IMP application."
+    REVISION    "201412050000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ums OBJECT IDENTIFIER
+    ::= { broadworks 38 }
+
+  imp OBJECT IDENTIFIER
+    ::= { ums 1 }
+
+  muc OBJECT IDENTIFIER
+    ::= { ums 2 }
+
+  server OBJECT IDENTIFIER
+    ::= { imp 1 }
+
+  filexfer OBJECT IDENTIFIER
+    ::= { imp 2 }
+
+  guestclient OBJECT IDENTIFIER
+    ::= { imp 3 }
+
+  msgarchiver OBJECT IDENTIFIER
+    ::= { imp 4 }
+
+  bosh OBJECT IDENTIFIER
+    ::= { imp 5 }
+
+  client OBJECT IDENTIFIER
+    ::= { imp 6 }
+
+  pubsub OBJECT IDENTIFIER
+    ::= { imp 7 }
+
+  federation OBJECT IDENTIFIER
+    ::= { imp 8 }
+
+  sessionmgr OBJECT IDENTIFIER
+    ::= { imp 9 }
+    
+  msghistory OBJECT IDENTIFIER
+    ::= { imp 10 }
+
+  room OBJECT IDENTIFIER
+    ::= { muc 1 }
+
+  bwUMSMibConformance OBJECT IDENTIFIER
+    ::= { ums 1000 }
+
+-- IMP Server ::  ...............................
+
+   bwImpServerClusterBufferQueueSize  OBJECT-TYPE
+    SYNTAX         Gauge32
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+            "The number of network buffers waiting to be submitted to a socket for inter-cluster communications."
+-- @feature:241604              
+      ::=  {  server  1  }
+
+   bwImpServerClusterPacketQueueSize  OBJECT-TYPE
+    SYNTAX         Gauge32
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+            "The number of XMPP packets waiting to be submitted for inter-cluster communication."
+-- @feature:241604              
+      ::=  {  server  2  }
+
+   bwImpServerClusterTxBytes  OBJECT-TYPE
+    SYNTAX         Counter32
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+            "The number of bytes sent to another node in the cluster."
+-- @feature:241604              
+      ::=  {  server  3  }
+
+   bwImpServerClusterPackets  OBJECT-TYPE
+    SYNTAX         Counter32
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+            "The number of packets sent to or received from other nodes in the server's cluster."
+-- @feature:241604              
+      ::=  {  server  4  }
+      
+  bwImpServerMessagePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets sent or received by the server. Includes the 'text' message itself in addition to 'composing' and 'paused' messages."
+-- @feature:241604              
+    ::= { server 5 }
+  
+  bwImpServerPresencePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets sent or received by the server."
+-- @feature:241604              
+    ::= { server 6 }
+  
+  bwImpServerPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of dropped packets."
+-- @feature:241604              
+    ::= { server 7 }
+  
+  bwImpServerQueueSize  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets waiting to be submitted."
+-- @feature:241604              
+    ::= { server 8 }
+
+-- IMP File Xfer  ...........................................
+
+  bwImpFileXferCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of file transfers."
+-- @feature:241604              
+    ::= { filexfer 1 }
+
+  bwImpFileXferTotalBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total bytes transferred."
+-- @feature:241604              
+    ::= { filexfer 2 }
+
+  bwImpFileXferMaxSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The maximum number of bytes transferred in a file. Updated when a transfered file is larger than any previously transferred files."
+-- @feature:241604              
+    ::= { filexfer 3 }
+
+-- IMP Gues Client  ...........................................
+
+  bwImpGuestClientJoinRequests  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of guest requests to join a room."
+-- @feature:241604              
+    ::= { guestclient 1 }
+
+  bwImpGuestClientJoinRequestsAccepted  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of guest requests to join a room that received an accepted response."
+-- @feature:241604              
+    ::= { guestclient 2 }
+
+  bwImpGuestClientJoinRequestsRejected  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of guest requests to join a room that received a rejected response."
+-- @feature:241604              
+    ::= { guestclient 3 }
+
+  bwImpGuestClientJoinResponsesInvalid  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of guest requests to join a room that received an invalid response."
+-- @feature:241604              
+    ::= { guestclient 4 }
+
+-- IMP Message Archiver  ...........................................
+
+  bwImpMsgArchiverClientRxMessages  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of messages received by the client from the server."
+-- @feature:241604              
+    ::= { msgarchiver 1 }
+
+  bwImpMsgArchiverClientTxMessages  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of messages sent from the client to the server."
+-- @feature:241604              
+    ::= { msgarchiver 2 }
+
+-- IMP Bosh  ...........................................
+
+  bwImpBoshConnectionsActive  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of BOSH connections currently open."
+-- @feature:241604              
+    ::= { bosh 1 }
+
+  bwImpBoshRxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes received by the BOSH client."
+-- @feature:241604              
+    ::= { bosh 2 }
+
+  bwImpBoshTxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes sent from the BOSH client."
+-- @feature:241604              
+    ::= { bosh 3 }
+
+  bwImpBoshRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets received by the BOSH client."
+-- @feature:241604              
+    ::= { bosh 4 }
+
+  bwImpBoshTxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets sent from the BOSH client."
+-- @feature:241604              
+    ::= { bosh 5 }
+
+  bwImpBoshRxPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of incoming dropped packets."
+-- @feature:241604              
+    ::= { bosh 6 }
+
+  bwImpBoshTxPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of outgoing dropped packets."
+-- @feature:241604              
+    ::= { bosh 7 }
+
+-- IMP Client  ...........................................
+
+  bwImpClientRxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes received by the server from the client."
+-- @feature:241604              
+    ::= { client 1 }
+
+  bwImpClientTxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes sent from the server to the client."
+-- @feature:241604              
+    ::= { client 2 }
+
+  bwImpClientRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets the client received from the server."
+-- @feature:241604
+    ::= { client 3 }
+
+  bwImpClientTxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets the client sent to the server."
+-- @feature:241604
+    ::= { client 4 }
+
+-- IMP PubSub  ...........................................
+
+  bwImpPubsubRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of pubsub message packets received by the server."
+-- @feature:241604
+    ::= { pubsub 1 }
+
+  bwImpPubsubTxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of pubsub message packets sent from the server."
+-- @feature:241604
+    ::= { pubsub 2 }
+
+  bwImpPubsubPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of dropped pubsub packets."
+-- @feature:241604
+    ::= { pubsub 3 }
+
+  bwImpPubsubDBWrites  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of pubsub writes to the database."
+-- @feature:241604
+    ::= { pubsub 4 }
+
+  bwImpPubsubSubcriptions  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of pubsub subscriptions."
+-- @feature:241604
+    ::= { pubsub 5 }
+
+  bwImpPubsubSubcriptionUpdates  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of updated pubsub subscriptions."
+-- @feature:241604
+    ::= { pubsub 6 }
+
+-- IMP Federation ...........................................
+
+  bwImpFederationRxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes received by the server from a federated server."
+-- @feature:241604
+    ::= { federation 1 }
+
+  bwImpFederationTxBytes  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of bytes sent from the server to a federated server."
+-- @feature:241604
+    ::= { federation 2 }
+
+  bwImpFederationRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets received by the server from the federated server."
+-- @feature:241604
+    ::= { federation 3 }
+
+  bwImpFederationTxPackets OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets sent from the server to the federated server."
+-- @feature:241604
+    ::= { federation 4 }
+
+  bwImpFederationRxMessages  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets received by the server from the federated server. Includes the 'text' message itself in addition to 'composing' and 'paused' messages."
+-- @feature:241604
+    ::= { federation 5 }
+
+  bwImpFederationTxMessages  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets sent from the server from the federated server. Includes the 'text' message itself in addition to 'composing' and 'paused' messages.."
+-- @feature:241604
+    ::= { federation 6 }
+
+  bwImpFederationRxPresences  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets received by the server from a federated server."
+-- @feature:241604
+    ::= { federation 7 }
+
+  bwImpFederationTxPresences OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets sent from the server to a federated server."
+-- @feature:241604
+    ::= { federation 8 }
+
+-- IMP Session Manager ...........................................
+
+  bwImpSessionMgrActivatedUsers  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of provisioned users that have logged in at least once. Can decrease if a user is deleted."
+-- @feature:241604
+    ::= { sessionmgr 1 }
+
+  bwImpSessionMgrConnectionsActive  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of connections currently opened to the server."
+-- @feature:241604
+    ::= { sessionmgr 2 }
+
+  bwImpSessionMgrConnectionsActiveMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The peak number of user opened connections. Updated when the current number of open connections excedes the previous maximum number of open connections."
+-- @feature:241604
+    ::= { sessionmgr 3 }
+
+  bwImpSessionMgrConnectionsTotal  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of opened user connections."
+-- @feature:241604
+    ::= { sessionmgr 4 }
+
+  bwImpSessionMgrConnectionsClosed  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total number of closed user connections."
+-- @feature:241604
+    ::= { sessionmgr 5 }
+
+  bwImpSessionMgrRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets received by the server."
+-- @feature:241604
+    ::= { sessionmgr 6 }
+
+  bwImpSessionMgrTxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets sent from the server."
+-- @feature:241604
+    ::= { sessionmgr 7 }
+
+  bwImpSessionMgrRxPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of incoming dropped packets."
+-- @feature:241604
+    ::= { sessionmgr 8 }
+
+  bwImpSessionMgrTxPacketsDropped  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of outgoing dropped packets."
+-- @feature:241604
+    ::= { sessionmgr 9 }
+
+  bwImpSessionMgrRxMessagePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets received by the server. Includes the 'text' message itself in addition to 'composing' and 'paused' messages."
+-- @feature:241604
+    ::= { sessionmgr 10 }
+
+  bwImpSessionMgrTxMessagePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets sent from the server. Includes the 'text' message itself in addition to 'composing' and 'paused' messages."
+-- @feature:241604
+    ::= { sessionmgr 11 }
+
+  bwImpSessionMgrRxPresencePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets received by the server."
+-- @feature:241604
+    ::= { sessionmgr 12 }
+
+  bwImpSessionMgrTxPresencePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets sent from the server."
+-- @feature:241604
+    ::= { sessionmgr 13 }
+
+  bwImpSessionMgrRxIQPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of iq packets received by the server."
+-- @feature:241604
+    ::= { sessionmgr 14 }
+
+  bwImpSessionMgrTxIQPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of iq packets sent from the server."
+-- @feature:241604
+    ::= { sessionmgr 15 }
+
+  bwImpMessageHistoryTotalSizeKB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Byte used for imp_message_history table in KB"
+-- @feature:TIII-44485
+    ::= { msghistory 1 }
+
+  bwImpMessageHistoryMaxSizeKB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Max byte used at high water mark in KB"
+-- @feature:TIII-44485
+    ::= { msghistory 2 }
+
+  bwImpMessageHistoryNumUsedRows  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Number of active or unlinked rows"
+-- @feature:TIII-44485
+    ::= { msghistory 3 }
+
+  bwImpMessageHistoryAveRowLen  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Average amount of bytes used to store a row"
+-- @feature:TIII-44485
+    ::= { msghistory 4 }
+
+  bwImpMessageHistoryTimesTenPermPct  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Percentage of PERM space currently filled"
+-- @feature:TIII-44485
+    ::= { msghistory 5 }
+
+  bwImpMessageHistoryTimesTenPermMaxPct  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Percentage of PERM space at high water mark"
+-- @feature:TIII-44485
+    ::= { msghistory 6 }
+
+  bwImpMessageHistoryTimesTenTempPct  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Percentage of TEMP space currently filled"
+-- @feature:TIII-44485
+    ::= { msghistory 7 }
+
+  bwImpMessageHistoryTimesTenTempMaxPct  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Percentage of TEMP space at high water mark"
+-- @feature:TIII-44485
+    ::= { msghistory 8 }
+
+  bwImpMessageHistoryTimesTenPermSizeKB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Allocated size of PERM space in KB"
+-- @feature:TIII-44485
+    ::= { msghistory 9 }
+    
+
+  bwImpMessageHistoryTimesTenTempSizeKB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Allocated size of TEMP space in KB"
+-- @feature:TIII-44485
+    ::= { msghistory 10 }
+
+-- IMP MUC Room ...........................................
+
+  bwMucRoomRxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets received by MUC."
+-- @feature:241604
+    ::= { room 1 }
+
+  bwMucRoomTxPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of packets sent from MUC."
+-- @feature:241604
+    ::= { room 2 }
+
+  bwMucRoomRxMessagePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets received by MUC."
+-- @feature:241604
+    ::= { room 3 }
+
+  bwMucRoomTxMessagePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of message packets sent from MUC."
+-- @feature:241604
+    ::= { room 4 }
+
+  bwMucRoomRxPresencePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets received by MUC."
+-- @feature:241604
+    ::= { room 5 }
+
+  bwMucRoomTxPresencePackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of presence packets sent from MUC."
+-- @feature:241604
+    ::= { room 6 }
+
+  bwMucRoomRxIQPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of iq packets received by MUC."
+-- @feature:241604
+    ::= { room 7 }
+
+  bwMucRoomTxIQPackets  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of iq packets sent from MUC."
+-- @feature:241604
+    ::= { room 8 }
+
+-- BroadWorks IMP MIB Conformance Definition  ...........................................
+
+  bwIMPMibGroups     OBJECT IDENTIFIER ::= { bwUMSMibConformance 1 }
+  bwIMPMibCompliancy OBJECT IDENTIFIER ::= { bwUMSMibConformance 2 }
+
+  bwIMPStatsGroup OBJECT-GROUP
+    OBJECTS {bwImpServerClusterBufferQueueSize, bwImpServerClusterPacketQueueSize,
+             bwImpServerClusterTxBytes, bwImpServerClusterPackets,
+             bwImpServerMessagePackets, bwImpServerPresencePackets,
+             bwImpServerPacketsDropped, bwImpServerQueueSize,
+             bwImpFileXferCount, bwImpFileXferTotalBytes,
+             bwImpFileXferMaxSize, bwImpGuestClientJoinRequests,
+             bwImpGuestClientJoinRequestsAccepted, bwImpGuestClientJoinRequestsRejected,
+             bwImpGuestClientJoinResponsesInvalid, bwImpMsgArchiverClientRxMessages,
+             bwImpMsgArchiverClientTxMessages, bwImpBoshConnectionsActive,
+             bwImpBoshRxBytes, bwImpBoshTxBytes,
+             bwImpBoshRxPackets, bwImpBoshTxPackets,
+             bwImpBoshRxBytes, bwImpBoshTxPacketsDropped,
+             bwImpClientRxBytes, bwImpClientTxBytes,
+             bwImpClientRxPackets, bwImpClientTxPackets,
+             bwImpPubsubRxPackets, bwImpPubsubTxPackets,
+             bwImpPubsubPacketsDropped, bwImpPubsubDBWrites,
+             bwImpPubsubSubcriptions, bwImpPubsubSubcriptionUpdates,
+             bwImpFederationRxBytes, bwImpFederationTxBytes,
+             bwImpFederationRxPackets, bwImpFederationTxPackets,
+             bwImpFederationRxMessages, bwImpFederationTxMessages,
+             bwImpFederationRxPresences, bwImpFederationTxPresences,
+             bwImpSessionMgrActivatedUsers, bwImpSessionMgrConnectionsActive,
+             bwImpSessionMgrConnectionsActiveMax, bwImpSessionMgrConnectionsTotal,
+             bwImpSessionMgrConnectionsClosed, bwImpSessionMgrRxPackets,
+             bwImpSessionMgrTxPackets, bwImpSessionMgrRxPacketsDropped,
+             bwImpSessionMgrTxPacketsDropped, bwImpSessionMgrRxMessagePackets,
+             bwImpSessionMgrTxMessagePackets, bwImpSessionMgrRxPresencePackets,
+             bwImpSessionMgrTxPresencePackets, bwImpSessionMgrRxIQPackets,
+             bwImpSessionMgrTxIQPackets, bwImpMessageHistoryTotalSizeKB,
+             bwImpMessageHistoryMaxSizeKB, bwImpMessageHistoryNumUsedRows,
+             bwImpMessageHistoryAveRowLen, bwImpMessageHistoryTimesTenPermPct,
+             bwImpMessageHistoryTimesTenPermMaxPct, bwImpMessageHistoryTimesTenTempPct,
+             bwImpMessageHistoryTimesTenTempMaxPct, bwImpMessageHistoryTimesTenPermSizeKB,
+             bwImpMessageHistoryTimesTenTempSizeKB }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the IMP."
+  ::= { bwIMPMibGroups 1 }
+
+  bwMUCStatsGroup OBJECT-GROUP
+      OBJECTS { bwMucRoomRxPackets, bwMucRoomTxPackets,
+                bwMucRoomRxMessagePackets, bwMucRoomTxMessagePackets,
+                bwMucRoomRxPresencePackets, bwMucRoomTxPresencePackets,
+                bwMucRoomRxIQPackets, bwMucRoomTxIQPackets }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the MUC."
+  ::= { bwIMPMibGroups 2 }
+
+  bwIMPBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks IMP MIB compliance"
+    MODULE
+        MANDATORY-GROUPS        { bwIMPStatsGroup, bwMUCStatsGroup }
+    ::= { bwIMPMibCompliancy 1 }
+
+END

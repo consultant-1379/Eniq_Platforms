@@ -1,0 +1,79 @@
+<%@ page import="com.ericsson.eniq.busyhourcfg.common.Constants"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.TechPack"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.TargetTechPack"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.BusyhourSupport"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.Placeholder"%>
+<%@ page import="java.net.URLEncoder"%>
+<%@ page import="java.util.List"%>
+
+<%!
+	String getLeftMenu(final TechPack currentTechPack, final TargetTechPack currentTargetTechPack, final BusyhourSupport currentBusyhourSupport) {
+
+    final String URL1 = "BusyhourView";
+
+    final String URL2 = "PlaceholdersView";
+
+    final String ref1 = URL1;
+    
+    if (currentTechPack == null) {
+      return "";
+    }
+
+    try {
+
+      
+      String out = "<div id='source_techpack'><div id='status' class='" + (currentTechPack.getModified() > 0 ? "modified" : "unmodified") 
+      	+ "'><a href='" + ref1 + "?sourcetp=" + URLEncoder.encode(currentTechPack.getVersionId(), Constants.DEFAULT_ENCODING) + "'>" + currentTechPack.getVersionId() + (currentTechPack.getModified() > 0 ? "*" : "") + "</a></div>";
+
+      final List<TargetTechPack> targetTechPacks = currentTechPack.getTargetTechPacks();
+
+      if (targetTechPacks.size() > 0) {
+
+        for (TargetTechPack targetTechPack : targetTechPacks) {
+
+          boolean isCurrentTarget = (targetTechPack == currentTargetTechPack);
+          final String targetVersionId = targetTechPack.getVersionId();
+
+          if (isCurrentTarget) {
+            out += "<div id='target_techpack_current'>";
+          } else {
+            out += "<div id='target_techpack'>";
+          }
+
+          out += "</div>";
+          
+            for (BusyhourSupport busyhourSupport : targetTechPack.getBusyhourSupports()) {
+
+              boolean isCurrentBHSupport = (busyhourSupport == currentBusyhourSupport);
+              
+              final String busyhourLevel = busyhourSupport.getBhlevel();
+
+              if (isCurrentBHSupport) {
+                out += "<div id='busyhour_current'>";
+              } else {
+                out += "<div id='busyhour'>";
+              }
+              
+              final String ref3 = URL2 + "?targettp=" + URLEncoder.encode(targetVersionId, Constants.DEFAULT_ENCODING) + "&bhsupport="
+                  + URLEncoder.encode(busyhourLevel, Constants.DEFAULT_ENCODING);
+              out += "<a href='" + ref3 + "'>" + busyhourLevel + "</a></div>";
+            }
+
+        }
+
+      } else {
+        out += "<div class='busyhour'>";
+        out += "&nbsp;No Busyhours";
+        out += "</div>";
+      }
+
+      out += "</div>";
+
+      return out;
+    } catch (Exception e) {
+      System.out.println("####Busyhours.jspf, .getLeftMenu(): Problem generating menu. Exception : " + e.getMessage());
+      e.printStackTrace();
+    }
+    return null;
+  }
+%>

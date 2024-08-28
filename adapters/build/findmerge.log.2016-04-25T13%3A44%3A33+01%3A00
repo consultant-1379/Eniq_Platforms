@@ -1,0 +1,3 @@
+cleartool findmerge . -d -fver /main/at_eniq/13 -log /dev/null -merge -cqe
+# Directory merges were necessary but not performed.
+# Unable to evaluate all possible merge candidates under those directories.

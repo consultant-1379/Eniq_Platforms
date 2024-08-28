@@ -1,0 +1,194 @@
+#!/usr/sunos/bin/sh
+# ----------------------------------------------------------------------
+# Ericsson Network IQ - Upgrade partitions to truncate datetime_id to minute.
+# This should only be used for a once off upgrade of the database schema.
+#
+# ----------------------------------------------------------------------
+# Copyright (C) 2010 LM Ericsson Limited.  All rights reserved.
+# ----------------------------------------------------------------------
+
+NAWK=/usr/bin/nawk
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+if [ ! -r "${CONF_DIR}/niq.rc" ] ; then
+  echo "ERROR: Source file is not readable at ${CONF_DIR}/niq.rc"
+  exit 2
+fi
+
+. ${CONF_DIR}/niq.rc
+
+CPATH="${INSTALLER_DIR}/lib/installer.jar"
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in $DIRS
+do
+  if [ -d ${PLATFORM_DIR}/$file/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/$file/dclib/*.jar`
+
+    for jar in $JARS
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+TIMESTAMP=`date +%y.%m.%d_%H:%M:%S`
+
+LOGFILE=${LOG_DIR}/datetime_minute_upgrade/execute_${TIMESTAMP}.log
+
+HSTNAME=`hostname`
+
+if [ ! -d ${LOG_DIR}/datetime_minute_upgrade ] ; then
+  mkdir -p ${LOG_DIR}/datetime_minute_upgrade  | tee -a ${LOGFILE}
+fi
+
+TEMPLATE_DIR="${INSTALLER_DIR}/datetime_minute_upgrade_templates"
+
+if [ ! -d ${TEMPLATE_DIR} ] ; then
+  mkdir -p ${TEMPLATE_DIR}  | tee -a ${LOGFILE}
+fi
+
+# ======================= Create SQL Tempalates ===================
+# =================================================================
+
+cat > ${TEMPLATE_DIR}/update.vm << UPDATE
+update \$partitionName set datetime_id = datefloor(MINUTE,datetime_id);
+UPDATE
+
+echo "====================================================================" | tee -a ${LOGFILE}
+echo "  Ericsson Network IQ - Apply datetime_upgrade on @ ${HSTNAME}" | tee -a ${LOGFILE}
+echo "===================================================================="  | tee -a ${LOGFILE}
+
+
+echo "Changing engine profile to NoLoads" | tee -a ${LOG_FILE}
+
+${BIN_DIR}/engine -e changeProfile NoLoads
+
+NOLOADS_EXIT_STATUS=$?
+
+if [ ${NOLOADS_EXIT_STATUS} -ne 0 ] ; then
+  echo "Engine status NoLoads could not be changed. Aborting upgrade." | tee -a ${LOG_FILE}
+  exit 43
+  else
+  echo "Engine status changed to NoLoads" | tee -a ${LOG_FILE}
+fi
+
+echo "Engine profile NoLoads changed successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+
+  #SMF is running
+  echo "SMF is running. Setting scheduler on hold and shutting it down with SMF scripts." | tee -a ${LOG_FILE}
+
+  ${BIN_DIR}/scheduler hold
+  SCHEDULER_HOLD_EXIT_STATUS=$?
+
+  if [ ${SCHEDULER_HOLD_EXIT_STATUS} -ne 0 ] ; then
+    echo "Scheduler could not be set on hold. Scheduler is not running." | tee -a ${LOG_FILE}
+   else
+    echo "Scheduler set on hold at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+  fi
+
+  echo "Shutdown engine before upgrade (no DB partitions should be write locked)." | tee -a ${LOG_FILE}
+
+  #SMF is running
+  echo "SMF is running. Stoping engine with SMF scripts." | tee -a ${LOG_FILE}
+  echo "Stopping engine" | tee -a ${LOG_FILE}
+  ${BIN_DIR}/engine stop >> /dev/null 2>&1
+
+  ENGINE_STOP_STATUS=$?
+  if [ ${ENGINE_STOP_STATUS} -ne 0 ] ; then
+    echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOG_FILE}
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s engine -a clear | tee -a ${LOG_FILE}
+        echo "Engine status cleared" | tee -a ${LOG_FILE}
+        sleep 10
+        ${BIN_DIR}/engine -e shutdown_forceful 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOG_FILE}
+        sleep 10
+  fi
+
+  ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+  if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+        echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOG_FILE}
+        ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s engine -a clear | tee -a ${LOG_FILE}
+        echo "Engine status cleared" | tee -a ${LOG_FILE}
+        sleep 10
+        ${BIN_DIR}/engine -e shutdown_forceful 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOG_FILE}
+        sleep 10
+        ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+        if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+                RETRY_COUNT=0
+                until [ "${ENGINE_SMF_STATUS}" = "online" ]
+                do
+                        if [ $RETRY_COUNT -gt 30 ]; then
+                                break
+                        fi
+                        sleep 10
+                        ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+                        RETRY_COUNT=`expr $RETRY_COUNT + 1`
+                        echo "Waiting for engine to go online" | tee -a ${LOG_FILE}
+                done
+                echo "Engine initially started" | tee -a ${LOG_FILE}
+                ${BIN_DIR}/engine stop | tee -a ${LOG_FILE}
+        fi
+  fi
+  echo "Engine stopped successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+
+#########################
+
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+cd ${INSTALLER_DIR}; ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_execute_partiton_upgrade_sql.xml -lib ${CPATH} -DpartitionStorageIdList="EVENT_E_SGEH_ERR:RAW,EVENT_E_SGEH_SUC:RAW" -DpartitionTemplateFilepath=${TEMPLATE_DIR}/update.vm -Ddebug="OFF" -DmaxParallel="5" execute | tee -a ${LOGFILE}
+
+if [ -f ${LOGFILE} ] ; then
+  SUC=`cat ${LOGFILE} | grep "BUILD SUCCESSFUL"`
+  if [ ! -z "${SUC}" ] ; then
+    echo "======================================="  | tee -a ${LOGFILE}
+    echo "Successfully upgraded datetimes in DWHDB database"  | tee -a ${LOGFILE}
+    echo "======================================="  | tee -a ${LOGFILE}
+  else
+    echo "================================"  | tee -a ${LOGFILE}
+    echo "DWHDB datetime upgrade failed"  | tee -a ${LOGFILE}
+    echo "================================"  | tee -a ${LOGFILE}
+  fi
+fi
+
+###########################
+
+${BIN_DIR}/engine start
+
+ENGINE_START_STATUS=$?
+
+if [ ${ENGINE_START_STATUS} -ne 0 ] ; then
+  echo "Engine could not be started. Plese restart manually." | tee -a ${LOG_FILE}
+  exit 44
+ else
+  echo "Engine restarted succesfully" | tee -a ${LOG_FILE}
+fi
+
+#Activate the scheduler
+SCHEDULER_ACTIVATE=`scheduler activate | grep "scheduler is running OK"`
+until [ "${SCHEDULER_ACTIVATE}" = "scheduler is running OK" ]
+  do
+        sleep 10
+        SCHEDULER_ACTIVATE=`scheduler activate | grep "scheduler is running OK"`
+        echo "Activating scheduler."
+  done
+echo "Activated scheduler successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+
+${BIN_DIR}/engine -e changeProfile Normal
+
+NORMAL_EXIT_STATUS=$?
+
+if [ ${NORMAL_EXIT_STATUS} -ne 0 ] ; then
+  echo "Engine status Normal could not be changed." | tee -a ${LOG_FILE}
+  exit 43
+  else
+  echo "Engine status changed to Normal" | tee -a ${LOG_FILE}
+fi

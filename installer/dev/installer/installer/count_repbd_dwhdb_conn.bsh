@@ -1,0 +1,203 @@
+#!/usr/bin/bash
+# ********************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ********************************************************************
+#
+# (c) Ericsson Radio Systems AB 2013 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used 
+# and/or copied only with the written permission from Ericsson Radio 
+# Systems AB or in accordance with the terms and conditions stipulated 
+# in the agreement/contract under which the program(s) have been 
+# supplied .
+#
+# ********************************************************************
+# Name    : count_repbd_dwhdb_conn.sh
+# Revision: main/at_eniq/1
+# Purpose : This script will count the most recently-prepared SQL  
+# statement for each connection to the specified database on the server. 
+# The script will save data for each min.
+#
+# Usage   : count_repbd_dwhdb_conn.sh -h <hours>
+#
+# ********************************************************************
+# Subrata Bhowmick (subrata.bhowmick@wipro.com)
+# ********************************************************************
+
+_date_=`date '+%Y-%m-%d'`
+
+_day_no=`date +%d`
+_time=`date '+%T'`
+_time_temp="01:00:00"
+
+NAWK=/usr/bin/nawk
+DATE=/usr/bin/date
+ECHO=/usr/bin/echo
+GREP=/usr/bin/grep
+RM=/usr/bin/rm
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+    $ECHO "Could not find /eniq/admin/lib/common_functions.lib"
+    exit 1
+fi
+
+
+LOGSFILE=/eniq/log/sw_log/iq/dwhdb/logscheck.log
+export LOGSFILE
+
+SYBASE=/eniq/sybase_iq
+export SYBASE
+
+SQLANY=/eniq/sql_anywhere
+export SQLANY
+
+. ${SYBASE}/IQ.sh
+
+# Internal directory variable
+
+CONF_DIR=/eniq/sw/conf
+export CONF_DIR
+
+BIN_DIR=/eniq/sw/bin
+export BIN_DIR
+
+RT_DIR=/eniq/sw/runtime
+export RT_DIR
+
+# ASN.1 library stuff
+OSS_ASN1_JAVA="${RT_DIR}/nokalva/asn1pjav/solaris.tgt/3.0"
+export OSS_ASN1_JAVA
+
+OSSINFO=${OSS_ASN1_JAVA}
+export OSSINFO
+
+DCPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+DBAPASSWORD=`inigetpassword DB -f ${CONF_DIR}/niq.ini -v DBAPassword`
+
+# Path extension
+PATH=${PATH}:${OSS_ASN1_JAVA}:/usr/local/bin:${BIN_DIR}
+export PATH
+
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${OSS_ASN1_JAVA}/lib:${SQLANY}/lib64
+export LD_LIBRARY_PATH
+
+
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+
+
+
+JAVA_HOME="/eniq/sw/runtime/java"
+
+CPATH="${PLATFORM_DIR}"
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in ${DIRS}
+do
+  if [ -d ${PLATFORM_DIR}/${file}/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/${file}/dclib/*.jar`
+
+    for jar in ${JARS}
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+#
+# check we are dcuser...
+#
+if [ ${LOGNAME} != "dcuser" ] ; then
+    echo ""
+    echo "This script has to be run as 'dcuser'. You are currently logged in as '${LOGNAME}'"
+    echo "Migration script aborting..."
+    exit 32
+fi
+
+#
+# log file name
+#
+HOSTNAME=`hostname`
+LOGFILE="/var/tmp/serverspeed"$HOSTNAME".log"
+
+#
+# check sql out-put
+#
+check_sqlout() {
+
+SQLOUTFILE=$1
+
+ERRORMSG=`cat $SQLOUTFILE | grep -v "already exists" | egrep -i "command not found|SQL Anywhere Error|CT-LIBRARY error"`
+ERRORCODE=`cat $SQLOUTFILE | grep -v "already exists" | egrep -i "command not found|SQL Anywhere Error|CT-LIBRARY error" | wc -l | $NAWK '{print $1}'`
+
+if [ "$ERRORCODE" != 0 ]; then
+   echo "Error ! $ERRORMSG"
+   echo "For more error details please check the log file : $LOGFILE"
+   cat "Error ! " >> ${LOGFILE}
+   cat $SQLOUTFILE >> ${LOGFILE}
+   exit 32
+fi
+}
+
+# ********************************************************************
+#
+#   Main body of program
+#
+# ********************************************************************
+#
+echo "Log file : $LOGFILE " 2>&1 > ${LOGFILE}
+
+# create temporary table to keep record 
+# - if required table "dwh_repdb_count" already present it will not create again
+# - if the table is not present but script is not able to create the table it will throw an error and exit
+iqisql -Udc -P${DCPASSWORD} -Sdwhdb -i /eniq/sw/bin/create_rep_dwh_temp.sql > /tmp/tablecreated.txt 
+check_sqlout /tmp/tablecreated.txt
+
+
+
+
+	# check no of repdb connection at present
+	REPDB=`iqisql -Udba -P$DBAPASSWORD -Srepdb -w1000 -i /eniq/sw/bin/count_repdb_conn.sql -b | grep -v row`
+	echo $REPDB >  /tmp/insertdata.sql
+	echo "go" >> /tmp/insertdata.sql
+	check_sqlout /tmp/insertdata.sql
+	
+	echo $REPDB >> /eniq/log/sw_log/engine/repdbCount-$_date_.log 
+
+	# check no of dwhdb connection at present
+	DWHDB=`iqisql -Udba -P$DBAPASSWORD -Sdwhdb -w1000 -i /eniq/sw/bin/count_dwhdb_conn.sql -b | grep -v row`
+	echo $DWHDB >> /tmp/insertdata.sql
+	echo "go" >> /tmp/insertdata.sql
+	check_sqlout /tmp/insertdata.sql
+	
+	echo $DWHDB >> /eniq/log/sw_log/engine/dwhdbCount-$_date_.log
+
+	# insert the data into temp table
+	iqisql -Udc -P$DCPASSWORD -Sdwhdb -i /tmp/insertdata.sql > /tmp/tableinserted.txt
+	check_sqlout /tmp/tableinserted.txt
+
+	#Deleting data older than 2 years from "DC.dwh_repdb_count"
+	if [ $_day_no -eq 07 ] || [ $_day_no -eq 14 ] || [ $_day_no -eq 21 ] || [ $_day_no -eq 28 ] && [ "$_time" == "$_time_temp"];then
+		/eniq/sybase_iq/IQ-16_0/bin64/dbisql -c "UID=dc;PWD=$DCPASSWORD" -host localhost -port 2640 -onerror exit -nogui "SELECT count(*) FROM DC.dwh_repdb_count WHERE EXECUTION_DATE<dateadd(year, -2, NOW());output to /eniq/log/sw_log/iq/dwhdb/count1.txt"
+		read count < /eniq/log/sw_log/iq/dwhdb/count1.txt
+		if [[ count > 0 ]];then
+			$ECHO "`$DATE '+%Y_%m_%d_%H:%M:%S'` : Data older than 2 years are deleted from DC.dwh_repdb_count" >> ${LOGSFILE}
+		fi
+		command1="DELETE FROM DC.dwh_repdb_count WHERE EXECUTION_DATE<dateadd(year, -2, NOW())"
+		/eniq/sybase_iq/IQ-16_0/bin64/dbisql -c "UID=dc;PWD=$DCPASSWORD" -host localhost -port 2640 -onerror exit -nogui $command1
+	fi
+	
+	$RM -rf /eniq/log/sw_log/iq/dwhdb/count1.txt

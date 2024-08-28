@@ -1,0 +1,133 @@
+##
+## Total.day.vm
+##
+##
+##
+##
+## Delete possible data before aggregation
+##
+DELETE $TargetTable.get("TOTAL")_IN
+WHERE DATE_ID=$dateid
+##
+##
+##
+
+Insert into $TargetTable.get("TOTAL")_IN
+(
+##
+## unique keys
+##
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("TOTAL"))
+#if($col.getUniquekey() == 1)
+#if($first) $col.getDataname() 
+#set($first = false)
+#else,$col.getDataname()
+#end
+#end
+#end
+,DATE_ID
+,YEAR_ID
+,MONTH_ID
+,DAY_ID
+,WEEK_ID
+,DATACOVERAGE
+,AGG_COUNT
+##
+## Aggregated Columns
+##
+#foreach($col in $TargetMeasurementCounterMap.get("TOTAL"))
+#if ("$col.getTimeaggregation()" == "SUM" || "$col.getTimeaggregation()" == "MAX" || "$col.getTimeaggregation()" == "MIN" || "$col.getTimeaggregation()" == "AVG")
+,$col.getDataname()
+#end  
+#end
+)
+Select
+##
+## unique keys
+##
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("TOTAL"))
+#if ($col.getUniquekey() == 1)
+#if($first) $col.getDataname()
+#set($first = false)
+#else 
+,$col.getDataname()
+#end
+#end
+#end
+,DATE_ID
+,YEAR_ID
+,MONTH_ID
+,DAY_ID
+,DATEPART(cwk, DATE_ID)
+,SUM(PERIOD_DURATION)
+,COUNT(*)
+##
+## Aggregated Columns
+##
+#foreach($col in $TargetMeasurementCounterMap.get("TOTAL"))
+#if ("$col.getTimeaggregation()" == "SUM" || "$col.getTimeaggregation()" == "MAX" || "$col.getTimeaggregation()" == "MIN" || "$col.getTimeaggregation()" == "AVG")
+,$col.getTimeaggregation()($col.getDataname())
+#end  
+#end
+from  $SourceTable.get("TOTAL")_ACT  AS src 
+where src.DATE_ID=$dateid
+group by
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("TOTAL"))
+#if ($col.getUniquekey() == 1)
+#if ($first) $col.getDataname()
+#set($first = false)
+#else
+,$col.getDataname()
+#end
+#end
+#end 
+,DATE_ID
+,YEAR_ID
+,MONTH_ID
+,DAY_ID
+,DATEPART(cwk, DATE_ID)
+
+##
+## UPDATE
+##
+UPDATE $TargetTable.get("TOTAL")_IN AS dst 
+SET 
+##
+##  NON UNIQUE KEYS
+## 
+#set($first = true)
+#set($isunique = false)
+#foreach($col in $TargetMeasurementKeyMap.get("TOTAL"))
+#if ($col.getUniquekey() == 0)
+#if($first) 
+dst.$col.getDataname()=src.$col.getDataname()
+#set($isunique = true)
+#set($first = false)
+#else 
+,dst.$col.getDataname()=src.$col.getDataname()
+#end
+#end
+#end
+#if($isunique)
+,SESSION_ID=$sessionid
+#else
+SESSION_ID=$sessionid
+#end
+,BATCH_ID=$batchid
+,TIMELEVEL='DAY'
+,PERIOD_DURATION=1440
+FROM $SourceTable.get("TOTAL")_ACT AS src 
+where src.DATE_ID=$dateid
+and dst.DATE_ID=$dateid
+and src.DATE_ID=dst.DATE_ID
+##
+## unique keys
+##
+#foreach($col in $TargetMeasurementKeyMap.get("TOTAL"))
+#if ($col.getUniquekey() == 1)
+and dst.$col.getDataname() = src.$col.getDataname()
+#end
+#end

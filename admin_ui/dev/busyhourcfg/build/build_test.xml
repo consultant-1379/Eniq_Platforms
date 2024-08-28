@@ -1,0 +1,29 @@
+<project name="busyhourcfg" default="test_all">
+	<property name="module.name" value="busyhourcfg" />
+	<property file="${user.home}/EniqBuild/BH/build.properties" />
+	<property name="ant.common" value="${cc.base}/tools/ant_common" />
+	<property file="${ant.common}/common.properties" />
+	<property name="module.base" value="${module.busyhourcfg.base}" />
+	<property name="module.build" value="${module.busyhourcfg.build}" />
+	<property name="module.dependants" value="${module.busyhourcfg.dependants}" />
+	<import file="${ant.common}/common.xml" />
+	<property name="tests.to.run" value="**/*Test.class" />
+    <property name="tests.to.exclude" value="**/com/ericsson/eniq/etl/ebsHandler/action/CreateXMLTest.class, **/com/ericsson/eniq/busyhourcfg/servlets/BusyhourSourceListTest.class, **/com/ericsson/eniq/busyhourcfg/config/DefaultBusyhourConfigurationTest.class"/>
+
+	<property name="mods.needed" value="" />
+
+	<path id="busyhourcfg.lib.classpath">
+		<path refid="plaform.lib.classpath" />
+		<path refid="servlet_api" />
+		<path location="${module.common_utilities.pkg}" />
+		<path location="${module.engine.pkg}" />
+		<path location="${module.repository.pkg}" />
+		<path location="${module.scheduler.pkg}" />
+		<path location="${module.licensing.pkg}" />
+		<path location="${module.dwh_manager.pkg}" />
+	</path>
+	<path id="busyhourcfg.test.classpath">
+		<path refid="platform.test.classpath" />
+		<path refid="busyhourcfg.lib.classpath" />
+	</path>
+</project>

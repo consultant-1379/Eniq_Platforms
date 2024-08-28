@@ -1,0 +1,74 @@
+<project name="installer" default="postcompile">
+
+	<property name="pack.name" value="installer"/>
+	<property name="pack.version" value="5-0-0"/>
+
+  <property name="vobs.plat" value="/vobs/eniq/design/plat"/>
+  <property name="vobs.3pp" value="/vobs/eniq/3pp"/>
+
+	<!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there -->
+	<property name="pack.dir" value="${vobs.plat}/installer/dev/installer"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="${vobs.plat}/common_utilities/build/common_utilities"/>
+  <property name="eniq.parser.dir" value="${vobs.plat}/adapters/build/parser"/>
+  <property name="eniq.engine.dir" value="${vobs.plat}/etl_controller/build/engine"/>
+  <property name="eniq.repository.dir" value="${vobs.plat}/installer/build/repository"/>
+  <property name="eniq.export.dir" value="${vobs.plat}/mediation/build/export"/>
+  <property name="eniq.licensing.dir" value="${vobs.plat}/licensing/build/licensing"/>
+  <property name="eniq.dwhmanager.dir" value="${vobs.plat}/management\build\dwh_manager"/>
+    <property name="3pp.jsch.dir" value="/vobs/eniq/3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod/"/> <!-- jsch.jar -->
+
+  <!-- 3PP Jars -->
+	<property name="3pp.sybase.dir" value="/vobs/eniq/3pp/sybase/sybase_iq"/> <!-- jconn jar -->
+  	<property name="3pp.velocity.dir" value="${vobs.3pp}/apache/jakarta_velocity/v1_2/prod"/>
+	<target name="precompile">
+	</target>
+
+	<target name="compile" depends="precompile">
+		<mkdir dir="${pack.dir}/classes"/>
+		<javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="true" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}"/>
+					<fileset dir="${eniq.parser.dir}">
+			    		<include name="**/*.jar"/>
+			    	</fileset>
+				  	<fileset dir="${eniq.common.dir}">
+			    		<include name="**/*.jar"/>
+			    	</fileset>
+					<fileset dir="${eniq.engine.dir}">
+				    	<include name="**/*.jar"/>
+				    </fileset>
+					<fileset dir="${eniq.repository.dir}">
+				    	<include name="**/*.jar"/>
+			    	    </fileset>
+					<fileset dir="${eniq.export.dir}">
+				    	<include name="**/*.jar"/>
+			    	    </fileset>
+					<fileset dir="${eniq.licensing.dir}">
+				    	<include name="**/*.jar"/>
+			    	</fileset>
+					<fileset dir="${3pp.velocity.dir}">
+			    		<include name="**/*.jar"/>
+			    	</fileset>
+					<fileset dir="${3pp.jsch.dir}">
+			    		<include name="**/*.jar"/>
+			    	</fileset>
+					<fileset dir="${3pp.sybase.dir}">
+						<include name="**/*.jar"/>
+					</fileset>
+					<fileset dir="${eniq.dwhmanager.dir}">
+						<include name="**/*.jar"/>
+					</fileset>
+					
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="postcompile" depends="compile">
+		<mkdir dir="${pack.dir}/lib"/>
+		<jar destfile="${pack.dir}/lib/installer.jar" basedir="${pack.dir}/classes"/>
+                <delete dir="${pack.dir}/classes"/>
+		<delete dir="${pack.dir}/dclib"/>
+	</target>
+</project>

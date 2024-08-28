@@ -1,0 +1,120 @@
+--===============================================================
+-- File Name : BW-NodeLifecycleManagerFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-NodeLifecycleManagerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+    alarmName, alarmState, common, component, correlationParameter, identifier, problemText, recommendedActionsText, severity, subcomponent, systemName, timeStamp
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201509230000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks node lifecycle manager Application."
+    REVISION    "201509230000Z"
+                DESCRIPTION    "Updated with correct trap names."
+    REVISION    "201506190000Z"
+                DESCRIPTION    "Creation of the Fault MIB."
+    ::=  {  common 1  }
+
+
+  bwPMnginxLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the nginx process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMnginxLaunched, bwPMnginxShutDown, bwPMnginxRestarted, and bwPMnginxDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the nginx process"
+-- @feature:217550
+    ::=  {  systemFaults 17301  }
+
+  bwPMnginxShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the node nginx process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMnginxLaunched, bwPMnginxShutDown, bwPMnginxRestarted, and bwPMnginxDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the nginx process"
+-- @feature:217550
+    ::=  {  systemFaults 17302  }
+
+  bwPMnginxRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the nginx process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMnginxLaunched, bwPMnginxShutDown, bwPMnginxRestarted, and bwPMnginxDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the nginx process"
+-- @feature:217550
+    ::=  {  systemFaults 17303  }
+
+  bwPMnginxDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the nginx process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMnginxLaunched, bwPMnginxShutDown, bwPMnginxRestarted, and bwPMnginxDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the nginx process"
+-- @feature:217550
+    ::=  {  systemFaults 17304  }
+
+  bwPMunicornLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the unicorn process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMunicornLaunched, bwPMunicornShutDown, bwPMunicornRestarted, and bwPMunicornDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the unicorn process"
+-- @feature:217550
+    ::=  {  systemFaults 17305  }
+
+  bwPMunicornShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the node unicorn process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMunicornLaunched, bwPMunicornShutDown, bwPMunicornRestarted, and bwPMunicornDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the unicorn process"
+-- @feature:217550
+    ::=  {  systemFaults 17306  }
+
+  bwPMunicornRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the unicorn process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMunicornLaunched, bwPMunicornShutDown, bwPMunicornRestarted, and bwPMunicornDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the unicorn process"
+-- @feature:217550
+    ::=  {  systemFaults 17307  }
+
+  bwPMunicornDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the unicorn process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMunicornLaunched, bwPMunicornShutDown, bwPMunicornRestarted, and bwPMunicornDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the unicorn process"
+-- @feature:217550
+    ::=  {  systemFaults 17308  }
+
+
+END

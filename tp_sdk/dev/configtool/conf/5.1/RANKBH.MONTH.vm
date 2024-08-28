@@ -1,0 +1,65 @@
+
+## RANKBH.MONTH.vm
+## UPDATE monthbh to 0
+##
+
+\#foreach($table in $targetTableList.get("RANKBHCLASS"))
+
+UPDATE $table.get("table") AS dst  
+SET 
+dst.monthbh = 0
+WHERE dst.date_id between $dateid and dateadd(mm,1,$dateid)-1
+and dst.bhtype='$Bhtype.get("RANKBHCLASS")'
+
+\#end
+
+
+## GET busyhour of month
+##
+
+\#foreach($table in $targetTableList.get("RANKBHCLASS"))
+
+UPDATE $table.get("table") AS dst  
+SET 
+monthbh = 1 
+where dst.date_id = (select min(a.date_id) from $targetDerivedTable.get("RANKBHCLASS") as a 
+where a.bhvalue = (select max(b.bhvalue) from $targetDerivedTable.get("RANKBHCLASS") as b 
+where a.bhtype = '$Bhtype.get("RANKBHCLASS")' and 
+b.date_id between $dateid and dateadd(mm,1,$dateid)-1 
+and b.bhtype='$Bhtype.get("RANKBHCLASS")'
+## KEY-COLUMNS
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBHCLASS"))
+#if ($col.getUniquekey() == 1)
+and a.$col.getDataname()= b.$col.getDataname()
+#end
+#end
+)
+and a.date_id between $dateid and dateadd(mm,1,$dateid)-1 
+and dst.bhtype = '$Bhtype.get("RANKBHCLASS")'
+and a.bhtype='$Bhtype.get("RANKBHCLASS")'
+## KEY-COLUMNS
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBHCLASS"))
+#if ($col.getUniquekey() == 1)
+and dst.$col.getDataname()= a.$col.getDataname()
+#end
+#end
+)
+and dst.date_id between $dateid and dateadd(mm,1,$dateid)-1
+
+\#end
+
+
+## UPDATE bhclass
+##
+
+\#foreach($table in $targetTableList.get("RANKBHCLASS"))
+
+UPDATE $table.get("table") AS dst  
+SET 
+dst.bhclass = (dst.monthbh * 100) + (dst.weekbh * 10) + 1
+WHERE dst.date_id between $dateid and dateadd(mm,1,$dateid)-1
+and dst.bhtype='$Bhtype.get("RANKBHCLASS")'
+
+\#end
+
+

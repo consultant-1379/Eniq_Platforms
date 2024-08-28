@@ -1,0 +1,50 @@
+--===============================================================
+-- File Name : BW-FileTransferFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-FileTransferFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+    alarmName, alarmState, common, component, identifier, npErrorMessage, npHost, npWebAppContextPath, npWebAppName, problemText, recommendedActionsText, severity, subcomponent, systemName, timeStamp
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201511060000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks FileTransfer Application."
+    REVISION    "201511060000Z"
+                DESCRIPTION    "Creation of the Fault MIB."
+    ::=  {  common 1  }
+
+
+  bwFileTransferReplicationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npHost, npWebAppContextPath }
+    STATUS      current
+    DESCRIPTION
+        "A replication failure occurred.
+@severity:high
+@subcomponent:filerepos"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17701  }
+
+  bwFileTransferReplicationOffline  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppContextPath, npHost }
+    STATUS      current
+    DESCRIPTION
+        "The replication stopped for one of the Profile Server peer. This was caused by exceeding the replication queue capacity.
+@severity:high
+@subcomponent:filerepos"
+-- @feature:BW-7266
+    ::=  {  systemFaults 17702  }
+
+
+END

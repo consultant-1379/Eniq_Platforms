@@ -1,0 +1,35 @@
+<project name="ebsmanager" default="test_all">
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="module.name" value="ebsmanager"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.base" value="${module.ebsmanager.base}"/>
+	<property name="module.build" value="${module.ebsmanager.build}"/>
+    <property name="module.dependants" value="${module.ebsmanager.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="junitp.testFileDir" value="${module.test.source}"/>
+    <property name="junitp.templateDir" value="5.2"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+    <property name="tests.to.exclude" value="**/com/ericsson/eniq/etl/ebsHandler/universeupdatelauncher/InstallerTest.class, **/com/ericsson/eniq/etl/ebsHandler/action/CreateXMLTest.class, **/com/ericsson/eniq/etl/ebsHandler/action/EBSUpdaterTest.class"/>
+
+
+    <path id="ebsmanager.lib.classpath">
+        <path refid="plaform.lib.classpath"/>
+		<path refid="servlet_api"/>
+        <path location="${module.repository.pkg}"/>
+        <path location="${module.dwh_manager.pkg}"/>
+        <path location="${module.engine.pkg}"/>
+        <path location="${module.scheduler.pkg}"/>
+        <path location="${module.tpide_junit.pkg}"/>
+        <path location="${module.common_utilities.pkg}"/>
+    </path>
+    <path id="ebsmanager.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="ebsmanager.lib.classpath"/>
+        <path location="${module.test.source}"/>
+        <path location="${module.test.source}/res"/>
+        <path location="${module.test.source}/sql"/>
+        <path location="${module.table_tree_component.pkg}"/>
+    </path>
+    
+</project>

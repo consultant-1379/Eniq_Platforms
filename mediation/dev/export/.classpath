@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/dbunit/dbunit/v2_4_7/prod/dbunit-2.4.7.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/xerces_impl/v2_0_2/prod/xercesImpl-2.0.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/junit/v4_5/prod/junit-4.5.jar"/>
+	<classpathentry kind="src" path="/common"/>
+	<classpathentry kind="src" path="/ETLC_TestHelper"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/repository"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DWHManager"/>
+	<classpathentry kind="lib" path="jar"/>
+	<classpathentry kind="lib" path="/DWHManager/jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/h2/h2/v_1_2_135/h2/prod/h2-1.2.135.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

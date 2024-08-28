@@ -1,0 +1,23 @@
+## 
+## REMOVE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+trg.STATUS = 'DEACTIVE'
+WHERE 
+#set($first = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if($first)  
+NOT EXISTS (SELECT tbl.$ref.getDataname() FROM ${TABLE}_CURRENT src
+WHERE src.$ref.getDataname() = trg.$ref.getDataname()
+#set($first = false)
+#else 
+AND tbl.$ref.getDataname() = trg.$ref.getDataname()
+#end
+#end
+#end
+)
+;
+commit;

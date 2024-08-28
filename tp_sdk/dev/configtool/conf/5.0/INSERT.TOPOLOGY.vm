@@ -1,0 +1,38 @@
+## 
+## INSERT.TOPOLOGY.vm
+## 
+## 
+Insert into $TABLE
+(
+#foreach ($ref in $referencecolumn)
+#if ( $velocityCount == 1 ) $ref.getDataname()
+#else 
+,$ref.getDataname()
+#end
+#end
+)
+Select
+#foreach ($ref in $referencecolumn)
+#if ( $velocityCount == 1 ) $ref.getDataname()
+#else 
+,$ref.getDataname()
+#end
+#end
+#set($first = true)
+FROM
+ ${TABLE}_CURRENT curr
+WHERE
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if ($first)  
+NOT EXISTS (SELECT tbl.$ref.getDataname() FROM ${TABLE} tbl
+WHERE curr.$ref.getDataname() = tbl.$ref.getDataname()
+#set($first = false)
+#else 
+AND curr.$ref.getDataname() = tbl.$ref.getDataname()
+#end
+#end
+#end
+)
+;
+commit;

@@ -1,0 +1,802 @@
+
+-- File Name : AGENT-SNMP-CONFIG-MIB
+-- Date      : Tue Dec 31 18:24:06 IST 2002
+-- Author    : AdventNet Agent Toolkit C Edition - MibEditor 6.0
+
+
+
+AGENT-SNMP-CONFIG-MIB	DEFINITIONS ::= BEGIN
+	IMPORTS
+		enterprises, DisplayString
+			FROM RFC1213-MIB
+		DisplayString, RowStatus
+			FROM SNMPv2-TC
+		products, ProtocolOperStatus
+			FROM AGENT-CONFIG-MIB
+		OBJECT-TYPE
+			FROM RFC-1212
+		enterprises, IpAddress, TimeTicks
+			FROM RFC1155-SMI;
+
+	enterprises	OBJECT IDENTIFIER
+		::=  {  private  1  }
+
+	cagent	OBJECT IDENTIFIER
+		::=  {  products  2  }
+
+	snmp	OBJECT IDENTIFIER
+		::=  {  cagent  1  }
+
+	snmpAgentInfo	OBJECT IDENTIFIER
+		::=  {  snmp  1  }
+
+	agentConfiguration	OBJECT IDENTIFIER
+		::=  {  snmp  2  }
+
+	snmpAgentVersion	OBJECT-TYPE	
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) ) 
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"The higher SNMP version supported by the SNMP agent (adapter).
+				The supported SNMP versions are SNMPv1, SNMPv2c and SNMPv3"
+		DEFVAL			{ "SNMPv1" }
+		::=  {  snmpAgentInfo  1  }
+
+	snmpAgentIpAddress	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"IP address used by the SNMP agent (adapter) to receive and send
+				requests and responses."
+		DEFVAL			{ '7F1'h }
+		::=  {  snmpAgentInfo  2  }
+
+	snmpAgentPortNumer	OBJECT-TYPE	
+		SYNTAX			Integer32  ( -2147483648 .. 2147483647  ) 
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"Port number used by the SNMP agent (adapter) to receive and send
+				requests and responses."
+		DEFVAL			{ 161 }
+		::=  {  snmpAgentInfo  3  }
+
+	snmpAgentUpTime	OBJECT-TYPE	
+		SYNTAX			TimeTicks
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"SNMP agent(adapter) up time in hundredths second."
+		::=  {  snmpAgentInfo  4  }
+
+	snmpAgentOperStatus	OBJECT-TYPE	
+		SYNTAX			ProtocolOperStatus  { not-running ( 0 ) , running ( 1 ) } 
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"SNMP agent status, if it is one (1) it means SNMP
+				agent (adapter) is running. If it is zero (0) it
+				means SNMP agent (adapter) is not running."
+		::=  {  snmpAgentInfo  5  }
+
+	v1v2AuthenticationTables	OBJECT IDENTIFIER
+		::=  {  agentConfiguration  1  }
+
+	trapTables	OBJECT IDENTIFIER
+		::=  {  agentConfiguration  2  }
+
+	subAgentTables	OBJECT IDENTIFIER
+		::=  {  agentConfiguration  3  }
+
+	notificationLogs	OBJECT IDENTIFIER
+		::=  {  agentConfiguration  4  }
+
+	aclTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  AclEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"The table maintains  a set of authentication parameters
+			like community and its maximum access of a SNMPv1/v2c 
+			agent."
+		::=  { v1v2AuthenticationTables  1 }
+
+	aclEntry	OBJECT-TYPE
+		SYNTAX		AclEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Each entry in this table describes one valid
+			authentication propertes."
+		INDEX		{  aclCommunity  }
+		::=  { aclTable 1 }
+
+	AclEntry  ::=  SEQUENCE {
+		aclCommunity  DisplayString,
+		aclAccess  INTEGER,
+		aclManagers  DisplayString,
+		aclStatus  RowStatus
+		}
+
+
+	aclCommunity	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Community string used by the manager to commnuicate
+				with the SNMPv1/v2c agent."
+		DEFVAL			{ "public" }
+		::=  {  aclEntry  1  }
+
+
+	aclAccess	OBJECT-TYPE	
+		SYNTAX			INTEGER  { NO_ACCESS ( 0 ) , READ_ONLY ( 1 ) , WRITE_ONLY ( 2 ) , READ_WRITE ( 3 ) , READ_CREATE ( 4 ) , ACCESS_FOR_NOTIFY ( 5 ) } 
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The maximum access allowed for the corresponding
+				community."
+		DEFVAL			{ READ_ONLY }
+		::=  {  aclEntry  2  }
+
+
+	aclManagers	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"This variable has the managers list allowed for specified
+                access with specified community. The format of the string
+                is 'managerName1;managerName2.....' with a  list of manager
+                IpAddress/name corresponding to each additional information
+                separated via ';' as the delimiter between any two managers.
+                The default value is '0:0:0:0' which states access for all
+                managers for the corresponding community."
+		::=  {  aclEntry  3  }
+
+
+	aclStatus	OBJECT-TYPE	
+		SYNTAX			RowStatus
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The status of this conceptual row.
+
+                 Until instances of all corresponding columns are
+                 appropriately configured, the value of the
+                 corresponding instance of the usmUserStatus column
+                 is 'notReady'"
+		::=  {  aclEntry  4  }
+
+	v1v2TrapForwardingTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  V1v2TrapForwardingEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"This table maintains the SNMP v1 and v2c managers
+			information like manager IP address, port number,
+			community, time out, retires, etc which are used 
+			in trap generation.  Timeout and retires are used 
+			in the case of SNMPv2c INFORM."
+		::=  { trapTables  1 }
+
+	v1v2TrapForwardingEntry	OBJECT-TYPE
+		SYNTAX		V1v2TrapForwardingEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Each entry in this table refers one manager
+			information who is registered to receive traps
+			fromt the agent."
+		INDEX		{  v1v2ManagerHost, v1v2ManagerPort  }
+		::=  { v1v2TrapForwardingTable 1 }
+
+	V1v2TrapForwardingEntry  ::=  SEQUENCE {
+		v1v2ManagerHost  IpAddress,
+		v1v2ManagerPort  Gauge,
+		v1v2ManagerVersion  Integer32,
+		v1v2ManagerCommunity  DisplayString,
+		v1v2ManagerTimeOut  Gauge,
+		v1v2ManagerRetries  Gauge,
+		v1v2ManagerStatus  RowStatus
+		}
+
+
+	v1v2ManagerHost	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"IP address where the manager is listening to
+				receive traps from the agent."
+		DEFVAL			{ "127.0.0.1" }
+		::=  {  v1v2TrapForwardingEntry  1  }
+
+
+	v1v2ManagerPort	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"The port at which manager is listening for
+				the traps from the agent."
+		DEFVAL			{ 162 }
+		::=  {  v1v2TrapForwardingEntry  2  }
+
+
+	v1v2ManagerVersion	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Description"
+		::=  {  v1v2TrapForwardingEntry  3  }
+
+
+	v1v2ManagerCommunity	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The community used by the agent to send trap
+				or inform to this manager."
+		DEFVAL			{ "public" }
+		::=  {  v1v2TrapForwardingEntry  4  }
+
+
+	v1v2ManagerTimeOut	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The  time out value in seconds for SNMPv2c INFORM."
+		DEFVAL			{ 5 }
+		::=  {  v1v2TrapForwardingEntry  5  }
+
+
+	v1v2ManagerRetries	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The number of retries in the case of SNMPV2c INFORM."
+		DEFVAL			{ 0 }
+		::=  {  v1v2TrapForwardingEntry  6  }
+
+
+	v1v2ManagerStatus	OBJECT-TYPE	
+		SYNTAX			RowStatus
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The status of this conceptual row.
+
+                 Until instances of all corresponding columns are
+                 appropriately configured, the value of the
+                 corresponding instance of the usmUserStatus column
+                 is 'notReady'"
+		::=  {  v1v2TrapForwardingEntry  7  }
+
+	v3TrapForwardingTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  V3TrapForwardingEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"This table maintains the SNMP v3 managers information
+			like manager IP address, port number, user name,
+			security model, context name, community, time out,
+			retires, etc which are used in trap generation. 
+			Timeout and retires are used in the case of INFORM."
+		::=  { trapTables  2 }
+
+	v3TrapForwardingEntry	OBJECT-TYPE
+		SYNTAX		V3TrapForwardingEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Each entry in this table refers one SNMPv3 manager
+			who will listen for TRAP or INFORM."
+		INDEX		{  v3ManagerHost, v3ManagerPort  }
+		::=  { v3TrapForwardingTable 1 }
+
+	V3TrapForwardingEntry  ::=  SEQUENCE {
+		v3ManagerHost  IpAddress,
+		v3ManagerPort  Gauge,
+		v3ManagerVersion  Integer32,
+		v3ManagerCommunity  DisplayString,
+		v3ManagerUserName  DisplayString,
+		v3ManagerUserSecModel  Gauge,
+		v3ManagerUserSecLevel  Integer32,
+		v3ManagerUserContextName  OCTET STRING,
+		v3ManagerTimeOut  Gauge,
+		v3ManagerRetries  Gauge,
+		v3ManagerStatus  RowStatus
+		}
+
+
+	v3ManagerHost	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"The IP address where the manager is  listening for
+				TRAPS or INFORMS."
+		DEFVAL			{ "127.0.0.1" }
+		::=  {  v3TrapForwardingEntry  1  }
+
+
+	v3ManagerPort	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"The UDP port at which manager is listening for
+				TRAPS or INFORMS."
+		DEFVAL			{ 162 }
+		::=  {  v3TrapForwardingEntry  2  }
+
+
+	v3ManagerVersion	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Description"
+		::=  {  v3TrapForwardingEntry  3  }
+
+
+	v3ManagerCommunity	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The community string used by the agent when sending
+				SNMP v1/v2c TRAPS or INFORMS to the manager.
+				It used to support backward compatability,
+				i.e. without any change in the table, user can send
+				both SNMPv1 and v2c TARPS and INFORMS."
+		DEFVAL			{ "public" }
+		::=  {  v3TrapForwardingEntry  4  }
+
+
+	v3ManagerUserName	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"This user name is same  as in USM MIB RFC 2574."
+		REFERENCE		"RFC 2574 USM table ."
+		::=  {  v3TrapForwardingEntry  5  }
+
+
+	v3ManagerUserSecModel	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"This security model value is same as in USM table 
+				of USM MIB RFC2574."
+		REFERENCE		"RFC 2574 USM table"
+		DEFVAL			{ 3 }
+		::=  {  v3TrapForwardingEntry  6  }
+
+
+	v3ManagerUserSecLevel	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Description"
+		::=  {  v3TrapForwardingEntry  7  }
+
+
+	v3ManagerUserContextName	OBJECT-TYPE	
+		SYNTAX			OCTET STRING
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"This context name is  same as in VacmAccessTable of VACM MIB RFC2575."
+		REFERENCE		"RFC 2575"
+		::=  {  v3TrapForwardingEntry  8  }
+
+
+	v3ManagerTimeOut	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The  time out value in seconds for INFORM request."
+		DEFVAL			{ 5 }
+		::=  {  v3TrapForwardingEntry  9  }
+
+
+	v3ManagerRetries	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The number of retries  for a failed INFORM reqeust."
+		DEFVAL			{ 0 }
+		::=  {  v3TrapForwardingEntry  10  }
+
+
+	v3ManagerStatus	OBJECT-TYPE	
+		SYNTAX			RowStatus
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The status of this conceptual row.
+
+                 Until instances of all corresponding columns are
+                 appropriately configured, the value of the
+                 corresponding instance of the usmUserStatus column
+                 is 'notReady'"
+		::=  {  v3TrapForwardingEntry  11  }
+
+	proxyTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  ProxyEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"This table maintains each sub agent information like
+			sub-tree oid, subagent IP address, port number,
+			community,  SNMP version timoOut, retries, etc.
+			The master agent look up this table when a request
+			is received from the manager, to forware the receieved
+			request."
+		::=  { subAgentTables  1 }
+
+	proxyEntry	OBJECT-TYPE
+		SYNTAX		ProxyEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Each entry in this table refers a sub agent."
+		INDEX		{  proxyOid, proxyEntryInstance, proxyContextName  }
+		::=  { proxyTable 1 }
+
+	ProxyEntry  ::=  SEQUENCE {
+		proxyOid  OBJECT IDENTIFIER,
+		proxyContextName  OCTET STRING,
+		proxyEntryInstance  OBJECT IDENTIFIER,
+		proxyHost  IpAddress,
+		proxyPortNumber  Gauge,
+		proxySnmpVersion  INTEGER,
+		proxyCommunity  DisplayString,
+		proxyTimeOut  Gauge,
+		proxyRetries  Gauge,
+		proxyStatus  RowStatus
+		}
+
+
+	proxyOid	OBJECT-TYPE	
+		SYNTAX			OBJECT IDENTIFIER
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"The oid sub-tree implemented by the sub agent.
+				If a request starts with this sub-tree oid the
+				master agent do a proxy for sub agent."
+		DEFVAL			{ {  1 3 6 1 2 1 } }
+		::=  {  proxyEntry  1  }
+
+
+	proxyContextName	OBJECT-TYPE	
+		SYNTAX			OCTET STRING
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Context Name to distinguish duplicate registration in the proxy."
+		DEFVAL			{ default }
+		::=  {  proxyEntry  2  }
+
+
+	proxyEntryInstance	OBJECT-TYPE	
+		SYNTAX			OBJECT IDENTIFIER
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Instance value for SNMP table level proxy."
+		::=  {  proxyEntry  3  }
+
+
+	proxyHost	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Sub  agent IP address where it is running."
+		DEFVAL			{ "127.0.0.1" }
+		::=  {  proxyEntry  4  }
+
+
+	proxyPortNumber	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Sub agent port number where it is running."
+		DEFVAL			{ 161 }
+		::=  {  proxyEntry  5  }
+
+
+	proxySnmpVersion	OBJECT-TYPE	
+		SYNTAX			INTEGER  { SNMP_VERSION_1 ( 0 ) , SNMP_VERSION_2C ( 1 ) } 
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The SNMP version used between the master and sub agent."
+		DEFVAL			{ SNMP_VERSION_1 }
+		::=  {  proxyEntry  6  }
+
+
+	proxyCommunity	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"Community  string used  between the master agent
+				and sub agent."
+		DEFVAL			{ public }
+		::=  {  proxyEntry  7  }
+
+
+	proxyTimeOut	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The time out value for each request send to the
+				sub agent.  The value is in seconds."
+		DEFVAL			{ 5 }
+		::=  {  proxyEntry  8  }
+
+
+	proxyRetries	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The number of retries for a failed proxy SNMP reqeust."
+		DEFVAL			{ 0 }
+		::=  {  proxyEntry  9  }
+
+
+	proxyStatus	OBJECT-TYPE	
+		SYNTAX			RowStatus
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The status of this conceptual row.
+
+                 Until instances of all corresponding columns are
+                 appropriately configured, the value of the
+                 corresponding instance of the usmUserStatus column
+                 is 'notReady'"
+		::=  {  proxyEntry  10  }
+
+	trapReceiverTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  TrapReceiverEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"This table maintains each sub agent information like
+			subagent IP address, port number, community, etc. 
+			they are allowed to send traps to the master agent. 
+			This table is used if PROXY is configurd."
+		::=  { subAgentTables  2 }
+
+	trapReceiverEntry	OBJECT-TYPE
+		SYNTAX		TrapReceiverEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"An entry of this table corresponds to one subagent
+				who is allowed to send trap to the master agent."
+		INDEX		{  agentHost, agentTrapPortNumber  }
+		::=  { trapReceiverTable 1 }
+
+	TrapReceiverEntry  ::=  SEQUENCE {
+		agentHost  IpAddress,
+		agentTrapPortNumber  Gauge,
+		agentCommunity  DisplayString,
+		agentStatus  RowStatus
+		}
+
+
+	agentHost	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Sub agent IP addres. "
+		DEFVAL			{ "127.0.0.1" }
+		::=  {  trapReceiverEntry  1  }
+
+
+	agentTrapPortNumber	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Sub agent port number addres. "
+		DEFVAL			{ 161 }
+		::=  {  trapReceiverEntry  2  }
+
+
+	agentCommunity	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The community string used by the subagent to send 
+				traps to the master agent. "
+		DEFVAL			{ "public" }
+		::=  {  trapReceiverEntry  3  }
+
+
+	agentStatus	OBJECT-TYPE	
+		SYNTAX			RowStatus
+		ACCESS			read-write
+		STATUS			mandatory
+		DESCRIPTION		"The status of this conceptual row.
+
+                 Until instances of all corresponding columns are
+                 appropriately configured, the value of the
+                 corresponding instance of the usmUserStatus column
+                 is 'notReady'"
+		::=  {  trapReceiverEntry  4  }
+
+	notificationLogTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  NotificationLogEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Description"
+		::=  { notificationLogs  1 }
+
+	notificationLogEntry	OBJECT-TYPE
+		SYNTAX		NotificationLogEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"Row Description"
+		INDEX		{  reqID  }
+		::=  { notificationLogTable 1 }
+
+	NotificationLogEntry  ::=  SEQUENCE {
+		reqID  Integer32,
+		notificationLogTime  TimeTicks,
+		notificationLogVarBinds  Integer32,
+		notificationLogOID  OBJECT IDENTIFIER,
+		notificationVersion  Integer32
+		}
+
+
+	reqID	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"Index column of the Table that stores the request ID of the Trap."
+		::=  {  notificationLogEntry  1  }
+
+
+	notificationLogTime	OBJECT-TYPE	
+		SYNTAX			TimeTicks
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"The Agent's value of SysUpTime, when the trap was generated."
+		::=  {  notificationLogEntry  2  }
+
+
+	notificationLogVarBinds	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"The Number of varbinds present in the Trap. If the version is 
+ of v2 type, then subtract 2 from the total number of varbinds. 
+ Since the first and second varbind represents the sysuptime and 
+ snmpTrapOID for v2 trap type."
+		::=  {  notificationLogEntry  3  }
+
+
+	notificationLogOID	OBJECT-TYPE	
+		SYNTAX			OBJECT IDENTIFIER
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the version is of v1 type then the notification OID will be 
+ the enterprise OID else the notification OID will be the 
+ snmpTrapOID."
+		::=  {  notificationLogEntry  4  }
+
+
+	notificationVersion	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"It specifies the Version of the Trap ."
+		::=  {  notificationLogEntry  5  }
+
+	notificationVarBindTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  NotificationVarBindEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"The Varbind Table stores information of the varbind values 
+ present in the Trap PDU."
+		::=  { notificationLogs  2 }
+
+	notificationVarBindEntry	OBJECT-TYPE
+		SYNTAX		NotificationVarBindEntry
+		ACCESS		not-accessible
+		STATUS		mandatory
+		DESCRIPTION	"The Varbind Table stores information of the varbind values 
+ present in the Trap PDU."
+		INDEX		{  notificationVarBindIndex, reqID  }
+		::=  { notificationVarBindTable 1 }
+
+	NotificationVarBindEntry  ::=  SEQUENCE {
+		notificationVarBindIndex  Integer32,
+		notificationVarBindID  OBJECT IDENTIFIER,
+		notificationVarBindType  DisplayString,
+		notificationCounter32Value  Counter,
+		notificationUnsigned32Value  Gauge,
+		notificationTimeTicksValue  TimeTicks,
+		notifiationInteger32Value  Integer32,
+		notificationOctetStringValue  OCTET STRING,
+		notificationIPAddressValue  IpAddress,
+		notificationOIDValue  OBJECT IDENTIFIER,
+		notificationCounter64Value  Counter64
+		}
+
+
+	notificationVarBindIndex	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			not-accessible
+		STATUS			mandatory
+		DESCRIPTION		"This column creates rows as per the number of Varbinds 
+ present in the notificationLogVarbinds of the previous 
+ table."
+		::=  {  notificationVarBindEntry  1  }
+
+
+	notificationVarBindID	OBJECT-TYPE	
+		SYNTAX			OBJECT IDENTIFIER
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"The OID which is present in the Trap PDU will be filled 
+ in this column ."
+		::=  {  notificationVarBindEntry  2  }
+
+
+	notificationVarBindType	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"Type of the Varbind sent as a Notification."
+		::=  {  notificationVarBindEntry  3  }
+
+
+	notificationCounter32Value	OBJECT-TYPE	
+		SYNTAX			Counter
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a Counter32 value, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  4  }
+
+
+	notificationUnsigned32Value	OBJECT-TYPE	
+		SYNTAX			Gauge
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"if the trap is sent for a Unsigned32 value, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  5  }
+
+
+	notificationTimeTicksValue	OBJECT-TYPE	
+		SYNTAX			TimeTicks
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a TimeTicks value, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  6  }
+
+
+	notifiationInteger32Value	OBJECT-TYPE	
+		SYNTAX			Integer32
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a Integer32 value, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  7  }
+
+
+	notificationOctetStringValue	OBJECT-TYPE	
+		SYNTAX			OCTET STRING
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a OctetString value, this 
+ particular column gets filled. Else showsa NULL value."
+		::=  {  notificationVarBindEntry  8  }
+
+
+	notificationIPAddressValue	OBJECT-TYPE	
+		SYNTAX			IpAddress
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a IP Address type, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  9  }
+
+
+	notificationOIDValue	OBJECT-TYPE	
+		SYNTAX			OBJECT IDENTIFIER
+		ACCESS			read-only
+		STATUS			mandatory
+		DESCRIPTION		"If the trap is sent for a OID value, this particular 
+ column gets filled. Else shows a NULL value."
+		::=  {  notificationVarBindEntry  10  }
+
+
+
+	 notificationCounter64Value	OBJECT-TYPE	
+		 SYNTAX			Counter64
+		 MAX-ACCESS		read-only
+		 STATUS			current
+		 DESCRIPTION		"If the trap is sent for a Counter64 value, this particular 
+ column gets filled. Else shows a NULL value."
+		 ::=  {  notificationVarBindEntry  11  }
+
+END

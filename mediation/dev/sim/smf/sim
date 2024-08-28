@@ -1,0 +1,212 @@
+#!/bin/bash
+# ##################################################################
+# # COPYRIGHT Ericsson AB 2015
+# #
+# # The copyright to the computer program(s) herein is the property
+# # of ERICSSON AB, Sweden. The programs may be used
+# # and/or copied only with the written permission from ERICSSON
+# # AB or in accordance with the terms and conditions
+# # stipulated in the agreement/contract under which the program(s)
+# # have been supplied.
+# #
+# ##################################################################
+#
+# Ericsson Network IQ sim control script for SMF to use
+#
+
+unalias stop 2> /dev/null
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+		echo "This script must be executed as dcuser"
+		exit 32
+fi
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../lib/common_functions.lib ]; then
+        . $SCRIPTHOME/../lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../lib/common_functions.lib"
+        exit 63
+fi
+
+SIM_START_COUNT=`iniget SIM -v SimStartCount -f ${CONF_DIR}/niq.ini`
+SIM_START_DELAY=`iniget SIM -v SimStartDelay -f ${CONF_DIR}/niq.ini`
+SIM_STOP_COUNT=`iniget SIM -v SimStopCount -f ${CONF_DIR}/niq.ini`
+SIM_STOP_DELAY=`iniget SIM -v SimStopDelay -f ${CONF_DIR}/niq.ini`
+
+SYSTEMLISTENER=$BIN_DIR/EniqEngineStatus.sh
+JAVA=/eniq/sw/runtime/java/bin/java
+SYSTEMLISTENERkill=EniqEngineStatus
+
+Jarpath=/eniq/sw/conf/sim/libs
+CPATH="${Jarpath}"
+for _jar_ in `find ${Jarpath}/ -name \*.jar` ; do
+        CPATH=${CPATH}:$_jar_
+done
+
+for _jar_ in `find ${PLATFORM_DIR}/sim*/dclib/ -name \*.jar` ; do
+        CPATH=${CPATH}:$_jar_
+done
+
+for _jar_ in `find ${PLATFORM_DIR}/licensing*/dclib/ -name \*.jar` ; do
+        CPATH=${CPATH}:$_jar_
+done
+
+FLAGS="-Ds=ESM -Xms128m -Xmx1024m"
+JMX="-Dcom.sun.management.jmxremote.port=3333 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+MAINCLASS="com.ericsson.sim.SIM"
+STATUSCLASS="com.ericsson.sim.rmi.RMIConnection"
+
+start() {
+
+if [ ! -d "${LOG_DIR}/sim" ]; then
+        mkdir ${LOG_DIR}/sim
+fi
+
+LOGFILE=${LOG_DIR}/sim/start_sim_`date '+%y%m%d_%H%M%S'`.log
+
+echo "Starting SIM..." > ${LOGFILE}
+
+EPID=`/usr/ucb/ps -auxww | grep "$SYSTEMLISTENERkill" | grep -v grep | nawk '{print $2}'`
+if [ -n "$EPID" ]; then
+        kill -TERM $EPID
+fi
+
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+if [ -n "$PID" ]; then
+        echo "SIM already running"
+        echo "Starting System Listener" >> ${LOGFILE}
+        $SYSTEMLISTENER &
+else
+        echo "Starting System Listener" >> ${LOGFILE}
+        $SYSTEMLISTENER &
+        echo "Starting SIM" >> ${LOGFILE}
+        $JAVA $FLAGS $JMX -cp $CPATH $MAINCLASS >/dev/null 2>&1 &
+fi
+
+cnt=0
+
+
+while [ ${cnt} -lt ${SIM_START_COUNT} ] ; do
+sleep ${SIM_START_DELAY}
+
+echo "Checking SIM status..." >> ${LOGFILE}
+
+CPID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+if [ -n "$CPID" ]; then
+        echo "SIM succesfully started" >> ${LOGFILE}
+        echo "SIM succesfully started"
+        exit 0
+else
+        echo "SIM not started yet. Retrying...." >> ${LOGFILE}
+        let cnt=cnt+1
+fi
+
+done
+
+echo "SIM failed to start" >> ${LOGFILE}
+exit 55
+}
+
+stop() {
+
+if [ ! -d "${LOG_DIR}/sim" ]; then
+        mkdir ${LOG_DIR}/sim
+fi
+
+LOGFILE=${LOG_DIR}/sim/stop_sim_`date '+%y%m%d_%H%M%S'`.log
+
+echo "Stopping SIM..." > ${LOGFILE}
+
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+EPID=`/usr/ucb/ps -auxww | grep "$SYSTEMLISTENERkill" | grep -v grep | nawk '{print $2}'`
+
+if [ -n "$EPID" ]; then
+        echo "Stopping System Listener" >> ${LOGFILE}
+        kill -TERM $EPID
+fi
+
+if [ -n "$PID" ]; then
+        kill -TERM $PID
+        echo "SIM shutdown requested" >> ${LOGFILE}
+else
+        echo "SIM not running" >> ${LOGFILE}
+fi
+
+cnt=0
+
+while [ ${cnt} -lt ${SIM_STOP_COUNT} ] ; do
+sleep ${SIM_STOP_DELAY}
+
+echo "Checking SIM status..." >> ${LOGFILE}
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+
+if [ -z "$PID" ]; then
+        echo "SIM shutdown is successfull" >> ${LOGFILE}
+        echo "SIM successfully shutdown"
+        exit 0
+else
+        echo "SIM still running" >> ${LOGFILE}
+        let cnt=cnt+1
+fi
+
+done
+
+echo "SIM failed to start" >> ${LOGFILE}
+exit 55
+}
+
+status(){
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+EPID=`/usr/ucb/ps -auxww | grep "$SYSTEMLISTENERkill" | grep -v grep | nawk '{print $2}'`
+
+if [ -n "$EPID" ]; then
+        echo "System Monitor enabled"
+else
+        echo "System Monitor disabled"
+fi
+
+echo "SIM"
+if [ -n "$PID" ]; then
+        echo "Status: Running"
+        $JAVA $STATUSCLASS
+else
+        echo "Status: Not running"
+fi
+}
+
+verify(){
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+if [ -n "$PID" ]; then
+        echo "SIM running"
+        exit 0
+else
+        echo "SIM not running"
+        exit 1
+fi
+}
+
+#Args
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+#       status)
+#               status
+#                       ;;
+#       verify)
+#               verify
+#                       ;;
+        *)
+                echo "Usage: sim <start|stop>"
+                exit 1
+                ;;
+esac
+exit 0

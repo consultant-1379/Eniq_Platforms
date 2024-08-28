@@ -1,0 +1,259 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ ETLC engine control script for SMF to use
+#
+# Usage: fls start|stop
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB Ericsson By  All rights reserved.
+# ----------------------------------------------------------------------
+
+# ********************************************************************
+#
+#       Configuration Section
+#
+# ********************************************************************
+
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../lib/common_functions.lib"
+        exit 63
+fi
+
+if [ -s ${CONF_DIR}/dwh.ini ]; then
+  ETLC_USER=`iniget ETLC -v UserName -f ${CONF_DIR}/dwh.ini`
+  START_COUNT=`iniget ETLC -v SchedulerStartCount -f ${CONF_DIR}/dwh.ini`
+  START_DELAY=`iniget ETLC -v SchedulerStartDelay -f ${CONF_DIR}/dwh.ini`
+  STOP_COUNT=`iniget ETLC -v SchedulerStopCount -f ${CONF_DIR}/dwh.ini`
+  STOP_DELAY=`iniget ETLC -v SchedulerStopDelay -f ${CONF_DIR}/dwh.ini`
+else
+  ETLC_USER=`iniget ETLC -v UserName -f ${CONF_DIR}/niq.ini`
+  START_COUNT=`iniget ETLC -v SchedulerStartCount -f ${CONF_DIR}/niq.ini`
+  START_DELAY=`iniget ETLC -v SchedulerStartDelay -f ${CONF_DIR}/niq.ini`
+  STOP_DELAY=`iniget ETLC -v SchedulerStopDelay -f ${CONF_DIR}/niq.ini`
+fi
+  STOP_COUNT=5
+if [ ${LOGNAME} != ${ETLC_USER} ] ; then
+  echo "ETLC engine must be started as user ${ETLC_USER}"
+  exit 32
+fi
+
+JAVA_HOME="${RT_DIR}/java"
+CPATH="${PLATFORM_DIR}:/eniq/sw/installer/lib/installer.jar"
+
+for _jar_ in `find ${PLATFORM_DIR}/*/dclib/ -name \*.jar` ; do
+	CPATH="${CPATH}:$_jar_"
+done
+
+#*********************************************************************
+#
+# 	functions
+#
+# ********************************************************************
+### Function: start ###
+#
+# Start the FLS service 
+#
+# Arguments:
+#       None
+# Return Values:
+#       None
+#HEAP_SIZE = 256M
+start() {
+
+
+  if [ ! -d ${LOG_DIR}/symboliclinkcreator ] ; then
+    mkdir ${LOG_DIR}/symboliclinkcreator
+    //echo "mkdir"
+  fi
+
+  LOGFILE=${LOG_DIR}/symboliclinkcreator/start_fls_`date '+%y%m%d_%H%M%S'`.log
+  echo "Starting fls ..." > ${LOGFILE}
+
+  xFLS=`ps -ef | grep java | grep "pname=FLSservice" | nawk '{print $2}'`
+  if [ ! -z "${xFLS}" ] ; then
+    echo "Killing previous fls instance in PID ${xFLS}" >> ${LOGFILE}
+    kill -9 ${xFLS} 2>&1 | tee -a ${LOGFILE}
+    echo "Previous fls process killed" >> ${LOGFILE}
+  fi
+  
+	if [ -f /eniq/installation/config/fls_conf ] && [ -s /eniq/installation/config/fls_conf ] ; then
+  #If SMF dependancies are enabled, Scheduler would have already been taken down
+  #If SMF dependancies are not enabled, scheduler will go into hold and reactivate once engine starts again.
+  echo "\${CPATH} is ${CPATH}" >> ${LOGFILE}
+                exec ${JAVA_HOME}/bin/java -d64 -server -Dpname="FLSservice" \
+				-mx64M -DHEAP_SIZE=64M \
+                -Djava.util.logging.config.file=${CONF_DIR}/symboliclinkcreatorLogging.properties \
+		  -Dlog4j.configuration=file:${CONF_DIR}/symboliclinkcreator.log4j.properties \
+                -DLOG_DIR=${LOG_DIR} \
+                -DCONF_DIR=${CONF_DIR} \
+                -classpath ${CPATH} \
+                -Djava.rmi.server.codebase="${CODEBASE}" \
+                com.ericsson.eniq.flssymlink.fls.Main &
+	
+
+  echo "fls forked" >> ${LOGFILE}
+
+  cnt=0
+
+  while [ ${cnt} -lt ${START_COUNT} ] ; do
+    sleep ${START_DELAY}
+
+    echo "Checking fls status..." >> ${LOGFILE}
+
+ ePID=`ps -eaf | grep java | grep FLSservice | nawk '{print $2}'`
+
+if [ -n "${ePID}" ] ; then
+      echo "FLS service succesfully started" >> ${LOGFILE}
+      exit 0     
+else
+      echo "FLS service not started yet" >> ${LOGFILE}
+      let cnt=cnt+1
+ fi
+
+ done
+
+  echo "FLS service failed to start" >> ${LOGFILE}
+
+  exit 55
+	else
+	    echo "FLS is not enabled" >> ${LOGFILE}
+			exit 0
+	fi
+}
+
+#*********************************************************************
+#
+# 	functions
+#
+# ********************************************************************
+### Function: stop ###
+#
+# Stop the FLS service.
+#
+# Arguments:
+#       None
+# Return Values:
+#       None
+
+stop() {
+  
+  LOGFILE=${LOG_DIR}/symboliclinkcreator/stop_fls_`date '+%y%m%d_%H%M%S'`.log
+
+  echo "Stopping fls ..." > ${LOGFILE}
+
+	if [ -f /eniq/installation/config/fls_conf ] && [ -s /eniq/installation/config/fls_conf ] ; then
+  ${JAVA_HOME}/bin/java -d64 -Dpname="FLSservice" -mx64M -classpath ${CPATH} com.ericsson.eniq.flssymlink.fls.FlsStopMain &
+
+  echo "FLS shutdown requested" >> ${LOGFILE}
+
+  cnt=0
+
+ while [ ${cnt} -lt ${STOP_COUNT} ] ; do
+    sleep ${STOP_DELAY}
+
+    echo "Checking fls status..." >> ${LOGFILE}
+
+ ePID=`ps -eaf | grep java | grep FLSservice | nawk '{print $2}'`
+
+ if [ -z "${ePID}" ] ; then
+      echo "FLS service shutdown is complete" >> ${LOGFILE}
+      exit 0
+    else
+      echo "FLS is still running" >> ${LOGFILE}
+      let cnt=cnt+1
+    fi
+ done
+
+ ePID=`ps -eaf | grep java | grep FLSservice | nawk '{print $2}'`
+
+ echo "FLS service refused to stop. Trying to kill it." >> ${LOGFILE}
+
+ if [ ! -z "${ePID}" ] ; then
+   kill -9 ${ePID}
+   echo "FLS killed." >> ${LOGFILE}
+ else
+    echo "FLS was dead before killing" >> ${LOGFILE}
+ fi
+
+	else
+	    echo "FLS is not enabled" >> ${LOGFILE}
+	fi
+	
+ exit 0
+
+}
+
+#*********************************************************************
+#
+# 	functions
+#
+# ********************************************************************
+### Function: stop ###
+#
+# status of the FLS service.
+#
+# Arguments:
+#       None
+# Return Values:
+#       None
+
+status(){
+
+PID=`ps -ef | grep java | grep "pname=FLSservice" | nawk '{print $2}'`
+
+if [ -n "${PID}" ] ; then
+    echo "fls service is running"
+    exit 1
+else
+    echo "fls is not running"
+    exit 0
+fi
+
+}
+
+# ********************************************************************
+#
+#   Main body of program
+#
+# ********************************************************************
+
+#getting codebase
+
+COMMON_JAR=`ls ${PLATFORM_DIR}/common*/dclib/common.jar`
+
+LICENSING_JAR=`ls ${PLATFORM_DIR}/licensing*/dclib/licensing.jar`
+
+#SCHEDULER_JAR=`ls ${PLATFORM_DIR}/scheduler*/dclib/scheduler.jar`
+
+ENGINE_JAR=`ls ${PLATFORM_DIR}/engine*/dclib/engine.jar`
+CODEBASE="file://${COMMON_JAR} file://${ENGINE_JAR} file://${LICENSING_JAR}"
+case "$1" in
+start)
+	  echo "fls start "
+	  start
+      ;;
+status)
+      status
+      ;;
+stop)
+	 echo "fls stop "
+     stop
+     ;;
+*)
+     echo "This script shall only be used by engine!"
+     exit 10
+     ;;
+esac
+

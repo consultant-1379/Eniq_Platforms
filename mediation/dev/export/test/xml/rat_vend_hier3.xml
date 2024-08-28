@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+	<group name="RNC_Group1" type="RAT_VEND_HIER3">
+		<group-element>
+            <key value ="1" name="RAT"/>
+            <key value ="Ericsson" name="VENDOR"/>
+			<key value ="ONRM_RootMo_R:RNC01:RNC01" name="HIERARCHY_3"/>
+		</group-element>
+	</group>
+</groupmgt>

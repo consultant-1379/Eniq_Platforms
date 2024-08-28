@@ -1,0 +1,152 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Events Glassfish control script for SMF to use
+#
+# 
+# Usage:  glassfish  start|stop|restart|status
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2010 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+case `uname` in
+  SunOS)
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/sfw/lib/amd64/
+	LD_LIBRARY_PATH_64=$LD_LIBRARY_PATH_64:/usr/sfw/lib/amd64/
+    ;;
+  *)
+    # Linux, cygwin etc..
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/
+	LD_LIBRARY_PATH_64=$LD_LIBRARY_PATH_64:/usr/lib64/
+    ;;
+esac
+
+export LD_LIBRARY_PATH
+export LD_LIBRARY_PATH_64
+
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+PATH=${RT_DIR}/java/bin/amd64:${PATH}
+export PATH
+
+if [ ! -f ${CONF_DIR}/niq.ini ] ; then
+  echo "Configuration file niq.ini not found"
+  exit 30
+fi
+
+GF_DIR=${GLASSFISH_DIR}/glassfish3
+GF_BIN=${GF_DIR}/glassfish/bin
+DOMAINS_DIR=${GF_DIR}/glassfish/domains
+
+
+start() {
+
+  if [ ! -d ${LOG_DIR}/glassfish ] ; then
+    mkdir -p ${LOG_DIR}/glassfish
+  fi
+
+  LOGFILE=${LOG_DIR}/glassfish/start_glassfish_`date '+%y%m%d_%H%M%S'`.log
+  DOMAINS=`ls ${GF_DIR}/glassfish/domains/`
+  
+  if [ ${#DOMAINS[@]} -eq 0 ]
+  then
+    echo "domain(s) not found"
+    exit 30
+   fi
+
+  xPID=`ps -ef | grep java | grep glassfish | awk '{print $2}'`
+  if [ ! -z ${xPID} ] ; then
+    kill -9 ${xPID}
+    echo "glassfish domain(s) killed." >> ${LOGFILE}
+  else
+    echo "glassfish was dead before killing" >> ${LOGFILE}
+  fi
+  
+  for domainName in $DOMAINS;
+  do
+    ${GF_BIN}/glassfish_jvm_config.sh $domainName
+  done
+  
+  for domainName in $DOMAINS;
+  do
+    if [ ! -d ${DOMAINS_DIR}/$domainName ] ; then
+	    echo "$domainName not found create domain before it can start"
+	    exit 30
+    else
+	    echo "$domainName  found "
+     fi
+   
+    #Workaround for EQEV-2135. Fixed in Glassfish 4.0.
+    if [ -d ${DOMAINS_DIR}/$domainName/generated/jsp/ ] ; then
+      /usr/bin/rm -rf ${DOMAINS_DIR}/$domainName/generated/jsp/* >> ${LOGFILE}
+    fi  
+	
+    #Check if it is possible to connect to the IQ database. 
+    ${ADMIN_BIN}/checkDBCon "${LOGFILE}" "glassfish"
+    echo "Starting glassfish service for $domainName" >> ${LOGFILE}
+    ${GF_BIN}/asadmin start-domain  $domainName
+    echo "glassfish service for $domainName started" >> ${LOGFILE}
+  done  
+  
+  echo "Configuring glassfish readers for domain(s)" >> ${LOGFILE}
+  ${GF_BIN}/configure_glassfish_readers.sh
+  echo "Glassfish readers configured for domain(s)" >> ${LOGFILE}
+   
+  exit 0
+}
+
+stop() {
+
+  LOGFILE=${LOG_DIR}/glassfish/stop_glassfish_`date '+%y%m%d_%H%M%S'`.log
+  DOMAINS=`ls ${GF_DIR}/glassfish/domains/`
+  
+  echo "Stopping glassfish" > ${LOGFILE}
+  echo "Stopping glassfish  " 
+  for domainName in $DOMAINS;
+  do
+    if [ -d ${DOMAINS_DIR}/$domainName ] ; then
+	  if [ -f ${DOMAINS_DIR}/$domainName/logs/server.log ] ; then
+	    echo "Deleting default server log file..." >> ${LOGFILE}
+	    /usr/bin/rm -f ${DOMAINS_DIR}/$domainName/logs/server.log
+	  fi
+	  ${GF_BIN}/asadmin stop-domain --domaindir ${DOMAINS_DIR} $domainName
+
+	  echo "Stopped $domainName." 
+	  echo "Stopped $domainName" >> ${LOGFILE}
+	  exit 0
+    fi
+  done
+  xPID=`ps -ef | grep java | grep glassfish | awk '{print $2}'`
+  if [ ! -z ${xPID} ] ; then
+        kill -9 ${xPID}
+        echo "glassfish domain(s) process killed."
+        exit 0
+  fi
+
+  echo "glassfish domain(s) shutdown is complete"
+ 
+  exit 0
+
+}
+
+
+case "$1" in
+start)
+      start
+      ;;
+stop)
+      stop
+      ;;
+*)
+      echo "This script shall only be used by SMF!"
+      exit 10
+      ;;
+esac

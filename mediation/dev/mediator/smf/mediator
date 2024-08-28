@@ -1,0 +1,155 @@
+#!/usr/sunos/bin/ksh
+# ##################################################################
+# # COPYRIGHT Ericsson AB 2008
+# #
+# # The copyright to the computer program(s) herein is the property
+# # of ERICSSON AB, Sweden. The programs may be used
+# # and/or copied only with the written permission from ERICSSON
+# # AB or in accordance with the terms and conditions
+# # stipulated in the agreement/contract under which the program(s)
+# # have been supplied.
+# #
+# ##################################################################
+#
+# Mediator stop/start script
+#
+# Env
+#  . /nav/etc/config/nsi.ini
+  
+  MEDIATORHOME=/eniq/mediator
+  JAVA=/eniq/sw/runtime/java/bin/java
+  PLATFORM_DIR=/eniq/sw/platform
+  
+  MEMORYLISTENER=$MEDIATORHOME/conf/scripts/memoryUsageListener.sh
+  MEMORYLISTENERkill=memoryUsageListener
+
+  CLASSPATH=""
+  find /eniq/sw/platform/*/dclib -name "*.jar" | while read JAR; do
+	[ -n "$CLASSPATH" ] && CLASSPATH="$CLASSPATH:$JAR" || CLASSPATH="$JAR"
+  done
+  export CLASSPATH
+
+
+  MEDIATORSETTINGS=""
+  egrep -v '(^#|^ *$)' /eniq/mediator/conf/properties/mediator.properties | nawk '{print $1}' | while read MEDIATORSETTING; do
+	MEDIATORSETTINGS="$MEDIATORSETTINGS -D$MEDIATORSETTING"
+  done
+
+  hostname | egrep 'atrcx920-z|atrcx921-z|atrcx922-z' >/dev/null && MEM="1024m" || MEM="2900m"
+  FLAGS="-Ds=ESM -Xms128m -Xmx${MEM} -XX:+PrintGCDetails -Xloggc:/nav/var/esm/log/gc.log -Dcom.sun.management.jmxremote -Djava.rmi.dgc.leaseValue=300000 -DPMDBPWD=$NSIDBPASS $MEDIATORSETTINGS"
+  MAINCLASS="com.ericsson.navigator.esm.MVM"
+  STATUSCLASS="com.ericsson.navigator.esm.agent.status.AddClient"
+  #REMOTE="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
+
+start() {
+
+	if [ ! -d "/eniq/log/sw_log/mediator" ]; then
+		mkdir /eniq/log/sw_log/mediator
+	fi
+
+	EPID=`/usr/ucb/ps -auxww | grep "$MEMORYLISTENERkill" | grep -v grep | nawk '{print $2}'`
+	 if [ -n "$EPID" ]; then
+		kill -TERM $EPID
+	fi
+
+
+#        SIMSERVICESTATUS=`svcs -a | grep sim | nawk '{print $1}'`
+#	if [ "$SIMSERVICESTATUS" == "disabled" ]; then	
+#                su eniq_adm -c "/usr/sbin/svcadm enable -s sim"
+#        fi
+
+	PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+	if [ -n "$PID" ]; then
+		echo "Starting Mediator"
+	else
+		echo "Starting Memory Listener"
+		$MEMORYLISTENER &
+		echo "Starting Mediator"
+		$JAVA $REMOTE $FLAGS -cp $CLASSPATH $MAINCLASS >/dev/null 2>&1 &
+	fi	
+	
+	echo `date +'%m.%d.%Y %H.%M.%S'` >  /eniq/log/sw_log/mediator/mediator_started.txt 
+}
+
+stopp() {
+  PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+  EPID=`/usr/ucb/ps -auxww | grep "$MEMORYLISTENERkill" | grep -v grep | nawk '{print $2}'`
+#  su eniq_adm -c "/usr/sbin/svcadm disable -st sim"
+  if [ -n "$EPID" ]; then
+	echo "Stopping Memory Listener"
+	kill -TERM $EPID
+  fi
+  if [ -n "$PID" ]; then
+	echo "Stopping Mediator"
+	kill -TERM $PID
+  else
+	echo "Mediator not running"
+  fi
+  
+  if [ -e "/eniq/log/sw_log/mediator/mediator_started.txt" ]; then
+  	rm -rf /eniq/log/sw_log/mediator/mediator_started.txt
+  fi
+ }
+
+status(){
+	#$JAVA $STATUSCLASS
+	PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+	EPID=`/usr/ucb/ps -auxww | grep "$MEMORYLISTENERkill" | grep -v grep | nawk '{print $2}'`
+
+	 if [ -n "$EPID" ]; then
+		echo "Memory Monitor enabled"
+	else
+		echo "Memory Monitor disabled"
+	
+	fi
+	echo "Mediator"
+	 if [ -n "$PID" ]; then
+		echo "Status: Running"
+		$JAVA $STATUSCLASS
+	else
+		echo "Status: Not running"
+	fi
+}
+
+verify(){
+	PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | nawk '{print $2}'`
+	if [ -n "$PID" ]; then
+		echo "Successful"
+		exit 0
+	else
+		echo "Failed"
+		exit 1
+	fi
+}
+
+
+#Verify user
+  if ! /usr/bin/id | egrep 'dcuser' >/dev/null; then
+	echo "You must be dcuser to run this script"
+	exit 1
+  fi
+
+# Args
+  case "$1" in
+	start)
+		start
+		verify
+        	;;
+	stop)
+		stopp
+		#verify
+        	;;
+	restart)
+		stopp
+		start
+		verify
+        	;;
+	status)
+		status
+		;;
+	*)
+		echo "Usage: mediator <start|stop|restart|status>"
+	 	exit 1
+		;;
+  esac
+  exit 0

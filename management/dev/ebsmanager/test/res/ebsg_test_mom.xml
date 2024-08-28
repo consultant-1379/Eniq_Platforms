@@ -1,0 +1,44 @@
+<pm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PM-MOM.xsd">
+	<pmMimVersion>
+		1.0
+	</pmMimVersion>
+	<applicationVersion>
+		6
+	</applicationVersion>
+	<measurements>
+		<measObjClass name="notSupported">
+			<group name="TrxGroup">
+				<counter>
+					<measType>
+						<measName>
+							ctrx
+						</measName>
+					</measType>
+					<description>
+					</description>
+					<storage>
+						<size>
+							numeric(18,0)
+						</size>
+						<aggregation>
+							SUM
+						</aggregation>
+						<type>
+							PEG
+						</type>
+					</storage>
+				</counter>
+				<formula name="AverageFERDLGSM">
+					<function>
+						MEAN
+					</function>
+					<argument seq="1">
+						<measName>
+							ctrx
+						</measName>
+					</argument>
+				</formula>
+			</group>
+		</measObjClass>
+	</measurements>
+</pm>

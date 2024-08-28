@@ -1,0 +1,70 @@
+<project name="sim" default="compile">
+
+  <property name="pack.name" value="sim"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/mediation/dev/sim"/>
+  
+  <!-- ENIQ Jars -->
+  <property name="eniq.licensing.dir" value="/vobs/eniq/design/plat/licensing/build/licensing"/>
+
+  <!-- 3PP Jars --> 
+  <property name="3pp.adventnet.dir" value="/vobs/eniq/design/plat/mediation/dev/sim/3PP/adventnet"/>
+  <property name="3pp.maverick.dir" value="/vobs/eniq/design/plat/mediation/dev/sim/3PP/maverick"/>
+  <property name="3pp.log4j.dir" value="/vobs/eniq/design/plat/mediation/dev/sim/3PP/log4j"/>
+  <property name="3pp.slf4j.dir" value="/vobs/eniq/design/plat/mediation/dev/sim/3PP/slf4j"/>
+  <property name="3pp.junit.dir" value="/vobs/eniq/3pp/junit/v4_5/prod"/>
+  <property name="3pp.jmock.dir" value="/vobs/eniq/3pp/jmock-2.5.1"/>
+  
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+
+	<!-- Compile the SIM platform code -->
+	<javac destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+		<src path="${pack.dir}/src/SIM_Common/src"/>
+		<src path="${pack.dir}/src/SIM_Config/src"/>
+		<src path="${pack.dir}/src/SIM_Config_Base/src"/>
+		<src path="${pack.dir}/src/SIM_ConfigConversion/src"/>
+		<src path="${pack.dir}/src/SIM_Config_CLI/src"/>
+		<src path="${pack.dir}/src/SIM_Engine/src"/>
+		<src path="${pack.dir}/src/SIM_SFTP/src"/>
+		<src path="${pack.dir}/src/SIM_SNMP/src"/>
+		<classpath>
+		<pathelement path="${classpath}"/>
+			<fileset dir="${3pp.adventnet.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.maverick.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.log4j.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.junit.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.jmock.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.licensing.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</classpath>
+	</javac>
+
+  </target>
+
+  <target name="postcompile">
+  <!-- Create the SIM platform jar file -->
+	<jar destfile="${pack.dir}/build/sim.jar" basedir="${pack.dir}/classes">
+		<manifest>
+			<attribute name="Main-Class" value="com.ericsson.sim.SIM"/>
+		</manifest>
+	</jar>
+
+  </target>
+
+</project>

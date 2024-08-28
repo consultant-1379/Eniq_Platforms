@@ -1,0 +1,2 @@
+MSP_CORE_Plugin
+MSP_AFG_Plugin

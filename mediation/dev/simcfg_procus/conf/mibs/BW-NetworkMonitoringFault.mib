@@ -1,0 +1,155 @@
+--===============================================================
+-- File Name : BW-NetworkMonitoringFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2016, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-NetworkMonitoringFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+    alarmName, alarmState, common, component, identifier, npExecutorType, npOperation, npReason, problemText, recommendedActionsText, severity, subcomponent, systemName, timeStamp
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks network monitoring Application."
+    REVISION    "201409100000Z"
+                DESCRIPTION    "Creation of the Fault MIB."
+    ::=  {  common 1  }
+
+
+  bwPMNetworkMonitoringLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the network monitoring has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNetworkMonitoringLaunched, bwPMNetworkMonitoringShutDown, bwPMNetworkMonitoringRestarted, bwPMNetworkMonitoringDeath, and bwPMNetworkMonitoringOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the network monitoring process"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16201  }
+
+  bwPMNetworkMonitoringShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the network monitoring has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNetworkMonitoringLaunched, bwPMNetworkMonitoringShutDown, bwPMNetworkMonitoringRestarted, bwPMNetworkMonitoringDeath, and bwPMNetworkMonitoringOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the network monitoring process"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16202  }
+
+  bwPMNetworkMonitoringRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the network monitoring restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNetworkMonitoringLaunched, bwPMNetworkMonitoringShutDown, bwPMNetworkMonitoringRestarted, bwPMNetworkMonitoringDeath, and bwPMNetworkMonitoringOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the network monitoring process"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16203  }
+
+  bwPMNetworkMonitoringDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the network monitoring death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMNetworkMonitoringLaunched, bwPMNetworkMonitoringShutDown, bwPMNetworkMonitoringRestarted, bwPMNetworkMonitoringDeath, and bwPMNetworkMonitoringOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the network monitoring process"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16204  }
+
+  bwPMNetworkMonitoringOutOfMemory  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time when the network monitoring application ran out of memory.
+@severity:high
+@subcomponent:processmonitor
+@correlationrules:bwPMNetworkMonitoringLaunched, bwPMNetworkMonitoringShutDown, bwPMNetworkMonitoringRestarted, bwPMNetworkMonitoringDeath, and bwPMNetworkMonitoringOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the network monitoring process."
+-- @feature:BW-6984
+    ::=  {  systemFaults 16205  }
+
+  bwNMControllerInventoryOutOfSynch  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "There is a loss of synchronization, regarding the NetworkMonitoring inventory.
+@severity:critical
+@subcomponent:networkMonitoring"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16206  }
+
+  bwPMFileReplicationLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the File Replication application has started.
+@severity:informational
+@subcomponent:processmonitor"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16207  }
+
+  bwPMFileReplicationShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the File Replication application has shut down.
+@severity:informational
+@subcomponent:processmonitor"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16208  }
+
+  bwPMFileReplicationRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the File Replication application has restarted.
+@severity:informational
+@subcomponent:processmonitor"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16209  }
+
+  bwPMFileReplicationDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the File Replication application has abnormally terminated.
+@severity:critical
+@subcomponent:processmonitor"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16210  }
+
+  bwNMReplicationPrimaryFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "The primary NetworkMonitoring application is not responding.
+@severity:critical
+@subcomponent:networkmonitoring"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16211  }
+
+  bwNMReplicationStandbyFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "The standby NetworkMonitoring application is not responding.
+@severity:critical
+@subcomponent:networkmonitoring"
+-- @feature:BW-6984
+    ::=  {  systemFaults 16212  }
+
+
+END

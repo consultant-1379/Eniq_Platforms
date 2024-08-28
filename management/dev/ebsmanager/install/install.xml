@@ -1,0 +1,243 @@
+<project name="install" basedir=".">
+
+	<property name="dcinstall.require.parser" value="> 5-0-0b212"/>
+	<property name="CAT" value="/usr/bin/cat"/>
+	<target name="install" depends="copyTmpToDeploy">
+
+		<!-- Remove the possible previous installation -->
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller"/>
+			<then>
+				<delete>
+					<fileset dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller">
+						<include name="**"/>
+					</fileset>
+				</delete>
+			</then>
+		</if>
+		
+		<!-- Create the required directories -->
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/JNLP-INF"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/classes"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib"/>
+		
+			<exec executable="/usr/bin/bash" outputproperty="webserverHost">
+			<arg value="-c"/>
+			<arg value="${CAT} /etc/hosts | grep webserver"/>
+		</exec>
+		
+		<propertyregex property="webserverHostname" input="${webserverHost}" regexp="\S+[ ]+(\S+)[ ]+\S+" select="\1" casesensitive="false"/>
+		
+		<replace file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" token="@@SERVER@@" value="${webserverHostname}"/>
+		<replace file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" token="@@IP@@" value="${webserverHostname}"/>
+		<replace file="${dc.installer.dir}/tmp/webstart/index.html" token="@@SERVER@@" value="${webserverHostname}"/>
+
+		<!-- Copy the ebsmanager property file -->
+		<copy file="${dc.installer.dir}/tmp/conf/EBSManager.properties" toFile="${dc.conf.dir}/EBSManager.properties" overwrite="true"/>
+		<replace file="${dc.conf.dir}/EBSManager.properties" token="@@PMDATA@@" value="${pmdata.dir}"/>
+		<replace file="${dc.conf.dir}/EBSManager.properties" token="@@ARCHIVE@@" value="${archive.dir}"/>
+
+		
+		<!-- Copy files to universeupdateinstaller/ -->
+		<copy file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_blue_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/eniq_blue_banner.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_white_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/eniq_white_banner.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/ericsson_logo.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo_without_text.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/ericsson_logo_without_text.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/index.html" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/index.html"/>
+
+		<!-- Copy files to universeupdateinstaller/lib/ --> 
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib">
+			<fileset dir="${dc.installer.dir}/tmp/webstart/lib"/>
+		</copy>
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib" flatten="true">
+			<fileset dir="${dc.platform.dir}">
+			 <include name="**/dclib/common.jar"/>
+			</fileset>
+		</copy>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF -->
+		<copy file="${dc.installer.dir}/tmp/webstart/WEB-INF/web.xml" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/web.xml"/>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF/classes -->
+		<copy file="${dc.installer.dir}/tmp/dclib/WebstartServlet.class" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/classes/WebstartServlet.class"/>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF/lib -->
+		<copy flatten="true" todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib/">
+		 	 <fileset dir="${dc.installer.dir}/tmp/dclib/" includes="**/jconn*.jar">
+		  	 </fileset>
+		</copy>
+                <copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib" flatten="true">
+                  <fileset dir="${dc.platform.dir}">
+                    <include name="**/dclib/repository*.jar"/>
+                  </fileset>
+                </copy>
+                    	
+		
+		
+		  <!-- Create rep tables by executing sql -->
+
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="REP" parameter="PortNumber"/>
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="REP" parameter="ETLREPPassword"/>
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="REP" parameter="DWHREPPassword"/>
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="DWH" parameter="PortNumber"/>
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="DWH" parameter="DCPassword"/>
+		  <INIGet file="${dc.conf.dir}/niq.ini" section="DB" parameter="DBAPassword"/>
+
+		  <if>
+		    <available file="${dc.conf.dir}/ETLCServer.properties"/>
+		    <then/>
+		    <else>
+		      <replace file="${dc.installer.dir}/tmp/conf/ETLCServer.properties" token="@ETLREPPASS@" value="${REP.ETLREPPassword}"/>
+		      <replace file="${dc.installer.dir}/tmp/conf/ETLCServer.properties" token="@REPPORT@" value="${REP.PortNumber}"/>
+		      <copy file="${dc.installer.dir}/tmp/conf/ETLCServer.properties" toFile="${dc.conf.dir}/ETLCServer.properties"/>
+		    </else>
+		  </if>
+				
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_1.sql"/>
+		  </antcall>
+
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_2.sql"/>
+		  </antcall>
+
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_3.sql"/>
+		  </antcall>
+		
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_4.sql"/>
+		  </antcall>
+		  		
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_5.sql"/>
+		  </antcall>
+
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_6.sql"/>
+		  </antcall>
+
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_7.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_8.sql"/>
+		  </antcall>
+
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="dwhrep_sybase_9.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="Base_TP_20110201.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="Base_TP_20130225.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="Base_TP_20130907.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="Base_TP_20150723.sql"/>
+		  </antcall>
+		  
+		  <antcall target="run_one_sql">
+		        <param name="dbname" value="dwhrep"/>
+		        <param name="sqlfile" value="Base_TP_20160518.sql"/>
+		  </antcall>
+		  
+	</target>
+
+	<target name="update" depends="moveToObsolete,install">
+		
+		<!-- Remove the possible previous installation -->
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller"/>
+			<then>
+				<delete>
+					<fileset dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller">
+						<include name="**"/>
+					</fileset>
+				</delete>
+			</then>
+		</if>
+		
+		<!-- Create the required directories -->
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/JNLP-INF"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/classes"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib"/>
+		
+		<replace file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" token="@@SERVER@@" value="${dc.hostname}"/>
+		<replace file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" token="@@IP@@" value="${dc.hostname}"/>
+		<replace file="${dc.installer.dir}/tmp/webstart/index.html" token="@@IP@@" value="${dc.hostname}"/>
+		<replace file="${dc.installer.dir}/tmp/webstart/index.html" token="@@SERVER@@" value="${dc.hostname}"/>
+
+		<!-- Copy the ebsmanager property file -->
+		<copy file="${dc.installer.dir}/tmp/conf/EBSManager.properties" toFile="${dc.conf.dir}/EBSManager.properties" overwrite="true"/>
+		<replace file="${dc.conf.dir}/EBSManager.properties" token="@@PMDATA@@" value="${pmdata.dir}"/>
+		<replace file="${dc.conf.dir}/EBSManager.properties" token="@@ARCHIVE@@" value="${archive.dir}"/>
+
+		
+		<!-- Copy files to universeupdateinstaller/ -->
+		<copy file="${dc.installer.dir}/tmp/webstart/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/JNLP-INF/UNIVERSEUPDATEINSTALLER_TEMPLATE.jnlp"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_blue_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/eniq_blue_banner.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_white_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/eniq_white_banner.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/ericsson_logo.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo_without_text.gif" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/ericsson_logo_without_text.gif"/>
+		<copy file="${dc.installer.dir}/tmp/webstart/index.html" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/index.html"/>
+
+		<!-- Copy files to universeupdateinstaller/lib/ --> 
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib">
+			<fileset dir="${dc.installer.dir}/tmp/webstart/lib"/>
+		</copy>
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/lib" flatten="true">
+			<fileset dir="${dc.platform.dir}">
+				<include name="**/dclib/common.jar"/>
+			</fileset>
+		</copy>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF -->
+		<copy file="${dc.installer.dir}/tmp/webstart/WEB-INF/web.xml" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/web.xml"/>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF/classes -->
+		<copy file="${dc.installer.dir}/tmp/dclib/WebstartServlet.class" tofile="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/classes/WebstartServlet.class"/>
+		
+		<!-- Copy files to universeupdateinstaller/WEB-INF/lib -->
+		<copy flatten="true" todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib/">
+			<fileset dir="${dc.installer.dir}/tmp/dclib/" includes="**/jconn*.jar">
+			</fileset>
+		</copy>
+                <copy todir="${dc.runtime.dir}/tomcat/webapps/universeupdateinstaller/WEB-INF/lib" flatten="true">
+                  <fileset dir="${dc.platform.dir}">
+                    <include name="**/dclib/repository*.jar"/>
+                  </fileset>
+                </copy>
+                
+		
+	</target>
+
+</project>

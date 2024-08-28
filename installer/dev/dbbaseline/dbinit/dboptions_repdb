@@ -1,0 +1,64 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Repository Database option setting script
+#
+# Usage: dboptions_repdb [-v]
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+VERBOSE=0
+
+if [ "$1" = "-v" ] ; then
+  VERBOSE=1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Setting Repository Database DB options..."
+fi
+
+DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+REP_PORT=`${BIN_DIR}/iniget REP -v PortNumber -f ${CONF_DIR}/niq.ini`
+REP_NAME=`${BIN_DIR}/iniget REP -v ServerName -f ${CONF_DIR}/niq.ini`
+
+REP_CONN_STR_USER_DBA="uid=dba;pwd=${DBA_PASSWORD};eng=${REP_NAME};links=tcpip{host=localhost;port=${REP_PORT};dobroadcast=no;verify=no}"
+
+ETLREP_PASSWD=`${BIN_DIR}/iniget REP -v ETLREPPassword -f ${CONF_DIR}/niq.ini`
+DWHREP_PASSWD=`${BIN_DIR}/iniget REP -v DWHREPPassword -f ${CONF_DIR}/niq.ini`
+
+sed -e "/@@etlrep_passwd@@/s//${ETLREP_PASSWD}/g" dbinit/sql/create_users_repdb.sql > dbinit/sql/create_users_repdb.1.sql
+sed -e "/@@dwhrep_passwd@@/s//${DWHREP_PASSWD}/g" dbinit/sql/create_users_repdb.1.sql > dbinit/sql/create_users_repdb.2.sql
+
+#${ASDIR}/bin/dbisqlc -c ${REP_CONN_STR_USER_DBA} -q dbinit/sql/create_users_repdb.2.sql
+
+if [ $? != 0 ] ; then
+  echo "Repository Database user creation failed"
+  exit 10
+fi
+
+${ASDIR}/bin/dbisqlc -c ${REP_CONN_STR_USER_DBA} -q dbinit/sql/dboptions_repdb.sql
+${ASDIR}/bin/dbisqlc -c ${REP_CONN_STR_USER_DBA} -q dbinit/sql/create_check_db_size_events.sql
+
+if [ $? != 0 ] ; then
+  echo "Repository Database DB options setting failed"
+  exit 11
+else
+  if [ ! -d ${INSTALLER_DIR}/sqlfiles ] ; then
+    mkdir -p ${INSTALLER_DIR}/sqlfiles
+  fi
+ # cp dbinit/sql/dboptions_repdb.sql ${INSTALLER_DIR}/sqlfiles/dbbaseline_dwhrep_options.sql
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Repository Database DB options successfully set"
+fi
+
+exit 0

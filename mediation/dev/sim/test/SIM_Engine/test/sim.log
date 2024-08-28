@@ -1,0 +1,19 @@
+2015-08-11 16:46:38,087 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.IllegalStateException: Shutdown in progress
+	at java.lang.ApplicationShutdownHooks.add(Unknown Source)
+	at java.lang.Runtime.addShutdownHook(Unknown Source)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:28)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-11 16:47:12,817 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-11 16:47:12,817 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-11 16:50:07,018 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-11 16:50:07,036 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-11 16:50:08,038 [Thread-17] ERROR com.ericsson.sim.rmi.RMIcomponent - RemoteException as SIM is not running
+2015-08-11 16:50:08,038 [Thread-17] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-11 16:50:08,039 [Thread-18] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)

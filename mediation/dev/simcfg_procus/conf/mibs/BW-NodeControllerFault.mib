@@ -1,0 +1,128 @@
+-- File Name : BW-NodeControllerFault.mib
+BW-NodeControllerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npExecutorType, npOperation, npReason
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks node controller Application."
+    REVISION    "201409100000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMNodeControllerLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the node controller has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNodeControllerLaunched, bwPMNodeControllerShutDown, bwPMNodeControllerRestarted, bwPMNodeControllerDeath, and bwPMNodeControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the node controller process"
+-- @feature:217550
+    ::=  {  systemFaults 15601  }
+
+  bwPMNodeControllerShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the node controller has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNodeControllerLaunched, bwPMNodeControllerShutDown, bwPMNodeControllerRestarted, bwPMNodeControllerDeath, and bwPMNodeControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the node controller process"
+-- @feature:217550
+    ::=  {  systemFaults 15602  }
+
+  bwPMNodeControllerRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the node controller restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMNodeControllerLaunched, bwPMNodeControllerShutDown, bwPMNodeControllerRestarted, bwPMNodeControllerDeath, and bwPMNodeControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the node controller process"
+-- @feature:217550
+    ::=  {  systemFaults 15603  }
+
+  bwPMNodeControllerDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the node controller death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMNodeControllerLaunched, bwPMNodeControllerShutDown, bwPMNodeControllerRestarted, bwPMNodeControllerDeath, and bwPMNodeControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the node controller process"
+-- @feature:217550
+    ::=  {  systemFaults 15604  }
+    
+bwPMNodeControllerOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the node controller application ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMNodeControllerLaunched, bwPMNodeControllerShutDown, bwPMNodeControllerRestarted, bwPMNodeControllerDeath, and bwPMNodeControllerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the node controller process."
+-- @feature:217550
+    ::=  {  systemFaults 15605  }
+
+  bwNodeControllerOperationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npOperation, npReason }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the node controller has experienced an error during an operation.
+@severity:high
+@subcomponent:nodeController"
+-- @feature:217550
+    ::=  {  systemFaults 15606  }
+
+  bwNodeControllerExecutorQueueUsageExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates the usage ratio of the executor queue exceeded the threshold level.
+@severity:high
+@subcomponent:nodeController"
+-- @feature:217550
+    ::=  {  systemFaults 15607  }
+
+  bwNodeControllerExecutorQueueLatencyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "This alarm indicates that the executor queue latency exceeded the threshold level.
+@severity:high
+@subcomponent:nodeController"
+-- @feature:217550
+    ::=  {  systemFaults 15608  }
+    
+  bwNodeControllerExecutorThreadPoolProcessingTimeExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "The alarm indicates that the executor thread pool processing time exceeded the threshold level.
+@severity:high
+@subcomponent:nodeController"
+-- @feature:217550
+    ::=  {  systemFaults 15609  }
+    
+  bwNodeControllerExecutorThreadPoolBusyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "The alarm indicates that the executor thread pool busy ratio exceeded the threshold level.
+@severity:high
+@subcomponent:nodeController"
+-- @feature:217550
+    ::=  {  systemFaults 15610  }
+    
+END

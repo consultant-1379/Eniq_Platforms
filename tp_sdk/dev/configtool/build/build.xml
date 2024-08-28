@@ -1,0 +1,69 @@
+<project name="configtool" default="compile">
+
+	<property name="pack.name" value="configtool" />
+	<property name="pack.version" value="5-0-0" />
+	<!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there -->
+	<property name="pack.dir" value="/vobs/eniq/design/plat/tp_sdk/dev/configtool" />
+        <property name="3pp.dir" value="/vobs/eniq/design/plat/tp_sdk/3pp" />
+	<target name="precompile">
+		<replace file="${pack.dir}/src/com/distocraft/dc5000/etl/gui/ConfigTool.java" token="@@BLD@@" value="${build.number}" />
+	</target>
+
+	<target name="compile">
+		<path id="pack.classpath">
+			<fileset dir="${pack.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+                        <fileset dir="${3pp.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<pathconvert property="pack.manifest.classpath" pathsep=" " refid="pack.classpath">
+			<chainedmapper>
+				<flattenmapper />
+				<globmapper from="*" to="../lib/*" />
+			</chainedmapper>
+		</pathconvert>
+
+		<mkdir dir="${pack.dir}/classes" />
+		<javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="off" optimize="off" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${pack.dir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.dir}/lib">
+				         <include name="*.jar" />
+                                </fileset>
+			</classpath>
+		</javac>
+
+		<jar destfile="${pack.dir}/dclib/${pack.name}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.distocraft.dc5000.etl.gui.ConfigTool" />
+				<attribute name="Class-Path" value="${pack.manifest.classpath}" />
+			</manifest>
+			<fileset dir="${pack.dir}/classes" />
+			<fileset dir="${pack.dir}/conf" >
+				<include name="icons/*.gif" />
+				<include name="ETLCExport.properties" />
+				<include name="ETLCImport.properties" />
+				<include name="5.0/*.vm" />
+				<include name="5.1/*.vm" />
+				<include name="5.2/*.vm" />
+				<include name="templateVersion.properties" />
+			</fileset>
+		</jar>
+
+		<delete dir="${pack.dir}/classes"/>
+		
+	</target>
+
+	<target name="postcompile">
+		<mkdir dir="${pack.dir}/icons" />
+		<copy toDir="${pack.dir}/icons">
+			<fileset dir="${pack.dir}/conf/icons" />
+		</copy>
+	</target>
+
+</project>

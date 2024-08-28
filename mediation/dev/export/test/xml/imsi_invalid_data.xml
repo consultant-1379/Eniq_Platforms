@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+    <group name="IMSI-1" type="IMSI">
+        <group-element>
+            <key value="vot_a_valid_key_value" name="IMSI"/>
+        </group-element>
+    </group>
+</groupmgt>

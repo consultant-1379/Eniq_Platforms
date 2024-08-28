@@ -1,0 +1,93 @@
+ERICSSON-MPE-SDD-SERVICE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeSddServicePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201603231116Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Alarms for SES Database service."
+::= { mpeModules 37 }
+
+sddServicePmObjects  OBJECT IDENTIFIER ::= { mpeSddServicePmModule 1 }
+
+sddAlarm  OBJECT IDENTIFIER ::= { sddServicePmObjects 1 }
+
+sddServicePmConformance  OBJECT IDENTIFIER ::= { mpeSddServicePmModule 3 }
+
+sddServicePmGroups  OBJECT IDENTIFIER ::= { sddServicePmConformance 1 }
+
+sddServicePmCompliances  OBJECT IDENTIFIER ::= { sddServicePmConformance 2 }
+
+sddAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SddAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { sddAlarm 1 } 
+
+sddAlarmEntry OBJECT-TYPE
+   SYNTAX          SddAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarms for SES Database service."
+   INDEX { applIndex }
+::= { sddAlarmTable  1 }
+
+SddAlarmEntry  ::= SEQUENCE
+{
+   sddAlarmExitCluster ItuPerceivedSeverity
+}
+
+sddAlarmExitCluster  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SDD exits from cluster state."
+::= { sddAlarmEntry 2 }
+
+-- Compliance Statements
+
+sddServiceCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for sdd service."
+   MODULE          -- this module
+   MANDATORY-GROUPS {sddServiceConfGroup}
+::= { sddServicePmCompliances 1 }
+
+-- Units of Conformance
+
+sddServiceConfGroup OBJECT-GROUP
+   OBJECTS { sddAlarmExitCluster}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a sdd service."
+::= { sddServicePmGroups 1 }
+END

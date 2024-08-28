@@ -1,0 +1,164 @@
+-- File Name : BW-MessagingServerFault.mib
+
+BW-MessagingServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter
+      FROM BroadworksFault;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201401140000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+        "This MIB defines management information for the Messaging Server."
+    REVISION    "201401140000Z"
+                DESCRIPTION     "Creating the mib."
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  common  OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  systemFaults  OBJECT IDENTIFIER
+    ::=  {  common  1  }
+    
+  bwPMimpLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the imp process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpStarted, and bwPMimpDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the imp process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13001  }
+
+  bwPMimpShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the imp process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpStarted, and bwPMimpDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the imp process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13002  }
+
+  bwPMimpRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the imp process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpStarted, and bwPMimpDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the imp process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13003  }
+
+  bwPMimpDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the imp process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpStarted, and bwPMimpDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the imp process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13004  }
+
+  bwPMmucLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the MUC process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucStarted, and bwPMmucDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the muc process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13005  }
+
+  bwPMmucShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the muc process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucStarted, and bwPMmucDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the muc process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13006  }
+
+  bwPMmucRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the muc process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucStarted, and bwPMmucDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the muc process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13007  }
+
+  bwPMmucDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the muc process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucStarted, and bwPMmucDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the muc process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13008  }
+   
+  bwPMdbConnectorLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the MUC process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorStarted, and bwPMdbConnectorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the dbConnector process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13009  }
+
+  bwPMdbConnectorShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the dbConnector process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorStarted, and bwPMdbConnectorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the dbConnector process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13010  }
+
+  bwPMdbConnectorRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the dbConnector process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorStarted, and bwPMdbConnectorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the dbConnector process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13011  }
+
+  bwPMdbConnectorDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the dbConnector process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorStarted, and bwPMdbConnectorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the dbConnector process running on some of the BroadWorks servers."
+-- @feature:213372
+    ::=  {  systemFaults 13012  }
+   
+END

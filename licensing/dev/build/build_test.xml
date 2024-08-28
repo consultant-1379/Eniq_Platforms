@@ -1,0 +1,24 @@
+<project name="licensing" default="test_all">
+    <property name="module.name" value="licensing"/>
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.base" value="${module.licensing.base}"/>
+	<property name="module.build" value="${module.licensing.build}"/>
+    <property name="module.dependants" value="${module.licensing.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+
+    <property name="mods.needed" value="common_utilities"/>
+	
+	 <path id="licensing.lib.classpath">
+	     <path refid="plaform.lib.classpath"/>
+		 <path location="${module.licensing.pkg}"/>
+		 <path location="${module.common_utilities.pkg}"/>
+		 <path location="${module.repository.pkg}"/>
+ 	 </path>
+	 <path id="licensing.test.classpath">
+		 <path refid="platform.test.classpath"/>
+		 <path refid="licensing.lib.classpath"/>		
+	 </path>
+</project>

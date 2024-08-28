@@ -1,0 +1,465 @@
+2015-08-06 09:11:10,446 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:11:10,461 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:11:11,506 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:11:11,508 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:11:11,508 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:11:11,510 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:11:11,510 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:11:11,510 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:11:11,719 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:11:11,719 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:11:11,741 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:11:11,741 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:11:11,741 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:11:11,751 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:11:11,758 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:11:11,760 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:11:22,227 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:11:22,234 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:11:23,233 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:11:23,233 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:11:23,246 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:11:23,246 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:11:23,246 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:11:23,270 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:11:23,286 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:11:23,286 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:11:23,286 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:11:23,289 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:11:23,290 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:11:23,291 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:11:23,292 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:11:23,293 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:11:41,794 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:11:41,819 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:12:04,742 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:12:05,755 [Thread-3] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:12:05,773 [Thread-3] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:12:05,779 [Thread-3] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:12:37,207 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:12:37,215 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:12:38,215 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:12:38,215 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:12:38,225 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:12:38,226 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:12:38,226 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:12:38,242 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:12:38,258 [Thread-16] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:12:38,259 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:12:38,260 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:12:38,270 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:12:38,270 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:12:38,270 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:12:38,273 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:12:38,273 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:12:38,273 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:13:03,268 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:13:03,268 [Thread-3] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:13:59,651 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:13:59,666 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SFTPPORT 22::: 
+	
+:::SFTPUSERNAME dcuser:::SNMPVERSION v2:::SNMPCOMMUNITY public:::SIMCONFIG 
+		:::IPADDRESS 10.42.39.24:::UNIQUEID :::SNMPPORT 161:::
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1958580744 -----------
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - UNIQUEID uniqueID:::IPADDRESS IPAddress:::----------- supportedTypes -----------0----------- -- -- -----------
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node -1285416601 -----------
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+2015-08-06 09:14:00,667 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,668 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - 
+2015-08-06 09:14:00,668 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:14:00,668 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:14:00,668 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SFTPPORT 22::: 
+	
+:::SFTPUSERNAME dcuser:::SNMPVERSION v2:::SNMPCOMMUNITY public:::SIMCONFIG 
+		:::IPADDRESS 10.42.39.24:::UNIQUEID :::SNMPPORT 161:::
+2015-08-06 09:14:00,668 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,668 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1958580744 -----------
+2015-08-06 09:14:00,669 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - UNIQUEID uniqueID:::IPADDRESS IPAddress:::----------- supportedTypes -----------0----------- -- -- -----------
+2015-08-06 09:14:00,669 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,669 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node -1285416601 -----------
+2015-08-06 09:14:00,669 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+2015-08-06 09:14:00,669 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:14:00,669 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - Topology file found and parsed
+2015-08-06 09:14:00,669 [Thread-17] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:14:00,669 [Thread-18] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:14:00,670 [Thread-20] ERROR com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Interrupted Exception
+2015-08-06 09:16:11,783 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:16:11,791 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:16:11,794 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:16:11,794 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:16:11,794 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:16:11,797 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:16:12,803 [Thread-16] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:16:12,804 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:16:12,804 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:17:14,113 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:17:14,113 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:17:15,124 [Thread-17] ERROR com.ericsson.sim.rmi.RMIcomponent - RemoteException as SIM is not running
+2015-08-06 09:17:15,125 [Thread-17] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:17:15,129 [Thread-18] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:17:27,335 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:17:27,341 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:17:28,335 [Thread-17] ERROR com.ericsson.sim.rmi.RMIcomponent - RemoteException as SIM is not running
+2015-08-06 09:17:28,336 [Thread-17] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:17:28,336 [Thread-18] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:17:39,287 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.IllegalStateException: Shutdown in progress
+	at java.lang.ApplicationShutdownHooks.add(Unknown Source)
+	at java.lang.Runtime.addShutdownHook(Unknown Source)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:28)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:17:51,196 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:17:51,197 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:19:09,953 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:19:09,954 [Thread-17] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:19:22,926 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:19:22,934 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:19:23,938 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:19:23,939 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:19:23,962 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:19:23,962 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:19:23,962 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:19:23,987 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:19:23,995 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:19:23,996 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:19:23,996 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:19:23,999 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:19:24,000 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:19:24,001 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:19:24,013 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:19:24,015 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:19:29,667 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:19:29,674 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:19:29,680 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:19:29,680 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:19:29,680 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:19:30,710 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:19:30,716 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:19:30,716 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:19:30,716 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:19:30,718 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:19:30,718 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:19:30,719 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:19:30,723 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:19:30,723 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:27:06,816 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:27:06,823 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:27:06,824 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:06,830 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:27:06,830 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:06,836 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:27:07,853 [Thread-15] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:27:07,854 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:27:07,857 [Thread-16] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:27:42,278 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:27:42,286 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:27:42,298 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:42,298 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:27:42,298 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:43,310 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:27:43,334 [Thread-15] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:27:43,336 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:27:51,774 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:27:51,781 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:27:51,788 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:51,788 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:27:51,788 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:27:51,792 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:27:52,814 [Thread-15] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:27:52,814 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:27:52,815 [Thread-16] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:27:58,425 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:27:58,426 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:04,527 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:04,538 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:05,538 [Thread-16] ERROR com.ericsson.sim.rmi.RMIcomponent - RemoteException as SIM is not running
+2015-08-06 09:28:05,539 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:28:10,035 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:28:10,042 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:11,050 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:28:11,050 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:28:11,078 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:11,079 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:28:11,079 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:11,088 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:11,089 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:28:11,089 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:28:11,089 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:28:11,091 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:28:11,092 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:28:11,092 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:28:16,036 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:17,059 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:17,080 [Thread-16] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:28:17,086 [Thread-16] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:28:17,087 [Thread-17] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 09:28:21,855 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:28:21,861 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:22,859 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:28:22,859 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:28:22,879 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:22,879 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:28:22,879 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:22,906 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:22,915 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:28:22,916 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:28:22,916 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:28:22,918 [Thread-15] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:28:22,918 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:28:22,919 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:28:29,006 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:29,006 [Thread-16] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:34,081 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:28:34,094 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:35,106 [main] ERROR com.ericsson.sim.SIM - Unable to validate SIM license, Exception caught: Connection refused to host: does.not.exist.here; nested exception is: 
+	java.net.ConnectException: Connection refused: connect
+2015-08-06 09:28:35,106 [main] ERROR com.ericsson.sim.SIM - No valid SIM license found
+2015-08-06 09:28:35,123 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:35,123 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:28:35,124 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:35,133 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - ----------- Node 1933108267 -----------
+2015-08-06 09:28:35,133 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - SNMPVERSION v2:::SFTPUSERNAME dcuser:::SFTPPORT 22:::SNMPCOMMUNITY public:::IPADDRESS 10.42.39.24:::SNMPPORT 161:::UNIQUEID :::FIRSTROP -904436663:::----------- supportedTypes ------------904436663----------- -- -- -----------
+2015-08-06 09:28:35,133 [Main Thread] ERROR com.ericsson.sim.model.pools.NodePool - 
+
+
+2015-08-06 09:28:35,136 [Main Thread] INFO com.ericsson.sim.engine.model.TopologyHandler - -904436663
+2015-08-06 09:28:35,137 [Main Thread] ERROR com.ericsson.sim.engine.model.TopologyHandler - Unable to map Direct_Plugin for node CCN_1. Plugin does not exist
+2015-08-06 09:28:35,137 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.NullPointerException
+	at com.ericsson.sim.engine.model.TopologyHandler.endElement(TopologyHandler.java:67)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(Unknown Source)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(Unknown Source)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(Unknown Source)
+	at javax.xml.parsers.SAXParser.parse(Unknown Source)
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:122)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 09:28:35,141 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:35,144 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 09:28:46,935 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 09:28:46,942 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 09:28:46,947 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:46,947 [main] WARN com.ericsson.sim.SIM - Memory usage on disk is >= 80%. SIM will not start!
+2015-08-06 09:28:46,947 [main] WARN com.ericsson.sim.SIM - ENIQ Engine not online. SIM will not start!
+2015-08-06 09:28:47,951 [Thread-15] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 09:28:47,964 [Thread-15] ERROR com.ericsson.sim.rmi.RMIcomponent - NotBoundException as SIM is not running
+2015-08-06 09:28:47,964 [Thread-15] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 11:23:05,180 [main] INFO com.ericsson.sim.SIM - SIM license validated. SIM Engine starting
+2015-08-06 11:23:05,198 [Main Thread] INFO com.ericsson.sim.model.pools.NodePool - BOOLEAN FOR FILE EXISTINGtrue
+2015-08-06 11:23:06,260 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+No topology file found
+	at com.ericsson.sim.engine.model.TopologyHandler.startup(TopologyHandler.java:118)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:68)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)
+2015-08-06 11:23:06,363 [Thread-3] INFO com.ericsson.sim.SIMEngineStarter - SIM shutdown called
+2015-08-06 11:23:06,367 [Thread-3] INFO com.ericsson.sim.engine.scheduler.RopIntervalScheduler - Scheduler shutdown called
+2015-08-06 11:23:06,368 [Thread-4] ERROR com.ericsson.sim.monitor.MonitoringThread - Error reading file: 
+java.nio.file.ClosedWatchServiceException
+	at sun.nio.fs.AbstractWatchService.checkOpen(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.checkKey(Unknown Source)
+	at sun.nio.fs.AbstractWatchService.take(Unknown Source)
+	at com.ericsson.sim.monitor.MonitoringThread.run(MonitoringThread.java:45)
+2015-08-06 11:30:40,694 [Main Thread] ERROR com.ericsson.sim.SIMEngineStarter - Unable to start SIM. Exception caught: 
+java.lang.IllegalStateException: Shutdown in progress
+	at java.lang.ApplicationShutdownHooks.add(Unknown Source)
+	at java.lang.Runtime.addShutdownHook(Unknown Source)
+	at com.ericsson.sim.SIMEngineStarter.init(SIMEngineStarter.java:28)
+	at com.ericsson.sim.SIM$1.run(SIM.java:45)
+	at java.lang.Thread.run(Unknown Source)

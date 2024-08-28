@@ -1,0 +1,65 @@
+<project name="mediator" default="postcompile">
+
+  <property name="pack.version" value="5-0-0"/>
+  <property name="pack.name" value="mediator"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/mediation/dev/mediator"/>
+  <property name="project.home" value="${pack.dir}"/>
+
+  <!-- ENIQ Jars 
+ -->
+  <!-- 3PP Jars -->
+  <property name="3pp.adventnet.dir" value="/vobs/eniq/3pp/adventnet"/>
+  <property name="3pp.maverick.dir" value="/vobs/eniq/3pp/maverick/dist/java/"/> 
+  <property name="3pp.log4j.dir" value="/vobs/eniq/3pp/apache/log4j/v1_2_11/prod/"/>
+ 
+<!-- 3PP Jar's not in CC VOB Structure
+
+	jdbc-2.0.jar
+-->
+
+	<target name="precompile">
+		<delete dir="${project.home}/classes" />
+		<mkdir dir="${project.home}/classes" />
+	</target>
+   
+
+	
+	<target name="compile">
+		<delete dir="${project.home}/classes" />
+		<mkdir dir="${project.home}/classes" />
+		<javac srcdir="${project.home}/src" destdir="${project.home}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+			<classpath>
+           	<pathelement path="${classpath}"/>
+		        <fileset dir="${3pp.adventnet.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.maverick.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.log4j.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath> 
+		</javac>
+	</target>
+
+	<!--====================================================================
+ 	 Task: create_zip
+	=====================================================================-->	
+<!--	<target name="create_zip" depends="compile">
+  		<zip destfile="${project.home}/build/${pack.name}_${build.number}.zip">
+	    <fileset dir="${project.home}/build/" />
+		</zip>
+	</target>	
+-->
+ 
+ 
+  	<target name="postcompile" depends="compile">
+  			<mkdir dir="${pack.dir}/lib" />
+  			<jar destfile="/vobs/eniq/design/plat/mediation/dev/mediator/build/mediator" basedir="${pack.dir}/src"  />
+  	</target>
+
+
+</project>

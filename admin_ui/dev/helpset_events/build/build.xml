@@ -1,0 +1,19 @@
+<project name="helpset_events" default="compile">
+
+	<property name="pack.name" value="helpset_events"/>
+	<property name="pack.version" value="1-0-0"/>
+	<property name="pack.dir" value="/vobs/eniq/design/plat/admin_ui/dev/helpset_events"/>
+
+	<target name="precompile"/>
+
+	<target name="compile" depends="create_war"/>
+
+	<target name="create_war">
+		<war destfile="${pack.dir}/install/helpset_events.war" needxmlfile="false">
+			<fileset dir="${pack.dir}/src"/>
+		</war>
+	</target>
+
+	<target name="postcompile"/>
+
+</project>

@@ -1,0 +1,49 @@
+<project name="licensing" default="compile">
+
+  <property name="pack.name" value="licensing"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/licensing/dev"/>
+
+  <property name="3pp.rainbow.dir" value="/vobs/eniq/3pp/safenet/sentinelrms/v8_2_3_300/prod"/>
+  
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+	
+	
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+  	<!-- set debug to off for distributions! -->
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="true"
+           optimize="off" 
+           deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+	    <fileset dir="${eniq.common.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+	    <fileset dir="${eniq.repository.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+	    <fileset dir="${3pp.rainbow.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+<!--		<fileset dir="${pack.dir}/buildlib">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+	    <fileset dir="${pack.dir}/dclib">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+-->
+      </classpath>
+    </javac>
+
+  </target>
+	
+  <target name="postcompile"/>
+
+</project>

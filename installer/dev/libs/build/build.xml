@@ -1,0 +1,65 @@
+<project name="libs" default="compile">
+
+  <property name="pack.name" value="libs"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/installer/dev/libs"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.log4j.dir" value="/vobs/eniq/3pp/apache/log4j/v1_2_11/prod"/>
+  <property name="3pp.velocity.dir" value="/vobs/eniq/3pp/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.xerces.dir" value="/vobs/eniq/3pp/apache/xerces_impl/v2_0_2/prod"/>
+  <property name="3pp.xmlapi.dir" value="/vobs/eniq/3pp/apache/xml_commons/v1_1/prod"/>
+  <property name="3pp.dbuint.dir" value="/vobs/eniq/3pp/dbunit/dbunit/v2_4_7/prod"/>
+  <property name="3pp.swingworker.dir" value="/vobs/eniq/3pp/idk/swing_worker/prod"/>
+  <property name="3pp.jcalendar.dir" value="/vobs/eniq/3pp/jcalendar/jcalendar/v1-3_1/prod"/>
+  <property name="3pp.commons_lang.dir" value="/vobs/eniq/3pp/apache/comm_lang/v2-0/prod"/>
+  <property name="3pp.commons_dbcp.dir" value="/vobs/eniq/3pp/apache/dbcp/v1_0/prod"/>
+  <property name="3pp.commons_logging.dir" value="/vobs/eniq/3pp/apache/comm_logging/v1_2/prod"/>
+  <property name="3pp.commons_config.dir" value="/vobs/eniq/3pp/apache/configuration/v1_1/prod"/>
+  <property name="3pp.commons_codec.dir" value="/vobs/eniq/3pp/apache/comm_codec/v1_9/prod"/>
+  <property name="3pp.appframework.dir" value="/vobs/eniq/3pp/appframework/prod"/>
+  <property name="3pp.ant_contrib.dir" value="/vobs/eniq/3pp/apache/ant_contrib/v1_0b2/prod"/>
+  <property name="3pp.jsch.dir" value="/vobs/eniq/3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod/"/> 
+  <property name="3pp.jersey.dir" value="/vobs/eniq/3pp/jersey/"/>
+  
+  <target name="precompile"/>
+  
+  <target name="compile"/>
+
+  <target name="postcompile" depends="compile">
+	<mkdir dir="${pack.dir}/dclib"/>
+	<copy file="${3pp.log4j.dir}/log4j-1.2.11.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.velocity.dir}/velocity-dep-1.5.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.xerces.dir}/xercesImpl-2.0.2.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.xmlapi.dir}/xml-apis.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.dbuint.dir}/dbunit-2.4.7.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.swingworker.dir}/swing-worker.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jcalendar.dir}/jcalendar.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.commons_lang.dir}/commons-lang-2.0.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.commons_dbcp.dir}/commons-dbcp.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.commons_logging.dir}/commons-logging-1.2.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.commons_config.dir}/commons-configuration-1.1.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.commons_codec.dir}/commons-codec-1.9.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.appframework.dir}/appframework.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.ant_contrib.dir}/ant-contrib.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.ant_contrib.dir}/ant-contrib.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.jsch.dir}/jsch-0.1.51.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/hk2-api-2.4.0-b31.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/hk2-locator-2.4.0-b31.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/hk2-utils-2.4.0-b31.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/javax.annotation-api-1.2.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/javax.inject-2.4.0-b31.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/javax.ws.rs-api-2.0.1.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/jersey-guava-2.21.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/org.eclipse.persistence.core-2.6.0.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/org.eclipse.persistence.moxy-2.6.0.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/validation-api-1.1.0.Final.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/jersey-apache-connector-2.21.jar" todir="${pack.dir}/dclib"/>	
+	<copy file="${3pp.jersey.dir}/jersey-client-2.21.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/jersey-common-2.21.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/jersey-entity-filtering-2.21.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/jersey-media-moxy-2.21.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.jersey.dir}/javax.json-1.0.jar" todir="${pack.dir}/dclib"/>
+  </target>
+</project>

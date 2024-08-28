@@ -1,0 +1,117 @@
+--
+-- defines VERITAS-VIP-MIB MIB 
+--
+-- Copyright (C) 2000, 2001, by VERITAS SOFTWARE Corporation.
+-- All rights reserved.
+--
+--
+
+VERITAS-VIP-MIB DEFINITIONS ::= BEGIN
+ 
+	IMPORTS                           
+      	enterprises
+           	FROM RFC1155-SMI
+        DisplayString
+            FROM RFC1213-MIB 
+    	TRAP-TYPE
+            FROM RFC-1215;
+                
+    veritas 	OBJECT IDENTIFIER ::= { enterprises 1302 }
+    products 	OBJECT IDENTIFIER ::= { veritas 3 }
+    veritasvip OBJECT IDENTIFIER ::= { products 14 }
+    -- veritasvip MODULE-IDENTITY
+	--        LAST-UPDATED 	"0106261600Z"
+	--        ORGANIZATION 	"VERITAS Software Corp."
+	--        CONTACT-INFO 	"VERITAS Software Corp.
+	--                       1600 Plymouth Street.
+	--                       Mountain View, CA 94043 US
+	--                       Tel: +1 650 318 4464
+	--                       Email: support@veritas.com"
+	--        REVISION    	"0106261600Z"
+	--        DESCRIPTION 	"A private MIB module for VERITAS Integration Platform (VIP) aka Isis."
+	-- ::= { products 14 }
+
+
+--
+--   Trap Definitions Section
+--
+
+     viptraps   		OBJECT IDENTIFIER ::= { veritasvip 10 }
+      
+--   Trap Variables 
+
+     viptrapvars 	OBJECT IDENTIFIER ::= { viptraps 1 }
+
+     alertMessage OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Describes the reason for the alert."
+     ::= { viptrapvars 1 }
+ 
+     alertSeverity OBJECT-TYPE
+     		SYNTAX INTEGER {
+     			info(1),
+     			warning(2),
+     			error(3),
+     			critical(4)
+     		}
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     " 1=info,2=warning,3=error,4=critical or string"
+     ::= { viptrapvars 2 }
+
+      classificationName OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     ""
+     ::= { viptrapvars 3 }
+
+     alertDescription OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Description of the alert."
+     ::= { viptrapvars 4 }
+
+     friendlyAlertName OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Human Friendly version of the alert name."
+     ::= { viptrapvars 5 }
+ 
+     recommendedAction OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Describes the action(s) recommended to resolve the alert."
+     ::= { viptrapvars 6 }
+ 
+ 
+
+-- 	 Trap Definitions                
+
+     viptrapdefs		OBJECT IDENTIFIER ::= { viptraps 2 }
+
+     serverStart    TRAP-TYPE
+          ENTERPRISE     viptrapdefs
+          VARIABLES { alertMessage, alertSeverity, classificationName, alertDescription, friendlyAlertName, 
+          			  recommendedAction }
+          DESCRIPTION       "The server for the VERITAS Integration Platform has started."
+         -- SEVERITY Informational
+         -- TOPIC event.alert.vrts.server.start
+     ::= 1
+     
+     serverShutdown    TRAP-TYPE
+          ENTERPRISE     viptrapdefs
+          VARIABLES { alertMessage, alertSeverity, classificationName, alertDescription, friendlyAlertName, 
+          			  recommendedAction }
+          DESCRIPTION       "The server for the VERITAS Integration Platform has shutdown."
+         -- SEVERITY Warning
+         -- TOPIC event.alert.vrts.server.shutdown
+     ::= 2
+     
+
+END

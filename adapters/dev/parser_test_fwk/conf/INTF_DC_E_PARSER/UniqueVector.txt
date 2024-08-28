@@ -1,0 +1,12 @@
+[GENERAL]
+tagId=UniqueVector
+dataFormatID=DC_E_PARSER:((1)):DC_E_PARSER_UNIQUEVECTOR:mdc
+folderName=DC_E_PARSER_UNIQUEVECTOR
+dItems_imports=__ENIQ__.txt
+
+[counter_peg]
+pi=PEG
+dataType=numeric
+dataSize=18
+dataScale=8
+isCounter=1

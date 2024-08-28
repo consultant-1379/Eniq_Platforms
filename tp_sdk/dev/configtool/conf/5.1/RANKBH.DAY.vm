@@ -1,0 +1,113 @@
+##
+## RANKBH.DAY.vm
+##
+##
+##
+## Delete possible data before aggregation
+##
+DELETE $targetDerivedTable.get("RANKBH")
+WHERE DATE_ID=$dateid AND BHTYPE='$Bhtype.get("RANKBH")'
+##
+##
+##
+
+Insert into $targetDerivedTable.get("RANKBH")
+(
+##
+## unique keys
+##
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBH"))
+#if($col.getUniquekey() == 1)
+#if($first) $col.getDataname() 
+#set($first = false)
+#else,$col.getDataname()
+#end
+#end
+#end
+,DATE_ID
+,BHTYPE
+,BHVALUE
+,BHCLASS
+,WEEKBH
+,MONTHBH
+,DATACOVERAGE
+,PERIOD_DURATION
+,TIMELEVEL
+,SESSION_ID
+,BATCH_ID
+)
+SELECT 
+##
+## unique keys
+##
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBH"))
+#if ($col.getUniquekey() == 1)
+#if($first) $col.getDataname()
+#set($first = false)
+#else 
+,$col.getDataname()
+#end
+#end
+#end
+,DATE_ID
+,'$Bhtype.get("RANKBH")'
+,MAX(BHVALUE)
+,1
+,0
+,0
+,SUM(PERIOD_DURATION)
+,NULL
+,'RANKBH'
+,$sessionid
+,$batchid
+from $sourceTable.get("RANKBH")
+WHERE DATE_ID=$dateid 
+GROUP BY
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBH"))
+#if ($col.getUniquekey() == 1)
+#if($first)  $col.getDataname()
+#set($first = false)
+#else 
+,$col.getDataname()
+#end
+#end
+#end
+,DATE_ID
+,BHTYPE
+
+##
+## UPDATE
+##
+
+UPDATE $targetDerivedTable.get("RANKBH") AS dst 
+SET 
+dst.BUSYHOUR=src.HOUR_ID,
+dst.PERIOD_DURATION=src.PERIOD_DURATION
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBH"))
+#if ($col.getUniquekey() == 0)
+,dst.$col.getDataname() = src.$col.getDataname()
+#end
+#end
+FROM $sourceTable.get("RANKBH") AS src
+where src.DATE_ID=$dateid
+and dst.DATE_ID=$dateid
+and src.DATE_ID=dst.DATE_ID
+and src.BHVALUE=dst.BHVALUE
+and src.BHTYPE=dst.BHTYPE
+##
+## unique keys
+##
+#foreach($col in $TargetMeasurementKeyMap.get("RANKBH"))
+#if ($col.getUniquekey() == 1)
+and dst.$col.getDataname() = src.$col.getDataname()
+#end
+#end
+ORDER BY src.HOUR_ID 
+
+
+
+
+

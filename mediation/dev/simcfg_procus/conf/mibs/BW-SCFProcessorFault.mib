@@ -1,0 +1,168 @@
+--
+BW-SCFProcessorFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Counter32
+      FROM SNMPv2-SMI
+    DateAndTime, DisplayString
+      FROM SNMPv2-TC
+    common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npAddress, npIndex, npConfiguredAddress, npResolvedAddress, npMessage, sccpPointCode, npSS7SubsystemNumber, npIS41Operation
+      FROM BroadworksFault;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201103240000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+        "This MIB defines management information that is common to all elements in a Broadworks system."
+    REVISION    "201103240000Z"
+                DESCRIPTION     "Creating the mib."
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  common  OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  systemFaults  OBJECT IDENTIFIER
+    ::=  {  common  1  }
+
+
+  bwPMscfProcessorLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the scfProcessor process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMscfProcessorLaunched, bwPMscfProcessorShutDown, bwPMscfProcessorStarted, and bwPMscfProcessorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the scfProcessor process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10001  }
+
+  bwPMscfProcessorShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the scfProcessor process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMscfProcessorLaunched, bwPMscfProcessorShutDown, bwPMscfProcessorStarted, and bwPMscfProcessorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the scfProcessor process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10002  }
+
+  bwPMscfProcessorRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the scfProcessor process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMscfProcessorLaunched, bwPMscfProcessorShutDown, bwPMscfProcessorStarted, and bwPMscfProcessorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the scfProcessor process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10003  }
+
+  bwPMscfProcessorDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the scfProcessor process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMscfProcessorLaunched, bwPMscfProcessorShutDown, bwPMscfProcessorStarted, and bwPMscfProcessorDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the scfProcessor process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10004  }
+    
+  bwNetworkServerUnreachable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npAddress }
+    STATUS      current
+    DESCRIPTION
+        "This alarm is raised for each Network Server that is unreachable. When all Network Servers are unreachable the severity of the raised alarms is increased. When one Network Server becomes reachable the corresponding alarm is cleared and the severity of the other alarms, if any, is lowered.
+@severity:medium, high
+@subcomponent:ServiceControlFunction"
+-- @feature:158606
+    ::=  {  systemFaults 10005  }
+    
+  bwApplicationServerUnreachable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npAddress }
+    STATUS      current
+    DESCRIPTION
+        "This alarm is raised for each Application Server in the cluster when it is unreachable. When both Application Servers are unreachable the severity of the raised alarms is increased. When the primary server becomes reachable, the primary and secondary alarms, if any, are cleared. When the secondary becomes reachable, its corresponding alarm is cleared and the severity of the primiary alarm is lowered.
+@severity:medium, high
+@subcomponent:ServiceControlFunction"
+-- @feature:158606
+    ::=  {  systemFaults 10006  }
+    
+  bwSmppConnectionFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npIndex, npConfiguredAddress, npResolvedAddress, npMessage }
+    STATUS      current
+    DESCRIPTION
+        "An opened SMPP connection unexpectedly closed (due to network, peer, or other unknown reason).
+@severity:low
+@subcomponent:smpp"
+-- @feature:158606
+    ::=  {  systemFaults 10007  }
+    
+  bwSmppRoutesExhausted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "Cannot connect to any provisioned SMS-C. All SCF to SMS-C notifications are lost. This alarm is cleared by the SCF once connection can be restablished.
+@severity:high
+@subcomponent:smpp"
+-- @feature:158606
+    ::=  {  systemFaults 10008  }
+    
+  bwNetworkServerUnresolvable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npAddress }
+    STATUS      current
+    DESCRIPTION
+        "The address of the Network Server cannot be resolved. The alarm is cleared once the network server address is updated.
+@severity:high
+@subcomponent:ServiceControlFunction"
+-- @feature:158606
+    ::=  {  systemFaults 10009  }
+    
+  bwSS7CapLayerDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "The SCF cannot properly communicate with the underlying SS7 CAP protocol stack.
+@severity:high
+@subcomponent:ServiceControlFunction"
+-- @feature:158606
+    ::=  {  systemFaults 10010  }
+
+  bwSS7MapLayerDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "The SCF cannot properly communicate with the underlying SS7 MAP protocol stack.
+@severity:high
+@subcomponent:ServiceControlFunction"
+-- @feature:158606
+    ::=  {  systemFaults 10011  }
+
+  bwSS7IS41LayerDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "The Service Control Function Processor cannot properly communicate with the underlying SS7 IS41 protocol stack.
+@severity:high
+@subcomponent:ServiceControlFunction"
+-- @feature:177227
+    ::=  {  systemFaults 10013  }
+
+  bwOperationRouteUnavailable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, sccpPointCode, npSS7SubsystemNumber, npIS41Operation }
+    STATUS      current
+    DESCRIPTION
+        "The peer IS41 subsytem to send the IS41 operation is not reachable.
+@severity:high
+@subcomponent:ServiceControlFunction"
+-- @feature:177227
+    ::=  {  systemFaults 10014  }
+
+END

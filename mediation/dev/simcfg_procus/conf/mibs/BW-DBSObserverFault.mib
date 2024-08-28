@@ -1,0 +1,68 @@
+-- File Name : BW-DBSObserverFault.mib
+BW-DBSObserverFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201206010000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks DBSObserver Application."
+    REVISION    "201206010000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMdbsObserverLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DBSObserver has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbsObserverLaunched, bwPMdbsObserverShutDown, bwPMdbsObserverRestarted, and bwPMdbsObserverDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the dbsObserver process"
+-- @feature:165352
+    ::=  {  systemFaults 11101  }
+
+  bwPMdbsObserverShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DBSObserver has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbsObserverLaunched, bwPMdbsObserverShutDown, bwPMdbsObserverRestarted, and bwPMdbsObserverDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the dbsObserver process"
+-- @feature:165352
+    ::=  {  systemFaults 11102  }
+
+  bwPMdbsObserverRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DBSObserver restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbsObserverLaunched, bwPMdbsObserverShutDown, bwPMdbsObserverRestarted, and bwPMdbsObserverDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the dbsObserver process"
+-- @feature:165352
+    ::=  {  systemFaults 11103  }
+
+  bwPMdbsObserverDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DBSObserver death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMdbsObserverLaunched, bwPMdbsObserverShutDown, bwPMdbsObserverRestarted, and bwPMdbsObserverDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the dbsObserver process"
+-- @feature:165352
+    ::=  {  systemFaults 11104  }
+    
+
+END

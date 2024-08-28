@@ -1,0 +1,370 @@
+BODY {
+	margin: 5;
+	padding: 0;
+	font-family: sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+#helptext {
+	font-size: 8pt;
+}
+
+#main {
+	margin: 0;
+}
+
+#masthead {
+	width: 100%;
+	background: #336699 url(../img/page_header_fade.jpg) repeat-y top left;
+	color: #ffffff;
+	clear: both;
+}
+
+#masthead .eniq_logo {
+	float: left;
+}
+
+.location_button {
+	clear: both;
+	width: 100%;
+	text-align: center;
+}
+
+#masthead .marketunit {
+	padding: 4px 9px 5px 0;
+	color: #c1d1e0; 
+	font-size: 100%;
+	text-align: right;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+#masthead .marketunit a:link,
+#masthead .marketunit a:visited,
+#masthead .marketunit a:active {
+	text-decoration: none;
+	text-transform: none;
+	color: #c1d1e0; 
+}
+
+#masthead .marketunit a:hover {
+	text-decoration: underline;
+	text-transform: none;
+	color: #c1d1e0; 
+}
+
+#whole_frame {
+	width: 720px;
+	margin-top: 20px;
+	margin-left: 0px;
+}
+
+#left_column {
+	width: 195px;
+	float: left;
+	background: #003258;
+	overflow: scroll;
+}
+
+#left_column_first_page {
+	width: 0px;
+	float: left;
+	background: white;
+}
+
+#select_tp_table {
+	margin: 0 auto;
+	border: 0;
+	font-family: sans-serif;
+}
+
+#select_tp_table .parameter_title {
+	text-align: left;
+	font-weight: normal;
+	margin-right: 5px;
+}
+
+#select_tp_table .parameter_value {
+	margin: 0;
+}
+
+#source_techpack {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	color: white;	
+	font-size: 12pt;
+	font-weight: bold;
+	word-wrap: break-word;
+}
+
+.unmodified {
+	font-style:normal; 
+}
+
+.modified {
+	font-style:italic; 
+}
+           
+
+#source_techpack a:link,
+#source_techpack a:visited,
+#source_techpack a:active {
+	text-decoration: none;
+	color: white; 
+}
+
+
+#target_techpack,
+#target_techpack_current {
+	padding: 10px;
+	font-family: sans-serif;
+	margin-left: 0px;
+	margin-bottom: 5px;
+	font-size: 10pt;
+	font-weight: bold;
+	width: 100%;
+	border-left: 1px solid #6666DD;
+	border: none;
+	word-wrap: break-word;
+}
+
+#target_techpack {
+	color: #c1d1e0; 
+}
+
+#target_techpack_current {
+	color: white; 
+}
+
+#target_techpack a:link,
+#target_techpack a:visited,
+#target_techpack a:active {
+	text-decoration: none;
+	color: #c1d1e0; 
+}
+
+#target_techpack a:hover {
+	text-decoration: underline;
+	color: #c1d1e0; 
+}
+
+#busyhour,
+#busyhour_current {
+	padding: 10px;
+	font-family: sans-serif;
+	margin-left: 20px;
+	font-size: 8pt;
+	font-weight: normal;
+	width: 100%;
+	border-left: 1px solid #6666DD;
+	word-wrap: break-word;
+}
+
+#busyhour {
+	color: #c1d1e0; 
+}
+
+#busyhour_current {
+	color: white; 
+}
+		
+#busyhour a:link,
+#busyhour a:visited,
+#busyhour a:active {
+	text-decoration: none;
+	color: #c1d1e0; 
+}
+
+#busyhour a:hover {
+	text-decoration: underline;
+	color: #c1d1e0; 
+}
+
+.error_message {
+	border: 1px solid black;
+	width: 100%;
+	text-align: center;
+	padding: 5px;
+	margin: 5px 5px 10px 5px;
+	color: red;
+	font-family: sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+.info_message {
+	border: 1px solid black;
+	width: 100%;
+	text-align: center;
+	padding: 5px;
+	margin: 5px 5px 10px 5px;
+	color: green;
+	font-family: sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+#main_column {
+	margin: 10px;
+	float: left;
+	width: 750px;
+}
+
+#placeholder_table_title {
+	margin-left: 10px;
+	font-size: 16pt;
+	font-family: sans-serif;
+}
+
+#placeholder_table {
+	width: 750px;
+	margin: 10px;
+	border-collapse: collapse;
+	border: 1px solid #999999;
+	font-family: sans-serif;
+}
+
+#placeholder_table TH,
+#placeholder_table TD {
+	text-align: left;
+	border: 1px solid #999999;
+	font-size: 10pt;
+	font-family: sans-serif;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#placeholder_table TH {
+	font-weight: bold;
+	border: none;
+	background: #DDDDDD;	
+}
+
+#placeholder_table TD {
+	text-decoration: none;
+}
+
+#placeholder_table TD a:link,
+#placeholder_table TD a:visited,
+#placeholder_table TD a:hover,
+#placeholder_table TD a:active {
+	text-decoration: none;
+}
+
+#placeholder_table IMG {
+	text-align: center;
+	border: 0;
+}
+
+#placeholderdetail_table {
+	width: 690px;
+	margin: 10px;
+	border-collapse: collapse;
+	border: 1px solid #999999;
+	font-family: sans-serif;
+}
+
+#placeholderdetail_table TH,
+#placeholderdetail_table TD {
+	text-align: left;
+	border: 1px solid #999999;
+	font-size: 10pt;
+	font-family: sans-serif;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#placeholderdetail_table TH {
+	font-weight: bold;
+	border: none; 
+	background: #DDDDDD;	
+}
+
+#placeholderdetail_table TD {
+	text-decoration: none;
+}
+
+#placeholderdetail_table TD a:link,
+#placeholderdetail_table TD a:visited,
+#placeholderdetail_table TD a:hover,
+#placeholderdetail_table TD a:active {
+	text-decoration: none;
+}
+
+#placeholderdetail_editor {
+	width: 690px;
+	margin: 10px;
+	border-collapse: collapse;
+	border: 0px;
+	font-family: sans-serif;
+}
+
+#placeholderdetail_editor TH,
+#placeholderdetail_editor TD {
+	text-align: left;
+	border: 0px;
+	font-size: 10pt;
+	font-family: sans-serif;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#placeholderdetail_editor TH {
+	font-weight: bold;
+	border: 0px; 
+	background: #DDDDDD;	
+}
+
+#placeholderdetail_editor TD {
+	text-decoration: none;
+}
+
+#placeholder_area_title {
+	margin-left: 10px;
+	font-size: 16pt;
+	font-family: sans-serif;
+}
+
+#placeholder_area {
+	width: 690px;
+	margin: 10px;
+	border-collapse: collapse;
+	border: none;
+	font-family: sans-serif;
+}
+
+#placeholder_area TH,
+#placeholder_area TD {
+	text-align: left;
+	border: none;
+	font-size: 10pt;
+	font-family: sans-serif;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#placeholder_area TH {
+	font-weight: bold;
+	border: none;
+	background: #DDDDDD;	
+}
+
+#placeholder_area TD {
+	text-decoration: none;
+}
+
+#placeholder_area TD a:link,
+#placeholder_area TD a:visited,
+#placeholder_area TD a:hover,
+#placeholder_area TD a:active {
+	text-decoration: none;
+}
+
+#placeholder_area IMG {
+	text-align: center;
+	border: 0;
+}
+

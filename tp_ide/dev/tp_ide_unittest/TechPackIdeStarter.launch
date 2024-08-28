@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/TechPackIDE_unittest/src/com/ericsson/eniq/techpacksdk/unittest/utils/TechPackIdeStarter.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<mapAttribute key="org.eclipse.debug.core.preferred_launchers">
+<mapEntry key="[run]" value="org.eclipse.jdt.launching.localJavaApplication"/>
+<mapEntry key="[debug]" value="org.eclipse.jdt.launching.localJavaApplication"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.ericsson.eniq.techpacksdk.unittest.utils.TechPackIdeStarter"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TechPackIDE_unittest"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1024m&#13;&#10;-Xms384m&#13;&#10;-DTPIDE.startWithLog=true&#13;&#10;-DTPIDE.LogLevel=FINEST"/>
+</launchConfiguration>

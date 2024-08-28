@@ -1,0 +1,63 @@
+<project name="procus_simcfg" default="compile">
+
+  <property name="pack.name" value="simcfg"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/mediation/dev/procus_simcfg"/>
+
+  <!-- 3pp's not in the vob yet -->
+  <property name="3pp.dir" value="${pack.dir}/3pp/"/>
+  
+  <!-- ENIQ Jars -->
+  <property name="eniq.licensing.dir" value="/vobs/eniq/design/plat/licensing/build/licensing"/>
+
+  <!-- 3PP Jars -->  
+  <property name="3pp.log4j.dir" value="/vobs/eniq/3pp/apache/log4j/v1_2_11/prod"/>
+  <property name="3pp.junit.dir" value="/vobs/eniq/3pp/junit/v4_5/prod"/>
+  <property name="3pp.jmock.dir" value="/vobs/eniq/3pp/jmock-2.5.1"/>
+  
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+	<javac destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+		<src path="${pack.dir}/src"/>
+		<classpath>
+		<pathelement path="${classpath}"/>
+			<fileset dir="${3pp.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.log4j.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.junit.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${3pp.jmock.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${eniq.licensing.dir}">
+				<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.sim.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+		</classpath>
+	</javac>
+
+  </target>
+
+  <target name="postcompile">
+	<jar destfile="${pack.dir}/build/procus_simcfg.jar" basedir="${pack.dir}/classes">
+		<manifest>
+			<attribute name="Main-Class" value="com.ericsson.procus_simcfg.PROCUS_SIMCFG"/>
+		</manifest>
+    </jar>
+    <zip destfile="${pack.dir}/build/procus_simcfg.zip" basedir="${pack.dir}/classes">
+		<manifest>
+			<attribute name="Main-Class" value="com.ericsson.procus_simcfg.PROCUS_SIMCFG"/>
+        </manifest>
+  </target>
+
+</project>

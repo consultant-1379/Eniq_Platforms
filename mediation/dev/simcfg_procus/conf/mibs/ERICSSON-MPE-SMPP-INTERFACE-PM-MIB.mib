@@ -1,0 +1,416 @@
+ERICSSON-MPE-SMPP-INTERFACE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeSmppInterfacePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events of the SMPP Interface."
+::= { mpeModules 17 }
+
+smppInterfacePmObjects  OBJECT IDENTIFIER ::= { mpeSmppInterfacePmModule 1 }
+
+smsC  OBJECT IDENTIFIER ::= { smppInterfacePmObjects 1 }
+
+smscGroup  OBJECT IDENTIFIER ::= { smppInterfacePmObjects 2 }
+
+smppInterfacePmConformance  OBJECT IDENTIFIER ::= { mpeSmppInterfacePmModule 3 }
+
+smppInterfacePmGroups  OBJECT IDENTIFIER ::= { smppInterfacePmConformance 1 }
+
+smppInterfacePmCompliances  OBJECT IDENTIFIER ::= { smppInterfacePmConformance 2 }
+
+smsCTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SmsCEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each SMS Service Center."
+::= { smsC 1 } 
+
+smsCEntry OBJECT-TYPE
+   SYNTAX          SmsCEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The states of the Service Center connections."
+   INDEX { smsCIndex }
+::= { smsCTable  1 }
+
+SmsCEntry  ::= SEQUENCE
+{
+   smsCIndex                       Unsigned32,
+   smsCDelivReceiptListFull        ItuPerceivedSeverity,
+   smsCdatagramSuccesfulMT         Counter32,
+   smsCdatagramUnsuccessfulMT      Counter32,
+   smsCdatagramSuccessfulMO        Counter32,
+   smsCdatagramUnsuccessfulMO      Counter32,
+   smsCdatagramDroppedMT           Counter32,
+   smsCdatagramOngoingMT           Gauge32,
+   smsCdatagramOngoingMO           Gauge32,
+   smsCdatagramDelRepQueueLength   Gauge32,
+   smsCdatagramThrottlLevelReached Counter32,
+   smsCQueueLength                 Gauge32,
+   smsCdataSmSuccessfulMT          Counter32,
+   smsCdataSmUnsuccessfulMT        Counter32,
+   smsCdataSmSuccessfulMO          Counter32,
+   smsCdataSmUnsuccessfulMO        Counter32,
+   smsCNoConnectToSmsc             ItuPerceivedSeverity,
+   smsCResponseTime                Gauge32,
+   smsCConfigError                 ItuPerceivedSeverity
+}
+
+smsCIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a sms c table 
+                    entry."
+::= { smsCEntry 1 }
+
+smsCDelivReceiptListFull  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "When the list is full, all datagrams requiring 
+                    delivery a report are keept in MIEP until the size of the 
+                    list is reduced."
+::= { smsCEntry 3 }
+
+smsCdatagramSuccesfulMT  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of successfully sent 
+                    mobile terminating datagrams. This is incremented when a 
+                    complete datagram has been sent from the SMPP Interface 
+                    to the mobile station.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 4 }
+
+smsCdatagramUnsuccessfulMT  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of unsuccessfully sent 
+                    mobile terminating datagrams. This is incremented when 
+                    the SMPP Interface fails to deliver a complete datagram 
+                    to the mobile station.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 5 }
+
+smsCdatagramSuccessfulMO  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of successfully received 
+                    mobile originating datagrams. This is incremented when 
+                    a complete datagram has been received from the mobile 
+                    station.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 6 }
+
+smsCdatagramUnsuccessfulMO  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of unsuccessfully received 
+                    mobile originating datagrams. This is incremented 
+                    when the mobile station fails to deliver a complete 
+                    datagram to the SMPP Interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 7 }
+
+smsCdatagramDroppedMT  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of dropped mobile 
+                    terminating datagrams. This is incremented if a datagram is 
+                    dropped after the retry attempts.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 8 }
+
+smsCdatagramOngoingMT  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of mobile terminating 
+                    datagrams currently stored in the SMPP Interface. This is 
+                    incremented when a datagram is accepted from the upper 
+                    WAP stack layers. It is decremented when a complete 
+                    datagram is sent to the mobile station or when the 
+                    datagram is discarded."
+::= { smsCEntry 9 }
+
+smsCdatagramOngoingMO  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of mobile station 
+                    datagrams currently stored in the SMPP Interface. This is 
+                    incremented when a datagram is accepted from the mobile 
+                    station. It is decremented when a complete datagram is 
+                    sent to the upper WAP stack layer or when the datagram 
+                    is discarded."
+::= { smsCEntry 10 }
+
+smsCdatagramDelRepQueueLength  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of datagrams currently 
+                    waiting for a delivery receipt message from the SMS-C. 
+                    This is incremented when a datagram with the delivery 
+                    report function active have been accepted by the SMS-C. 
+                    It is decremented when the delivery receipt for the 
+                    datagram is received from the SMS-C."
+::= { smsCEntry 11 }
+
+smsCdatagramThrottlLevelReached  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of one seconds intervals 
+                    when the throttling function has decreased the 
+                    throughput.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 12 }
+
+smsCQueueLength  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the current length of the SMPP Queue, 
+                    i.e. the number of objects currently stored in the 
+                    queue. The SMPP Queue is an internal queue used to store 
+                    incoming/outgoing datagram jobs. A high value for 
+                    this counter indicates that the process is heavily 
+                    loaded."
+::= { smsCEntry 13 }
+
+smsCdataSmSuccessfulMT  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of successfully sent 
+                    mobile terminating DATA_SM messages. This is incremented 
+                    when a DATA_SM message has been successfully sent from 
+                    the SMPP Interface to the SMS centre.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 14 }
+
+smsCdataSmUnsuccessfulMT  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of unsuccessfully sent 
+                    mobile terminating DATA_SM messages. This is incremented 
+                    when the SMPP Interface fails to deliver a DATA_SM 
+                    message to the SMS centre.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 15 }
+
+smsCdataSmSuccessfulMO  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of successfully received 
+                    mobile originating DATA_SM messages. This is 
+                    incremented when a DATA_SM message has been successfully 
+                    received from the SMS centre.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 16 }
+
+smsCdataSmUnsuccessfulMO  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of unsuccessfully received 
+                    mobile originating DATA_SM messages. This is 
+                    incremented when a DATA_SM message has been received from the 
+                    SMS centre but there is a problem with the message, 
+                    for example, it contains a corrupt parameter or there is 
+                    corrupt data in the protocol data unit from the SMS 
+                    centre.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smsCEntry 17 }
+
+smsCNoConnectToSmsc  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The connection to the SMS-C could not be established 
+                    or has been broken"
+::= { smsCEntry 18 }
+
+smsCResponseTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the average SMS-C response time in 
+                    milliseconds. The time is meassured between the DATA_SM 
+                    sent to the SMS-C and the DATA_SM_RESP received from 
+                    the SMS-C."
+::= { smsCEntry 19 }
+
+smsCConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The configuration data for the SMPP Interface process 
+                    has not been correctly initiated."
+::= { smsCEntry 20 }
+
+smscGroupTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SmscGroupEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each SMS Service Center 
+                    group."
+::= { smscGroup 1 } 
+
+smscGroupEntry OBJECT-TYPE
+   SYNTAX          SmscGroupEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The states of the Service Center Connection Groups."
+   INDEX { smscGroupIndex }
+::= { smscGroupTable  1 }
+
+SmscGroupEntry  ::= SEQUENCE
+{
+   smscGroupIndex                 Unsigned32,
+   smscGroupNoSmscInGroup         ItuPerceivedSeverity,
+   smscGroupDestNumberConfigError ItuPerceivedSeverity,
+   smscGroupPrimaryGroupUsed      Counter32,
+   smscGroupFallbackGroupUsed     Counter32,
+   smscGroupFailedToGetSmscGroup  Counter32
+}
+
+smscGroupIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a smsc group 
+                    table entry."
+::= { smscGroupEntry 1 }
+
+smscGroupNoSmscInGroup  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The SMS-C group is selected to be used but no SMS-C 
+                    id is configured in the group."
+::= { smscGroupEntry 6 }
+
+smscGroupDestNumberConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The specified destination number prefix has already 
+                    been configured for another SMS-C group."
+::= { smscGroupEntry 2 }
+
+smscGroupPrimaryGroupUsed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of times that the primary 
+                    SMS-C group was sucssessfully chosen.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smscGroupEntry 3 }
+
+smscGroupFallbackGroupUsed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of times that the primary 
+                    SMS-C group was unavailable and the fallback SMS-C was 
+                    sucssessfully chosen.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smscGroupEntry 4 }
+
+smscGroupFailedToGetSmscGroup  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of times that the SMS-C 
+                    group was unavailable. Both the primary and the fallback 
+                    SMS-C groups were unavailable.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { smscGroupEntry 5 }
+
+-- Compliance Statements
+
+smppInterfaceCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for smpp interface."
+   MODULE          -- this module
+   MANDATORY-GROUPS {smppInterfaceConfGroup}
+::= { smppInterfacePmCompliances 1 }
+
+-- Units of Conformance
+
+smppInterfaceConfGroup OBJECT-GROUP
+   OBJECTS { smsCDelivReceiptListFull,
+             smsCdatagramSuccesfulMT,
+             smsCdatagramUnsuccessfulMT,
+             smsCdatagramSuccessfulMO,
+             smsCdatagramUnsuccessfulMO,
+             smsCdatagramDroppedMT,
+             smsCdatagramOngoingMT,
+             smsCdatagramOngoingMO,
+             smsCdatagramDelRepQueueLength,
+             smsCdatagramThrottlLevelReached,
+             smsCQueueLength,
+             smsCdataSmSuccessfulMT,
+             smsCdataSmUnsuccessfulMT,
+             smsCdataSmSuccessfulMO,
+             smsCdataSmUnsuccessfulMO,
+             smsCNoConnectToSmsc,
+             smsCResponseTime,
+             smsCConfigError,
+             smscGroupNoSmscInGroup,
+             smscGroupDestNumberConfigError,
+             smscGroupPrimaryGroupUsed,
+             smscGroupFallbackGroupUsed,
+             smscGroupFailedToGetSmscGroup}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a smpp interface."
+::= { smppInterfacePmGroups 1 }
+END

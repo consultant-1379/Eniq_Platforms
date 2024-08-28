@@ -1,0 +1,17 @@
+[req]
+distinguished_name=req_distinguished_name
+req_extensions=v3_req
+prompt=no
+default_md=sha1
+
+[req_distinguished_name]
+commonName=WEBSERVER_FQDN
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints=CA:false
+subjectAltName=@alt_names
+
+[alt_names]
+DNS.1=WEBSERVER_FQDN
+IP.1=WEBSERVER_IP_ADDRESS

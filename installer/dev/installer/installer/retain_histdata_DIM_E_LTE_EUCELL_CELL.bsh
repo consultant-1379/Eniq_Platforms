@@ -1,0 +1,70 @@
+# !/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ to retain historical data into DIM_E_LTE_EUCELL_CELL table script
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2013 AB LM Ericsson  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+ENIQ_BIN_DIR=/eniq/sw/bin
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../../admin/lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../../admin/lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../../admin/lib/common_functions.lib"
+        exit 63
+fi
+
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+DBA_PASSWORD=`inigetpassword DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+DWH_PORT=`inigetpassword DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_NAME=`inigetpassword DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+SYBASE_IQ_PATH=${IQ_DIR}/${SYBASE_OCS}/bin/isql
+
+if [ ! -f ${ENIQ_BIN_DIR}/retain_histdata_DIM_E_LTE_EUCELL_CELL.bsh ] ; then
+        echo "${ENIQ_BIN_DIR}/retain_histdata_DIM_E_LTE_EUCELL_CELL.bsh does not exist"
+        exit 1
+fi
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dc;pwd=${DWHDBPASSWORD};eng=dwhdb;links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Executing  retain_histdata_DIM_E_LTE_EUCELL_CELL.bsh script.." 
+
+${SYBASE_IQ_PATH} -Udc -P${DWHDBPASSWORD} -Sdwhdb <<EOISQL
+print "Deleting entries from DIM_E_LTE_EUCELL_CELL"
+
+delete from DIM_E_LTE_EUCELL_CELL
+go
+
+print "Popultaing entries into DIM_E_LTE_EUCELL_CELL"
+
+Insert into DIM_E_LTE_EUCELL_CELL(OSS_ID,EUTRANCELL_FDN,CELL_TYPE,ERBS_ID,ENodeBFunction,EUtranCellId,CELL_ID,tac,earfcndl,earfcnul,earfcn,userLabel,hostingDigitalUnit,noOfPucchCqiUsers,noOfPucchSrUsers,cellRange,ulChannelBandwidth,pdcchCfiMode,VENDOR,STATUS,CREATED,MODIFIED,MODIFIER)Select distinct OSS_ID,EUTRANCELL_FDN,CELL_TYPE,ERBS_ID,ENodeBFunction,EUtranCellId,CELL_ID,tac,earfcndl,earfcnul,earfcn,userLabel,hostingDigitalUnit,noOfPucchCqiUsers,noOfPucchSrUsers,cellRange,ulChannelBandwidth,pdcchCfiMode,VENDOR,STATUS,CREATED,MODIFIED,MODIFIER FROM DIM_E_LTE_EUCELL  where ROWID(DIM_E_LTE_EUCELL) IN(  SELECT MIN(ROWID(DIM_E_LTE_EUCELL))rownumber FROM DIM_E_LTE_EUCELL group by EUTRANCELL_FDN) AND MODIFIED IN (select max(MODIFIED) from DIM_E_LTE_EUCELL group by OSS_ID,EUTRANCELL_FDN,EUtranCellId,ERBS_ID)
+
+go
+
+print "Executing the script,restoring the historical data "
+
+EOISQL
+

@@ -1,0 +1,961 @@
+--===============================================================
+-- File Name : BW-NetworkMonitoring.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2016, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-NetworkMonitoring DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Unsigned32, Counter32, Gauge32, Integer32
+      FROM SNMPv2-SMI
+    DateAndTime, DisplayString, TimeStamp
+      FROM SNMPv2-TC;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201604060000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This is the MIB for the BroadWorks Network Monitoring application."
+    REVISION    "201604060000Z"
+                DESCRIPTION    "Added High Availability."
+    REVISION    "201502060000Z"
+                DESCRIPTION    "Updated description for JVM counters."
+    REVISION    "201411040000Z"
+                DESCRIPTION    "Added counters for heap, nonheap and garbageCollection Resources."
+    REVISION    "201409100000Z"
+                DESCRIPTION    "Creation."
+    ::=  {  enterprises 6431  }
+
+  broadworks OBJECT IDENTIFIER
+    ::=  {  broadsoft 1  }
+
+  networkMonitoring OBJECT IDENTIFIER
+    ::=  {  broadworks 58  }
+
+  executors OBJECT IDENTIFIER
+    ::=  {  networkMonitoring 1  }
+
+  databaseStats OBJECT IDENTIFIER
+    ::=  {  networkMonitoring 2  }
+
+  replication OBJECT IDENTIFIER
+    ::=  {  networkMonitoring 3  }
+
+-- MIB Compliance - Root
+  bwNMControllerMibConformance OBJECT IDENTIFIER
+    ::=  {  networkMonitoring 1000  }
+
+  bwNMControllerMariaDB OBJECT IDENTIFIER
+    ::=  {  databaseStats 1  }
+
+  bwNMControllerPostgreSQL OBJECT IDENTIFIER
+    ::=  {  databaseStats 2  }
+
+  primary OBJECT IDENTIFIER
+    ::=  {  replication 1  }
+
+  standby OBJECT IDENTIFIER
+    ::=  {  replication 2  }
+
+-- MIB Compliance - Groups
+  bwNMControllerMibGroups OBJECT IDENTIFIER
+    ::=  {  bwNMControllerMibConformance 1  }
+
+-- MIB Compliance - Module
+  bwNMControllerMibCompliancy OBJECT IDENTIFIER
+    ::=  {  bwNMControllerMibConformance 2  }
+
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).networkMonitoring(58).executors(1)
+-- ################### ...............................
+
+  bwNMControllerExecutorReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "When set to a value other than '0', all statistics stored under executorTable are reset to '0'."
+-- @feature:6984
+    ::=  {  executors 1  }
+
+  bwNMControllerExecutorTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwNMControllerExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table exposes the NetworkMonitoring executor statistics."
+-- @feature:6984
+    ::=  {  executors 2  }
+
+  bwNMControllerExecutorTableEntry OBJECT-TYPE
+    SYNTAX      BwNMControllerExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "This row contains information about a NetworkMonitoring executor."
+    INDEX       { bwNMControllerExecutorIndex }
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTable 1  }
+
+  BwNMControllerExecutorTableEntry ::= SEQUENCE {
+    bwNMControllerExecutorIndex  Unsigned32,
+    bwNMControllerExecutorName  DisplayString,
+    bwNMControllerExecutorQueueCapacity  Gauge32,
+    bwNMControllerExecutorQueueSize  Gauge32,
+    bwNMControllerExecutorQueueWaitingTimeAvg  Gauge32,
+    bwNMControllerExecutorQueueWaitingTimeMin  Gauge32,
+    bwNMControllerExecutorQueueWaitingTimeMax  Gauge32,
+    bwNMControllerExecutorQueueWaitingTimeMaxTimestamp  DateAndTime,
+    bwNMControllerExecutorMinPoolSize  Gauge32,
+    bwNMControllerExecutorMaxPoolSize  Gauge32,
+    bwNMControllerExecutorThreadsBusy  Gauge32,
+    bwNMControllerExecutorCompletedTaskCount  Counter32,
+    bwNMControllerExecutorThreadsAlive  Gauge32,
+    bwNMControllerExecutorThreadsAliveMax  Gauge32,
+    bwNMControllerExecutorTaskProcessingTimeAvg  Gauge32,
+    bwNMControllerExecutorTaskProcessingTimeMin  Gauge32,
+    bwNMControllerExecutorTaskProcessingTimeMax  Gauge32,
+    bwNMControllerExecutorTaskProcessingTimeMaxTimestamp  DateAndTime
+  }
+
+  bwNMControllerExecutorIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an index to a given executor."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 1  }
+
+  bwNMControllerExecutorName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the name of this executor."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 2  }
+
+  bwNMControllerExecutorQueueCapacity OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the initial capacity of the executor queue."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 3  }
+
+  bwNMControllerExecutorQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current size of the executor queue."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 4  }
+
+  bwNMControllerExecutorQueueWaitingTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the average time spent waiting in the executor queue since the last reset."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 5  }
+
+  bwNMControllerExecutorQueueWaitingTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the minimum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 6  }
+
+  bwNMControllerExecutorQueueWaitingTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 7  }
+
+  bwNMControllerExecutorQueueWaitingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when executorQueueWaitingTime was obtained."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 8  }
+
+  bwNMControllerExecutorMinPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the number of threads to keep in the pool, even if they are idle."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 9  }
+
+  bwNMControllerExecutorMaxPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads to allow in the pool."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 10  }
+
+  bwNMControllerExecutorThreadsBusy OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the approximate number of threads that are actively executing tasks."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 11  }
+
+  bwNMControllerExecutorCompletedTaskCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the approximate total number of tasks that have completed execution.  Because the states of tasks and threads may change dynamically during computation, the returned value is only an approximation; however, it does not ever decrease across successive calls."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 12  }
+
+  bwNMControllerExecutorThreadsAlive OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current number of threads instantiated."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 13  }
+
+  bwNMControllerExecutorThreadsAliveMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads that can be allocated at the same time."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 14  }
+
+  bwNMControllerExecutorTaskProcessingTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the average processing time spent by this executor."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 15  }
+
+  bwNMControllerExecutorTaskProcessingTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the minimum amount of processing time spent by this executor."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 16  }
+
+  bwNMControllerExecutorTaskProcessingTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum amount of processing time spent by this executor."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 17  }
+
+  bwNMControllerExecutorTaskProcessingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when taskProcessingTimeMax was obtained."
+-- @feature:6984
+    ::=  {  bwNMControllerExecutorTableEntry 18  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).networkMonitoring(58).databaseStats(2).bwNMControllerMariaDB(1)
+-- ################### ...............................
+
+  bwNMControllerMariaDBNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of opened transactions with the MariaDB database."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 1  }
+
+  bwNMControllerMariaDBNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The total number of committed transactions to the MariaDB database since the last restart."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 2  }
+
+  bwNMControllerMariaDBNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The number of failed transactions with the MariaDB database."
+-- @feature:6984    
+    ::=  {  bwNMControllerMariaDB 3  }
+
+  bwNMControllerMariaDBNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The total number of critical errors encountered during processing with the MariaDB database."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 4  }
+
+  bwNMControllerMariaDBDbCount OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of MariaDB databases defined for this application."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 5  }
+
+  bwNMControllerMariaDBDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwNMControllerMariaDBDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A list of MariaDB database entries.  The number of entries is given by the value of bwNMControllerMariaDBDbCount."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 6  }
+
+  bwNMControllerMariaDBDbStatsEntry OBJECT-TYPE
+    SYNTAX      BwNMControllerMariaDBDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "An entry containing statistics information applicable to a particular MariaDB database."
+    INDEX       { bwNMControllerMariaDBDbStatsIndex }
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsTable 1  }
+
+  BwNMControllerMariaDBDbStatsEntry ::= SEQUENCE {
+    bwNMControllerMariaDBDbStatsIndex  Unsigned32,
+    bwNMControllerMariaDBDbName  DisplayString,
+    bwNMControllerMariaDBDbNbConnectionsCreated  Counter32,
+    bwNMControllerMariaDBDbConnectionPoolSize  Gauge32,
+    bwNMControllerMariaDBDbAvgUpdateTime  Gauge32,
+    bwNMControllerMariaDBDbAvgRowsUpdated  Gauge32,
+    bwNMControllerMariaDBDbAvgQueryTime  Gauge32,
+    bwNMControllerMariaDBDbAvgRowsQueried  Gauge32,
+    bwNMControllerMariaDBDbUpdateCount  Counter32,
+    bwNMControllerMariaDBDbQueryCount  Counter32
+  }
+
+  bwNMControllerMariaDBDbStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an MariaDB database index in the table."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 1  }
+
+  bwNMControllerMariaDBDbName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the MariaDB database name."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 2  }
+
+  bwNMControllerMariaDBDbNbConnectionsCreated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of total connections created to the MariaDB database."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 3  }
+
+  bwNMControllerMariaDBDbConnectionPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of connections residing in the MariaDB database connection pool."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 4  }
+
+  bwNMControllerMariaDBDbAvgUpdateTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average MariaDB DB update time in milliseconds."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 5  }
+
+  bwNMControllerMariaDBDbAvgRowsUpdated OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average number of rows affected in MariaDB DB updates."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 6  }
+
+  bwNMControllerMariaDBDbAvgQueryTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average MariaDB DB query time in milliseconds."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 7  }
+
+  bwNMControllerMariaDBDbAvgRowsQueried OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average number of rows processed in MariaDB DB queries."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 8  }
+
+  bwNMControllerMariaDBDbUpdateCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of MariaDB DB updates performed since the application started."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 9  }
+
+  bwNMControllerMariaDBDbQueryCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of MariaDB DB queries performed since the application started."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbStatsEntry 10  }
+
+  bwNMControllerMariaDBDbHWMTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwNMControllerMariaDBDbHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A list of MariaDB database High Water Mark entries.  The number of entries is given by the value of bwNMControllerMariaDBDbCount."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDB 7  }
+
+  bwNMControllerMariaDBDbHWMEntry OBJECT-TYPE
+    SYNTAX      BwNMControllerMariaDBDbHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "An entry containing high water mark information applicable to a particular MariaDB database."
+    INDEX       { bwNMControllerMariaDBDbHWMIndex }
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMTable 1  }
+
+  BwNMControllerMariaDBDbHWMEntry ::= SEQUENCE {
+    bwNMControllerMariaDBDbHWMIndex  Unsigned32,
+    bwNMControllerMariaDBDbHWMDbName  DisplayString,
+    bwNMControllerMariaDBDbHWMStatName  DisplayString,
+    bwNMControllerMariaDBDbHWMStatValue  Gauge32,
+    bwNMControllerMariaDBDbHWMTimestamp  DisplayString,
+    bwNMControllerMariaDBDbHWMStackTrace  DisplayString
+  }
+
+  bwNMControllerMariaDBDbHWMIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an MariaDBDb database index in the table."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 1  }
+
+  bwNMControllerMariaDBDbHWMDbName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the MariaDB database name."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 2  }
+
+  bwNMControllerMariaDBDbHWMStatName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the statistic name."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 3  }
+
+  bwNMControllerMariaDBDbHWMStatValue OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the statistic value."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 4  }
+
+  bwNMControllerMariaDBDbHWMTimestamp OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the timestamp of the high water mark."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 5  }
+
+  bwNMControllerMariaDBDbHWMStackTrace OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the stack trace when the high water mark occured."
+-- @feature:6984
+    ::=  {  bwNMControllerMariaDBDbHWMEntry 6  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).networkMonitoring(58).databaseStats(2).bwNMControllerPostgreSQL(2)
+-- ################### ...............................
+
+  bwNMControllerPostgreSQLNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of opened transactions with the PostgreSQL database."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 1  }
+
+  bwNMControllerPostgreSQLNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The total number of committed transactions to the PostgreSQL database since the last restart."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 2  }
+
+  bwNMControllerPostgreSQLNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The number of failed transactions with the PostgreSQL database."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 3  }
+
+  bwNMControllerPostgreSQLNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "The total number of critical errors encountered during processing with the PostgreSQL database."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 4  }
+
+  bwNMControllerPostgreSQLDbCount OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of PostgreSQL database defined for this application."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 5  }
+
+  bwNMControllerPostgreSQLDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwNMControllerPostgreSQLDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A list of PostgreSQL database entries.  The number of entries is given by the value of bwNMControllerPostgreSQLDbCount."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 6  }
+
+  bwNMControllerPostgreSQLDbStatsEntry OBJECT-TYPE
+    SYNTAX      BwNMControllerPostgreSQLDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "An entry containing statistics information applicable to a particular PostgreSQL database."
+    INDEX       { bwNMControllerPostgreSQLDbStatsIndex }
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsTable 1  }
+
+  BwNMControllerPostgreSQLDbStatsEntry ::= SEQUENCE {
+    bwNMControllerPostgreSQLDbStatsIndex  Unsigned32,
+    bwNMControllerPostgreSQLDbName  DisplayString,
+    bwNMControllerPostgreSQLDbNbConnectionsCreated  Counter32,
+    bwNMControllerPostgreSQLDbConnectionPoolSize  Gauge32,
+    bwNMControllerPostgreSQLDbAvgUpdateTime  Gauge32,
+    bwNMControllerPostgreSQLDbAvgRowsUpdated  Gauge32,
+    bwNMControllerPostgreSQLDbAvgQueryTime  Gauge32,
+    bwNMControllerPostgreSQLDbAvgRowsQueried  Gauge32,
+    bwNMControllerPostgreSQLDbUpdateCount  Counter32,
+    bwNMControllerPostgreSQLDbQueryCount  Counter32
+  }
+
+  bwNMControllerPostgreSQLDbStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an PostgreSQL database index in the table."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 1  }
+
+  bwNMControllerPostgreSQLDbName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the PostgreSQL database name."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 2  }
+
+  bwNMControllerPostgreSQLDbNbConnectionsCreated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of total connections created to the PostgreSQL database."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 3  }
+
+  bwNMControllerPostgreSQLDbConnectionPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of connections residing in the PostgreSQL database connection pool."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 4  }
+
+  bwNMControllerPostgreSQLDbAvgUpdateTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average PostgreSQL DB update time in milliseconds."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 5  }
+
+  bwNMControllerPostgreSQLDbAvgRowsUpdated OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average number of rows affected in PostgreSQL DB updates."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 6  }
+
+  bwNMControllerPostgreSQLDbAvgQueryTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average PostgreSQL DB query time in milliseconds."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 7  }
+
+  bwNMControllerPostgreSQLDbAvgRowsQueried OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average number of rows processed in PostgreSQL DB queries."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 8  }
+
+  bwNMControllerPostgreSQLDbUpdateCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of PostgreSQL DB updates performed since the application started."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 9  }
+
+  bwNMControllerPostgreSQLDbQueryCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Number of PostgreSQL DB queries performed since the application started."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbStatsEntry 10  }
+
+  bwNMControllerPostgreSQLDbHWMTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwNMControllerPostgreSQLDbHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "A list of PostgreSQL database High Water Mark entries.  The number of entries is given by the value of bwNMControllerPostgreSQLDbCount."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQL 7  }
+
+  bwNMControllerPostgreSQLDbHWMEntry OBJECT-TYPE
+    SYNTAX      BwNMControllerPostgreSQLDbHWMEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "An entry containing high water mark information applicable to a particular PostgreSQL database."
+    INDEX       { bwNMControllerPostgreSQLDbHWMIndex }
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMTable 1  }
+
+  BwNMControllerPostgreSQLDbHWMEntry ::= SEQUENCE {
+    bwNMControllerPostgreSQLDbHWMIndex  Unsigned32,
+    bwNMControllerPostgreSQLDbHWMDbName  DisplayString,
+    bwNMControllerPostgreSQLDbHWMStatName  DisplayString,
+    bwNMControllerPostgreSQLDbHWMStatValue  Gauge32,
+    bwNMControllerPostgreSQLDbHWMTimestamp  DisplayString,
+    bwNMControllerPostgreSQLDbHWMStackTrace  DisplayString
+  }
+
+  bwNMControllerPostgreSQLDbHWMIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an PostgreSQL database index in the table."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 1  }
+
+  bwNMControllerPostgreSQLDbHWMDbName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the PostgreSQL database name."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 2  }
+
+  bwNMControllerPostgreSQLDbHWMStatName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the statistic name."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 3  }
+
+  bwNMControllerPostgreSQLDbHWMStatValue OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the statistic value."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 4  }
+
+  bwNMControllerPostgreSQLDbHWMTimestamp OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the timestamp of the high water mark."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 5  }
+
+  bwNMControllerPostgreSQLDbHWMStackTrace OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This string represents the stack trace when the high water mark occured."
+-- @feature:6984
+    ::=  {  bwNMControllerPostgreSQLDbHWMEntry 6  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).networkMonitoring(58).replication(3).primary(1)
+-- ################### ...............................
+
+  bwPostgreSQLDbSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the size of the database (in megabytes)."
+-- @feature:6984
+    ::=  {  primary 1  }
+
+  bwPostgreSQLReplicationStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwPostgreSQLReplicationStatsTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table exposes the NetworkMonitoring replication statistics of each connected nodes."
+-- @feature:6984
+    ::=  {  primary 2  }
+
+  bwPostgreSQLReplicationStatsTableEntry OBJECT-TYPE
+    SYNTAX      BwPostgreSQLReplicationStatsTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "This row contains information about a NetworkMonitoring replication statistics of a connected node."
+    INDEX       { bwPostgreSQLReplicationStatsIndex }
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTable 1  }
+
+  BwPostgreSQLReplicationStatsTableEntry ::= SEQUENCE {
+    bwPostgreSQLReplicationStatsIndex  Unsigned32,
+    bwPostgreSQLReplicationStatsAddr  DisplayString,
+    bwPostgreSQLReplicationStatsName  DisplayString,
+    bwPostgreSQLReplicationStatsState  INTEGER,
+    bwPostgreSQLReplicationStatsLag  Gauge32
+  }
+
+  bwPostgreSQLReplicationStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an index in table bwPostgreSQLReplicationStatsTable. The index represents a peer entry in the table."
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTableEntry 1  }
+
+  bwPostgreSQLReplicationStatsAddr OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the address of this connected node."
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTableEntry 2  }
+
+  bwPostgreSQLReplicationStatsName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the name of this connected node."
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTableEntry 3  }
+
+  bwPostgreSQLReplicationStatsState OBJECT-TYPE
+    SYNTAX      INTEGER { 
+      startup (0),
+      backup (1),
+      catchup (2),
+      streaming (3) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the replication state of this connected node."
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTableEntry 4  }
+
+  bwPostgreSQLReplicationStatsLag OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the replication lag of this connected node."
+-- @feature:6984
+    ::=  {  bwPostgreSQLReplicationStatsTableEntry 5  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).networkMonitoring(58).replication(3).standby(2)
+-- ################### ...............................
+
+  bwPostgreSQLReplicationStandbyInRecovery OBJECT-TYPE
+    SYNTAX      INTEGER { 
+      true (1),
+      false (2) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is indicates whether the node is in recovery mode."
+-- @feature:217550
+    ::=  {  standby 1  }
+
+  bwPostgreSQLReplicationStandbyLastTS OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the timestamp of the last replication which was replayed during recovery."
+-- @feature:217550
+    ::=  {  standby 2  }
+
+  bwPostgreSQLReplicationStandbyLag OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the replication delay in seconds."
+-- @feature:217550
+    ::=  {  standby 3  }
+
+-- BroadWorks MIB Conformance Definition  ...........................................
+
+  bwnetworkmonitoringExecutorsGroup OBJECT-GROUP
+    OBJECTS { bwNMControllerExecutorReset, bwNMControllerExecutorIndex, bwNMControllerExecutorName, bwNMControllerExecutorQueueCapacity, bwNMControllerExecutorQueueSize, bwNMControllerExecutorQueueWaitingTimeAvg, bwNMControllerExecutorQueueWaitingTimeMin, bwNMControllerExecutorQueueWaitingTimeMax, bwNMControllerExecutorQueueWaitingTimeMaxTimestamp, bwNMControllerExecutorMinPoolSize, bwNMControllerExecutorMaxPoolSize, bwNMControllerExecutorThreadsBusy, bwNMControllerExecutorCompletedTaskCount, bwNMControllerExecutorThreadsAlive, bwNMControllerExecutorThreadsAliveMax, bwNMControllerExecutorTaskProcessingTimeAvg, bwNMControllerExecutorTaskProcessingTimeMin, bwNMControllerExecutorTaskProcessingTimeMax, bwNMControllerExecutorTaskProcessingTimeMaxTimestamp }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for networkMonitoring executors."
+    ::=  {  bwNMControllerMibGroups 1  }
+
+  bwnetworkmonitoringBwNMControllerMariaDBGroup OBJECT-GROUP
+    OBJECTS { bwNMControllerMariaDBNbOpenedTransactions, bwNMControllerMariaDBNbCommittedTransactions, bwNMControllerMariaDBNbFailedTransactions, bwNMControllerMariaDBNbCriticalErrors, bwNMControllerMariaDBDbCount, bwNMControllerMariaDBDbStatsIndex, bwNMControllerMariaDBDbName, bwNMControllerMariaDBDbNbConnectionsCreated, bwNMControllerMariaDBDbConnectionPoolSize, bwNMControllerMariaDBDbAvgUpdateTime, bwNMControllerMariaDBDbAvgRowsUpdated, bwNMControllerMariaDBDbAvgQueryTime, bwNMControllerMariaDBDbAvgRowsQueried, bwNMControllerMariaDBDbUpdateCount, bwNMControllerMariaDBDbQueryCount, bwNMControllerMariaDBDbHWMIndex, bwNMControllerMariaDBDbHWMDbName, bwNMControllerMariaDBDbHWMStatName, bwNMControllerMariaDBDbHWMStatValue, bwNMControllerMariaDBDbHWMTimestamp, bwNMControllerMariaDBDbHWMStackTrace }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for networkMonitoring databaseStats bwNMControllerMariaDB."
+    ::=  {  bwNMControllerMibGroups 2  }
+
+  bwnetworkmonitoringBwNMControllerPostgreSQLGroup OBJECT-GROUP
+    OBJECTS { bwNMControllerPostgreSQLNbOpenedTransactions, bwNMControllerPostgreSQLNbCommittedTransactions, bwNMControllerPostgreSQLNbFailedTransactions, bwNMControllerPostgreSQLNbCriticalErrors, bwNMControllerPostgreSQLDbCount, bwNMControllerPostgreSQLDbStatsIndex, bwNMControllerPostgreSQLDbName, bwNMControllerPostgreSQLDbNbConnectionsCreated, bwNMControllerPostgreSQLDbConnectionPoolSize, bwNMControllerPostgreSQLDbAvgUpdateTime, bwNMControllerPostgreSQLDbAvgRowsUpdated, bwNMControllerPostgreSQLDbAvgQueryTime, bwNMControllerPostgreSQLDbAvgRowsQueried, bwNMControllerPostgreSQLDbUpdateCount, bwNMControllerPostgreSQLDbQueryCount, bwNMControllerPostgreSQLDbHWMIndex, bwNMControllerPostgreSQLDbHWMDbName, bwNMControllerPostgreSQLDbHWMStatName, bwNMControllerPostgreSQLDbHWMStatValue, bwNMControllerPostgreSQLDbHWMTimestamp, bwNMControllerPostgreSQLDbHWMStackTrace }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for networkMonitoring databaseStats bwNMControllerPostgreSQL."
+    ::=  {  bwNMControllerMibGroups 3  }
+
+  bwnetworkmonitoringPrimaryGroup OBJECT-GROUP
+    OBJECTS { bwPostgreSQLDbSize, bwPostgreSQLReplicationStatsIndex, bwPostgreSQLReplicationStatsAddr, bwPostgreSQLReplicationStatsName, bwPostgreSQLReplicationStatsState, bwPostgreSQLReplicationStatsLag }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for networkMonitoring replication primary."
+    ::=  {  bwNMControllerMibGroups 4  }
+
+  bwnetworkmonitoringStandbyGroup OBJECT-GROUP
+    OBJECTS { bwPostgreSQLReplicationStandbyInRecovery, bwPostgreSQLReplicationStandbyLastTS, bwPostgreSQLReplicationStandbyLag }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for networkMonitoring replication standby."
+    ::=  {  bwNMControllerMibGroups 5  }
+
+  bwNMControllerBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "BW-NetworkMonitoring MIB compliance."
+    MODULE
+      MANDATORY-GROUPS { bwnetworkmonitoringExecutorsGroup, bwnetworkmonitoringBwNMControllerMariaDBGroup,
+                         bwnetworkmonitoringBwNMControllerPostgreSQLGroup, bwnetworkmonitoringPrimaryGroup,
+                         bwnetworkmonitoringStandbyGroup }
+    ::=  {  bwNMControllerMibCompliancy 1  }
+
+END

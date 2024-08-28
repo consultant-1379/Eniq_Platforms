@@ -1,0 +1,233 @@
+-- File Name : BW-IMPFault.mib
+BW-IMPFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npRepositoryUri
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201406160000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks IMP Application."
+    REVISION    "201406160000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMimpLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the IMP has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpRestarted, and bwPMimpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the IMP process"
+-- @feature:
+    ::=  {  systemFaults 15001  }
+
+  bwPMimpShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the IMP has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpRestarted, and bwPMimpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the IMP process"
+-- @feature:
+    ::=  {  systemFaults 15002  }
+
+  bwPMimpRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the IMP restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpRestarted, and bwPMimpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the IMP process"
+-- @feature:
+    ::=  {  systemFaults 15003  }
+
+  bwPMimpDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the IMP death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMimpLaunched, bwPMimpShutDown, bwPMimpRestarted, and bwPMimpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the IMP process"
+-- @feature:
+    ::=  {  systemFaults 15004  }
+    
+  bwPMmucLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the MUC has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucRestarted, and bwPMmucDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the MUC process"
+-- @feature:
+    ::=  {  systemFaults 15005  }
+
+  bwPMmucShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the MUC has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucRestarted, and bwPMmucDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the MUC process"
+-- @feature:
+    ::=  {  systemFaults 15006  }
+
+  bwPMmucRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the MUC restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucRestarted, and bwPMmucDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the MUC process"
+-- @feature:
+    ::=  {  systemFaults 15007  }
+
+  bwPMmucDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the MUC death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMmucLaunched, bwPMmucShutDown, bwPMmucRestarted, and bwPMmucDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the MUC process"
+-- @feature:
+    ::=  {  systemFaults 15008  }
+    
+  bwPMdbConnectorLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DB CONNECTOR has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorRestarted, and bwPMdbConnectorDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DB CONNECTOR process"
+-- @feature:
+    ::=  {  systemFaults 15009  }
+
+  bwPMdbConnectorShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DB CONNECTOR has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorRestarted, and bwPMdbConnectorDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DB CONNECTOR process"
+-- @feature:
+    ::=  {  systemFaults 15010  }
+
+  bwPMdbConnectorRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DB CONNECTOR restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorRestarted, and bwPMdbConnectorDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DB CONNECTOR process"
+-- @feature:
+    ::=  {  systemFaults 15011  }
+
+  bwPMdbConnectorDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DB CONNECTOR death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorRestarted, and bwPMdbConnectorDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DB CONNECTOR process"
+-- @feature:
+    ::=  {  systemFaults 15012  }
+    
+bwPMdbConnectorOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the DB Connector ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMdbConnectorLaunched, bwPMdbConnectorShutDown, bwPMdbConnectorRestarted, bwPMdbConnectorDeath, and bwPMdbConnectorOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DB Connector process"
+-- @feature:165352
+    ::=  {  systemFaults 15013  }    
+    
+  bwPMmaliLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the Message Archiver has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmaliLaunched, bwPMmaliShutDown, bwPMmaliRestarted, and bwPMmaliDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Message Archiver process"
+-- @feature:
+    ::=  {  systemFaults 15014  }
+
+  bwPMmaliShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the Message Archiver has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmaliLaunched, bwPMmaliShutDown, bwPMmaliRestarted, and bwPMmaliDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Message Archiver process"
+-- @feature:
+    ::=  {  systemFaults 15015  }
+
+  bwPMmaliRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the Message Archiver restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMmaliLaunched, bwPMmaliShutDown, bwPMmaliRestarted, and bwPMmaliDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Message Archive process"
+-- @feature:
+    ::=  {  systemFaults 15016  }
+
+  bwPMmaliDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the Message Archiver death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMmaliLaunched, bwPMmaliShutDown, bwPMmaliRestarted, and bwPMmaliDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Message Archiver process"
+-- @feature:
+    ::=  {  systemFaults 15017  }
+    
+bwPMmaliOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the mali ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMmaliLaunched, bwPMmaliShutDown, bwPMmaliRestarted, bwPMmaliDeath, and bwPMmaliOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the Message Archiver process"
+-- @feature:165352
+    ::=  {  systemFaults 15018  }    
+    
+  bwMessageArchiverRepositoryCommunicationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npRepositoryUri }
+    STATUS      current
+    DESCRIPTION
+        "The MessageArchiver is unable to send files to the configured file repository.
+@severity:high
+@subcomponent:messageArchiver
+"
+-- @feature:
+    ::=  {  systemFaults 15019  }
+    
+
+END

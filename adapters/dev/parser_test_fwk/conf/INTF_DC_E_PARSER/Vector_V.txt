@@ -1,0 +1,12 @@
+[GENERAL]
+tagId=Vector_V
+dataFormatID=DC_E_PARSER:((1)):DC_E_PARSER_VECTOR_V:mdc
+folderName=DC_E_PARSER_VECTOR_V
+dItems_imports=__ENIQ__.txt
+
+[vector_counter]
+pi=VECTOR
+dataType=numeric
+dataSize=18
+dataScale=8
+isCounter=1

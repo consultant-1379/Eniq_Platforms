@@ -1,0 +1,11 @@
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSG:((3))', 'DIM_E_GRAN', 'R2B');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSG:((3))', 'DWH_BASE', 'R3A');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSG:((3))', 'DWH_MONITOR', 'R2F');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSG:((3))', 'DC_BSS_BASE', 'R20A');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSS:((2))', 'DIM_E_CN', 'R2A');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSS:((2))', 'DWH_BASE', 'R3B');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSS:((2))', 'DWH_MONITOR', 'R2F');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSW:((2))', 'DIM_E_UTRAN', 'R2A');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSW:((2))', 'UTRAN_BASE', 'R3A');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSW:((2))', 'DWH_BASE', 'R3B');
+insert into Techpackdependency (VERSIONID, TECHPACKNAME, VERSION) values ('PM_E_EBSW:((2))', 'DWH_MONITOR', 'R2F');

@@ -1,0 +1,52 @@
+<project name="simcfg" default="compile">
+
+  <property name="pack.name" value="simcfg"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/mediation/dev/simcfg"/>
+  <property name="simpack.dir" value="/vobs/eniq/design/plat/mediation/dev/sim"/>
+
+  <property name="3pp.log4j.dir" value="/vobs/eniq/3pp/apache/log4j/v1_2_11/prod"/>
+  
+  <target name="precompile">
+    <mkdir dir="${pack.dir}/classes"/>
+  </target>
+  
+  <target name="compile">
+
+    <!-- Compile the config creation code into the simcfg classes directory-->
+    <javac destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+      <src path="${simpack.dir}/src/ConfigurationCreator/src"/>
+      <src path="${simpack.dir}/src/SIM_Config/src"/>
+      <src path="${simpack.dir}/src/SIM_Config_Base/src"/>
+      <classpath>
+      <pathelement path="${classpath}"/>
+        <fileset dir="${3pp.log4j.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+
+
+    <!-- Create the config creation jar file into the simcfg src directory-->
+    <jar destfile="${pack.dir}/src/simcfg.jar" basedir="${pack.dir}/classes">
+      <manifest>
+        <attribute name="Main-Class" value="configCreation.ConfigCreator"/>
+      </manifest>
+    </jar>
+	
+	<java classname="configCreation.ConfigCreator">
+      <classpath>
+        <pathelement location="${pack.dir}/src/simcfg.jar"/>
+        <pathelement path="${java.class.path}"/>
+      </classpath>
+    </java>
+
+  </target>
+
+  <target name="postcompile">
+    
+  </target>
+
+</project>

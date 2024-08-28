@@ -1,0 +1,84 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Alter CUDB tables script
+#
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2012 AB LM Ericsson  All rights reserved.
+# ----------------------------------------------------------------------
+
+# This script alters the system tables of DC_E_CUDB  <RAW/DAY/DAYBH/DAYBHCALC> to make the NE_ID keys as nullable columns. 
+#
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+ENIQ_BIN_DIR=/eniq/sw/bin
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../../admin/lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../../admin/lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../../admin/lib/common_functions.lib"
+        exit 63
+fi
+
+DBA_PASSWORD=`iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+DWH_PORT=`iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_NAME=`iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+SYBASE_IQ_PATH=/eniq/sybase_iq//OCS-15_0/bin/isql
+
+if [ ! -f ${ENIQ_BIN_DIR}/alter_dc_e_cudb_neid.sql ] ; then
+        echo "${ENIQ_BIN_DIR}/alter_dc_e_cudb_neid.sql does not exist"
+        exit 1
+fi
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dba;pwd=${DBA_PASSWORD};eng=${DWH_NAME};links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Logging into database to alter the tables."
+
+${IQDIR}/bin64/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q ${ENIQ_BIN_DIR}/alter_dc_e_cudb_neid.sql
+
+if [ $? != 0 ] ; then
+  echo "Creation of Stored Procedure alter_DC_E_CUDB_NEID failed"
+  exit 10
+else
+  echo "Stored Procedure alter_DC_E_CUDB_NEID successfully created"
+fi
+
+
+echo "Executing the stored procedure alter_DC_E_CUDB_NEID"
+
+${SYBASE_IQ_PATH} -Udba -P${DBA_PASSWORD} -S${DWH_NAME} <<EOISQL
+alter_DC_E_CUDB_NEID
+go
+EOISQL
+echo "Executed the stored procedure alter_DC_E_CUDB_NEID"
+
+
+
+echo "Droping the stored procedure alter_DC_E_CUDB_NEID"
+${SYBASE_IQ_PATH} -Udba -P${DBA_PASSWORD} -S${DWH_NAME} <<EOISQL
+drop proc alter_DC_E_CUDB_NEID
+go
+EOISQL
+echo "Dropped the stored procedure alter_DC_E_CUDB_NEID"

@@ -1,0 +1,146 @@
+#!/bin/bash
+##################################################################
+# COPYRIGHT Ericsson AB 2015
+#
+# The copyright to the computer program(s) herein is the property
+# of ERICSSON AB, Sweden. The programs may be used
+# and/or copied only with the written permission from ERICSSON
+# AB or in accordance with the terms and conditions
+# stipulated in the agreement/contract under which the program(s)
+# have been supplied.
+#
+##################################################################
+#
+# "Usage: sim <start|stop|restart|status|migrateconfig|config (import filepath/export filename)>"
+#
+
+NAWK=/usr/bin/nawk
+unalias stop 2> /dev/null
+ 
+if [ ${LOGNAME} != "dcuser" ] ; then
+	echo "This script must be executed as dcuser"
+	exit 32
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+	echo "ERROR: CONF_DIR is not set"
+	exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+CPATH="${PLATFORM_DIR}"
+for _jar_ in `find ${PLATFORM_DIR}/*/dclib/ -name \*.jar` ; do
+        CPATH=${CPATH}:$_jar_
+done
+ 
+ENIQENGINESTATUS=/eniq/procus/sim/app/scripts/EniqEngineStatus.sh
+SYSTEMLISTENERkill=EniqEngineStatus
+JAVA=/eniq/sw/runtime/java/bin/java
+STATUSCLASS="com.ericsson.sim.rmi.RMIConnection"
+SIMCLICLASS="com.ericsson.sim.config.configNodes.SIMCLI"
+MAINCLASS="com.ericsson.sim.SIM"
+CONFIGCONVERTCLASS="com.ericsson.sim.configConversion.SIMConfigConversion"
+
+start() {
+if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+	${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s sim -a start
+else
+	${ADMIN_BIN}/eniq_service_start_stop.bsh -s sim -a start
+fi
+}
+
+stop() {
+if [ -f "/tmp/dwhdb_full" ]; then    
+	thisdate=`date +%Y_%m_%d`
+	message=`date "+%d.%m %H:%M:%S"`" 0 SEVERE : DWHDB is full! Therefore SIM service is killed."
+  	echo ${message} >> ${LOG_DIR}/sim/sim-${thisdate}.log
+	echo ${message} >> ${LOG_DIR}/sim/sim-${thisdate}.log
+	rm /tmp/dwhdb_full
+	ps -ef | grep java | grep $SYSTEMLISTENERkill | $NAWK '{print $2}' | xargs kill -9
+else
+	if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+		${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s sim -a stop
+	else
+		${ADMIN_BIN}/eniq_service_start_stop.bsh -s sim -a stop
+	fi
+fi
+}
+
+status(){
+PID=`/usr/ucb/ps -auxww | grep "$MAINCLASS" | grep -v grep | $NAWK '{print $2}'`
+EPID=`/usr/ucb/ps -auxww | grep "$SYSTEMLISTENERkill" | grep -v grep | $NAWK '{print $2}'`
+
+if [ -n "$PID" ] && [ -n "$EPID" ]; then
+	echo "System Monitor is enabled"
+	echo "SIM"
+	echo "Status: Running"
+	$JAVA -cp $CPATH $STATUSCLASS
+elif [ -n "$PID" ] && [ -z "$EPID" ]; then
+	echo "System Monitor is disabled"
+	echo "SIM"
+	echo "Status: Running"
+	$JAVA -cp $CPATH $STATUSCLASS
+elif [ -z "$PID" ] && [ -n "$EPID" ]; then
+	echo "System Monitor is enabled"
+	echo "SIM"
+	echo "Status: Not Running"
+else
+	echo "System Monitor disabled"
+	echo "SIM"
+	echo "Status: Not running"
+fi
+}
+
+migrateconfig(){
+
+	$JAVA -cp $CPATH $CONFIGCONVERTCLASS
+}
+
+config(){
+
+if [ -z "$ACTION" ] && [ -z "$FILEPATH" ]; then
+	echo "Usage: sim <start|stop|restart|status|migrateconfig|config (import filepath/export filename)>"
+	exit 1
+fi
+
+if [ "$ACTION" == "import" ] || [ "$ACTION" == "export" ]; then
+	$JAVA -cp $CPATH $SIMCLICLASS "$ACTION" "$FILEPATH"
+else
+	echo "Usage: sim <start|stop|restart|status|migrateconfig|config (import filepath/export filename)>"
+fi
+
+
+
+}
+
+#Args
+ACTION=$2
+FILEPATH=$3
+
+case "$1" in
+	start)
+		start
+        	;;
+	stop)
+		stop
+        	;;
+	restart)
+		stop
+		start
+        	;;
+	status)
+		status
+		;;
+	migrateconfig)
+		migrateconfig
+		;;
+	config)
+		config
+			;;
+	*)
+		echo "Usage: sim <start|stop|restart|status|migrateconfig|config (import filepath/export filename)>"
+	 	exit 1
+		;;
+esac
+exit 0

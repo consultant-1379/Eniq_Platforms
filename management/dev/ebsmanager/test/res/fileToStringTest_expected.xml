@@ -1,0 +1,18 @@
+cell
+	CounterGroup1
+		c3
+		c4
+		c8
+		c9
+	CounterGroup2
+		c10
+	Handover
+		c24
+		c22
+		c23
+		c21
+trx
+	FFAX
+		c14
+		c15
+		c16

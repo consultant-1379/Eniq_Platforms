@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+    <group name="VIP" type="HOME">
+        <!--<group-element>
+            <key value="abc" name="mcc"/>
+            <key value="def" name="mnc"/>
+        </group-element> -->
+        <group-element>
+            <key value="ggg" name="mcc"/>
+            <key value="fr" name="mnc"/>
+        </group-element>
+        <!-- <group-element>
+            <key value="en" name="mcc"/>
+            <key value="jj" name="mnc"/>
+        </group-element> -->
+    </group>
+</groupmgt>

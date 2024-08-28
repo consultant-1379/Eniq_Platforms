@@ -1,0 +1,505 @@
+-- File Name : BW-CAPStack.mib
+
+BW-CAPStack DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201202230000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201202230000Z"
+      DESCRIPTION "Creation of the SS7 Protocol Stack MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ss7ProtocolStack OBJECT IDENTIFIER
+    ::= { broadworks 30 }
+
+  bwCAPStackMibConformance OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 1001 }
+
+-- SS7 Protocol Stack modules  ...........................................
+
+  ss7CapCounters OBJECT IDENTIFIER
+    ::= { ss7ProtocolStack 7 }
+    
+-- SS7 CAP Counters  ...........................................
+
+  bwSS7CapGSMStatsTable  OBJECT-TYPE
+    SYNTAX      SEQUENCE  OF  BwSS7CapGSMStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "This table exposes total CAP Single Association Control Function (SACF) related statistics"
+-- @feature:158606
+    ::=  {  ss7CapCounters  1 }
+  
+-- bwSS7CapGSMStatsTable  ...........................................
+
+  bwSS7CapGSMStatsEntry  OBJECT-TYPE
+    SYNTAX      BwSS7CapGSMStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION  
+      "Defines the row structure for bwSS7CapGSMStatsTable."
+    INDEX    {  bwSS7CapGSMStatsIndex  }
+-- @feature:158606
+    ::=  { bwSS7CapGSMStatsTable 1 }
+
+  BwSS7CapGSMStatsEntry  ::=  SEQUENCE {
+    bwSS7CapGSMStatsIndex  Unsigned32,
+    bwSS7CapGSMStatsInstanceId  Unsigned32,
+    bwSS7CapGSMStatsSACFDialogsActiveGauge  Gauge32,
+    bwSS7CapGSMStatsSACFDialogsCummulativeCount  Unsigned32,
+    bwSS7CapGSMStatsSACFFailedACCount  Unsigned32,
+    bwSS7CapGSMStatsSACFPhase2DialogsActiveGauge  Gauge32,
+    bwSS7CapGSMStatsSACFPhase2DialogsCummulativeCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMInvokeReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMResultReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMErrorReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMURejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMLRejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMRRejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMInvokeRequestReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMErrorRequestReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMURejectRequestSentCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMUResultRequestSentCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMASNDecodingErrorCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMASNEncodingErrorCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2InvokeReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2ResultReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2ErrorReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2URejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2LRejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2RRejectIndReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2InvokeRequestReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2ErrorRequestReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2URejectRequestSentCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2UResultRequestSentCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2ASNDecodingErrorCount  Unsigned32,
+    bwSS7CapGSMStatsFEAMPhase2ASNEncodingErrorCount  Unsigned32,
+    bwSS7CapGSMStatsSCMESessionEstablishedCount  Unsigned32,
+    bwSS7CapGSMStatsSCMEUnexpectedMessageCount  Unsigned32,
+    bwSS7CapGSMStatsSCMECorrelationIdMismatchCount  Unsigned32,
+    bwSS7CapGSMStatsSCMEPhase2SessionEstablishedCount  Unsigned32,
+    bwSS7CapGSMStatsSCMEPhase2UnexpectedMessageCount  Unsigned32,
+    bwSS7CapGSMStatsSCSMInvocationRejectedCount  Unsigned32,
+    bwSS7CapGSMStatsSCSMMaxCSReceivedCount  Unsigned32,
+    bwSS7CapGSMStatsSCSMMaxLegAchievedCount  Unsigned32,
+    bwSS7CapGSMStatsSCSMPhase2InvocationRejectedCount  Unsigned32,
+    bwSS7CapGSMStatsTableReset  INTEGER
+  }
+
+  bwSS7CapGSMStatsIndex  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  1  }
+
+  bwSS7CapGSMStatsInstanceId  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This integer represents an instance id."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  2  }
+
+  bwSS7CapGSMStatsSACFDialogsActiveGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of active CAP Single Association Control Function (SACF) dialogs."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  3  }
+
+  bwSS7CapGSMStatsSACFDialogsCummulativeCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The cummulative number of CAP Single Association Control Function (SACF) dialogs since startup or last reset."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  4  }
+
+  bwSS7CapGSMStatsSACFFailedACCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of times CAP Single Association Control Function (SACF) AC failed."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  5  }
+
+  bwSS7CapGSMStatsSACFPhase2DialogsActiveGauge  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of active CAP Single Association Control Function (SACF) dialogs - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  6  }
+
+  bwSS7CapGSMStatsSACFPhase2DialogsCummulativeCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The cummulative number of CAP Single Association Control Function (SACF) dialogs since startup or last reset - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  7  }
+
+  bwSS7CapGSMStatsFEAMInvokeReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) invoke indication received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  8  }
+
+  bwSS7CapGSMStatsFEAMResultReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) result indication received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  9  }
+
+  bwSS7CapGSMStatsFEAMErrorReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) error indication received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  10  }
+
+  bwSS7CapGSMStatsFEAMURejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_reject_indications received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  11  }
+
+  bwSS7CapGSMStatsFEAMLRejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) l_reject_indications received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  12  }
+
+  bwSS7CapGSMStatsFEAMRRejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) r_reject_indications received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  13  }
+
+  bwSS7CapGSMStatsFEAMInvokeRequestReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) invoke request received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  14  }
+
+  bwSS7CapGSMStatsFEAMErrorRequestReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) error request received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  15  }
+
+  bwSS7CapGSMStatsFEAMURejectRequestSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_reject_request received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  16  }
+
+  bwSS7CapGSMStatsFEAMUResultRequestSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_result_request received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  17  }
+
+  bwSS7CapGSMStatsFEAMASNDecodingErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) ASN decoding error."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  18  }
+
+  bwSS7CapGSMStatsFEAMASNEncodingErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) ASN encoding error."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  19  }
+
+  bwSS7CapGSMStatsFEAMPhase2InvokeReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) invoke indication received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  20  }
+
+  bwSS7CapGSMStatsFEAMPhase2ResultReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) result indication received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  21  }
+
+  bwSS7CapGSMStatsFEAMPhase2ErrorReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) error indication received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  22  }
+
+  bwSS7CapGSMStatsFEAMPhase2URejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_reject_indications received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  23  }
+
+  bwSS7CapGSMStatsFEAMPhase2LRejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) l_reject_indications received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  24  }
+
+  bwSS7CapGSMStatsFEAMPhase2RRejectIndReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) r_reject_indications received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  25  }
+
+  bwSS7CapGSMStatsFEAMPhase2InvokeRequestReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) invoke request received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  26  }
+
+  bwSS7CapGSMStatsFEAMPhase2ErrorRequestReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) error request received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  27  }
+
+  bwSS7CapGSMStatsFEAMPhase2URejectRequestSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_reject_request received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  28  }
+
+  bwSS7CapGSMStatsFEAMPhase2UResultRequestSentCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) u_result_request received - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  29   }
+
+  bwSS7CapGSMStatsFEAMPhase2ASNDecodingErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) ASN decoding error - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  30  }
+
+  bwSS7CapGSMStatsFEAMPhase2ASNEncodingErrorCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP Functional Entity Access Manager (FEAM) ASN encoding error - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  31  }
+
+  bwSS7CapGSMStatsSCMESessionEstablishedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCME established sessions."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  32  }
+
+  bwSS7CapGSMStatsSCMEUnexpectedMessageCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCME unexpected messages."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  33  }
+
+  bwSS7CapGSMStatsSCMECorrelationIdMismatchCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCME correlation id mismatch - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  34  }
+
+  bwSS7CapGSMStatsSCMEPhase2SessionEstablishedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCME established sessions - Phase 2."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  35  }
+
+  bwSS7CapGSMStatsSCMEPhase2UnexpectedMessageCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCME unexpected messages."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  36  }
+
+
+  bwSS7CapGSMStatsSCSMInvocationRejectedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCSM invoation rejected."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  37  }
+
+  bwSS7CapGSMStatsSCSMMaxCSReceivedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCSM maximum CS received."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  38  }
+
+  bwSS7CapGSMStatsSCSMMaxLegAchievedCount  OBJECT-TYPE  
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "The number of CAP SCSM maximum leg Achieved."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  39  }
+
+   bwSS7CapGSMStatsSCSMPhase2InvocationRejectedCount  OBJECT-TYPE  
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION    
+         "The number of CAP SCSM invocation rejected - Phase 2."
+-- @feature:158606
+     ::= {  bwSS7CapGSMStatsEntry  40  }
+
+  bwSS7CapGSMStatsTableReset  OBJECT-TYPE  
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter can be used to reset the stats in the bwSS7CapGSMStatsTable by setting the counter to 1."
+-- @feature:158606
+    ::=  {  bwSS7CapGSMStatsEntry  41  }
+
+-- BroadWorks SS7 Protocol Stack MIB Conformance Definition  ......................................
+
+  bwCAPStackMibGroups OBJECT IDENTIFIER 
+    ::= { bwCAPStackMibConformance 1 }
+
+  bwCAPStackMibCompliancy OBJECT IDENTIFIER
+    ::= { bwCAPStackMibConformance 2 }
+
+  
+  bwCAPGSMStatsGroup OBJECT-GROUP
+    OBJECTS { bwSS7CapGSMStatsIndex, bwSS7CapGSMStatsInstanceId, bwSS7CapGSMStatsSACFDialogsActiveGauge, bwSS7CapGSMStatsSACFDialogsCummulativeCount, bwSS7CapGSMStatsSACFFailedACCount, bwSS7CapGSMStatsSACFPhase2DialogsActiveGauge, bwSS7CapGSMStatsSACFPhase2DialogsCummulativeCount, bwSS7CapGSMStatsFEAMInvokeReceivedCount, bwSS7CapGSMStatsFEAMResultReceivedCount, bwSS7CapGSMStatsFEAMErrorReceivedCount, bwSS7CapGSMStatsFEAMURejectIndReceivedCount, bwSS7CapGSMStatsFEAMLRejectIndReceivedCount, bwSS7CapGSMStatsFEAMRRejectIndReceivedCount, bwSS7CapGSMStatsFEAMInvokeRequestReceivedCount, bwSS7CapGSMStatsFEAMErrorRequestReceivedCount, bwSS7CapGSMStatsFEAMURejectRequestSentCount, bwSS7CapGSMStatsFEAMUResultRequestSentCount, bwSS7CapGSMStatsFEAMASNDecodingErrorCount, bwSS7CapGSMStatsFEAMASNEncodingErrorCount, bwSS7CapGSMStatsFEAMPhase2InvokeReceivedCount, bwSS7CapGSMStatsFEAMPhase2ResultReceivedCount, bwSS7CapGSMStatsFEAMPhase2ErrorReceivedCount, bwSS7CapGSMStatsFEAMPhase2URejectIndReceivedCount, bwSS7CapGSMStatsFEAMPhase2LRejectIndReceivedCount, bwSS7CapGSMStatsFEAMPhase2RRejectIndReceivedCount, bwSS7CapGSMStatsFEAMPhase2InvokeRequestReceivedCount, bwSS7CapGSMStatsFEAMPhase2ErrorRequestReceivedCount, bwSS7CapGSMStatsFEAMPhase2URejectRequestSentCount, bwSS7CapGSMStatsFEAMPhase2UResultRequestSentCount, bwSS7CapGSMStatsFEAMPhase2ASNDecodingErrorCount, bwSS7CapGSMStatsFEAMPhase2ASNEncodingErrorCount, bwSS7CapGSMStatsSCMESessionEstablishedCount, bwSS7CapGSMStatsSCMEUnexpectedMessageCount, bwSS7CapGSMStatsSCMECorrelationIdMismatchCount, bwSS7CapGSMStatsSCMEPhase2SessionEstablishedCount, bwSS7CapGSMStatsSCMEPhase2UnexpectedMessageCount, bwSS7CapGSMStatsSCSMInvocationRejectedCount, bwSS7CapGSMStatsSCSMMaxCSReceivedCount, bwSS7CapGSMStatsSCSMMaxLegAchievedCount, bwSS7CapGSMStatsSCSMPhase2InvocationRejectedCount, bwSS7CapGSMStatsTableReset }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the CAP statistics."
+    ::= { bwCAPStackMibGroups 1 }
+   
+  bwCAPBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks CAP Stack MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwCAPGSMStatsGroup }
+
+    ::= { bwCAPStackMibCompliancy 1 }
+END

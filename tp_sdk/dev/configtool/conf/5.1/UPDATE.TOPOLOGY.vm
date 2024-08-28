@@ -1,0 +1,54 @@
+## 
+## UPDATE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+#set($first = true)
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() != 1) 
+#if ( $first ) 
+#if ($ref.getDataname().equalsIgnoreCase("CREATED") == false)
+trg.$ref.getDataname() = src.$ref.getDataname()
+#set($first = false)
+#end
+#else
+#if ($ref.getDataname().equalsIgnoreCase("CREATED") == false)
+,trg.$ref.getDataname() = src.$ref.getDataname()
+#end
+#end
+#end
+#end
+FROM ${TABLE}_CURRENT src, $TABLE trg
+WHERE 
+(
+#set($first = true)
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() != 1) 
+#if ( $first ) 
+#if ($ref.getDataname().equalsIgnoreCase("CREATED") == false && $ref.getDataname().equalsIgnoreCase("MODIFIED") == false)
+trg.$ref.getDataname() <> src.$ref.getDataname()
+#set($first = false)
+#end
+#else
+#if ($ref.getDataname().equalsIgnoreCase("CREATED") == false && $ref.getDataname().equalsIgnoreCase("MODIFIED") == false)
+OR trg.$ref.getDataname() <> src.$ref.getDataname()
+#end
+#end
+#end
+#end
+)
+AND
+#set($first = true)
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1) 
+#if ( $first )
+trg.$ref.getDataname() = src.$ref.getDataname()
+#set($first = false)
+#else 
+AND trg.$ref.getDataname() = src.$ref.getDataname()
+#end
+#end
+#end
+;
+commit;

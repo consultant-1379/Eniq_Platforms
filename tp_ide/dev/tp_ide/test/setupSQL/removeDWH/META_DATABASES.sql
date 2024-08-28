@@ -1,0 +1,6 @@
+create table META_DATABASES (USERNAME varchar(30) , VERSION_NUMBER varchar(32) not null,TYPE_NAME varchar(15) not null, CONNECTION_ID numeric(31) not null,CONNECTION_NAME varchar(30) not null,  CONNECTION_STRING varchar(200) not null,PASSWORD varchar(30) , DESCRIPTION varchar(32000) , DRIVER_NAME varchar(100) not null,DB_LINK_NAME varchar(128));
+insert into META_DATABASES( USERNAME, VERSION_NUMBER, TYPE_NAME, CONNECTION_ID, CONNECTION_NAME, CONNECTION_STRING, PASSWORD, DESCRIPTION, DRIVER_NAME, DB_LINK_NAME) values ('etlrep', '0', 'USER', 0, 'etlrep', 'jdbc:hsqldb:mem:etlrep', 'etlrep', 'ETL Repository Database', 'org.hsqldb.jdbcDriver', null);
+insert into META_DATABASES( USERNAME, VERSION_NUMBER, TYPE_NAME, CONNECTION_ID, CONNECTION_NAME, CONNECTION_STRING, PASSWORD, DESCRIPTION, DRIVER_NAME, DB_LINK_NAME) values ('dwhrep', '0', 'USER', 1, 'dwhrep', 'jdbc:hsqldb:mem:dwhrep', 'dwhrep', 'DWH Repository Database', 'org.hsqldb.jdbcDriver', null);
+insert into META_DATABASES( USERNAME, VERSION_NUMBER, TYPE_NAME, CONNECTION_ID, CONNECTION_NAME, CONNECTION_STRING, PASSWORD, DESCRIPTION, DRIVER_NAME, DB_LINK_NAME) values ('dc', '0', 'USER', 2, 'dwh', 'jdbc:hsqldb:mem:dwh', 'dc', 'The DataWareHouse Database', 'org.hsqldb.jdbcDriver', null);
+CREATE USER dwhrep PASSWORD dwhrep ADMIN;
+

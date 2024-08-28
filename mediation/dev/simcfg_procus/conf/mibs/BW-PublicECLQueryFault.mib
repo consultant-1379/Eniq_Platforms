@@ -1,0 +1,34 @@
+-- File Name : BW-PublicECLQueryFault.mib
+BW-PublicECLQueryFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npNetAddress
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201312140000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks Public ECL Query Application."
+    REVISION    "201312140000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwEnhancedCallLogQueryWebAppNotReachable NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npNetAddress }
+    STATUS      current
+    DESCRIPTION
+        "Application could not establish a connection to ECLQuery web application hosting server.
+@severity:high
+@subcomponent:publicECLQuery
+@correlationrules:This alarm is cleared once the connection is restored."
+-- @feature:206184
+    ::=  {  systemFaults 13401  }
+
+END

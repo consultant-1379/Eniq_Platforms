@@ -1,0 +1,3 @@
+insert into dwhrep.GROUPTYPES (GROUPTYPE, VERSIONID, DATANAME, DATATYPE, DATASIZE, DATASCALE, NULLABLE) values ('APN', 'EVENT_E_SGEH:((11))', 'APN', 'unsigned int', '0', '0', 0);
+insert into dwhrep.GROUPTYPES (GROUPTYPE, VERSIONID, DATANAME, DATATYPE, DATASIZE, DATASCALE, NULLABLE) values ('IMSI', 'EVENT_E_SGEH:((11))', 'IMSI', 'unsigned bigint', '0', '0', 0);
+insert into dwhrep.GROUPTYPES (GROUPTYPE, VERSIONID, DATANAME, DATATYPE, DATASIZE, DATASCALE, NULLABLE) values ('TAC', 'EVENT_E_SGEH:((11))', 'TAC', 'unsigned int', '0', '0', 0);

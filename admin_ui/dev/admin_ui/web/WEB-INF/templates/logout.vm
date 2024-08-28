@@ -1,0 +1,28 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/admin.css"><title>Ericsson Network IQ</title></head>
+<link rel="shortcut icon" href="../img/favicon.ico">
+<body bgcolor="#ffffff">
+
+<table border="0" width="100%">
+<tr valign=top>
+<td align="center" valign="middle">
+<br />
+<img src="../eniq_blue_banner.jpg" /><br/>
+<br /><br />
+
+<font face="Verdana, Helvetica, Arial" size=2>
+
+You have logged out.<br />
+
+$!notification <br />
+
+<a href="$req.getContextPath()/servlet/LoaderStatusServlet">Login</a>
+</font>
+</td>
+</tr>
+
+#parse( "footer.vm" )
+</table>
+</body>
+</html>

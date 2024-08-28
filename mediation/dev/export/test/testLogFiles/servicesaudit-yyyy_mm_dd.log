@@ -1,0 +1,338 @@
+2011-01-26 12:03:08.832;23;INFO;Level<INFO>;Object[][http://atc3000bl3.athtem.eei.ericsson.se:18080/EniqEventsServices_eriwals/SUBSCRIBER/EVENT_ANALYSIS?time=30&type=IMSI&imsi=460010057584541&display=grid&type=IMSI&key=TOTAL&tzOffset=+0000&maxRows=500&userId=admin&srcIpAddress=159.107.167.85];
+2011-01-26 12:04:12.315;49;INFO;Level<INFO>;Object[][http://atc3000bl3.athtem.eei.ericsson.se:18080/EniqEventsServices_eriwals/SUBSCRIBER/EVENT_ANALYSIS?time=10080&type=IMSI&imsi=460010057584541&display=grid&type=IMSI&key=TOTAL&tzOffset=+0000&maxRows=500&userId=admin&srcIpAddress=159.107.167.85];
+2011-01-26 12:04:12.334;49;FINE;Level<FINE>;Object[][select
+		top 500
+	    rawview.EVENT_TIME,
+			rawview.PTMSI,
+	    rawview.TAC,
+    tacref.MANUFACTURER,
+    tacref.Marketing_Name,
+    etref.EVENT_ID_DESC,
+    erref.EVENT_RESULT_DESC,
+	cptref.CAUSE_PROT_TYPE_DESC,
+    ccref.CAUSE_CODE_DESC,
+    sccref.SUBCAUSE_CODE_DESC,    
+    rawview.EVENT_SOURCE_NAME,
+	ratref.RAT_DESC,
+    rawview.HIERARCHY_3,
+    rawview.HIERARCHY_2,
+    rawview.HIERARCHY_1,
+    rawview.VENDOR,
+	rawview.LINKED_NSAPI,
+	rawview.PDP_NSAPI_1,
+	    (case when (rawview.PDP_GGSN_IPADDRESS_1 is not null) then (case when (rawview.PDP_GGSN_NAME_1 is null) then isnull(ggsnref.GGSN_NAME,  
+	cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,4,2)) as varchar))
+	else rawview.PDP_GGSN_NAME_1 end)else '' end) as PDP_GGSN_NAME_1,
+	
+	(case when (rawview.PDP_MS_IPADDRESS_1 is not null) then(
+	cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,4,2)) as varchar))
+	else '' end) as PDP_MS_IPADDRESS_1,
+
+    rawview.PDP_NSAPI_2,       
+    	(case when (rawview.PDP_GGSN_IPADDRESS_2 is not null) then (case when (rawview.PDP_GGSN_NAME_2 is null) then isnull(ggsnref.GGSN_NAME, 
+	cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,4,2)) as varchar))
+	else rawview.PDP_GGSN_NAME_2 end)else '' end) as PDP_GGSN_NAME_2,
+    
+	(case when (rawview.PDP_MS_IPADDRESS_2 is not null) then(
+	cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,4,2)) as varchar))
+	else '' end) as PDP_MS_IPADDRESS_2,
+
+	rawview.PAGING_ATTEMPTS,
+    rawview.SERVICE_REQ_TRIGGER,
+    rawview.REQUEST_RETRIES,
+    rawview.APN,
+    rawview.MCC, 
+    rawview.MNC,
+    rawview.RAC,
+    rawview.LAC,
+    rawview.UPDATE_TYPE,
+		(case when (rawview.OLD_SGSN_IPADDRESS is not null) then isnull(sgsnref.SGSN_NAME, 
+	cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,4,2)) as varchar))
+	else '' end) as OLD_SGSN_NAME,
+    rawview.OLD_MCC,
+    rawview.OLD_MNC,	
+    rawview.OLD_RAC,
+    rawview.OLD_LAC,
+    rawview.TRANSFERRED_PDP,
+    rawview.DROPPED_PDP,
+    rawview.HLR,
+    rawview.DEACTIVATION_TRIGGER,
+    ccref.CAUSE_CODE,
+    sccref.SUBCAUSE_CODE,
+    erref.EVENT_RESULT,
+	cptref.CAUSE_PROT_TYPE,
+    ratref.RAT
+from
+		(
+					select
+				*
+			from dc.EVENT_E_SGEH_SUC_RAW_43 where
+													EVENT_E_SGEH_SUC_RAW_43.IMSI = :IMSI
+					and DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+											union all
+								select
+				*
+			from dc.EVENT_E_SGEH_ERR_RAW_06 where
+													EVENT_E_SGEH_ERR_RAW_06.IMSI = :IMSI
+					and DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+									) as rawview,
+    dc.DIM_E_SGEH_EVENTTYPE etref,
+    dc.DIM_E_SGEH_CAUSECODE ccref,
+    dc.DIM_E_SGEH_SUBCAUSECODE sccref,
+    dc.DIM_E_SGEH_EVENTRESULT erref,
+    dc.DIM_E_SGEH_TAC tacref,
+	dc.DIM_E_SGEH_SGSN sgsnref,
+	dc.DIM_E_SGEH_GGSN ggsnref,
+    dc.DIM_E_SGEH_CAUSE_PROT_TYPE cptref,
+    dc.DIM_E_SGEH_RAT ratref
+    where
+    		rawview.EVENT_ID is not null
+		    and rawview.EVENT_ID = etref.EVENT_ID
+    and rawview.CAUSE_PROT_TYPE = cptref.CAUSE_PROT_TYPE
+    and rawview.CAUSE_PROT_TYPE = ccref.CAUSE_PROT_TYPE
+    and rawview.CAUSE_CODE = ccref.CAUSE_CODE
+    and rawview.SUBCAUSE_CODE = sccref.SUBCAUSE_CODE
+    and rawview.EVENT_RESULT = erref.EVENT_RESULT
+	
+		and rawview.TAC *= tacref.TAC
+		
+	and rawview.OLD_SGSN_IPADDRESS *= sgsnref.IP_ADDRESS	
+    and rawview.PDP_GGSN_NAME_1 *= ggsnref.GGSN_IPADDRESS
+    and rawview.PDP_GGSN_NAME_2 *= ggsnref.GGSN_IPADDRESS
+    and rawview.RAT = ratref.RAT
+order by 
+	DATETIME_ID desc,{dateTo=STRING:2011-01-26 00:00, IMSI=STRING:460010057584541, dateFrom=STRING:2011-01-19 00:00}];
+2011-01-26 12:04:33.399;34;INFO;Level<INFO>;Object[][http://atc3000bl3.athtem.eei.ericsson.se:18080/EniqEventsServices_eriwals/SUBSCRIBER/EVENT_ANALYSIS?time=10080&display=grid&key=SUM&type=TAC&tac=35231202&tzOffset=+0000&maxRows=500&userId=admin&srcIpAddress=159.107.167.85];
+2011-01-26 12:04:33.436;34;FINE;Level<FINE>;Object[][select
+                isnull(
+                    suc.TAC
+                        ,
+                                err.TAC
+                        ,
+                                sub.TAC
+                            ) as TAC,
+        etref.EVENT_ID,
+    etref.EVENT_ID_DESC,
+    sum(isnull(NO_OF_ERRORS, 0)) as NO_OF_ERRORS,
+    sum(isnull(NO_OF_SUCCESSES,0)) as NO_OF_SUCCESSES,
+    NO_OF_ERRORS+NO_OF_SUCCESSES as OCCURRENCES,
+        cast (round((isnull((  isnull(NO_OF_SUCCESSES,0) )/cast(   isnull(NO_OF_ERRORS,0)   + isnull(NO_OF_SUCCESSES,0)  as float),0))*100, 2) as numeric(5,2))
+	as KPI
+,
+    isnull(max(NO_OF_TOTAL_ERR_SUBSCRIBERS), 0) as NO_OF_TOTAL_ERR_SUBSCRIBERS
+from
+    (select
+                temp_err.TAC,
+            EVENT_ID,
+        sum(NO_OF_ERRORS),
+        sum(NO_OF_NET_INIT_DEACTIVATES)
+    from
+        dc.EVENT_E_SGEH_MANUF_TAC_EVENTID_ERR_DAY temp_err
+			where
+		DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+					and TAC = :TAC
+		    group by
+        EVENT_ID,
+                            temp_err.TAC
+            	having
+		EVENT_ID is not null
+    ) as err (
+		        TAC,
+            EVENT_ID, NO_OF_ERRORS, NO_OF_NET_INIT_DEACTIVATES)
+    full outer join
+    (select
+		        temp_suc.TAC,
+            EVENT_ID,
+        sum(NO_OF_SUCCESSES),
+        sum(NO_OF_NET_INIT_DEACTIVATES)
+    from
+        dc.EVENT_E_SGEH_MANUF_TAC_EVENTID_SUC_DAY temp_suc
+			where   
+        DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+					and TAC = :TAC
+		    group by
+        EVENT_ID,
+                            temp_suc.TAC
+            	having
+		EVENT_ID is not null	
+    ) as suc (
+                TAC,
+            EVENT_ID, NO_OF_SUCCESSES, NO_OF_NET_INIT_DEACTIVATES)
+    on (
+		                    err.TAC=suc.TAC
+            and err.EVENT_ID = suc.EVENT_ID
+    )
+    full outer join
+    (select
+                temp_sub.TAC,
+            EVENT_ID,
+        count(distinct(IMSI))
+    from
+	    				(
+					select
+				*
+			from dc.EVENT_E_SGEH_ERR_RAW_06 
+			where
+			DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+			and TAC = :TAC
+			and     TAC not in (select TAC from dc.GROUP_TYPE_E_TAC where GROUP_NAME = 'EXCLUSIVE_TAC')
+						) as temp_sub
+		    group by
+        EVENT_ID,
+		                    temp_sub.TAC
+            	having
+		EVENT_ID is not null	
+    ) as sub(
+                TAC,
+            EVENT_ID, NO_OF_TOTAL_ERR_SUBSCRIBERS)
+    on(
+		                    isnull(
+                    err.TAC
+                        ,
+                                suc.TAC
+                            )= sub.TAC
+            and isnull(err.EVENT_ID, suc.EVENT_ID)=sub.EVENT_ID
+    )
+    inner join
+        dc.DIM_E_SGEH_EVENTTYPE etref
+    on(
+        isnull(suc.EVENT_ID, err.EVENT_ID, sub.EVENT_ID) = etref.EVENT_ID
+		    )
+    group by
+        etref.EVENT_ID,
+		etref.EVENT_ID_DESC,
+                            TAC,{TAC=STRING:35231202, dateTo=STRING:2011-01-25 00:00, dateFrom=STRING:2011-01-18 00:00}];
+2011-01-26 12:32:54.752;30;INFO;Level<INFO>;Object[][http://atc3000bl3.athtem.eei.ericsson.se:18080/EniqEventsServices_eriwals/SUBSCRIBER/EVENT_ANALYSIS?time=10080&type=IMSI&groupname=imsi&display=grid&type=IMSI&key=TOTAL&tzOffset=+0000&maxRows=500&userId=admin&srcIpAddress=159.107.167.85];
+2011-01-26 12:32:57.471;30;FINE;Level<FINE>;Object[][select
+		top 500
+	    rawview.EVENT_TIME,
+	    rawview.IMSI,
+			rawview.PTMSI,
+	    rawview.TAC,
+    tacref.MANUFACTURER,
+    tacref.Marketing_Name,
+    etref.EVENT_ID_DESC,
+    erref.EVENT_RESULT_DESC,
+	cptref.CAUSE_PROT_TYPE_DESC,
+    ccref.CAUSE_CODE_DESC,
+    sccref.SUBCAUSE_CODE_DESC,    
+    rawview.EVENT_SOURCE_NAME,
+	ratref.RAT_DESC,
+    rawview.HIERARCHY_3,
+    rawview.HIERARCHY_2,
+    rawview.HIERARCHY_1,
+    rawview.VENDOR,
+	rawview.LINKED_NSAPI,
+	rawview.PDP_NSAPI_1,
+	    (case when (rawview.PDP_GGSN_IPADDRESS_1 is not null) then (case when (rawview.PDP_GGSN_NAME_1 is null) then isnull(ggsnref.GGSN_NAME,  
+	cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_1,4,2)) as varchar))
+	else rawview.PDP_GGSN_NAME_1 end)else '' end) as PDP_GGSN_NAME_1,
+	
+	(case when (rawview.PDP_MS_IPADDRESS_1 is not null) then(
+	cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_1,4,2)) as varchar))
+	else '' end) as PDP_MS_IPADDRESS_1,
+
+    rawview.PDP_NSAPI_2,       
+    	(case when (rawview.PDP_GGSN_IPADDRESS_2 is not null) then (case when (rawview.PDP_GGSN_NAME_2 is null) then isnull(ggsnref.GGSN_NAME, 
+	cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_GGSN_IPADDRESS_2,4,2)) as varchar))
+	else rawview.PDP_GGSN_NAME_2 end)else '' end) as PDP_GGSN_NAME_2,
+    
+	(case when (rawview.PDP_MS_IPADDRESS_2 is not null) then(
+	cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.PDP_MS_IPADDRESS_2,4,2)) as varchar))
+	else '' end) as PDP_MS_IPADDRESS_2,
+
+	rawview.PAGING_ATTEMPTS,
+    rawview.SERVICE_REQ_TRIGGER,
+    rawview.REQUEST_RETRIES,
+    rawview.APN,
+    rawview.MCC, 
+    rawview.MNC,
+    rawview.RAC,
+    rawview.LAC,
+    rawview.UPDATE_TYPE,
+		(case when (rawview.OLD_SGSN_IPADDRESS is not null) then isnull(sgsnref.SGSN_NAME, 
+	cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,1,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,2,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,3,1)) as varchar) || '.' ||
+cast(convert(unsigned int, substr(rawview.OLD_SGSN_IPADDRESS,4,2)) as varchar))
+	else '' end) as OLD_SGSN_NAME,
+    rawview.OLD_MCC,
+    rawview.OLD_MNC,	
+    rawview.OLD_RAC,
+    rawview.OLD_LAC,
+    rawview.TRANSFERRED_PDP,
+    rawview.DROPPED_PDP,
+    rawview.HLR,
+    rawview.DEACTIVATION_TRIGGER,
+    ccref.CAUSE_CODE,
+    sccref.SUBCAUSE_CODE,
+    erref.EVENT_RESULT,
+	cptref.CAUSE_PROT_TYPE,
+    ratref.RAT
+from
+		(
+					select
+				*
+			from dc.EVENT_E_SGEH_SUC_RAW_43 where
+													DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+											union all
+								select
+				*
+			from dc.EVENT_E_SGEH_ERR_RAW_06 where
+													DATETIME_ID >= :dateFrom and DATETIME_ID < :dateTo
+									) as rawview,
+    dc.DIM_E_SGEH_EVENTTYPE etref,
+    dc.DIM_E_SGEH_CAUSECODE ccref,
+    dc.DIM_E_SGEH_SUBCAUSECODE sccref,
+    dc.DIM_E_SGEH_EVENTRESULT erref,
+    dc.DIM_E_SGEH_TAC tacref,
+	dc.DIM_E_SGEH_SGSN sgsnref,
+	dc.DIM_E_SGEH_GGSN ggsnref,
+    dc.DIM_E_SGEH_CAUSE_PROT_TYPE cptref,
+    dc.DIM_E_SGEH_RAT ratref
+        ,$groupTable groupref
+    where
+    		rawview.EVENT_ID is not null
+				and     		and $groupnameColumn = :groupname
+	    and rawview.EVENT_ID = etref.EVENT_ID
+    and rawview.CAUSE_PROT_TYPE = cptref.CAUSE_PROT_TYPE
+    and rawview.CAUSE_PROT_TYPE = ccref.CAUSE_PROT_TYPE
+    and rawview.CAUSE_CODE = ccref.CAUSE_CODE
+    and rawview.SUBCAUSE_CODE = sccref.SUBCAUSE_CODE
+    and rawview.EVENT_RESULT = erref.EVENT_RESULT
+	
+		and rawview.TAC *= tacref.TAC
+		
+	and rawview.OLD_SGSN_IPADDRESS *= sgsnref.IP_ADDRESS	
+    and rawview.PDP_GGSN_NAME_1 *= ggsnref.GGSN_IPADDRESS
+    and rawview.PDP_GGSN_NAME_2 *= ggsnref.GGSN_IPADDRESS
+    and rawview.RAT = ratref.RAT
+order by 
+	DATETIME_ID desc,{dateTo=STRING:2011-01-26 00:00, groupname=STRING:imsi, dateFrom=STRING:2011-01-19 00:00}];

@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<project name="ENIQ Code Reporting" default="all" basedir=".">
+
+	<description>
+		Ant Build For Code Reporting for ENIQ
+	</description>
+	
+<!-- ========================================================== -->
+<!-- Main Directory mappings                                    -->
+<!-- ========================================================== -->	
+	
+	<!-- Environment Variables-->
+	<property environment="env"/>
+	<property name="ant.home" value="${env.ANT_HOME}" />
+	<property name="junit.home" value="${env.JUNIT_HOME}"/>
+	<property name="cobertura.home" value="C:\\cobertura"/>
+	<property name="ant-contrib.jar" location="C:\\ant-contrib\\ant-contrib-1.0b3.jar"/>
+	
+	<property name="module.name" value="DWHManager"/>	
+
+	<!-- cobertura.classpath -->
+	<path id="cobertura.classpath">
+		<fileset dir="${cobertura.home}">
+			<include name="cobertura.jar"/>
+			<include name="lib/**/*.jar"/>
+		</fileset>
+	</path>
+
+	<tstamp>
+		<!--format property="test.time" pattern="w-yyyy-MM-dd-HH-mm"/ -->
+		<format property="test.time" pattern=""/>
+	</tstamp>
+
+
+	<!-- Cobertura Task Definition -->
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+
+	<!-- Ant-Contrib Task Defintion -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib.jar}"/>
+		
+   <target name="createReports">
+  		
+		<!--propertyregex property="module.name" input="${pack.dir}" regexp=".*/" replace="${module.name}" global="true" override="true" /-->
+
+		<!-- ========================================== -->
+		<!-- Module Directory mappings                  -->
+		<!-- ========================================== -->
+
+		<!-- Source Directories-->		
+		<property name="root.dir" location=""/>
+		<property name="src.root.dir" location="src"/>
+		<property name="lib.dir" location="lib"/>
+		<property name="test.root.dir" location="test"/>
+
+
+		<!-- Build Directories-->
+		<property name="build.test.dir" location="bin"/>
+		<property name="build.src.classes.dir" location="${build.test.dir}"/>
+		<property name="build.test.classes.dir" location="${build.test.dir}"/>
+
+
+		<!-- Test Directories-->
+		<property name="reports.dir" location="${root.dir}/reports"/>
+		<property name="test.reports.data.dir" location="${test.root.dir}/data"/>
+		<property name="instrumented.classes.dir" location="${test.reports.data.dir}/instrumented"/>
+		<property name="test.reports.dir.cobertura" location="${reports.dir}/cobertura/${module.name}-CodeCoverage-${test.time}"/>
+		<property name="test.reports.dir.junit" location="${reports.dir}/junit/${module.name}-UnitTests-${test.time}"/>
+
+
+		<!-- ========================================================== -->
+		<!-- Classpaths													-->
+		<!-- ========================================================== -->
+
+		<property name="dbunit.home" value="${lib.dir}/dbunit-2.2.jar"/>
+
+		<!-- test.classpath -->
+		<path id="test.classpath">
+			<pathelement location="${basedir}"/>
+			<pathelement location="${ant.home}"/>
+			<pathelement location="${junit.home}"/>
+			<pathelement location="${dbunit.home}"/>
+			<pathelement location="${build.src.classes.dir}"/>
+			<pathelement location="${build.test.classes.dir}"/>
+		</path>
+
+
+		<!-- Compiling the Test Classes -->
+		<runtarget target="compile.test.classes"/>
+
+		<!-- ========================================================== -->
+		<!-- Cobetura Code Coverage 									-->
+		<!-- ========================================================== -->
+
+
+		<cobertura-instrument todir="${instrumented.classes.dir}">
+			<fileset dir="${build.src.classes.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/*Test.class"/>
+			</fileset>
+		</cobertura-instrument>
+
+
+		<!-- ================ -->
+		<!-- JUnit Reporting  -->
+		<!-- ================ -->
+
+		<!-- Running Junit and Cobertura on the Test cases-->
+		<junit fork="yes" printsummary="yes" maxmemory="1500m">
+
+			<!-- sysproperty key="net.sourceforge.cobertura.datafile" file="${test.reports.data.dir}/cobertura-${module.name}.ser"/ -->
+
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath location="${build.test.classes.dir}"/>
+
+			<classpath refid="cobertura.classpath"/>
+			<classpath refid="test.classpath"/>
+
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${test.reports.data.dir}" >
+				<fileset dir="${build.test.classes.dir}" includes="**/*Test.class"/>
+				<!-- fileset dir="${build.src.classes.dir}" includes="**/*.class"/ -->
+			</batchtest>
+		</junit>
+
+		<!--Create the JUnit Test Reports-->
+		<junitreport todir="${test.reports.data.dir}">
+			<fileset dir="${test.reports.data.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${test.reports.dir.junit}"/>
+		</junitreport>
+
+
+		<!-- ====================================== -->
+		<!-- Generating the Cobertura Test Report   -->
+		<!-- ====================================== -->
+
+  		<!-- cobertura-report format="html" datafile="${test.reports.data.dir}/cobertura-${module.name}.ser" destdir="${test.reports.dir.cobertura}" srcdir="${src.root.dir}"/ -->
+
+	</target>
+
+
+	<!-- ======================================= -->
+	<!-- Init - Creates necessary Directories    -->
+	<!-- ======================================= -->
+
+	<target name="init" depends="clean">
+		<mkdir dir="${test.reports.data.dir}"/>
+	</target>
+
+
+	<!-- ===================================== -->
+	<!-- Clean - Removes Certain Directories   -->
+	<!-- ===================================== -->
+
+	<target name="clean">
+		<delete dir="${test.reports.data.dir}"/>
+	</target>
+
+
+	<!-- ============================= -->
+	<!-- Compile the JUnit Test Code   -->
+	<!-- ============================= -->
+
+	<target name="compile.test.classes" depends="init">
+		<javac destdir="${build.test.classes.dir}" classpath="test.classpath" includeAntRuntime="yes" srcdir="${build.test.dir}">
+	        	<classpath refid="test.classpath"/>	        	
+  	    </javac>
+	</target>
+
+
+	<!-- ================= -->
+	<!-- Default target    -->
+	<!-- ================= -->
+
+	<target name="all" depends="createReports"></target>
+
+</project>

@@ -1,0 +1,908 @@
+--===============================================================
+-- File Name : BW-Subscriber.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2010, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-Subscriber DEFINITIONS ::= BEGIN
+    IMPORTS
+      DateAndTime, DisplayString
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201007230000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the BroadWorks Subscriber Agent."
+    REVISION    "201007230000Z"
+      DESCRIPTION     "Creation of the BroadWorks Subscriber Agent."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  subscriber OBJECT IDENTIFIER
+    ::= { broadworks 21 }
+
+  cache OBJECT IDENTIFIER
+    ::= { subscriber 1 }
+
+  access OBJECT IDENTIFIER
+    ::= { subscriber 2 }
+
+  sh OBJECT IDENTIFIER
+    ::= { subscriber 3 }
+
+  db OBJECT IDENTIFIER
+    ::= { subscriber 4 }
+
+  diameterModule OBJECT IDENTIFIER
+    ::= { subscriber 5 }
+
+  shInterfaceModule OBJECT IDENTIFIER
+    ::= { subscriber 6 }
+
+  storage OBJECT IDENTIFIER
+    ::= { subscriber 7 }
+    
+  subDatabaseModule OBJECT IDENTIFIER
+    ::= { subscriber 8 }
+
+  concurrentModule OBJECT IDENTIFIER
+    ::= { subscriber 9 }
+
+  concurrentStats OBJECT IDENTIFIER
+    ::= { concurrentModule 1 }
+  
+-- Stats and other modules.
+
+  diameterStats OBJECT IDENTIFIER
+    ::= { diameterModule 1 }
+
+  shInterfaceStats OBJECT IDENTIFIER
+    ::= { shInterfaceModule 1 }
+    
+  subDatabaseStats OBJECT IDENTIFIER
+    ::= { subDatabaseModule 1 }
+  
+  bwSubscriberMibConformance OBJECT IDENTIFIER
+    ::= { subscriber 100 }
+
+-- SUBSCRIBER :: CACHE ...............................
+
+	bwSubscriberCacheHits	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"The number of cache hits."
+		::=  {  cache  1  }
+
+	bwSubscriberCacheMiss	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"The number of cache miss."
+		::=  {  cache  2  }
+
+	bwSubscriberCacheEntriesTotal	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of cache entries."
+		::=  {  cache  3  }
+
+	bwSubscriberCacheEntriesInMemory	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of cache entries commited to memory."
+		::=  {  cache  4  }
+
+	bwSubscriberCacheEntriesOnDisk	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of cache entries commited to disk."
+		::=  {  cache  5  }
+
+	bwSubscriberCacheDiskUsage	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The current disk cache size in Mbytes."
+		::=  {  cache  6  }
+
+	bwSubscriberAccessIOWorkersBusy	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number i/o worker threads currently processing a packet."
+		::=  {  access  1  }
+
+	bwSubscriberAccessIOQueueSize	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of packets currently queued for processingin the i/o queue"
+		::=  {  access  2  }
+
+	bwSubscriberAccessReadWorkersBusy	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number read worker threads currently processing profile retrieval."
+		::=  {  access  3  }
+
+	bwSubscriberAccessReadQueueSize	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of profile retrieval requests currently queued for processing."
+		::=  {  access  4  }
+
+	bwSubscriberAccessWriteWorkersBusy	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of write worker threads currently processing a profile update request."
+		::=  {  access  5  }
+
+	bwSubscriberAccessWriteQueueSize	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of requests currently queued for processing"
+		::=  {  access  6  }
+
+	bwSubscriberAccessRetrieve	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of retrieve requests processed."
+		::=  {  access  7  }
+
+	bwSubscriberAccessModify	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of modify request processe. This measures the number of profile modification requests received from applications."
+		::=  {  access  8  }
+
+	bwSubscriberAccessRegister	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"The number of register requests processed."
+		::=  {  access  9  }
+
+	bwSubscriberAccessErrors	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"The number of errors responses generated."
+		::=  {  access  10  }
+
+	bwSubscriberAccessRegistrations	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"The number of active registrations."
+		::=  {  access  11  }
+
+	bwSubscriberAccessNotifications	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"The number of change notifications generated."
+		::=  {  access  12  }
+
+	bwSubscriberShOperationMinTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the minimum time the Subscriber Agent waited for a Sh operation to complete.  An operation can involve multiple Sh exchanges with the HSS.  An operation is typically a full profile read or write."
+		::=  {  sh  1  }
+
+	bwSubscriberShOperationMaxTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the maximum time the Subscriber Agent waited for a Sh operation to complete.  An operation can involve multiple Sh exchanges with the HSS.  An operation is typically a full profile read or write."
+		::=  {  sh  2  }
+
+	bwSubscriberShOperationAverageTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the average time the Subscriber Agent waited for Sh operation to complete.  An operation can involve multiple Sh exchanges with the HSS.  An operation is typically a full profile read or write."
+		::=  {  sh  3  }
+
+	bwSubscriberShOperations	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"This is the number of completed Sh operations"
+		::=  {  sh  4  }
+
+	bwSubscriberDbQueryMinTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the minimum time the Subscriber Agent waited for a database query to complete."
+		::=  {  db  1  }
+
+	bwSubscriberDbQueryMaxTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the maximum time the Subscriber Agent waited for a database query to complete."
+		::=  {  db  2  }
+
+	bwSubscriberDbQueryAverageTime	OBJECT-TYPE
+		SYNTAX			Gauge32
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION
+				"This is the average time the Subscriber Agent waited for database queries to complete."
+		::=  {  db  3  }
+
+	bwSubscriberDbQueries	OBJECT-TYPE
+		SYNTAX			Counter32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION
+				"This is the number of completed database queries."
+		::=  {  db  4  }
+
+-- DIAMETERSTATS ::  ...............................
+
+  bwSubscriberDiameterTransactionTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSubscriberDiameterTransactionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the Diameter Stack transactions."
+    ::= { diameterStats 1 }
+
+  bwSubscriberDiameterTransactionEntry OBJECT-TYPE
+    SYNTAX      BwSubscriberDiameterTransactionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given Diameter transaction."
+    INDEX       { bwSubscriberDiameterCommandCode }
+    ::= { bwSubscriberDiameterTransactionTable 1 }
+
+  BwSubscriberDiameterTransactionEntry ::= SEQUENCE {
+    bwSubscriberDiameterCommandCode                  Unsigned32,
+    bwSubscriberDiameterRequestsOut                  Counter32,
+    bwSubscriberDiameterInformationalAnswersIn       Counter32,
+    bwSubscriberDiameterSuccessAnswersIn             Counter32,
+    bwSubscriberDiameterFailureAnswersIn             Counter32,
+    bwSubscriberDiameterRequestTimeouts              Counter32,
+    bwSubscriberDiameterRequestsIn                   Counter32,
+    bwSubscriberDiameterInformationalAnswersOut      Counter32,
+    bwSubscriberDiameterSuccessAnswersOut            Counter32,
+    bwSubscriberDiameterFailureAnswersOut            Counter32
+  }
+
+  bwSubscriberDiameterCommandCode OBJECT-TYPE
+    SYNTAX      Unsigned32 
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the Diameter message's command-code which indexes this table."
+    ::= { bwSubscriberDiameterTransactionEntry 1 }
+
+  bwSubscriberDiameterRequestsOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of requests sent by the Diameter stack, indexed by the message's Command-Code.  This includes both initial transmissions and retransmissions of the same request."
+    ::= { bwSubscriberDiameterTransactionEntry 2 }
+
+  bwSubscriberDiameterInformationalAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing an informational Result-Code (value 1xxx), indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 3 }
+
+  bwSubscriberDiameterSuccessAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing a successful Result-Code (value 2xxx), indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 4 }
+
+  bwSubscriberDiameterFailureAnswersIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of answers containing a failure Result-Code or Experimental-Result (value >= 3000), malformed answers, or answers that do not match any outstanding request.  Malformed answers have inappropriate Diameter message header values or do not contain any Result-Code or Experimental-Result AVPs."
+    ::= { bwSubscriberDiameterTransactionEntry 5 }
+
+  bwSubscriberDiameterRequestTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of requests for which no response has been received within the specified timeout.  The timeout value is application-dependent.  If an answer is received afterward, it is treated as an unmatched answer and the bwDiameterFailureAnswersIn is incremented.  This value is indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 6 }
+
+  bwSubscriberDiameterRequestsIn OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of received requests on the corresponding Diameter stack instance, indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 7 }
+
+  bwSubscriberDiameterInformationalAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of informational answers (Result-Code value = 1xxx) sent by the corresponding Diameter stack instance, indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 8 }
+
+  bwSubscriberDiameterSuccessAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of successful answers (Result-Code value = 2xxx) sent by the corresponding Diameter stack instance, indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 9 }
+
+  bwSubscriberDiameterFailureAnswersOut OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of failure answers (Result-Code/Experimental-Result-Code value >= 3000) sent by the corresponding Diameter stack instance, indexed by the message's Command-Code."
+    ::= { bwSubscriberDiameterTransactionEntry 10 }
+
+-- Sh Interface Stats ::  ...............................
+
+  bwShInterfaceServerUnreachable OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This is the number of Sh requests not sent because none of the HSSs, Diameter agents, or the Sh Execution Server relay (if operating in relay mode) is currently connected."
+    ::= { shInterfaceStats 1 }
+
+-- Storage Stats ::  ...............................
+
+  bwUserStorageMode OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The location of the user profiles: HSS 'hss' for user profiles stored in the HSS, DBS 'dbs' for user profiles stored in the DBS and HSSDBS 'hssdbs' when both are used simultaneously."
+-- @feature:150212
+    ::= { storage 1 }
+    
+-- oracle ...........................................
+
+subOracle OBJECT IDENTIFIER
+    ::= { subDatabaseStats 1 }  
+    
+  bwSubscriberOracleNbOpenedTransactions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of opened transaction with the oracle database"
+    ::= { subOracle 1 }
+
+  bwSubscriberOracleNbCommittedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of committed transactions to the oracle database since the last restart"
+    ::= { subOracle 2 }
+
+  bwSubscriberOracleNbFailedTransactions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of failed transactions with the oracle database"
+    ::= { subOracle 3 }
+
+  bwSubscriberOracleNbCriticalErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The total number of critical errors encountered during processing with the oracle database"
+    ::= { subOracle 4 }
+    
+  bwSubscriberOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application."
+-- @feature:162466              
+    ::= { subOracle 5 }
+  
+  bwSubscriberOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSubscriberOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwSubscriberOracleDbCount."
+-- @feature:162466              
+    ::= { subOracle 6 }
+  
+  bwSubscriberOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwSubscriberOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwSubscriberOracleDbStatsIndex }
+-- @feature:162466            
+    ::= { bwSubscriberOracleDbStatsTable 1 }
+    
+  BwSubscriberOracleDbStatsEntry ::= SEQUENCE {
+    bwSubscriberOracleDbStatsIndex           Unsigned32,
+    bwSubscriberOracleDbName                 DisplayString,
+    bwSubscriberOracleDbNbConnectionsCreated Counter32,
+    bwSubscriberOracleDbConnectionPoolSize   Gauge32,
+    bwSubscriberOracleDbAvgUpdateTime        Gauge32,
+    bwSubscriberOracleDbAvgRowsUpdated       Gauge32,
+    bwSubscriberOracleDbAvgQueryTime         Gauge32,
+    bwSubscriberOracleDbAvgRowsQueried       Gauge32,
+    bwSubscriberOracleDbUpdateCount          Counter32,
+    bwSubscriberOracleDbQueryCount           Counter32
+  }
+  
+   bwSubscriberOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:162466               
+   ::= { bwSubscriberOracleDbStatsEntry 1 }
+   
+   bwSubscriberOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:162466               
+   ::= { bwSubscriberOracleDbStatsEntry 2 }
+   
+   bwSubscriberOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 3 }
+   
+   bwSubscriberOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 4 }
+   
+   bwSubscriberOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 5 }
+   
+   bwSubscriberOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 6 }
+   
+   bwSubscriberOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 7 }
+   
+   bwSubscriberOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 8 }
+   
+   bwSubscriberOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 9 }
+   
+   bwSubscriberOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:162466                
+   ::= { bwSubscriberOracleDbStatsEntry 10 }
+      
+   bwSubscriberOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwSubscriberOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwSubscriberOracleDbCount."
+-- @feature:162466                 
+       ::= { subOracle 7 }
+     
+     bwSubscriberOracleDbHWMEntry OBJECT-TYPE
+         SYNTAX      BwSubscriberOracleDbHWMEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "An entry containing high water mark information applicable to a particular oracle database."
+         INDEX   { bwSubscriberOracleDbHWMIndex }
+-- @feature:162466               
+    ::= { bwSubscriberOracleDbHWMTable 1 }
+    
+    BwSubscriberOracleDbHWMEntry ::= SEQUENCE {
+        bwSubscriberOracleDbHWMIndex           Unsigned32,
+        bwSubscriberOracleDbHWMDbName          DisplayString,
+        bwSubscriberOracleDbHWMStatName        DisplayString,
+        bwSubscriberOracleDbHWMStatValue       Gauge32,
+        bwSubscriberOracleDbHWMTimestamp       DisplayString,
+        bwSubscriberOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwSubscriberOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:162466                   
+    ::= { bwSubscriberOracleDbHWMEntry 1 }
+       
+    bwSubscriberOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:162466                   
+    ::= { bwSubscriberOracleDbHWMEntry 2 }
+    
+    bwSubscriberOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:162466                   
+   ::= { bwSubscriberOracleDbHWMEntry 3 }
+   
+    bwSubscriberOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:162466                   
+   ::= { bwSubscriberOracleDbHWMEntry 4 }
+   
+    bwSubscriberOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:162466                   
+   ::= { bwSubscriberOracleDbHWMEntry 5 }
+   
+    bwSubscriberOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:162466                   
+   ::= { bwSubscriberOracleDbHWMEntry 6 }
+    
+-- Subscriber - Concurrent Framework ........................
+
+    bwSubscriberMonitoringExecutorTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwSubscriberMonitoringExecutorEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION 
+          "This table contains counters for the concurrent framework."
+    ::= { concurrentStats 1 }
+
+    bwSubscriberMonitoringExecutorEntry OBJECT-TYPE
+      SYNTAX      BwSubscriberMonitoringExecutorEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION 
+          "Definition of the entries for bwSubscriberMonitoringExecutorTable."
+      INDEX       { bwSubscriberMonitoringExecutorIndex }
+      ::= { bwSubscriberMonitoringExecutorTable 1 }
+
+    BwSubscriberMonitoringExecutorEntry ::= SEQUENCE {
+      bwSubscriberMonitoringExecutorIndex             Unsigned32,
+      bwSubscriberMonitoringExecutorName              DisplayString,
+      bwSubscriberMonitoringExecutorCurrentPoolSize   Gauge32,
+      bwSubscriberMonitoringExecutorMaxPoolSize       Gauge32,
+      bwSubscriberMonitoringExecutorAvgActiveThreads  Gauge32,
+      bwSubscriberMonitoringExecutorTaskQueueSize     Gauge32,
+      bwSubscriberMonitoringExecutorNbTasksRun        Counter32,
+      bwSubscriberMonitoringExecutorNbWarnings        Counter32,
+      bwSubscriberMonitoringExecutorNbErrors          Counter32,
+      bwSubscriberMonitoringExecutorLongestTaskMs     Gauge32,
+      bwSubscriberMonitoringExecutorLongestTaskName   DisplayString
+    }
+
+    bwSubscriberMonitoringExecutorIndex OBJECT-TYPE
+      SYNTAX      Unsigned32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "This integer represents an index in table bwSubscriberMonitoringExecutorTable. This is the index to a specific Monitoring Executor name."
+      ::= { bwSubscriberMonitoringExecutorEntry 1 }
+
+    bwSubscriberMonitoringExecutorName OBJECT-TYPE
+      SYNTAX      DisplayString
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "The name of the Monitoring Executor - Names are internally defined at the application level."
+      ::= { bwSubscriberMonitoringExecutorEntry 2 }
+
+    bwSubscriberMonitoringExecutorCurrentPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "The current thread pool size"
+      ::= { bwSubscriberMonitoringExecutorEntry 3 }
+
+    bwSubscriberMonitoringExecutorMaxPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "The maximum thread pool size"
+      ::= { bwSubscriberMonitoringExecutorEntry 4 }
+
+    bwSubscriberMonitoringExecutorAvgActiveThreads OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "The average number of active threads, rounded up"
+      ::= { bwSubscriberMonitoringExecutorEntry 5 }
+
+    bwSubscriberMonitoringExecutorTaskQueueSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of tasks in the queue (includes scheduled and recurring tasks)"
+      ::= { bwSubscriberMonitoringExecutorEntry 6 }
+
+    bwSubscriberMonitoringExecutorNbTasksRun OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-write
+      STATUS      current
+      DESCRIPTION 
+          "Number of tasks run"
+      ::= { bwSubscriberMonitoringExecutorEntry 7 }
+
+    bwSubscriberMonitoringExecutorNbWarnings OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-write
+      STATUS      current
+      DESCRIPTION 
+          "Number of warnings that occured"
+      ::= { bwSubscriberMonitoringExecutorEntry 8 }
+
+    bwSubscriberMonitoringExecutorNbErrors OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-write
+      STATUS      current
+      DESCRIPTION 
+          "Number of errors that occured"
+      ::= { bwSubscriberMonitoringExecutorEntry 9 }
+
+    bwSubscriberMonitoringExecutorLongestTaskMs OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Longest completed task execution time in milliseconds"
+      ::= { bwSubscriberMonitoringExecutorEntry 10 }
+
+    bwSubscriberMonitoringExecutorLongestTaskName OBJECT-TYPE
+      SYNTAX      DisplayString
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Longest completed task name"
+      ::= { bwSubscriberMonitoringExecutorEntry 11 }
+
+--
+-- BroadWorks Common managed object MIB Conformance Definition  ...........................................
+--
+
+  bwSubscriberMibGroups OBJECT IDENTIFIER ::= { bwSubscriberMibConformance 1 }
+  bwSubscriberMibCompliancy OBJECT IDENTIFIER ::= { bwSubscriberMibConformance 2 }
+
+  bwSubscriberCacheStatsGroup OBJECT-GROUP
+    OBJECTS { bwSubscriberCacheHits, bwSubscriberCacheMiss,
+              bwSubscriberCacheEntriesTotal, bwSubscriberCacheEntriesInMemory,
+              bwSubscriberCacheEntriesOnDisk, bwSubscriberCacheDiskUsage }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the Subscriber cache."
+  ::= { bwSubscriberMibGroups 1 }
+
+  bwSubscriberAccessStatsGroup OBJECT-GROUP
+    OBJECTS { bwSubscriberAccessIOWorkersBusy, bwSubscriberAccessIOQueueSize, bwSubscriberAccessReadWorkersBusy,
+              bwSubscriberAccessReadQueueSize, bwSubscriberAccessWriteWorkersBusy,
+              bwSubscriberAccessWriteQueueSize, bwSubscriberAccessRetrieve,
+              bwSubscriberAccessModify, bwSubscriberAccessRegister, 
+              bwSubscriberAccessErrors, bwSubscriberAccessRegistrations,
+              bwSubscriberAccessNotifications  }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the Subscriber Access."
+  ::= { bwSubscriberMibGroups 2 }
+
+  bwSubscriberShStatsGroup OBJECT-GROUP
+    OBJECTS { bwSubscriberShOperationMinTime, bwSubscriberShOperationMaxTime,
+              bwSubscriberShOperationAverageTime, bwSubscriberShOperations }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the Subscriber Sh."
+  ::= { bwSubscriberMibGroups 3 }
+
+  bwSubscriberDbStatsGroup OBJECT-GROUP
+    OBJECTS { bwSubscriberDbQueryMinTime, bwSubscriberDbQueryMaxTime,
+              bwSubscriberDbQueryAverageTime, bwSubscriberDbQueries }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the Subscriber Sh."
+  ::= { bwSubscriberMibGroups 4 }
+
+  bwSubscriberDiameterGroup OBJECT-GROUP
+    OBJECTS { bwSubscriberDiameterCommandCode, bwSubscriberDiameterRequestsOut,
+              bwSubscriberDiameterInformationalAnswersIn, bwSubscriberDiameterSuccessAnswersIn,
+              bwSubscriberDiameterFailureAnswersIn, bwSubscriberDiameterRequestTimeouts,
+              bwSubscriberDiameterRequestsIn, bwSubscriberDiameterInformationalAnswersOut,
+              bwSubscriberDiameterSuccessAnswersOut, bwSubscriberDiameterFailureAnswersOut }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Subscriber Diameter statistics."
+    ::= { bwSubscriberMibGroups 5 }
+
+  bwSubscriberShInterfaceStatsGroup OBJECT-GROUP
+    OBJECTS { bwShInterfaceServerUnreachable }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Subscriber Diameter Sh interface statistics."
+    ::= { bwSubscriberMibGroups 6 }
+
+  bwSubscriberStorageStatsGroup OBJECT-GROUP
+    OBJECTS { bwUserStorageMode }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Subscriber storage statistics."
+    ::= { bwSubscriberMibGroups 7 }
+    
+  bwSubscriberDatabaseStatsGroup OBJECT-GROUP
+    OBJECTS     { bwSubscriberOracleNbOpenedTransactions, bwSubscriberOracleNbFailedTransactions,
+                  bwSubscriberOracleNbFailedTransactions, bwSubscriberOracleNbCriticalErrors,
+                  bwSubscriberOracleDbCount, bwSubscriberOracleDbStatsIndex,
+                  bwSubscriberOracleDbName, bwSubscriberOracleDbNbConnectionsCreated,
+                  bwSubscriberOracleDbConnectionPoolSize, bwSubscriberOracleDbAvgUpdateTime,
+                  bwSubscriberOracleDbAvgRowsUpdated, bwSubscriberOracleDbAvgQueryTime,
+                  bwSubscriberOracleDbAvgRowsQueried, bwSubscriberOracleDbUpdateCount,
+                  bwSubscriberOracleDbQueryCount, bwSubscriberOracleDbHWMIndex,
+                  bwSubscriberOracleDbHWMDbName, bwSubscriberOracleDbHWMStatName,
+                  bwSubscriberOracleDbHWMStatValue, bwSubscriberOracleDbHWMTimestamp,
+                  bwSubscriberOracleDbHWMStackTrace }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Subscriber Database."
+    ::= { bwSubscriberMibGroups 8 }
+    
+  bwSubscriberConcurentFrameworkStatsGroup OBJECT-GROUP
+      OBJECTS     { bwSubscriberMonitoringExecutorIndex, bwSubscriberMonitoringExecutorName,
+                    bwSubscriberMonitoringExecutorCurrentPoolSize, bwSubscriberMonitoringExecutorMaxPoolSize,
+                    bwSubscriberMonitoringExecutorAvgActiveThreads, bwSubscriberMonitoringExecutorTaskQueueSize,
+                    bwSubscriberMonitoringExecutorNbTasksRun, bwSubscriberMonitoringExecutorNbWarnings,
+                    bwSubscriberMonitoringExecutorNbErrors, bwSubscriberMonitoringExecutorLongestTaskMs,
+                    bwSubscriberMonitoringExecutorLongestTaskName }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the Subscriber Concurent Framework."
+    ::= { bwSubscriberMibGroups 9 }
+    
+  bwSubscriberBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks Subscriber MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        { bwSubscriberCacheStatsGroup, bwSubscriberAccessStatsGroup,
+                                  bwSubscriberShStatsGroup, bwSubscriberDbStatsGroup,
+                                  bwSubscriberDiameterGroup, bwSubscriberShInterfaceStatsGroup,
+                                  bwSubscriberStorageStatsGroup, bwSubscriberDatabaseStatsGroup,
+				  bwSubscriberConcurentFrameworkStatsGroup }
+
+    ::= { bwSubscriberMibCompliancy 1 }
+
+END

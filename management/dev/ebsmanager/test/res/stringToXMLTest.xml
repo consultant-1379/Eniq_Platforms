@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pm xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='PM-MOM.xsd'>
+    <pmMimVersion>1.0</pmMimVersion>
+    <applicationVersion>6</applicationVersion>
+    <measurements>
+        <measObjClass name="cell">
+            <group name="CounterGroup1">
+                <counter>
+                    <measType>
+                        <measName>c3</measName>
+                    </measType>
+                    <description/>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+            </group>
+        </measObjClass>
+    </measurements>
+</pm>

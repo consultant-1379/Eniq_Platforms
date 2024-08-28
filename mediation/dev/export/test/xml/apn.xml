@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+    <group name="apn-1" type="APN">
+        <group-element>
+            <key value="1" name="APN"/>
+        </group-element>
+    </group>
+</groupmgt>

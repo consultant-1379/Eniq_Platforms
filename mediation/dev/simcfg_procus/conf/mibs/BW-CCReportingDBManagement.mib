@@ -1,0 +1,340 @@
+--===============================================================
+-- File Name : BW-CCReportingDBManagement.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2010, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-CCReportingDBManagement DEFINITIONS ::= BEGIN
+    IMPORTS
+      DisplayString
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201008230000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the CC Reporting DB Management application."
+    REVISION    "201008230000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ccReportingDBManagement OBJECT IDENTIFIER
+    ::= { broadworks 24 }
+
+  ccrdbDatabaseModule OBJECT IDENTIFIER
+    ::= { ccReportingDBManagement 1 }
+
+  ccrdbDatabaseStats OBJECT IDENTIFIER
+    ::= { ccrdbDatabaseModule 1 }
+
+  ccrdbOracle OBJECT IDENTIFIER
+    ::= { ccrdbDatabaseStats 1 }
+
+  bwCCReportingDBManagementMibConformance OBJECT IDENTIFIER
+    ::= { ccReportingDBManagement 1000 }
+
+-- ccrdbOracle ::  ...............................
+
+   bwCCReportingDBManagementOpenedTransactions  OBJECT-TYPE
+      SYNTAX         Gauge32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of opened transaction with the database."
+      ::=  {  ccrdbOracle  1  }
+
+   bwCCReportingDBManagementCommittedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of committed transactions to the database since the last restart."
+      ::=  {  ccrdbOracle  2  }
+
+   bwCCReportingDBManagementFailedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of failed transactions with the database."
+      ::=  {  ccrdbOracle  3  }
+
+   bwCCReportingDBManagementCriticalErrors  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of critical errors encountered during processing with the database."
+      ::=  {  ccrdbOracle  4  }
+      
+  bwCCReportingDBManagementOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application."
+-- @feature:162466        
+    ::= { ccrdbOracle 5 }
+  
+  bwCCReportingDBManagementOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCCReportingDBManagementOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwCCReportingDBManagementOracleDbCount."
+-- @feature:162466        
+    ::= { ccrdbOracle 6 }
+  
+  bwCCReportingDBManagementOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwCCReportingDBManagementOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwCCReportingDBManagementOracleDbStatsIndex }
+-- @feature:162466      
+    ::= { bwCCReportingDBManagementOracleDbStatsTable 1 }
+    
+  BwCCReportingDBManagementOracleDbStatsEntry ::= SEQUENCE {
+    bwCCReportingDBManagementOracleDbStatsIndex           Unsigned32,
+    bwCCReportingDBManagementOracleDbName               DisplayString,
+    bwCCReportingDBManagementOracleDbNbConnectionsCreated Counter32,
+    bwCCReportingDBManagementOracleDbConnectionPoolSize   Gauge32,
+    bwCCReportingDBManagementOracleDbAvgUpdateTime        Gauge32,
+    bwCCReportingDBManagementOracleDbAvgRowsUpdated       Gauge32,
+    bwCCReportingDBManagementOracleDbAvgQueryTime         Gauge32,
+    bwCCReportingDBManagementOracleDbAvgRowsQueried       Gauge32,
+    bwCCReportingDBManagementOracleDbUpdateCount          Counter32,
+    bwCCReportingDBManagementOracleDbQueryCount           Counter32
+  }
+  
+   bwCCReportingDBManagementOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:162466               
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 1 }
+   
+   bwCCReportingDBManagementOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:162466               
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 2 }
+   
+   bwCCReportingDBManagementOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 3 }
+   
+   bwCCReportingDBManagementOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 4 }
+   
+   bwCCReportingDBManagementOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 5 }
+   
+   bwCCReportingDBManagementOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 6 }
+   
+   bwCCReportingDBManagementOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 7 }
+   
+   bwCCReportingDBManagementOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 8 }
+   
+   bwCCReportingDBManagementOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 9 }
+   
+   bwCCReportingDBManagementOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:162466                
+   ::= { bwCCReportingDBManagementOracleDbStatsEntry 10 }
+      
+   bwCCReportingDBManagementOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwCCReportingDBManagementOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwCCReportingDBManagementOracleDbCount."
+-- @feature:162466                 
+       ::= { ccrdbOracle 7 }
+     
+     bwCCReportingDBManagementOracleDbHWMEntry OBJECT-TYPE
+         SYNTAX      BwCCReportingDBManagementOracleDbHWMEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "An entry containing high water mark information applicable to a particular oracle database."
+         INDEX   { bwCCReportingDBManagementOracleDbHWMIndex }
+-- @feature:162466               
+    ::= { bwCCReportingDBManagementOracleDbHWMTable 1 }
+    
+    BwCCReportingDBManagementOracleDbHWMEntry ::= SEQUENCE {
+        bwCCReportingDBManagementOracleDbHWMIndex           Unsigned32,
+        bwCCReportingDBManagementOracleDbHWMDbName          DisplayString,
+        bwCCReportingDBManagementOracleDbHWMStatName        DisplayString,
+        bwCCReportingDBManagementOracleDbHWMStatValue       Gauge32,
+        bwCCReportingDBManagementOracleDbHWMTimestamp       DisplayString,
+        bwCCReportingDBManagementOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwCCReportingDBManagementOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:162466                   
+    ::= { bwCCReportingDBManagementOracleDbHWMEntry 1 }
+       
+    bwCCReportingDBManagementOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:162466                   
+    ::= { bwCCReportingDBManagementOracleDbHWMEntry 2 }
+    
+    bwCCReportingDBManagementOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:162466                   
+   ::= { bwCCReportingDBManagementOracleDbHWMEntry 3 }
+   
+    bwCCReportingDBManagementOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:162466                   
+   ::= { bwCCReportingDBManagementOracleDbHWMEntry 4 }
+   
+    bwCCReportingDBManagementOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:162466                   
+   ::= { bwCCReportingDBManagementOracleDbHWMEntry 5 }
+   
+    bwCCReportingDBManagementOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:162466                   
+   ::= { bwCCReportingDBManagementOracleDbHWMEntry 6 }
+        
+
+-- BroadWorks CC Reporting DB Management MIB Conformance Definition  ...........................................
+
+bwCCReportingDbManagementMibGroups     OBJECT IDENTIFIER ::= { bwCCReportingDBManagementMibConformance 1 }
+bwCCReportingDbManagementMibCompliancy OBJECT IDENTIFIER ::= { bwCCReportingDBManagementMibConformance 2 }
+
+bwCCReportingDbManagementStatsGroup OBJECT-GROUP
+    OBJECTS { bwCCReportingDBManagementOpenedTransactions,
+              bwCCReportingDBManagementCommittedTransactions,
+              bwCCReportingDBManagementFailedTransactions,
+              bwCCReportingDBManagementCriticalErrors,
+              bwCCReportingDBManagementOracleDbCount,
+              bwCCReportingDBManagementOracleDbStatsIndex,
+              bwCCReportingDBManagementOracleDbName,
+              bwCCReportingDBManagementOracleDbNbConnectionsCreated,
+              bwCCReportingDBManagementOracleDbConnectionPoolSize,
+              bwCCReportingDBManagementOracleDbAvgUpdateTime,
+              bwCCReportingDBManagementOracleDbAvgRowsUpdated,
+              bwCCReportingDBManagementOracleDbAvgQueryTime,
+              bwCCReportingDBManagementOracleDbAvgRowsQueried,
+              bwCCReportingDBManagementOracleDbUpdateCount,
+              bwCCReportingDBManagementOracleDbQueryCount,
+              bwCCReportingDBManagementOracleDbHWMIndex,
+              bwCCReportingDBManagementOracleDbHWMDbName,
+              bwCCReportingDBManagementOracleDbHWMStatName,
+              bwCCReportingDBManagementOracleDbHWMStatValue,
+              bwCCReportingDBManagementOracleDbHWMTimestamp,
+              bwCCReportingDBManagementOracleDbHWMStackTrace }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the CC Reporting DB Management."
+  ::= { bwCCReportingDbManagementMibGroups 1 }
+
+  bwScfBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks CC Reporting DB Management MIB compliance"
+
+    MODULE
+
+        MANDATORY-GROUPS        { bwCCReportingDbManagementStatsGroup }
+
+    ::= { bwCCReportingDbManagementMibCompliancy 1 }
+
+END

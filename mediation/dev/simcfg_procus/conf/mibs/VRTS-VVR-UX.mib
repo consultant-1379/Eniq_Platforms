@@ -1,0 +1,332 @@
+-- ***************************************************************************
+--  Copyright (c) 1998-2005 VERITAS Software Corporation.
+--  All Rights Reserved 
+--  
+--	The right to change this MIB without notification is retained.
+--
+--	VERITAS Software Corporation
+--	mailstop
+--	350 Ellis Street
+--	P.O. Box 7011
+--	Mountain View CA 94043-2237
+-- ***************************************************************************
+
+
+VERITAS-VVR-UX-MIB DEFINITIONS ::= BEGIN
+ 
+IMPORTS
+	enterprises
+    	FROM RFC1155-SMI
+	OBJECT-TYPE
+		FROM RFC-1212
+	TRAP-TYPE
+		FROM RFC-1215
+	DisplayString			
+		FROM RFC1213-MIB;
+
+
+--	A private MIB module for the VERITAS VVR-UX.
+--
+--	Node definations
+--
+
+veritas		OBJECT IDENTIFIER	::= { enterprises 1302 }
+products		OBJECT IDENTIFIER	::= { veritas 3 }
+veritasvvr		OBJECT IDENTIFIER	::= { products 19 }
+veritasvvrux 	OBJECT IDENTIFIER ::= { veritasvvr 1 }
+
+-- veritasvvrux MODULE-IDENTITY
+--  LAST-UPDATED    	"1102031800Z"
+--	ORGANIZATION		"VERITAS Software Corporation"
+--	CONTACT-INFO		"VERITAS Software Corporation
+-- 						 mailstop
+-- 						 350 Ellis Street
+-- 						 P.O. Box 7011
+-- 					 	 Mountain View CA 94043-2237
+-- 					 	 Tel: +1 650 318 4464
+-- 					 	 Email: support@veritas.com"
+
+
+
+--	
+--	The branch of the VERITAS VVR-UX MIB containing
+--	VVR objects information.
+--
+
+vvruxObjectBranch		OBJECT IDENTIFIER	::= { veritasvvrux 1 }
+
+--	The branch of the VERITAS VVR-UX MIB containing
+--	trap information.
+--
+
+vvruxTrapBranch		OBJECT IDENTIFIER	::= { veritasvvrux 2 }
+
+--
+-- Trap variables
+--
+
+vvruxTrapVars		OBJECT IDENTIFIER	::= { vvruxTrapBranch 1 }
+
+rvgName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Replicated Volume Group Name"
+	::= { vvruxTrapVars 1 }
+
+dgName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Disk Group Name"
+	::= { vvruxTrapVars 2 }
+
+priHostName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Primary Host Name"
+	::= { vvruxTrapVars 3 }
+
+secHostName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Secondary Host Name"
+	::= { vvruxTrapVars 4 }
+
+srlPercent OBJECT-TYPE
+	SYNTAX	INTEGER
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Percentage of SRL used"
+	::= { vvruxTrapVars 5 }
+
+latencyHighMark OBJECT-TYPE
+	SYNTAX	INTEGER
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Latency High Mark"
+	::= { vvruxTrapVars 6 }
+
+latencyLowMark OBJECT-TYPE
+	SYNTAX	INTEGER
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Latency Low Mark"
+	::= { vvruxTrapVars 7 }
+
+
+--
+--	Trap definations
+--
+
+vvruxTrapDefs		OBJECT IDENTIFIER	::= { vvruxTrapBranch 2 }
+
+-- RVG Group related
+
+rvgTransientSecondary TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, secHostName}
+	DESCRIPTION
+		"The Old Primary RVG has become a transient Secondary during fast failback."
+	::=	1
+
+rvgTransientSecondaryToSecondary TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, secHostName}
+	DESCRIPTION
+		"Transient Secondary has become a Secondary during fast failback."
+	::=	2
+
+repStatusAsyncToSync TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Replication mode has changed from Asynchronous to Synchronous."
+	::=	3
+
+repStatusSyncToAsync TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Replication mode has changed from Synchronous to Asynchronous."
+	::=	4
+
+repStatusRepStarted TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Either a user has started or resumed replication or the network 
+		connection between the Primary and Secondary has been re-established. 
+		This indicates that the Primary is replicating to the Secondary."
+	::=	5
+
+repStatusRepStopped TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Either a user has stopped or paused replication or there has been a 
+		network disconnect between the Primary and the Secondary. This indicates 
+		that the Primary is not replicating to the Secondary."
+	::=	6
+
+repStatusRepPaused TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Replication has been paused."
+	::=	7
+
+repStatusReSyncStarted TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"This could have occured due to a user action initiating a 						resynchronization of the Secondary or due to auto failback or 
+		after the network connection was re-established between the Primary 
+		and the Secondary."
+	::=	8
+
+repStatusReSyncStopped TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Incremental synchronization of the Secondary may have been stopped 
+		by the user or may have been completed. If it has been completed the 
+		data on the Secondary is consistent."
+	::=	9
+
+repStatusReSyncPaused TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Incremental synchronization of the Secondary was paused either by 
+		the user or due to network disconnect between Primary and the Secondary."
+	::=	10
+
+repStatusRepFrozen TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, secHostName}
+	DESCRIPTION
+		"Writes to data volumes of Secondary RVG have been frozen on 
+		receiving IBC message."
+	::=	11
+
+repStatusRePunFrozen TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, secHostName}
+	DESCRIPTION
+		"Writes to data volumes of Secondary RVG have resumed after 
+		receiving IBC unfreeze message."
+	::=	12
+
+repStatusRepStoppedSrlOverflow TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, secHostName}
+	DESCRIPTION
+		"Replication has stopped due to SRL Overflow. This happens when 
+		SRL Protection has been set to off."
+	::=	13
+
+srlStateSrlFull TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, srlPercent }
+	DESCRIPTION
+		"SRL on Primary RVG is full."
+	::=	14
+
+protLatThrottleStarted TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, latencyHighMark }
+	DESCRIPTION
+		"Write throttling associated to Latency protection started. High Latency
+		 Mark has been reached. This happened due to Latency protection setting 
+		which has a High Latency Mark set. "
+	::=	15
+
+protLatThrottleStopped TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, latencyLowMark }
+	DESCRIPTION
+		"Writes throttling associated to Latency protection stopped. 
+		Low Latency Mark has been reached."
+	::=	16
+
+protLatOverriden TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, latencyHighMark }
+	DESCRIPTION
+		"Latency protection has been overriden.
+		 High Latency mark has been crossed."
+	::=	17
+
+protLatWriteFailed TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName, latencyHighMark }
+	DESCRIPTION
+		"Throttling due to Latency protection caused IO failure.
+		 High Latency mark has been reached."
+	::=	18
+
+protSrlThrottleStarted TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Write throttling associated to SRL Overflow protection started."
+	::=	19
+
+protSrlThrottleStopped TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Write throttling associated to SRL Overflow protection stopped."
+	::=	20
+
+protSrlOverriden TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"SRL Overflow protection has been overriden."
+	::=	21
+
+protSrlWriteFailed TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Writes throttling due to SRL Overflow protection caused IO failure."
+	::=	22
+
+protSrlDcmUsageStarted TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Started using DCM for SRL Overflow protection."
+	::=	23
+
+protSrlDcmUsageStopped TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgName, priHostName}
+	DESCRIPTION
+		"Stopped using DCM for SRL Overflow protection. If replication is 
+		still active SRL will be able to track writes."
+	::=	24
+
+miscIbcMsgDiscarded TRAP-TYPE
+	ENTERPRISE	vvruxTrapDefs
+	VARIABLES	{ rvgName, dgname, priHostName}
+	DESCRIPTION
+		"IBC message discarded due to timeout."
+	::=	25
+
+END
+
+--
+--   End VERITAS-VVR-UX-MIB
+--

@@ -1,0 +1,2835 @@
+<html>
+<head>
+<title></title>
+<script type="text/javascript" language="JavaScript">
+<!--
+
+
+var CHAPTERS = new Array(
+"C1",
+"C1_1",
+"C1_2",
+"C1_3",
+"C2",
+"C2_1",
+"C3",
+"C3_1",
+"C3_1_1",
+"C3_1_2",
+"C3_1_3",
+"C3_1_4",
+"C3_1_5",
+"C3_2",
+"C3_2_1",
+"C3_2_2",
+"C3_2_3",
+"C3_3",
+"C3_3_1",
+"C3_3_2",
+"C3_3_3",
+"C3_3_4",
+"C3_3_5",
+"C3_3_6",
+"C3_3_7",
+"C3_4",
+"C3_5",
+"C3_6",
+"C3_7",
+"C3_8",
+"C3_9",
+"C3_9_1",
+"C3_9_2",
+"C3_10",
+"C3_11",
+"C4",
+"C5",
+"C5_1",
+"C6",
+"C7"
+);
+// TR 3319 Problem with THS Back button when scaled Image is clicked
+var isScalled = 0;
+function ScaledImage() {
+	isScalled = 1;
+}
+
+var ANCH_ARRAY = new Array();
+function saveAnchor(name, location) {
+ var saveAnch = new Array(
+  name,
+  location
+ );
+ ANCH_ARRAY[ANCH_ARRAY.length] = saveAnch;
+}
+
+saveAnchor("CHAPTER1", "C1");
+saveAnchor("id_sg27", "C1");
+saveAnchor("CHAPTER1.1", "C1_1");
+saveAnchor("id_pdiq", "C1_1");
+saveAnchor("CHAPTER1.2", "C1_2");
+saveAnchor("id_8gvq", "C1_2");
+saveAnchor("CHAPTER1.3", "C1_3");
+saveAnchor("id_zhmt", "C1_3");
+saveAnchor("CHAPTER2", "C2");
+saveAnchor("id_8z9p", "C2");
+saveAnchor("CHAPTER2.1", "C2_1");
+saveAnchor("id_7kzh", "C2_1");
+saveAnchor("TableforDirectoryStructure", "C2_1");
+saveAnchor("TABLE1", "C2_1");
+saveAnchor("CHAPTER3", "C3");
+saveAnchor("AdminUI", "C3");
+saveAnchor("id_tw7i", "C3");
+saveAnchor("tbl-Adminuitable", "C3");
+saveAnchor("TABLE2", "C3");
+saveAnchor("CHAPTER3.1", "C3_1");
+saveAnchor("id_0wr4", "C3_1");
+saveAnchor("CHAPTER3.1.1", "C3_1_1");
+saveAnchor("SystemStatus", "C3_1_1");
+saveAnchor("id_0tpo", "C3_1_1");
+saveAnchor("table-SystemStatusview", "C3_1_1");
+saveAnchor("TABLE3", "C3_1_1");
+saveAnchor("SystemStatusView", "C3_1_1");
+saveAnchor("FIGURE1", "C3_1_1");
+saveAnchor("tbl-service", "C3_1_1");
+saveAnchor("TABLE4", "C3_1_1");
+saveAnchor("CHAPTER3.1.2", "C3_1_2");
+saveAnchor("MonitoringCommands", "C3_1_2");
+saveAnchor("id_rtvb", "C3_1_2");
+saveAnchor("FIGURE2", "C3_1_2");
+saveAnchor("CHAPTER3.1.3", "C3_1_3");
+saveAnchor("id_h89y", "C3_1_3");
+saveAnchor("FIGURE3", "C3_1_3");
+saveAnchor("CHAPTER3.1.4", "C3_1_4");
+saveAnchor("id_zxsf", "C3_1_4");
+saveAnchor("FIGURE4", "C3_1_4");
+saveAnchor("CHAPTER3.1.5", "C3_1_5");
+saveAnchor("id_qc62", "C3_1_5");
+saveAnchor("FIGURE5", "C3_1_5");
+saveAnchor("CHAPTER3.2", "C3_2");
+saveAnchor("id_p0ej", "C3_2");
+saveAnchor("CHAPTER3.2.1", "C3_2_1");
+saveAnchor("id_0f95", "C3_2_1");
+saveAnchor("CHAPTER3.2.2", "C3_2_2");
+saveAnchor("ReaggregationEvents", "C3_2_2");
+saveAnchor("id_bw1t", "C3_2_2");
+saveAnchor("FIGURE6", "C3_2_2");
+saveAnchor("CHAPTER3.2.3", "C3_2_3");
+saveAnchor("Reaggregation", "C3_2_3");
+saveAnchor("id_9hld", "C3_2_3");
+saveAnchor("SelectForReAggeration", "C3_2_3");
+saveAnchor("FIGURE7", "C3_2_3");
+saveAnchor("ManualAggregations", "C3_2_3");
+saveAnchor("FIGURE8", "C3_2_3");
+saveAnchor("CHAPTER3.3", "C3_3");
+saveAnchor("id_ff76", "C3_3");
+saveAnchor("CHAPTER3.3.1", "C3_3_1");
+saveAnchor("id_2grg", "C3_3_1");
+saveAnchor("CHAPTER3.3.2", "C3_3_2");
+saveAnchor("id_tv4j", "C3_3_2");
+saveAnchor("FIGURE9", "C3_3_2");
+saveAnchor("FIGURE10", "C3_3_2");
+saveAnchor("CHAPTER3.3.3", "C3_3_3");
+saveAnchor("id_qz1b", "C3_3_3");
+saveAnchor("FIGURE11", "C3_3_3");
+saveAnchor("CHAPTER3.3.4", "C3_3_4");
+saveAnchor("TypeConfiguration", "C3_3_4");
+saveAnchor("id_7074", "C3_3_4");
+saveAnchor("tbl-partition", "C3_3_4");
+saveAnchor("TABLE5", "C3_3_4");
+saveAnchor("CHAPTER3.3.5", "C3_3_5");
+saveAnchor("ActivatingTypes", "C3_3_5");
+saveAnchor("id_hzry", "C3_3_5");
+saveAnchor("FIGURE12", "C3_3_5");
+saveAnchor("CHAPTER3.3.6", "C3_3_6");
+saveAnchor("id_yiyz", "C3_3_6");
+saveAnchor("FIGURE13", "C3_3_6");
+saveAnchor("CHAPTER3.3.7", "C3_3_7");
+saveAnchor("DWHConfiguration", "C3_3_7");
+saveAnchor("id_p342", "C3_3_7");
+saveAnchor("FIGURE14", "C3_3_7");
+saveAnchor("FIGURE15", "C3_3_7");
+saveAnchor("CHAPTER3.4", "C3_4");
+saveAnchor("LoggingConfiguration", "C3_4");
+saveAnchor("id_x4rn", "C3_4");
+saveAnchor("TABLE6", "C3_4");
+saveAnchor("FIGURE16", "C3_4");
+saveAnchor("CHAPTER3.5", "C3_5");
+saveAnchor("adminconfiguration", "C3_5");
+saveAnchor("id_3971", "C3_5");
+saveAnchor("FIGURE17", "C3_5");
+saveAnchor("CHAPTER3.6", "C3_6");
+saveAnchor("UnknownCells", "C3_6");
+saveAnchor("id_7x56", "C3_6");
+saveAnchor("FIGURE18", "C3_6");
+saveAnchor("FIGURE19", "C3_6");
+saveAnchor("FIGURE20", "C3_6");
+saveAnchor("CHAPTER3.7", "C3_7");
+saveAnchor("SessionLogs", "C3_7");
+saveAnchor("id_nj4a", "C3_7");
+saveAnchor("fig-logdetailsGPEH", "C3_7");
+saveAnchor("FIGURE21", "C3_7");
+saveAnchor("FIGURE22", "C3_7");
+saveAnchor("FIGURE23", "C3_7");
+saveAnchor("CHAPTER3.8", "C3_8");
+saveAnchor("DataSourceLog", "C3_8");
+saveAnchor("id_se4t", "C3_8");
+saveAnchor("FIGURE24", "C3_8");
+saveAnchor("CHAPTER3.9", "C3_9");
+saveAnchor("id_7nur", "C3_9");
+saveAnchor("CHAPTER3.9.1", "C3_9_1");
+saveAnchor("DataRowInfo", "C3_9_1");
+saveAnchor("id_fiiq", "C3_9_1");
+saveAnchor("FIGURE25", "C3_9_1");
+saveAnchor("FIGURE26", "C3_9_1");
+saveAnchor("CHAPTER3.9.2", "C3_9_2");
+saveAnchor("ShowReferenceTables", "C3_9_2");
+saveAnchor("id_zm86", "C3_9_2");
+saveAnchor("FIGURE27", "C3_9_2");
+saveAnchor("CHAPTER3.10", "C3_10");
+saveAnchor("id_jl1j", "C3_10");
+saveAnchor("CHAPTER3.11", "C3_11");
+saveAnchor("id_tkqz", "C3_11");
+saveAnchor("FIGURE28", "C3_11");
+saveAnchor("CHAPTER4", "C4");
+saveAnchor("id_9m4i", "C4");
+saveAnchor("tbl-error", "C4");
+saveAnchor("TABLE7", "C4");
+saveAnchor("CHAPTER5", "C5");
+saveAnchor("id_pavy", "C5");
+saveAnchor("trblshooting", "C5");
+saveAnchor("CHAPTER5.1", "C5_1");
+saveAnchor("troublechapter", "C5_1");
+saveAnchor("troubleshooting", "C5_1");
+saveAnchor("tbl-troubleshooting", "C5_1");
+saveAnchor("TABLE8", "C5_1");
+saveAnchor("CHAPTER6", "C6");
+saveAnchor("CHAPTER7", "C7");
+saveAnchor("rf-OSSGlossary", "C7");
+saveAnchor("rf-TypographicConventions", "C7");
+saveAnchor("rf-ProdDesc", "C7");
+saveAnchor("rf-EventsSAG", "C7");
+saveAnchor("ENIQSecurityAdminGuide", "C7");
+
+
+var parallelPDF = "EE17A_AdminUI_SAG_ISO9069.html";
+
+var C1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"\n" +
+"<h1><span class=\"CHAPNUMBER\">1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_sg27\"></a><a name=\"CHAPTER1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">About This Document</a></span></h1>\n" +
+"\n"+
+"</div>\n";
+
+var C1_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">1.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_pdiq\"></a><a name=\"CHAPTER1.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Purpose</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"This document describes system administration tasks in Ericsson\n" +
+"Network OSS.</p>\n" +
+"\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C1_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">1.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_8gvq\"></a><a name=\"CHAPTER1.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Prerequisites</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"It is assumed that the user of this document: </p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Is familiar with Ericsson Network OSS</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has Ericsson Network OSS installed</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has administrator privileges to AdminUI</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has dcuser account</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has knowledge of Solaris</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has knowledge of SQL</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Has knowledge of Windows-based applications</li></ul>\n" +
+"<p>\n" +
+"The browsers recommended for running the Ericsson Network OSS Application\n" +
+"are the following:</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Mozilla Firefox 3.6 and subsequent releases<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Mozilla Firefox is the recommended browser for this release.</dd></dl><br /></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Google Chrome</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Internet Explorer 8.0 and subsequent releases<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Users may experience service degradation on an Internet Explorer\n" +
+"browser. For Internet Explorer 9, it is necessary to complete the\n" +
+"following steps each time the browser is opened: \n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE2\">Press <b>F12</b> or click on <b>Tools</b> or cogwheel icon and select <b>F12 Developer Tools</b>.</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\">On the pop-up menu, select <b>Document Mode</b> and select <b>IE9 Standards</b> from the drop-down menu.</li></ul></dd></dl><br /></li></ul>\n" +
+"<p>\n" +
+"It is assumed all required licenses are available and installed.</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C1_3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">1.3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_zhmt\"></a><a name=\"CHAPTER1.3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Typographic Conventions</a></span></h2>\n" +
+"\n" +
+"\n" +
+"<p>\n" +
+"The typographic conventions for all Customer Product Information\n" +
+"(CPI) in Ericsson Network OSS are found in <a href='javascript:parent.parent.parent.showAnchor(\"rf-TypographicConventions\")' class=\"xref\">Reference [2]</a>.</p>\n" +
+"\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1><span class=\"CHAPNUMBER\">2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_8z9p\"></a><a name=\"CHAPTER2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">System Overview</a></span></h1>\n" +
+"\n" +
+"<p>\n" +
+"The operation of Ericsson Network OSS is based around a series\n" +
+"of event-driven data.  Events occur in the network, and these are\n" +
+"captured by network elements, probes, or software systems. These are\n" +
+"event producers, and they place these events in files, a database,\n" +
+"or in a stream. The mediation layer within Ericsson Network OSS collects\n" +
+"and processes this data from these event producers. Once collected\n" +
+"the events are parsed, reformatted, and binary load files are created\n" +
+"for loading into the data warehouse.  The data warehouse is partitioned\n" +
+"such that the data can be made available to higher layers within a\n" +
+"very short time interval.  Where multiple data sources are used, correlation\n" +
+"between those data sources is performed, for example, events from\n" +
+"RNC and SGSN that contain IMSI references would be correlated to get\n" +
+"a view of the IMSI across the radio and packet core interfaces. </p>\n" +
+"\n" +
+"<p>\n" +
+"User interface applications, built upon the data warehouse, run\n" +
+"queries and the visual results facilitate monitoring and troubleshooting\n" +
+"use cases.</p>\n" +
+"\n" +
+"<p>\n" +
+"A more detailed technical overview is available in the <em class=\"LOWEMPH\">ENIQ Events System Description</em>, <a href='javascript:parent.parent.parent.showAnchor(\"rf-ProdDesc\")' class=\"xref\">Reference [3]</a>. </p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C2_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">2.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_7kzh\"></a><a name=\"CHAPTER2.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Ericsson Network OSS Directory Structure</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"Ericsson Network OSS has a standard directory structure. The common\n" +
+"directories of Ericsson Network OSS and their content are outlined\n" +
+"in <a name=\"TableforDirectoryStructure\" href='javascript:parent.parent.parent.showAnchor(\"TableforDirectoryStructure\")' class=\"xref\"> Table 1</a>:</p>\n" +
+"\n" +
+"<a name=\"TABLE1\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 1 &nbsp;&nbsp; Directory Structure</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\">\n" +
+"\n" +
+"<p>Directory</p></th>\n" +
+"<th align=\"left\" valign=\"top\">\n" +
+"\n" +
+"<p>Contents</p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Ericsson Network OSS log files</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/local_logs</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Log files for local file system</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/sw/conf</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Ericsson Network OSS configuration files</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/sw/bin</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Scripts to start and stop Ericsson Network OSS services</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/database</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Ericsson Network OSS database files</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/archive</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Processed data from parser</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/data/etldata/<i class=\"var\">techpack_name_counter_name</i>/failed</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Failed data from loader</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/local_logs/rolling_snapshot_logs</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Contains logs regarding the roll back service and manual\n" +
+"snapshots</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>This location collects diverse logs for engine, scheduler,\n" +
+"tech packs, interfaces, adminui, alarms</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/local_logs/iq/dwhdb.iqmsg</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Master database log file</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/glassfish</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Contains GlassFish logs</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/mediation_gw/M_E_LTEES/events_oss_&lt;n&gt;/topology</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Details of LTE ES processed topology files </p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/mediation_gw/M_E_LTEES/events_oss_&lt;n&gt;/celltrace</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Details of LTE ES processed celltrace files </p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/mediation_gw</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Contains Controlzone, EC stop/start and install logs</p>\n" +
+"</td></tr></table>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1><a name=\"AdminUI\"></a><span class=\"CHAPNUMBER\">3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_tw7i\"></a><a name=\"CHAPTER3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">AdminUI</a></span></h1>\n" +
+"\n" +
+"<p>\n" +
+"Administrative client, AdminUI, is hosted by ENIQ Events. AdminUI\n" +
+"provides a Web Interface for various administrative tasks.</p>\n" +
+"\n" +
+"<p>\n" +
+"To start AdminUI:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Open your Web browser.<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>AdminUI supports Microsoft Internet Explorer, Google Chrome\n" +
+"and Mozilla-based browsers</dd></dl><br /></li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Navigate to <tt class=\"file-path\">http://<i class=\"var\">CoordinatorServerIP</i>:8080/adminui/</tt>, where <tt class=\"input\"><b><i class=\"var\">CoordinatorServerIP</i></b></tt> is the IP address of the ENIQ Events Coordinator blade.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Type your user name and password.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Login</b>.</li></ol>\n" +
+"<p>\n" +
+"AdminUI has its own on-line Help. Click a [help] link on left hand\n" +
+"panel to view the corresponding help topic. <a name=\"tbl-Adminuitable\" href='javascript:parent.parent.parent.showAnchor(\"tbl-Adminuitable\")' class=\"xref\"> Table 2</a> lists all AdminUI links and the features\n" +
+"you can access by clicking them.</p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE2\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 2 &nbsp;&nbsp; AdminUI Links</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"35%\">\n" +
+"\n" +
+"<p>AdminUI Link</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"65%\">\n" +
+"\n" +
+"<p>Click To</p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p><b class=\"object\">System Monitoring</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>System Status</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View system status</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>ETLC Monitoring</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View running, queued, executed, and failed ETL sets</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>ETLC Set History</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View logs from a selected session</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>ETLC Set Scheduling</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View the execution status of a set</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Monitoring Commands</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Use monitoring utilities</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p><b class=\"object\">Data Flow Monitoring</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Show Loadings</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Check that measurement data is loaded correctly on the\n" +
+"system</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Show Aggregations</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View the status of aggregations for a tech pack</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Reaggregation</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Manually request aggregation</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Session Logs</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View selected session&rsquo;s log files</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Datasource Log</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Display datasources with no data received for selected\n" +
+"time range</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p><b class=\"object\">Data Verification</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Data Row Info</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Check if database tables contain data</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Show Reference Tables</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View the contents of reference tables</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p><b class=\"object\">Configuration</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Unmatched Topology</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Define parent for unmatched access areas.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Monitored Types</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Activate, inactivate, delete and add monitored types</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Type Configuration</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Activate, inactivate types and change storage time of types</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>DWH Configuration</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Change storage time of partition plans</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Logging Configuration</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Configure logging properties for engine, scheduler, and\n" +
+"performance as well as for all packages</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Admin Configuration</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View or modify the system properties that are configurable.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p><b class=\"object\">Security Administration</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>User Management</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Create, Edit, Delete, View, and Unlock user accounts</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Role Management</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Create, Edit, Delete and View Roles within the system</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Permission Groups</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Create, Edit, Delete and View Permission Groups</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"&nbsp;\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"&nbsp;\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>User Manual</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>View the on-line Help</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"35%\">\n" +
+"<p>Logout</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"65%\">\n" +
+"<p>Log out of AdminUI</p>\n" +
+"</td></tr></table>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_0wr4\"></a><a name=\"CHAPTER3.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">System Monitoring</a></span></h2>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"SystemStatus\"></a><span class=\"CHAPNUMBER\">3.1.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_0tpo\"></a><a name=\"CHAPTER3.1.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking System Status</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"You can use AdminUI to check system status:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>System Status</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\"><a href='javascript:parent.parent.parent.showAnchor(\"table-SystemStatusview\")' class=\"xref\"> Table 3</a>, describes the\n" +
+"information provided in the <b><a name=\"table-SystemStatusview\"></a>System Status</b> view.</li></ol>\n" +
+"\n" +
+"<a name=\"TABLE3\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 3 &nbsp;&nbsp; System Status View</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\">\n" +
+"\n" +
+"<p><b class=\"object\">System Detail</b></p></th>\n" +
+"<th align=\"left\" valign=\"top\">\n" +
+"\n" +
+"<p><b class=\"object\">Information Provided</b></p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">Host Information</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Displays the list of server names providing services for\n" +
+"different applications. This host information contains their operating\n" +
+"systems, hardware and uptime.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">ENIQ DWH</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>DWH database</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">ENIQ REP</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>REP database</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">Engine</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>ENIQ engine</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">Scheduler</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>ENIQ scheduler</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">License server</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Installed licenses</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">License manager</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>License logs</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">Mediation Gateway</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Mediation Gateway Details</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\">\n" +
+"<p><b class=\"object\">Application Server</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\">\n" +
+"<p>Displays the status of both the application server and\n" +
+"the list of domains.</p><br />\n" +
+"<p>The host name from which application server is running is also\n" +
+"displayed.</p>\n" +
+"</td></tr></table>\n" +
+"<p>\n" +
+"The <b>System Status</b> view is shown in <a href='javascript:parent.parent.parent.showAnchor(\"SystemStatusView\")' class=\"xref\"> Figure 1</a>. Host name and server IP address has\n" +
+"been removed from this figure.</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><a name=\"SystemStatusView\"></a><p align=\"left\" class=\"image\"><a href=\"12_1543-CSA11363_2Uen.A-SystemStatusView.jpg\" name=\"FIGURE1\" class=\"UNSCALEDREFERENCE\" onclick =\"javascript:parent.parent.ScaledImage();\"><img src=\"12_1543-CSA11363_2Uen.A-SystemStatusView.jpg\" title=\"Click to view an unscaled version of this image\" border=\"0\" width=\"640\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 1 &nbsp; System Status View</i></p></div>\n" +
+"<p>\n" +
+"On the System Status View:</p>\n" +
+"\n" +
+"<p>\n" +
+"Click <b>Show connection status details</b> for information\n" +
+"about specific database connections.</p>\n" +
+"\n" +
+"<p>\n" +
+"Click <b>Show status details</b> next to the specific\n" +
+"database to view database status details.</p>\n" +
+"\n" +
+"<p>\n" +
+"Click <b>Show status details</b> next to <b>Engine</b> or <b>Scheduler</b> to view Engine or Scheduler status\n" +
+"details.</p>\n" +
+"\n" +
+"<p>\n" +
+"Click <b>Show installed licenses</b> next to <b>License server</b> to view installed licenses.</p>\n" +
+"\n" +
+"<p>\n" +
+"Click <b>Show license logs</b> next to <b>License\n" +
+"manager</b> to view license logs.</p>\n" +
+"\n" +
+"<p>\n" +
+"Service status is indicated by a traffic light. The colors and\n" +
+"what they represent are listed in <a name=\"tbl-service\" href='javascript:parent.parent.parent.showAnchor(\"tbl-service\")' class=\"xref\"> Table 4</a>.</p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE4\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 4 &nbsp;&nbsp; Service Status Color Codes</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"9%\">\n" +
+"\n" +
+"<p>Color</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"16%\">\n" +
+"\n" +
+"<p>Engine or Scheduler</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"16%\">\n" +
+"\n" +
+"<p>Host Information</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"15%\">\n" +
+"\n" +
+"<p>ENIQ DWH or ENIQ REP</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"15%\">\n" +
+"\n" +
+"<p>License Information</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"15%\">\n" +
+"\n" +
+"<p>Mediation Gateway</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"15%\">\n" +
+"\n" +
+"<p>Application Server</p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"9%\">\n" +
+"<p>Green</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Specific <b class=\"object\">ETLC</b> process is running normally.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Host details acquired successfully.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Database is up and running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>License server is online.</p><br />\n" +
+"<p>License manager is running normally.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>At least one execution context or control zone is up.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>If Glassfish domain1 is running. </p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"9%\">\n" +
+"<p>Yellow</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Engine's execution profile is in <b class=\"object\">NoLoads</b> profile.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>If any of the available service status is offline.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Database is up and running, but no backup of the database\n" +
+"has been created.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Not Applicable.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Connection /authentication failure to any remote EC.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Not Available. </p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"9%\">\n" +
+"<p>Red</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Specific <b class=\"object\">ETLC</b> process is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Host details could not be acquired.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Database is not running or <b class=\"object\">ENIQ DWH</b> database\n" +
+"is full.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>License server is offline.</p><br />\n" +
+"<p> License manager is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>All  execution contexts and control zone are down.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>If Glassfish domain1 is not running.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"9%\">\n" +
+"<p>Grey</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>Not Applicable.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"16%\">\n" +
+"<p>In case of any exception, authentication failure or if\n" +
+"REPDB is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>In case of any exception, authentication failure or if\n" +
+"REPDB is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>Not applicable.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>In case of any exception, authentication failure or if\n" +
+"REPDB is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"15%\">\n" +
+"<p>In case of any exception, authentication failure or if\n" +
+"REPDB is not running.</p>\n" +
+"</td></tr></table>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"MonitoringCommands\"></a><span class=\"CHAPNUMBER\">3.1.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_rtvb\"></a><a name=\"CHAPTER3.1.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking\n" +
+"System Version and Installed Tech Packs</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"To verify the version of Ericsson Network OSS that is currently\n" +
+"active, select <b>ENIQ software version</b> from the drop-down\n" +
+"menu in <b>Monitoring Commands</b>.</p>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to obtain the list of the tech packs\n" +
+"installed on the system. This list includes product and version number\n" +
+"information.</p>\n" +
+"\n" +
+"<p>\n" +
+"To check installed tech packs:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Monitoring Commands</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Installed tech packs</b> from the\n" +
+"commands list and click <b>Start</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE2\"><img src=\"12_1543-CSA11363_2Uen.A-Techpacksnum.jpg\" title=\"\" border=\"0\" width=\"608\" height=\"637\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 2 &nbsp; Viewing Installed Tech Packs</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1_3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.1.3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_h89y\"></a><a name=\"CHAPTER3.1.3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking Disk Space</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to check the server's disk space:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Monitoring Commands</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Disk space information</b> from the\n" +
+"commands list and click <b>Start</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE3\"><img src=\"12_1543-CSA11363_2Uen.A-disk_space.gif\" title=\"\" border=\"0\" width=\"665\" height=\"598\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 3 &nbsp; Viewing Disk Space Information</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1_4=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.1.4 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_zxsf\"></a><a name=\"CHAPTER3.1.4\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking Installed Modules</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to view the modules installed on the\n" +
+"system.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Monitoring Commands</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Installed modules</b> from the commands\n" +
+"list and click <b>Start</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE4\"><img src=\"12_1543-CSA11363_2Uen.A-InstalledModules.gif\" title=\"\" border=\"0\" width=\"369\" height=\"512\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 4 &nbsp; Viewing Installed Modules</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_1_5=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.1.5 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_qc62\"></a><a name=\"CHAPTER3.1.5\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking Active Processes</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to view the active processes on the\n" +
+"system.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Monitoring Commands</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Most active processes</b> from the\n" +
+"commands list and click <b>Start</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE5\"><img src=\"12_1543-CSA11363_2Uen.A-active_processes.gif\" title=\"\" border=\"0\" width=\"515\" height=\"472\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 5 &nbsp; Viewing Active Processes</i></p></div>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_p0ej\"></a><a name=\"CHAPTER3.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Data Flow Monitoring</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_2_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.2.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_0f95\"></a><a name=\"CHAPTER3.2.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Reloading Data</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to reload data that is not parsed or\n" +
+"that needs to be reloaded.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>ETLC Set Scheduling</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the required <b>Set type</b> from the\n" +
+"drop-down menu. For example <b>Interface</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the specified activated interface as package.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the set named <tt class=\"file-path\">Adapter_INTERFACE_NAME</tt> on the result table and click <b>Start</b>. AdminUI automatically\n" +
+"redirects to the ETLC Monitoring view.</li></ol>\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Duplicate files may be rejected by the adapter. However,\n" +
+"this option is disabled by default.</dd></dl><br />\n" +
+"\n"+
+"</div>\n";
+
+var C3_2_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"ReaggregationEvents\"></a><span class=\"CHAPNUMBER\">3.2.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_bw1t\"></a><a name=\"CHAPTER3.2.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Reaggregating\n" +
+"Data</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps To reaggregate data for Ericsson Network\n" +
+"OSS:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Reaggregation</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the time level and required tech pack.<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>DAY level aggregation is available for Ericsson Network OSS.</dd></dl><br /></li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>ReAggregate</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Start Time</b> and <b>End Time</b> from given drop-down lists.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select required operation <b>ReAgg Now or Later</b> from the drop-down list box.<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd><b>ReAgg Now</b> displays updated results immediately.</dd></dl><br /></li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>ReAggregate</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE6\"><img src=\"12_1543-CSA11363_2Uen.A-eventsreaggregation.jpg\" title=\"\" border=\"0\" width=\"609\" height=\"664\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 6 &nbsp; Selecting Measurement Types for Reaggregation in ENIQ Events</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"7\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Selected measurement types are now set to manual state.\n" +
+"Automatic Reaggregation reaggregates aggregations set to manual state\n" +
+"during the next execution.</li></ol>\n" +
+"\n"+
+"</div>\n";
+
+var C3_2_3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"Reaggregation\"></a><span class=\"CHAPNUMBER\">3.2.3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_9hld\"></a><a name=\"CHAPTER3.2.3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Reaggregating\n" +
+"PM Data</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to reaggregate PM data:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>PM Reaggregation</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the <b>Time Level</b>, <b>Start\n" +
+"Time</b>, <b>End Time</b>, and <b>Techpack Name</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>List</b> to get a list of measurement\n" +
+"types to be reaggregated.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select the measurement types to be reaggregated and click <b>Aggregate</b>. See <a href='javascript:parent.parent.parent.showAnchor(\"SelectForReAggeration\")' class=\"xref\"> Figure 7</a>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><a name=\"SelectForReAggeration\"></a><p align=\"left\" class=\"image\"><a name=\"FIGURE7\"><img src=\"12_1543-CSA11363_2Uen.A-reaggre.gif\" title=\"\" border=\"0\" width=\"637\" height=\"558\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 7 &nbsp; Selecting Measurement Types for Reaggregation</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"5\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Selected measurement types are now set to manual state.\n" +
+"See <a href='javascript:parent.parent.parent.showAnchor(\"ManualAggregations\")' class=\"xref\"> Figure 8</a>. Automatic Reaggregation\n" +
+"reaggregates aggregations set to manual state during the next execution.<p>\n" +
+"If the data has been aggregated before, the reaggregation starts\n" +
+"at 7 PM. If the data has not been aggregated before, the aggregation\n" +
+"starts after one hour.</p>\n" +
+"</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><a name=\"ManualAggregations\"></a><p align=\"left\" class=\"image\"><a name=\"FIGURE8\"><img src=\"12_1543-CSA11363_2Uen.A-showaggre2.gif\" title=\"\" border=\"0\" width=\"552\" height=\"599\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 8 &nbsp; Aggregations Set to Manual</i></p></div>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_ff76\"></a><a name=\"CHAPTER3.3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Maintenance Operations</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.3.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_2grg\"></a><a name=\"CHAPTER3.3.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">ENIQ Database Maintenance</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Database maintenance is handled automatically by DWHManagement\n" +
+"sets. The data in DWH is stored in types.</p>\n" +
+"\n" +
+"<p>\n" +
+"There are three different types:</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Partitioned type</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Unpartitioned type</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Simple type</li></ul>\n" +
+"<p>\n" +
+"Unpartitioned and simple types are used for storing small amounts\n" +
+"of data and therefore need no daily management. The actual measurement\n" +
+"data is stored in partitioned types.</p>\n" +
+"\n" +
+"<p>\n" +
+"During the initial installation of ENIQ, tech packs and partitions\n" +
+"are created for the entire storage time. Data can be loaded into the\n" +
+"whole storage time range.</p>\n" +
+"\n" +
+"<p>\n" +
+"However, by default ENIQ load monitoring is only performed to data\n" +
+"that is not older than three days. Therefore, measurement data loadings\n" +
+"that are older than three days at the time of the loading are not\n" +
+"displayed in AdminUI.</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.3.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_tv4j\"></a><a name=\"CHAPTER3.3.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Daily Database Maintenance</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"A partitioned type has a set of partitions and database tables\n" +
+"used with circular buffer algorithm. Because of the finite length\n" +
+"of storage time in a circular buffer, partitioned types need daily\n" +
+"maintenance. </p>\n" +
+"\n" +
+"<p>\n" +
+"Daily management is performed by <tt class=\"file-path\">DWHM_Partition</tt> sets. Each tech pack contains a partitioning set. Partitioning sets\n" +
+"are triggered by <tt class=\"file-path\">Trigger_Partitioning</tt> set\n" +
+"in <tt class=\"file-path\">DWH_BASE</tt> tech pack. You can verify the\n" +
+"execution of daily database maintenance by running the <tt class=\"file-path\">Verify_Partitioning</tt> set in <tt class=\"file-path\">DWH_BASE</tt> tech pack. However, this is normally not necessary.</p>\n" +
+"\n" +
+"<p>\n" +
+"Perform the following steps to verify the execution of daily database\n" +
+"maintenance: </p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>ETLC Set Scheduling</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Set type</b>, select <b>Maintenance</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Package</b>, select <b>DWH_BASE</b> package.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a href=\"12_1543-CSA11363_2Uen.A-etcl_set_scheduling.gif\" name=\"FIGURE9\" class=\"UNSCALEDREFERENCE\" onclick =\"javascript:parent.parent.ScaledImage();\"><img src=\"12_1543-CSA11363_2Uen.A-etcl_set_scheduling.gif\" title=\"Click to view an unscaled version of this image\" border=\"0\" width=\"640\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 9 &nbsp; Daily Database Maintenance</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"4\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Find the set named <b>Verify_Partitioning</b> and click <b>Start</b>. AdminUI automatically redirects\n" +
+"you to the <b>ETLC Monitoring</b> view.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Wait until the <b>Verify_Partitioning</b> set\n" +
+"has been executed. Refresh the page manually.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">When <b>Verify_Partitioning</b> is successfully\n" +
+"executed, click the set name column for the set in Executed ETL Sets.<p>\n" +
+"If the log contains warnings, there is a problem in partitioning.\n" +
+" Check the execution of <tt class=\"file-path\">DWHM_Partition</tt> sets\n" +
+"for all tech packs on the list.</p>\n" +
+"</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE10\"><img src=\"12_1543-CSA11363_2Uen.A-AdminUIException.jpg\" title=\"\" border=\"0\" width=\"688\" height=\"574\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 10 &nbsp; Viewing the Execution of DWHM_Partition Sets</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_3=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.3.3 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_qz1b\"></a><a name=\"CHAPTER3.3.3\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Executing Partitioning Manually</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"If there is a problem in partitioning, or the system has to be\n" +
+"recovered, you can execute the partitioning manually. There is a set, <tt class=\"file-path\">DWHM_Partition_TechPackName</tt>, for each tech pack to\n" +
+"execute partitioning. The partitioning is performed by manually triggering\n" +
+"this set.</p>\n" +
+"\n" +
+"<p>\n" +
+"To execute manual partitioning: </p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>ETLC Set Scheduling</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Set type</b>, select <b>Techpack</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Package</b>, select the name of the\n" +
+"tech pack</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <tt class=\"file-path\">DWHM_Partition_&lt;<i class=\"var\">TechPackName</i>></tt> from the list and click the pack's <b>Start</b> link. AdminUI automatically transfers into ETLC Monitoring view,\n" +
+"where you can monitor the set execution.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">After the set has been executed, check the log for errors.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE11\"><img src=\"12_1543-CSA11363_2Uen.A-setscheduling.jpg\" title=\"\" border=\"0\" width=\"581\" height=\"316\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 11 &nbsp; Starting Manual Partitioning</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_4=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"TypeConfiguration\"></a><span class=\"CHAPNUMBER\">3.3.4 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_7074\"></a><a name=\"CHAPTER3.3.4\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking\n" +
+"Partition Status</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"There are three ways of checking ENIQ partition status:</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Logging into the DWH repository.</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Viewing log files</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Using AdminUI.<p>\n" +
+"This is the easiest method.</p>\n" +
+"</li></ul>\n" +
+"<p>\n" +
+"Perform the following steps to view partition status.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Type Configuration</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Tech Pack</b> and <b>Tablelevel</b>.<p>\n" +
+"The <b>Status</b> column displays the partition status\n" +
+"of each tech pack.</p>\n" +
+"</li></ol>\n" +
+"<p>\n" +
+"Partition statuses are explained in <a href='javascript:parent.parent.parent.showAnchor(\"tbl-partition\")' class=\"xref\"> Table 5</a>.</p>\n" +
+"\n" +
+"<p>\n" +
+"For more information on troubleshooting INSANE partitions issues\n" +
+"refer to <em class=\"LOWEMPH\">Ericsson Network IQ Events, System Administrator\n" +
+"Guide</em>, <a name=\"tbl-partition\" href='javascript:parent.parent.parent.showAnchor(\"rf-EventsSAG\")' class=\"xref\">Reference [4]</a> .</p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE5\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 5 &nbsp;&nbsp; Partition Statuses</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"25%\">\n" +
+"\n" +
+"<p>Partition Status</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"75%\">\n" +
+"\n" +
+"<p>Explanation</p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">ACTIVE</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>The partition is working.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">MANUAL</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>The partition was created manually.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">MIGRATED</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>The partition plan is updated.</p><br />\n" +
+"<p>This status is also used when partitions are being deleted: the\n" +
+"status is changed to <b class=\"object\">MIGRATED</b>, sanity check is run,\n" +
+"and then the partition is deleted.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">READONLY</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>Partition can only be read. No data can be inserted.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">NEW</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>A new partition that has not been activated yet.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">INSANE_AC</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>An active partition that is insane, for example, because\n" +
+"it does not correspond to the Partition Definitions in the DWH Repository.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">INSANE_MA</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>A manual partition that is insane, for example, because\n" +
+"it does not correspond to the Partition Definitions in the DWH Repository.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">INSANE_MG</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>A migrated partition that has gone insane.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">INSANE_RO</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>A read-only partition that has gone insane.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"25%\">\n" +
+"<p><b class=\"object\">INSANE_NE</b></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"75%\">\n" +
+"<p>New Partition that has gone insane, for example, because\n" +
+"it contains data.</p>\n" +
+"</td></tr></table>\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_5=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"ActivatingTypes\"></a><span class=\"CHAPNUMBER\">3.3.5 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_hzry\"></a><a name=\"CHAPTER3.3.5\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Activating\n" +
+"and Inactivating Types</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Data loading for a specific measurement type is enabled or disabled\n" +
+"by activating or inactivating the measurement type using AdminUI.</p>\n" +
+"\n" +
+"<p>\n" +
+"To activate and inactivate types:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Type Configuration</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select <b>Tech Pack</b> and <b>Tablelevel</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE12\"><img src=\"12_1543-CSA11363_2Uen.A-typeconfiguration.jpg\" title=\"\" border=\"0\" width=\"579\" height=\"408\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 12 &nbsp; Activating and Inactivating Types</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"3\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select at least one type by clicking the check box to\n" +
+"the left of the <b>Typename</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Activate selected</b> to activate the\n" +
+"selected types, or, click <b>Inactivate selected</b> to\n" +
+"inactivate them.</li></ol>\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_6=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><span class=\"CHAPNUMBER\">3.3.6 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_yiyz\"></a><a name=\"CHAPTER3.3.6\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Adjusting Storage Times</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"By default, each type initially uses storage time from a partition\n" +
+"plan. You can use AdminUI to check and change storage times.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Contact local Ericsson support before adjusting storage times.</dd></dl><br />\n" +
+"<p>\n" +
+"To adjust storage times:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Type Configuration</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select required tech pack from drop-down menu.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select type by clicking its <b>Typename</b> in\n" +
+"the resulting table.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Adjust the <b>Storage time</b> value or select <b>Use default storage time</b> to use the default storage time\n" +
+"defined by the type&rsquo;s partition plan.<br /> Decreasing storage\n" +
+"time results in loss of data for all affected measurement types. To\n" +
+"keep this data, back it up before adjusting the storage time.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">To save changes, click <b>Save</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE13\"><img src=\"12_1543-CSA11363_2Uen.A-adjuststorage.jpg\" title=\"\" border=\"0\" width=\"561\" height=\"490\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 13 &nbsp; Adjusting Storage Times</i></p></div>\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd><b>Storage Time</b> is defined in terms of <b>days</b> for all levels except <tt class=\"LITERALMONO\">RAW</tt> where\n" +
+"it is defined in terms of <b>rows</b>.</dd></dl><br />\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"6\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">After the changes are performed, set the loader into maintenance\n" +
+"mode, see <a href='javascript:parent.parent.parent.showAnchor(\"rf-EventsSAG\")' class=\"xref\">Reference [4]</a> and execute the tech packs <tt class=\"file-path\">DWHM_StorageTime_Update</tt> set to modify the partition\n" +
+"scheme according to the new settings.<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Before setting the maintenance mode, you must block IQ user <b>dcpublic</b> from accessing the ENIQ server by locking the user\n" +
+"name (See <a href='javascript:parent.parent.parent.showAnchor(\"rf-EventsSAG\")' class=\"xref\">Reference [4]</a>).</dd></dl><br /></li><li class=\"STEPLIST\" id=\"THSSTYLE4\">After executing tech pack's <tt class=\"file-path\">DWHM_StorageTime_Update</tt>, unlock IQ users and set ENIQ into normal mode (See <a href='javascript:parent.parent.parent.showAnchor(\"rf-EventsSAG\")' class=\"xref\">Reference [4]</a>).</li></ol>\n" +
+"\n"+
+"</div>\n";
+
+var C3_3_7=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"DWHConfiguration\"></a><span class=\"CHAPNUMBER\">3.3.7 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_p342\"></a><a name=\"CHAPTER3.3.7\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Adjusting\n" +
+"Partition Plans</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"Ericsson Network OSS uses a set of predefined partition plans.\n" +
+"These partition plans cannot be removed and new plans cannot be created,\n" +
+"but storage times of partition plans can be changed.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Contact local Ericsson support before adjusting partition\n" +
+"plans.</dd></dl><br />\n" +
+"<p>\n" +
+"To change storage times of partition plans:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>DWH Configuration</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE14\"><img src=\"12_1543-CSA11363_2Uen.A-DWHconfiguration.jpg\" title=\"\" border=\"0\" width=\"557\" height=\"704\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 14 &nbsp; DWH Configuration</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"2\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select one of the partition plans by clicking its name.\n" +
+"The selected partition plan and its details are shown.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Edit the storage time and click <b>Save</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE15\"><img src=\"12_1543-CSA11363_2Uen.A-adjustpartition.jpg\" title=\"\" border=\"0\" width=\"524\" height=\"557\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 15 &nbsp; Changing Storage Time</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"4\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">After saving the new partition plan storage time, execute <tt class=\"file-path\">DWHM_StorageTime_Update</tt> for all tech packs.</li></ol>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_4=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"LoggingConfiguration\"></a><span class=\"CHAPNUMBER\">3.4 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_x4rn\"></a><a name=\"CHAPTER3.4\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">ETLC\n" +
+"Logging</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"Configuration logging files are located in <tt class=\"file-path\">/eniq/sw/conf</tt> directory.</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\"><tt class=\"file-path\">engineLogging.properties</tt></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><tt class=\"file-path\">schedulerLogging.properties</tt></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><tt class=\"file-path\">engine.log4j.properties</tt></li></ul>\n" +
+"<p>\n" +
+"By default, all logs are under <tt class=\"file-path\">/eniq/log/sw_log</tt>.</p>\n" +
+"\n" +
+"<p>\n" +
+"Each tech pack and interface has its own directory under <tt class=\"file-path\">/eniq/log/sw_log</tt>.  Each day has its own log. File log\n" +
+"contains logging on operated files. Engine log contains events concerning\n" +
+"a tech pack or an interface. </p>\n" +
+"\n" +
+"<p>\n" +
+"Scheduling logs and events that are not related to any tech pack\n" +
+"or interface, are logged under the root of <tt class=\"file-path\">/eniq/sw/conf</tt>. </p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE6\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 6 &nbsp;&nbsp; Engine Root Logging</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"48%\">\n" +
+"\n" +
+"<p>Log File</p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"52%\">\n" +
+"\n" +
+"<p>Description</p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"48%\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/engine/engine-&lt;<i class=\"var\">YYYY_MM_DD</i>&gt;.log</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"52%\">\n" +
+"<p>Generic engine events not related to any tech pack</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"48%\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/engine/schedule-&lt;<i class=\"var\">YYYY_MM_DD</i>&gt;.log</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"52%\">\n" +
+"<p>Scheduling logs</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"48%\">\n" +
+"<p><tt class=\"file-path\">/eniq/log/sw_log/engine/error-&lt;<i class=\"var\">YYYY_MM_DD</i>&gt;.log</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"52%\">\n" +
+"<p>Error log</p>\n" +
+"</td></tr></table>\n" +
+"<p>\n" +
+"Following are the steps to configure ETLC logging:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Logging Configuration</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">On <b>Logging Configuration</b> page, set logging\n" +
+"properties for engine, scheduler, performance and all packages by\n" +
+"selecting values from the corresponding log level list boxes. <p>\n" +
+"The logging levels are <b>SEVERE</b>, <b>WARNING</b>, <b>INFO</b>, <b>CONFIG</b>, <b>FINE</b>, <b>FINER</b>, and <b>FINEST</b>.</p>\n" +
+"<p>\n" +
+"If there is no specific need for detailed information on engine,\n" +
+"scheduler, or package, set the logging level to <b>INFO</b>. If no logging level is set, default logging is used.</p>\n" +
+"<p>\n" +
+"ENIQ Logging can be set to <strong class=\"MEDEMPH\">FINEST</strong> only\n" +
+"if the current utilization of <b>/eniq/log</b> filesystem\n" +
+"is less than 60%.</p>\n" +
+"<p>\n" +
+"ENIQ Logging can be set to <strong class=\"MEDEMPH\">FINER</strong> only\n" +
+"if the current utilization of <b>/eniq/log</b> filesystem\n" +
+"is less than 70%.</p>\n" +
+"<p>\n" +
+"ENIQ Logging can be set to <strong class=\"MEDEMPH\">FINE</strong> only\n" +
+"if the current utilization of <b>/eniq/log</b> filesystem\n" +
+"is less than 75%.</p>\n" +
+"<p>\n" +
+"These logging levels will be monitored every 1min and if the usage\n" +
+"of <b>/eniq/log</b> filesystem exceeds 80% then the logging\n" +
+"levels will be reverted to default.</p>\n" +
+"<p>\n" +
+"All of the above mentioned values are configurable.</p>\n" +
+"<p>\n" +
+"If a user wants to change the default Logging limit for the Logging\n" +
+"levels, then the following needs to be done:</p>\n" +
+"\n" +
+"<ol type=\"a\">\n" +
+"\n" +
+"<li class=\"substep\">Log on to the ENIQ server or in case of a multi blade\n" +
+"deployment log on to the coordinator blade as <tt class=\"input\"><b>dcuser</b></tt> \n" +
+"</li>\n" +
+"\n" +
+"<li class=\"substep\">Edit the following entries in the <tt class=\"file-path\">/eniq/sw/conf/static.properties</tt> and save it. \n" +
+"<p>\n" +
+"<tt class=\"input\"><b>FINEST.limit=60</b></tt></p>\n" +
+"\n" +
+"<p>\n" +
+"<tt class=\"input\"><b>FINER.limit=70</b></tt></p>\n" +
+"\n" +
+"<p>\n" +
+"<tt class=\"input\"><b>FINE.limit=75</b></tt></p>\n" +
+"\n" +
+"<p>\n" +
+"<tt class=\"input\"><b>Logging.MaxLimit=80</b></tt></p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>The values should be configured to meet the following conditions:\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE2\">Max Limit &lt; 100% </li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\">Finest Limit &lt; Finer Limit &lt; Fine Limit &lt; Max\n" +
+"Limit </li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\">Logging level does not change if the above conditions\n" +
+"are not met</li></ul></dd></dl><br />\n" +
+"</li>\n" +
+"</ol><dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>The <b>FINEST</b> logging level increases the log\n" +
+"file sizes dramatically. Only use this level only for short testing\n" +
+"periods to avoid excessive consumption of disk space which could potentially\n" +
+"cause a server crash.</dd></dl><br /></li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Save changes</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE16\"><img src=\"12_1543-CSA11363_2Uen.A-loggingconf.jpg\" title=\"\" border=\"0\" width=\"749\" height=\"746\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 16 &nbsp; Logging Configuration</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_5=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"adminconfiguration\"></a><span class=\"CHAPNUMBER\">3.5 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_3971\"></a><a name=\"CHAPTER3.5\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Admin\n" +
+"Configuration</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"System administrators can use <b>Admin Configuration</b> for the following tasks:</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Configuring system properties</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Broadcasting messages to users logged in to the user\n" +
+"interface</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Setting the maximum allowable set of users</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Locking out the user interface<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>Locking out the User Interface logs out any users who are\n" +
+"currently logged in.</dd></dl><br /></li></ul>\n" +
+"<p>\n" +
+"In AdminUI, click <b>Admin Configuration</b></p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE17\"><img src=\"12_1543-CSA11363_2Uen.A-AdminConfiguration.JPG\" title=\"\" border=\"0\" width=\"446\" height=\"285\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 17 &nbsp; Configurable System Properties</i></p></div>\n" +
+"<p>\n" +
+"<b>ENIQ_EVENTS_LOCK_USERS</b> locks out the user interface\n" +
+"for all users and logs out all users currently logged in. <b>ENIQ_EVENTS_BANNER_MESSAGE</b> is used to broadcast messages\n" +
+"to all users of the system, for example, to notify users before locking\n" +
+"out the interface.</p>\n" +
+"\n" +
+"<p>\n" +
+"The predefined maximum number of users supported by the system\n" +
+"is 150. This is configurable depending on the systems requirements.\n" +
+"Use <b>ENIQ_EVENTS_MAX_USER_SESSIONS</b> to define the maximum\n" +
+"number of allowable users on the system.</p>\n" +
+"\n" +
+"<p>\n" +
+"The User Management screen highlights users with a specific (or\n" +
+"greater) number of days inactivity. Use <b>ENIQ_EVENTS_LAST_LOGIN_THRESHOLD</b> to determine the threshold for highlighting. The default is 90 days.</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_6=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"UnknownCells\"></a><span class=\"CHAPNUMBER\">3.6 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_7x56\"></a><a name=\"CHAPTER3.6\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Unmatched\n" +
+"Topology</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"For events that contain access area (2G/3G (Core)), Cell Id (3G\n" +
+"(RAN))  or eUtranCell Id ECI (4G) references that do not match provisioned\n" +
+"topology entities, it is possible to select an existing controller\n" +
+"or create a new controller for 2G/3G (Core) and assign the unknown\n" +
+"access area to this controller.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>For 4G &amp; 3G (RAN) the controller is identified automatically.</dd></dl><br />\n" +
+"\n" +
+"<table class=\"DEFLIST\" width=\"100%\"><tr class=\"dlitem\"><td valign=\"top\" width=\"125\" nowrap=\"nowrap\"><b>Access Area</b></td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 2G this refers to a Cell.</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr><td class=\"TERM\">&nbsp;</td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 3G (Core) this refers to a Service Area (SAC).</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr><td class=\"TERM\">&nbsp;</td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 3G (RAN) this refers to a Cell.</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr><td class=\"TERM\">&nbsp;</td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 4G this refers to E-UTRAN Cell Identifier (ECI).</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr class=\"dlitem\"><td valign=\"top\" width=\"125\" nowrap=\"nowrap\"><b>Controller</b></td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 2G this refers to a BSC.</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr><td class=\"TERM\">&nbsp;</td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 3G (Core) &amp; 3G (RAN) this refers to a RNC.</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr><tr><td class=\"TERM\">&nbsp;</td><td>&nbsp;</td><td class=\"DEF\" valign=\"top\" width=\"100%\">In 4G this refers to eNodeB.</td></tr><tr height=\"6\"><td colspan=\"3\"></td></tr></table>\n" +
+"<p>\n" +
+"In <b>AdminUI</b>, click <b>Unmatched Topology</b> to display the list of unmatched access areas, by default 2G unmatched\n" +
+"cells are displayed. Use the <b>Select Controller</b> options\n" +
+"to select an existing controller or define a new one.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>This is only applicable for 2G/3G as the controller can be\n" +
+"identified by the <tt class=\"LITERALMONO\">ECI</tt> in 4G or by the <tt class=\"LITERALMONO\">rncId</tt> for 3G (RAN).</dd></dl><br />\n" +
+"<p>\n" +
+"Use the <b>Filter Data</b> options to limit the unmatched\n" +
+"access areas returned in the search result field, use <b>Reset</b> to show all rows.</p>\n" +
+"\n" +
+"<p>\n" +
+"Use the <b>Select</b> field to select or deselect all\n" +
+"of the rows in the result field. When the relevant access areas have\n" +
+"been selected and a controller defined, use the <b>Connect</b> button to start the connection process.</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE18\"><img src=\"12_1543-CSA11363_2Uen.A-unknowncells4G.jpg\" title=\"\" border=\"0\" width=\"629\" height=\"504\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 18 &nbsp; Unmatched Topology</i></p></div>\n" +
+"<p>\n" +
+"Once <b>Connect</b> is selected, a summary of the topology\n" +
+"entities to be connected will be displayed, with a list of available\n" +
+"vendors and the option to define a new vendor if required. Selecting\n" +
+"a vendor other than Ericsson will result in unmatched entries being\n" +
+"stored in non-ericsson topology tables.</p>\n" +
+"\n" +
+"<p>\n" +
+"The list of available <b>OSS ID</b> are those defined\n" +
+"in the Ericsson topology. Alternatively a new OSS ID can be defined\n" +
+"in the input field. Select <b>Connect</b> to proceed.</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE19\"><img src=\"12_1543-CSA11363_2Uen.A-unknowntopologyStep2.jpg\" title=\"\" border=\"0\" width=\"637\" height=\"352\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 19 &nbsp; Example of Vendor Selection for Unmatched 2G Topology</i></p></div>\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>If Ericsson or Non-Ericsson topology tables are updated (by\n" +
+"scheduled platform tasks) after an unmatched topology update, then\n" +
+"the tables may be out of sync and an error message stating some of\n" +
+"the selected Access Areas are already active and connected will be\n" +
+"returned. If this occurs, then unselect the access areas specified\n" +
+"in the error message and proceed with the operation.</dd></dl><br />\n" +
+"<p>\n" +
+"The following screen then displays the topology entities that have\n" +
+"been successfully connected:</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE20\"><img src=\"12_1543-CSA11363_2Uen.A-unknowntopologyStep3.jpg\" title=\"\" border=\"0\" width=\"552\" height=\"321\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 20 &nbsp; Example of Summary of Connected 2G Access Areas</i></p></div>\n" +
+"<p>\n" +
+"It is possible to format the connected cells so that they can be\n" +
+"added to the topology import files. Use <b>Format for Topology\n" +
+"import</b> to display the information in a textual format that\n" +
+"can be copied into the import topology files.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd><b>Cancel</b> does not cancel the connection of\n" +
+"the unmatched topology access areas, but returns the user to the main <b>Unmatched Topology</b> window.</dd></dl><br />\n" +
+"\n"+
+"</div>\n";
+
+var C3_7=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"SessionLogs\"></a><span class=\"CHAPNUMBER\">3.7 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_nj4a\"></a><a name=\"CHAPTER3.7\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Session Logging</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"Session logs are used to inspect data as it passes through the\n" +
+"system. There are five types of session logs:</p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\">Adapter</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Loader</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">Aggregation</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">MG Processing</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\">MG Preprocessing</li></ul>\n" +
+"<p>\n" +
+"Adapter session logs contain information on the adaptations performed\n" +
+"in the system, for example, start and end time of the adaptation,\n" +
+"the original filename of the adapted data, and the status of the adaptation.</p>\n" +
+"\n" +
+"<p>\n" +
+"Loader session logs contain information on system data loading,\n" +
+"for example, start and end time of the loading, number of rows loaded,\n" +
+"and loading status. The <b>Status</b> field is not applicable\n" +
+"for Loader session logs.</p>\n" +
+"\n" +
+"<p>\n" +
+"Aggregation session logs contain information on aggregations, for\n" +
+"example, start and end time of the aggregation, number of rows aggregated,\n" +
+"and the status of the aggregation. The <b>Status </b>field\n" +
+"is not applicable for Aggregation session logs.</p>\n" +
+"\n" +
+"<p>\n" +
+"MG Processing and MG Preprocessing session logs contain Mediation\n" +
+"Zone parsing statistics. Use Preprocessing to extract and verify the\n" +
+"correctness of events and Processing to view additional measures and\n" +
+"output. There is an additional filter for these :<b>Typename</b>, presented as a drop-down list, which can be used as search criteria\n" +
+"to refine the results.</p>\n" +
+"\n" +
+"<p>\n" +
+"The available criteria are </p>\n" +
+"\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE0\"><b>SGEH</b><p>\n" +
+"Selection of <b>Status</b> is disabled</p>\n" +
+"</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><b>MSS</b><p>\n" +
+"Selection of <b>Status</b> is disabled</p>\n" +
+"</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><b>GSN CDR</b><p>\n" +
+"Enables the following options for <b>Status</b> selection:</p>\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\"><tt class=\"LITERALMONO\">OK</tt></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\"><tt class=\"LITERALMONO\">ERROR</tt></li></ul></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><b>GPEH</b><p>\n" +
+"Selection of <b>Status</b> is disabled</p>\n" +
+"<p>\n" +
+"Displays logs from both CFA and HFA</p>\n" +
+"<p>\n" +
+"Enables the following options for <b>Status</b> selection:</p>\n" +
+"\n" +
+"<ul>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\"><tt class=\"LITERALMONO\">OK</tt></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE3\"><tt class=\"LITERALMONO\">ERROR</tt></li></ul></li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><b>GSM</b><p>\n" +
+"Selection of <b>Status</b> is disabled</p>\n" +
+"<p>\n" +
+"Displays logs from CFA and HFA</p>\n" +
+"</li>\n" +
+"<li class=\"UNORD\" id=\"THSSTYLE1\"><b>LTE</b><p>\n" +
+"Selection of <b>Status</b> is disabled</p>\n" +
+"<p>\n" +
+"Displays logs from CFA and HFA</p>\n" +
+"</li></ul>\n" +
+"<p>\n" +
+"These will display the log files available for the selection criteria,\n" +
+"select any log file name to display all logging details, <a href='javascript:parent.parent.parent.showAnchor(\"fig-logdetailsGPEH\")' class=\"xref\"> Figure 21</a> is given for example purposes only,\n" +
+"it illustrates a typical processing log.</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><a name=\"fig-logdetailsGPEH\"></a><p align=\"left\" class=\"image\"><a href=\"12_1543-CSA11363_2Uen.A-LogfilesGPEH.jpg\" name=\"FIGURE21\" class=\"UNSCALEDREFERENCE\" onclick =\"javascript:parent.parent.ScaledImage();\"><img src=\"12_1543-CSA11363_2Uen.A-LogfilesGPEH.jpg\" title=\"Click to view an unscaled version of this image\" border=\"0\" width=\"640\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 21 &nbsp; Sample Log File Details for GPEH_CFA </i></p></div>\n" +
+"<p>\n" +
+"The <b>Source</b> field refers to the node type, for\n" +
+"example RBS or RNC or interface names.</p>\n" +
+"\n" +
+"<dl class=\"note\"><dt><b>Note: &nbsp;</b></dt><dd>The <b>Source</b> search is based on 'contains\n" +
+"the string' and returns any row containing the search string entered.</dd></dl><br />\n" +
+"<p>\n" +
+"To check session logs:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Session Logs</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Select search parameters.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Search</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE22\"><img src=\"12_1543-CSA11363_2Uen.A-sessionlogsearch.gif\" title=\"\" border=\"0\" width=\"423\" height=\"245\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 22 &nbsp; Selecting Session Log Search Parameters</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"4\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">To view detailed row information, select a file by clicking\n" +
+"the <b>Filename</b> or <b>Typename</b> depending\n" +
+"on the information returned:</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a href=\"12_1543-CSA11363_2Uen.A-rowinfo.gif\" name=\"FIGURE23\" class=\"UNSCALEDREFERENCE\" onclick =\"javascript:parent.parent.ScaledImage();\"><img src=\"12_1543-CSA11363_2Uen.A-rowinfo.gif\" title=\"Click to view an unscaled version of this image\" border=\"0\" width=\"640\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 23 &nbsp; Viewing Detailed Row Information</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"5\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Close</b> to close the <b>Row\n" +
+"Info</b> view.</li></ol>\n" +
+"\n"+
+"</div>\n";
+
+var C3_8=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"DataSourceLog\"></a><span class=\"CHAPNUMBER\">3.8 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_se4t\"></a><a name=\"CHAPTER3.8\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Datasource\n" +
+"Log</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"You can use AdminUI to view datasources with no data received for\n" +
+"any given time range:</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Datasource Log</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">In <b>Select time range</b>, specify start and\n" +
+"end date and specific times if required.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Search</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE24\"><img src=\"12_1543-CSA11363_2Uen.A-datasourcelog.jpg\" title=\"\" border=\"0\" width=\"556\" height=\"390\" class=\"tab1\" /></a></p><p align=\"left\"><i>Figure 24 &nbsp; Viewing Datasource Logs</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_9=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.9 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_7nur\"></a><a name=\"CHAPTER3.9\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Data Verification</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_9_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"DataRowInfo\"></a><span class=\"CHAPNUMBER\">3.9.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_fiiq\"></a><a name=\"CHAPTER3.9.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking Data Row\n" +
+"Information</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"You can use AdminUI to check that database tables contain data.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Data Row Info</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>TechPack</b>, select required tech pack.\n" +
+"A list of available measurement types appears.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Measurement Type</b>, select measurement\n" +
+"type. You can also select optional parameters: Level, Date, Search\n" +
+"Days, and Search Direction.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Get Information</b>.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE25\"><img src=\"12_1543-CSA11363_2Uen.A-datarow_small.gif\" title=\"\" border=\"0\" width=\"700\" height=\"272\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 25 &nbsp; Viewing Data Row Information</i></p></div>\n" +
+"\n" +
+"<ol class=\"STEPLIST\" start=\"5\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">On the <b>Data Row Raw Info</b> view, left-click\n" +
+"a date for a detailed view of the loadings.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE26\"><img src=\"12_1543-CSA11363_2Uen.A-datarowraw.gif\" title=\"\" border=\"0\" width=\"407\" height=\"548\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 26 &nbsp; Viewing Data Row Raw Information</i></p></div>\n" +
+"\n"+
+"</div>\n";
+
+var C3_9_2=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h3><a name=\"ShowReferenceTables\"></a><span class=\"CHAPNUMBER\">3.9.2 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_zm86\"></a><a name=\"CHAPTER3.9.2\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Checking\n" +
+"Reference Data Tables</a></span></h3>\n" +
+"\n" +
+"<p>\n" +
+"You can use AdminUI to check that reference tables contain data.</p>\n" +
+"\n" +
+"\n" +
+"<ol class=\"STEPLIST\"><li class=\"STEPLIST\" id=\"THSSTYLE4\">In AdminUI, click <b>Show Reference Tables</b>.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">From <b>Select table</b>, select a reference\n" +
+"table.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Filter the results by using the filter options. By default\n" +
+"the results only show 500 rows.</li><li class=\"STEPLIST\" id=\"THSSTYLE4\">Click <b>Show</b> to see the contents of the\n" +
+"reference table.</li></ol>\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE27\"><img src=\"12_1543-CSA11363_2Uen.A-reftables.jpg\" title=\"\" border=\"0\" width=\"475\" height=\"472\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 27 &nbsp; Viewing Reference Tables</i></p></div>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_10=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.10 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_jl1j\"></a><a name=\"CHAPTER3.10\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Security Administration</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"For information on User, Role and Permission Group Management,\n" +
+"please refer to the <em class=\"LOWEMPH\">Ericsson Network IQ Security\n" +
+"Admin Guide</em>, <a href='javascript:parent.parent.parent.showAnchor(\"ENIQSecurityAdminGuide\")' class=\"xref\">Reference [5]</a>.</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C3_11=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><span class=\"CHAPNUMBER\">3.11 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_tkqz\"></a><a name=\"CHAPTER3.11\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Alarm Changes for Database Corruption</a></span></h2>\n" +
+"\n" +
+"<p>\n" +
+"AdminUI provides an alert message in case of any database corruption\n" +
+"for handling the Rolling snapshot and OMBS Backup failures. If any\n" +
+"of these failures are identified, AdminUI generates an alarm.</p>\n" +
+"\n" +
+"<p>\n" +
+"The following figure shows the alarm for Database corruption:</p>\n" +
+"\n" +
+"<div style=\"margin-top: 12pt\"><p align=\"left\" class=\"image\"><a name=\"FIGURE28\"><img src=\"12_1543-CSA11363_2Uen.A-Capture2.jpg\" title=\"\" border=\"0\" width=\"589\" height=\"102\" class=\"tab0\" /></a></p><p align=\"left\"><i>Figure 28 &nbsp; Alarm for Database corruption</i></p></div>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C4=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1><span class=\"CHAPNUMBER\">4 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_9m4i\"></a><a name=\"CHAPTER4\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Corrective Maintenance</a></span></h1>\n" +
+"\n" +
+"<p><a name=\"tbl-error\"></a>\n" +
+"The following are actions to take when a system error message is\n" +
+"displayed.</p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE7\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 7 &nbsp;&nbsp; Error Messages</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"31%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Error</strong></p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"31%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Cause</strong> </p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"38%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Action</strong></p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Engine does not start: &quot;ERROR : Fault starting svc:/eniq/engine&quot;</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Engine is in maintenance state, because:</p><br />\n" +
+"<p>Engine script fails to work.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>Database is full.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"38%\">\n" +
+"\n" +
+"<ul>\n" +
+"<li><p>Log in Ericsson Network OSS server with <tt class=\"file-path\">SSH</tt>.</p>\n" +
+"</li>\n" +
+"<li><p>To check maintenance state, enter the following command: <tt class=\"input\"><b>svcs -a | grep eniq</b></tt></p>\n" +
+"</li>\n" +
+"<li><p>To check what has happened during the start of the Engine,\n" +
+"see the latest <tt class=\"file-path\">start_engine</tt> logs from <tt class=\"file-path\">/eniq/log/sw_log/engine</tt>.</p>\n" +
+"</li>\n" +
+"<li><p>When in maintenance state, check if the database is\n" +
+"full. View the dwhdb-usage log file, <tt class=\"file-path\">/eniq/log/sw_log/iq/dwhdb_usage.log</tt>, to see if one of the most recent messages is: &quot;SEVERE: DWHDB\n" +
+"is full!&quot;. If it is not full, the problem may be with the engine\n" +
+"script. Contact local Ericsson support.</p>\n" +
+"</li>\n" +
+"<li><p>To reset Engine state, run command: <tt class=\"input\"><b>svcadm clear\n" +
+"svc:/eniq/engine:default</b></tt> </p>\n" +
+"</li>\n" +
+"</ul><br />\n" +
+"<p><strong class=\"MEDEMPH\">Note:</strong> The filling ratio log file is created the first\n" +
+"time the ratio exceeds 85%. If there is no <tt class=\"file-path\">dwhdb_usage.log</tt>, the ratio has never exceeded 85%. </p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Parsing errors &quot;org.xml.sax.SAXParseException: XML\n" +
+"document structures must start and end within the same entity.&quot; </p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>PM data is corrupted or invalid.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"38%\">\n" +
+"<p>Ensure the data is valid.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Engine error log: &quot;Can't find table for DC_E_XXX_YYYY:RAW\n" +
+"@ YYYY-MM-DD&quot;, but dateString is between current date (YYYY-MM-DD)\n" +
+"and last partition endtime (YYYY-MM-DD)<br /></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>There is no partition for the date selected.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"38%\">\n" +
+"<p>Wait until the Data Warehouse database is updated and a\n" +
+"new partition has been created.</p>\n" +
+"</td></tr></table>\n" +
+"\n"+
+"</div>\n";
+
+var C5=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1><span class=\"CHAPNUMBER\">5 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"id_pavy\"></a><a name=\"CHAPTER5\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Troubleshooting</a></span></h1>\n" +
+"\n" +
+"<p>\n" +
+"This chapter describes some possible problems that can occur in\n" +
+"ENIQ Events and presents possible solutions.</p>\n" +
+"\n" +
+"<p><a name=\"trblshooting\"></a>\n" +
+"Contact local Ericsson support for additional\n" +
+"assistance.</p>\n" +
+"\n" +
+"\n"+
+"</div>\n";
+
+var C5_1=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h2><a name=\"troublechapter\"></a><span class=\"CHAPNUMBER\">5.1 &nbsp; </span><span class=\"CHAPTITLE\"><a name=\"troubleshooting\"></a><a name=\"CHAPTER5.1\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Troubleshooting\n" +
+"Ericsson Network OSS</a></span></h2>\n" +
+"\n" +
+"<p><a name=\"tbl-troubleshooting\"></a>\n" +
+"The table below lists possible troubles and actions to perform\n" +
+"to solve them.</p>\n" +
+"\n" +
+"\n" +
+"<a name=\"TABLE8\"></a>\n" +
+"<table class=\"tblcnt\" width=\"100%\">\n" +
+"<caption>Table 8 &nbsp;&nbsp; Troubleshooting Ericsson Network OSS</caption>\n" +
+"<tr valign=\"top\">\n" +
+"<th align=\"left\" valign=\"top\" width=\"31%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Description</strong></p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"29%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Cause</strong> </p></th>\n" +
+"<th align=\"left\" valign=\"top\" width=\"40%\">\n" +
+"\n" +
+"<p><strong class=\"MEDEMPH\">Action</strong></p></th></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>AdminUI is not available at<br /><tt class=\"file-path\">http://<i class=\"var\">CoordinatorServerIP</i>:8080/adminui/</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>ENIQ Events Web Server process is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>Ensure ENIQ Events Web Server process is running by executing <tt class=\"input\"><b>/eniq/sw/bin/webserver status</b></tt> on the coordinator blade.</p><br />\n" +
+"<p>If the process is not running, start it by executing<tt class=\"input\"><b>/eniq/sw/bin/webserver\n" +
+"start</b></tt> .</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>No data is loaded.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>There are no files in the mounted OSS directories, or in <tt class=\"LITERALMONO\">/eniq/data/pmdata</tt> directory on Ericsson Network OSS Server</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>An Ericsson Network OSS process is down</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>System is in maintenance mode (execution profile is in NoLoads)</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>If using OSS-RC, check that PM mediators collect data files\n" +
+"from network element, and that symbolic links are created under <tt class=\"LITERALMONO\">/ossrc/data/pmMediation/pmData</tt> directory on OSS.</p><br />\n" +
+"<p>The same links should appear under the <tt class=\"LITERALMONO\">/eniq/data/pmdata</tt> directory on ENIQ Server.</p><br />\n" +
+"<p>Check status of scheduler, engine, dwhdb, and repdb.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>If using OSS-RC, check that PM mediators are collecting data,\n" +
+"NFS/SSH mount is working.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>Check the DWHDB filling ratio (this information is stored in <tt class=\"file-path\">/eniq/log/sw_log/iq/dwhdb_usage.log</tt></p><br />\n" +
+"<p><strong class=\"MEDEMPH\">Note:</strong> The filling ratio log file is created the first\n" +
+"time the ratio exceeds 85%. If there is no <tt class=\"file-path\">dwhdb_usage.log</tt>, the ratio has never exceeded 85%.</p><br />\n" +
+"<p>If the ratio is over 90%, the database is considered full and\n" +
+"ENIQ is switched to maintenance mode.</p><br />\n" +
+"<p>If the DWHDBs filling ratio has been over 90% but no recent log\n" +
+"entries are found (filling ratio has dropped below 90%), switch ENIQ\n" +
+"back to normal mode. Type on the command line:<br /><tt class=\"input\"><b>engine -e\n" +
+"changeProfile Normal</b></tt></p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Database is full.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>The database is too small for the amount of data.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>Contact local Ericsson support.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Engine does not start.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>See <a href='javascript:parent.parent.parent.showAnchor(\"tbl-error\")' class=\"xref\"> Table 7</a>.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>See <a href='javascript:parent.parent.parent.showAnchor(\"tbl-error\")' class=\"xref\"> Table 7</a>.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Server has ran out of disc space.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>Old snapshot is consuming unnecessary disc space.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong> </p><br />\n" +
+"<p>Ericsson Network OSS logging has been left on detailed level </p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or </strong></p><br />\n" +
+"<p>ENIQ has been receiving faulty data which is not cleared out from\n" +
+"/ <tt class=\"file-path\">eniq/data/rejected/ /eniq/data/etldata/*/failed</tt></p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>Remove unnecessary snapshots if any exist.</p><br />\n" +
+"<p>Remove unnecessary log files and decrease the logging level.</p><br />\n" +
+"<p>Remove unnecessary faulty data and check the data mediation.</p><br />\n" +
+"<p>After the removals, stop all Ericsson Network OSS processes and\n" +
+"start them again.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>After installation, system loads data, but monitoring does\n" +
+"not show measurement types</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>A new measurement type is activated in the system, but monitoring\n" +
+"is not showing the new measurement type.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>Monitored types are not updated.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>The System gets measurement types from data stream dynamically\n" +
+"once a day and monitoring is build upon these measurement types. It\n" +
+"may, therefore, take a day for the system to start monitoring the\n" +
+"new measurement type(s). To start monitoring the new measurement types\n" +
+"immediately:</p><br />\n" +
+"<ul>\n" +
+"<li><p>In AdminUI, click <b class=\"object\">ETLC Set Scheduling</b></p>\n" +
+"</li>\n" +
+"<li><p>From <b class=\"object\">Package</b>, select <tt class=\"input\"><b><i class=\"var\">DWH_MONITOR</i></b></tt>.</p>\n" +
+"</li>\n" +
+"<li><p>Select <b class=\"object\">UpdateMonitoredTypes</b> and click <b class=\"object\">Start</b>.</p>\n" +
+"</li>\n" +
+"<li><p>In <b class=\"object\">ETLC Set Scheduling</b>, select <tt class=\"input\"><b><i class=\"var\">DWH_MONITOR</i></b></tt>.</p>\n" +
+"</li>\n" +
+"<li><p>Select <b class=\"object\">UpdateMonitoring</b> and click <b class=\"object\">Start</b> </p>\n" +
+"</li>\n" +
+"</ul>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Monitoring is showing deactivated measurement types.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>Monitoring is showing deleted measurement types.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>Monitored types are not updated.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>When you set a type as inactive using AdminUI, by default,\n" +
+"the type is no longer monitored after three days.</p><br />\n" +
+"<p>The default value can be changed by changing the <tt class=\"LITERALMONO\">lookahead</tt> UpdateMonitoring property of the DWH_MONITOR tech pack. The <tt class=\"LITERALMONO\">lookahead</tt> value shows the number of days from today (the\n" +
+"default is 2).  To change the value, contact local Ericsson support.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">or</strong></p><br />\n" +
+"<p>The System gets measurement types from data stream dynamically\n" +
+"once a day and monitoring is build upon these measurement types. If\n" +
+"you delete a measurement type, but the data stream includes measurements\n" +
+"of the deleted type, the type you deleted continues to be displayed\n" +
+"in monitoring.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>After loading late data, AdminUI does not show data that\n" +
+"is older than three days.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>By default, loaded late data that is older than three days\n" +
+"is not updated to AdminUI.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"\n" +
+"<ul>\n" +
+"<li><p>After loading late data, in AdminUI, click <b class=\"object\">ETLC\n" +
+"Set Scheduling</b>.</p>\n" +
+"</li>\n" +
+"<li><p>From <b class=\"object\">Set type</b>, select <tt class=\"input\"><b><i class=\"var\">Maintenance</i></b></tt> and from <b class=\"object\">Package</b>, select <tt class=\"input\"><b><i class=\"var\">DWH_MONITOR</i></b></tt>.</p>\n" +
+"</li>\n" +
+"<li><p>Select <b class=\"object\">UpdateFirstLoadings</b> and click<b class=\"object\">Start.</b></p>\n" +
+"</li>\n" +
+"</ul><br />\n" +
+"<p>Running this set updates the data loadings for AdminUI from the\n" +
+"previous 30 days.</p><br />\n" +
+"<p><strong class=\"MEDEMPH\">Note:</strong> This operation may take a long time if there\n" +
+"is a large amount of data.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Engine, Scheduler, DWH database, or ETL database is showing\n" +
+"a red light in AdminUI Loader status view.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>The service is not running.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>Make sure the service with the red light is running by\n" +
+"following the instructions in this guide.</p>\n" +
+"</td></tr>\n" +
+"<tr valign=\"top\">\n" +
+"<td align=\"left\" width=\"31%\">\n" +
+"<p>Sets are dropped from queue.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"29%\">\n" +
+"<p>Each set enters the queue with a priority from 0-15. Priority\n" +
+"is defined in the set. Each set is given a queue time limit. When\n" +
+"the set has been in the queue for this time limit, the priority is\n" +
+"increased. When a set reaches priority 15, and has not been entered\n" +
+"into the execution slot, it waits for one more queue time limit and\n" +
+"then it is removed from the priority queue. This can happen in a backlog\n" +
+"situation.</p>\n" +
+"</td>\n" +
+"<td align=\"left\" width=\"40%\">\n" +
+"<p>Usually no action is required.</p><br />\n" +
+"<p>If this problem occurs frequently, contact local Ericsson Support.</p>\n" +
+"</td></tr></table>\n" +
+"\n" +
+"\n" +
+"\n" +
+"<br />\n"+
+"</div>\n";
+
+var C6=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1 class=\"glossary\"><span class=\"CHAPTITLE\"><a name=\"CHAPTER6\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Glossary</a></span></h1>\n" +
+"<table class=\"GLOSSARY\"><tr><td class=\"term\" valign=\"top\"><b>Glossary</b></td></tr><tr><td class=\"expansion\">The Glossary is available in <a href='javascript:parent.parent.parent.showAnchor(\"rf-OSSGlossary\")' class=\"xref\">Reference [1]</a>.</td></tr></table>\n" +
+"<br />\n"+
+"</div>\n";
+
+var C7=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1 class=\"reference\"><span class=\"CHAPTITLE\"><a name=\"CHAPTER7\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Reference List</a></span></h1>\n" +
+"<table><tr><th class=\"rf-subsection\"></th></tr><tr><td><a name=\"rf-OSSGlossary\"></a>[1] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Operations Support System (OSS) Glossary\" class=\"pnolink\" style=\"text-decoration:none\">Operations Support System\n" +
+"(OSS) Glossary</a></i>, <!--@doc-no-->0033-AOM 901 017/2<!--@/doc-no--></td></tr><tr><td><a name=\"rf-TypographicConventions\"></a>[2] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=OSS Library Typographic Conventions\" class=\"pnolink\" style=\"text-decoration:none\">OSS Library Typographic\n" +
+"Conventions</a></i>, <!--@doc-no-->1/154 43-AOM 901 017/4<!--@/doc-no--></td></tr><tr><td><a name=\"rf-ProdDesc\"></a>[3] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=ENIQ Events System Description\" class=\"pnolink\" style=\"text-decoration:none\">ENIQ Events System Description</a></i>. </td></tr><tr><td><a name=\"rf-EventsSAG\"></a>[4] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Ericsson Network IQ Events, System Administrator Guide\" class=\"pnolink\" style=\"text-decoration:none\">Ericsson Network IQ Events,\n" +
+"System Administrator Guide</a></i>. </td></tr><tr><td><a name=\"ENIQSecurityAdminGuide\"></a>[5] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Ericsson Network IQ Security Admin Guide\" class=\"pnolink\" style=\"text-decoration:none\">Ericsson Network IQ Security\n" +
+"Admin Guide</a></i>. </td></tr><tr><td>[6] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Trademark Information\" class=\"pnolink\" style=\"text-decoration:none\">Trademark Information</a></i>, <!--@doc-no-->006 51-AOM 901 046<!--@/doc-no--></td></tr></table>\n"+
+"</div>\n";
+
+var TOP=
+"<a name=\"TOP\"></a><!--@@noprnt-->\n" +
+"<div id=\"header\">\n" +
+"<table class=\"docinfo\">\n" +
+"<tr>\n" +
+"<td> &nbsp; &nbsp; <span class=\"fcaption\"><span class=\"caption\">SYSTEM ADMINISTRATOR GUIDE</span> &nbsp; &nbsp; &nbsp; &nbsp; 12/1543-CSA 113 63/2 Uen&nbsp;A</span> &nbsp; &nbsp;</td>\n" +
+"</tr>\n" +
+"</table>\n" +
+"</div>\n" +
+"<!--@@/noprnt-->\n" +
+"<div id=\"content\" class=\"body-content\">\n" +
+"\n" +
+"\n" +
+"<h1 class=\"TITLE\"><a name=\"TITLE\"></a></h1><div class=\"DOCTITLE\">Ericsson Network IQ Events, AdminUI</div>\n" +
+"\n" +
+" \n" +
+"<!--@contents level=2-->\n" +
+"<p class=\"HDR\"><a name=\"CONTENTS\" onclick=\"javascript:if(!document.tocf0){document.toc0=1;document.tocf0=1;}document.toc0=show_hide_cont('toc0', 'ce_i1_0', 'ce_i2_0', document.toc0);\" title=\"Expand/collapse table of contents\"><img id=\"ce_i1_0\" class=\"ce\" src=\"CP.png\" /><img id=\"ce_i2_0\" class=\"ce\" src=\"EP.png\" style=\"display:none\" />Contents\n" +
+"</a></p><div id=\"toc0\"><table cellpadding=\"0\" class=\"TOCTBL\"><tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><b><span class=\"TOCNUM\">1</span></b></td><td><b><a href='javascript:parent.parent.sC2(\"C1\")' class=\"TOCLINK\">About This Document</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.1</span></td><td><a href='javascript:parent.parent.sC2(\"C1_1\")' class=\"TOCLINK\">Purpose</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.2</span></td><td><a href='javascript:parent.parent.sC2(\"C1_2\")' class=\"TOCLINK\">Prerequisites</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.3</span></td><td><a href='javascript:parent.parent.sC2(\"C1_3\")' class=\"TOCLINK\">Typographic Conventions</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">2</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C2\")' class=\"TOCLINK\">System Overview</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">2.1</span></td><td><a href='javascript:parent.parent.sC2(\"C2_1\")' class=\"TOCLINK\">Ericsson Network OSS Directory Structure</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">3</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C3\")' class=\"TOCLINK\">AdminUI</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.1</span></td><td><a href='javascript:parent.parent.sC2(\"C3_1\")' class=\"TOCLINK\">System Monitoring</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.2</span></td><td><a href='javascript:parent.parent.sC2(\"C3_2\")' class=\"TOCLINK\">Data Flow Monitoring</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.3</span></td><td><a href='javascript:parent.parent.sC2(\"C3_3\")' class=\"TOCLINK\">Maintenance Operations</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.4</span></td><td><a href='javascript:parent.parent.sC2(\"C3_4\")' class=\"TOCLINK\">ETLC Logging</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.5</span></td><td><a href='javascript:parent.parent.sC2(\"C3_5\")' class=\"TOCLINK\">Admin Configuration</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.6</span></td><td><a href='javascript:parent.parent.sC2(\"C3_6\")' class=\"TOCLINK\">Unmatched Topology</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.7</span></td><td><a href='javascript:parent.parent.sC2(\"C3_7\")' class=\"TOCLINK\">Session Logging</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.8</span></td><td><a href='javascript:parent.parent.sC2(\"C3_8\")' class=\"TOCLINK\">Datasource Log</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.9</span></td><td><a href='javascript:parent.parent.sC2(\"C3_9\")' class=\"TOCLINK\">Data Verification</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.10</span></td><td><a href='javascript:parent.parent.sC2(\"C3_10\")' class=\"TOCLINK\">Security Administration</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.11</span></td><td><a href='javascript:parent.parent.sC2(\"C3_11\")' class=\"TOCLINK\">Alarm Changes for Database Corruption</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">4</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C4\")' class=\"TOCLINK\">Corrective Maintenance</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">5</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C5\")' class=\"TOCLINK\">Troubleshooting</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.1</span></td><td><a href='javascript:parent.parent.sC2(\"C5_1\")' class=\"TOCLINK\">Troubleshooting Ericsson Network OSS</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td valign=\"bottom\" colspan=\"2\"><br /><b><a href='javascript:parent.parent.sC2(\"C6\")' class=\"TOCLINK\">Glossary</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td valign=\"bottom\" colspan=\"2\"><br /><b><a href='javascript:parent.parent.sC2(\"C7\")' class=\"TOCLINK\">Reference List</a></b>\n" +
+"</td></tr>\n" +
+"</table>\n" +
+"</div>\n" +
+"<!--@/contents-->\n" +
+"<table width=\"100%\" class=\"copytbl\">\n" +
+"<tr><td class=\"copyhead\">Copyright</td><td class=\"copyinfo\">\n" +
+"<p>\n" +
+"&copy; Ericsson LMI 2016. All rights reserved. No part\n" +
+"of this document may be reproduced in any form without the written\n" +
+"permission of the copyright owner.</p>\n" +
+"</td></tr>\n" +
+"<tr><td class=\"copyhead\">Disclaimer</td><td class=\"copyinfo\">\n" +
+"<p>\n" +
+"The contents of this document are subject to revision\n" +
+"without notice due to continued progress in methodology, design and\n" +
+"manufacturing. Ericsson shall have no liability for any error or damage\n" +
+"of any kind resulting from the use of this document.</p>\n" +
+"</td></tr>\n" +
+"<tr><td class=\"copyhead\">Trademark List</td><td class=\"copyinfo\">\n" +
+"<table class=\"trdmrkcnt\" width=\"100%\">\n" +
+"<tr><td colspan=\"3\" width=\"100%\">All trademarks mentioned herein\n" +
+"are the property of their respective owners. These are shown in the\n" +
+"document Trademark Information.\n" +
+"</td></tr></table>\n" +
+"</td></tr></table>\n" +
+"\n" +
+"<br />\n" +
+"<div class=\"hd0\"></div><div class=\"hd1\"></div>\n";
+
+TOP = TOP+"</div>\n";
+var PAGE_START=
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n" +
+"<head><meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\" /><meta name=\"HTMLPACKLINKS\" content=\"2\" />\n" +
+"\n" +
+"<title>Ericsson Network IQ Events, AdminUI</title>\n" +
+"<meta http-equiv=\"X-UA-Compatible\" content=\"IE=EDGE\" />\n" +
+"<meta name=\"TITLE\" content=\"Ericsson Network IQ Events, AdminUI\" />\n" +
+"<meta name=\"GENERATOR\" content=\"omnifilter CAA 139 1216/11 R11AC\" />\n" +
+"<meta name=\"FILTERTIME\" content=\"2016-07-01 12:52:24\" />\n" +
+"<meta name=\"SRCDOCTYPE\" content=\"XSEIF\" />\n" +
+"<meta name=\"SRCDTD\" content=\"-//ERICSSON//DTD XSEIF 1/FAD 110 05 R6//EN\" />\n" +
+"<meta name=\"APPR\" content=\"XCS (Suneeta Patra)\" />\n" +
+"<meta name=\"BUSINESSUNIT\" content=\"LMI\" />\n" +
+"<meta name=\"CHECKED\" content=\"XSUNEPA\" />\n" +
+"<meta name=\"COMPANYNAME\" content=\"Ericsson\" />\n" +
+"<meta name=\"CONFIDENTIALITY\" content=\"Ericsson Internal\" />\n" +
+"<meta name=\"CRIGHT\" content=\"&copy; Ericsson LMI 2016. All rights reserved. No part of this document may be reproduced in any form without the written permission of the copyright owner.\" />\n" +
+"<meta name=\"DATE\" content=\"2016-07-01\" />\n" +
+"<meta name=\"DOCNAME\" content=\"SYSTEM ADMINISTRATOR GUIDE\" />\n" +
+"<meta name=\"DOCNO\" content=\"12/1543-CSA 113 63/2 Uen\" />\n" +
+"<meta name=\"LANG\" content=\"en\" />\n" +
+"<meta name=\"PREP\" content=\"XSUNEPA Suneeta Patra\" />\n" +
+"<meta name=\"REV\" content=\"A\" />\n" +
+"<meta name=\"SEIFDOCTYPE\" content=\"REGISTRATION\" />\n" +
+"<meta name=\"SEIFVERSION\" content=\"XSEIF R6\" />\n" +
+"<meta name=\"format-detection\" content=\"telephone=no\" />\n" +
+"<script type=\"text/javascript\" language=\"JavaScript\">window.history.forward(+1);\n" +
+"function show_hide_cont(d_id, i_id1, i_id2, fl){\n" +
+"var TOC=document.getElementById(d_id)\;\n" +
+"if (fl) {\n" +
+"TOC.style.display=\"none\"\;\n" +
+"document.getElementById(i_id1).style.display = \"none\"\;\n" +
+"document.getElementById(i_id2).style.display = \"inline\"\;\n" +
+"fl = false\;\n" +
+"} else {\n" +
+"TOC.style.display=\"inline\"\;\n" +
+"document.getElementById(i_id1).style.display = \"inline\"\;\n" +
+"document.getElementById(i_id2).style.display = \"none\"\;\n" +
+"fl = true\;\n" +
+"}\n" +
+"return fl\;\n" +
+"}\n" +
+"<\/script>\n" +
+"<style type=\"text/css\">\n" +
+"body,ul,ol,dl,li,div,form,dd,dt,input,p,.BLOCK,.LITERAL{color:#000000;font-family:Verdana,Helvetica,Arial,sans-serif;font-size:10pt}\n" +
+"h1,.HDR,.CTW{font-family:Helvetica,Geneva,Arial,sans-serif;font-weight:normal;font-size:16pt;color:#666666;margin-top:25px}\n" +
+"h2{font-family:Helvetica,Geneva,Arial,sans-serif;font-weight:normal;font-size:14pt;color:#666666;margin-top:25px}\n" +
+"h3{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:10pt;color:#666666;margin-top:25px;margin-bottom:12px}\n" +
+"h4,h5,h6{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:10pt;font-weight:normal;color:#666666;margin-top:20px;margin-bottom:12px}\n" +
+"table{border-collapse:collapse}\n" +
+"td,th{color:#000000;font-family:Verdana,Helvetica,Arial,sans-serif;font-size:10pt;text-decoration:none}\n" + 
+"caption,caption em{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:9pt;white-space:nowrap;text-align:left}\n" +
+"a{outline:none}\n" +
+"b{color:#333333}\n" +
+"th{color:#333333}\n" +
+"strong{color:#333333}\n" +
+".caption{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:9pt;font-weight:bold}\n" +
+".mcaption{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:7pt;color:#666666}\n" + 
+".fcaption{color:#ffffff}\n" + 
+".body-content{margin-left:30px}\n" + 
+".body-content h1,.body-content h2,.body-content h3,.body-content h4,.body-content h5,.body-content h6{margin-left:-30px}\n" + 
+"h1.TITLE{margin-left:0px}\n" + 
+".titled-block{color:#333333;font-weight:bold;margin-top:25px}\n" + 
+".doc-id,.user-info{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:12pt;font-weight:normal;color:#000000;margin-top:19px}\n" +
+".DOCTITLE{font-family:Helvetica,Geneva,Arial,sans-serif;font-size:16pt;color:#666666;margin-top:25px}\n" + 
+".HDR{margin-top:20px;margin-bottom:12px}\n" + 
+".SUBTITLE{font-family:Helvetica,Geneva,Arial,sans-serif;font-size:14pt;color:#999999;margin-top:5px}\n" +
+".STITLE{font-family:Verdana,Helvetica,Arial,sans-serif;font-size:10pt;color:#666666}\n" +
+".TOCNUM{color:#666666}\n" + 
+".TOCTBL{margin-top:-8px}\n" + 
+".NEWPAGE{page-break-after:always}\n" +
+".LITERALMONO{color:#000000;font-family:monospace;font-size:10pt}\n" + 
+".LITERALLAYOUT,.input,.INPUT,.USERINPUT,.output,.OUTPUT,.QUOTE,tt,pre{font-family:monospace;font-size:10pt}\n" +
+".ADMON{background-color:#fffaf0;border:1px solid #f0f0f0;margin-top:18px;margin-bottom:18px;margin-left:0px;margin-right:0px;padding:6px}\n" +
+".ADMONIMG{margin-right:25px;vertical-align:-9px}\n" + 
+".ADMONMSG1{color:#333333;font-family:Verdana,Helvetica,Arial,sans-serif;font-weight:bold;font-size:12pt} \n" + 
+".ADMONMSG2{color:#dd0000;font-family:Verdana,Helvetica,Arial,sans-serif;font-weight:bold;font-size:12pt} \n" + 
+".ADMONDESC{margin-top:8px;margin-bottom:0px}\n" + 
+".ADMONMSG{font-family:Verdana,Helvetica,Arial,sans-serif;font-weight:bold;color:#dd0000}\n" +
+".ADMONMSG b{color:#dd0000}\n" +
+".ADMONMSG_XSEIF{font-family:Verdana,Helvetica,Arial,sans-serif;font-weight:bold;color:#dd0000;font-size:12pt}\n" +
+".BOX{border-width:1px}\n" + 
+".CHAPNUMBER{font-weight:normal}\n" + 
+".ACTIVITYTITLE{padding-left:30px}\n" + 
+".COPYRIGHT{color:#666666;font-size:8pt;margin-bottom:-10px}\n" + 
+".CTW{margin-top:20px;margin-bottom:-20px}\n" + 
+".XAMP{background-color:#fcfcfc;border:1px solid #e0e0e0}\n" + 
+".RECORD th,.RECORD td,.FIELD td{border:1px solid #ccddee;padding:2px}\n" + 
+"table .DANGER,.CAUTION,.WARNING{background-color:#fffaf0;border:1px solid #f0f0f0}\n" + 
+".boxncd{padding-right:2px;background-color:#f5f5f5;font-size:11pt;margin-bottom:0px;margin-top:0px}\n" + 
+".boxcd {padding-right:2px;background-color:#f5f5f5;font-size:8pt;margin-bottom:0px;margin-top:0px}\n" + 
+".boxcd tt{font-size:8pt}\n" + 
+".ce{border:none;margin-right:17px;height:13px;width:13px;margin-left:-30px;}\n" + 
+".ce2{border:none;margin-right:9px;height:13px;width:13px;margin-bottom:-2px;margin-top:7px}\n" + 
+".hd0{background-color:#ccddee;height:1px;width:100%;font-size:0pt}\n" + 
+".hd1{background-color:#f5f5f5;height:1px;width:100%;font-size:0pt}\n" + 
+".prencd{font-size:11pt}\n" + 
+".precd {font-size:8pt}\n" + 
+".precd tt{font-size:8pt}\n" + 
+".pretbl td{border-spacing:0px;padding:0px}\n" + 
+".rf-title{font-style:italic}\n" +
+".rf-subsection{font-weight:bold;font-size:10pt;text-align:left;padding-top:4px}\n" + 
+".prod-no,.doc-no{font-family:Verdana,Helvetica,Arial,sans-serif;font-style:italic;color:#000000}\n" +
+".cmd,.proc-example{font-family:Verdana,Helvetica,Arial,sans-serif;font-weight:bold;color:#000000}\n" +
+".xref,.XREF,.link,.AXEREF,.docref,.REF,.LINK,.GLOSSSEEALSO,.glossseealso,.GLOSSSEE,.glosssee,.see,.SEE,.seealso,.SEEALSO,.AUDIODATA,.audiodata,.VIDEODATA,.videodata,.SYNOPFRAGMENTREF,.synopfragmentref,.FOOTNOTEREF,.footnoteref{font-family:Verdana,Helvetica,Arial,sans-serif;color:#336699}\n" +
+".trade td{padding-bottom:10px;vertical-align:top}\n" + 
+".trdmrkcnt td{padding-bottom:2px;vertical-align:top;font-size:8pt;margin-top:2px;margin-bottom:2px;color:#666666}\n" + 
+".trdmrkinfo{width:90%}\n" + 
+".tblcnt{border:1px solid #ccddee;margin-bottom:20px border-collapse:collapse}\n" + 
+".tblcnt_margin{margin-top:-3px}\n" + 
+".tblcnt caption{padding-bottom:8px;font-style:italic}\n" + 
+".tblcnt th {border:1px solid #ccddee;background-color:#f5f5f5;color:#666666;padding:2px}\n" + 
+".tblcnt th p{background-color:#f5f5f5;color:#666666;}\n" + 
+".tblcnt td{border:1px solid #ccddee;padding:2px}\n" + 
+".tblcnt p{margin-top:0px;margin-bottom:0px;}\n" + 
+".tblcnt ul{margin-top:0px;margin-bottom:0px}\n" + 
+".tblcnt li{margin-bottom:4px}\n" + 
+".tblcnt pre{margin-top:0px;margin-bottom:0px}\n" + 
+".tblcolsep{border:1px solid #a6a6a6;margin-bottom:20px}\n" + 
+".tblcolsep caption{padding-bottom:8px;font-style:italic}\n" + 
+".tblcolsep th{border-right:1px solid #a6a6a6;background-color:#f5f5f5;padding:2px}\n" + 
+".tblcolsep td{border-right:1px solid #a6a6a6;padding:2px}\n" + 
+".tblcolsep p{margin-top:0px;margin-bottom:0px}\n" + 
+".tblcolsep ul{margin-top:0px;margin-bottom:0px}\n" + 
+".tblcolsep li{margin-bottom:4px}\n" + 
+".tblcolsep pre{margin-top:0px;margin-bottom:0px}\n" + 
+".tblrowsep{border:1px solid #a6a6a6;margin-bottom:20px}\n" + 
+".tblrowsep caption{padding-bottom:8px;font-style:italic}\n" + 
+".tblrowsep th{border-bottom:1px solid #a6a6a6;background-color:#f5f5f5;padding:2px}\n" + 
+".tblrowsep td{border-bottom:1px solid #a6a6a6;padding:2px}\n" + 
+".tblrowsep p{margin-top:0px;margin-bottom:0px}\n" + 
+".tblrowsep ul{margin-top:0px;margin-bottom:0px}\n" + 
+".tblrowsep li{margin-bottom:4px}\n" + 
+".tblrowsep pre{margin-top:0px;margin-bottom:0px}\n" + 
+".tblnosep{border:1px solid #a6a6a6;margin-bottom:20px}\n" + 
+".tblnosep caption{padding-bottom:8px;font-style:italic}\n" + 
+".tblnosep th{background-color:#f5f5f5;padding:2px}\n" + 
+".tblnosep td{padding:2px}\n" + 
+".tblnosep p{margin-top:0px;margin-bottom:0px}\n" + 
+".tblnosep ul{margin-top:0px;margin-bottom:0px}\n" + 
+".tblnosep li{margin-bottom:4px}\n" + 
+".tblnosep pre{margin-top:0px;margin-bottom:0px}\n" + 
+".tblgrp{border:0px}\n" + 
+".tblgrp caption{padding-bottom:8px;font-style:italic}\n" + 
+".tblgrp li{margin-bottom:4px}\n" + 
+".grd{margin-bottom:20px}\n" + 
+".grd th{padding:2px}\n" + 
+".grd td{padding:2px}\n" + 
+".grd p{margin-top:0px;margin-bottom:0px}\n" + 
+".grd ul{margin-top:0px;margin-bottom:0px}\n" + 
+".grd li{margin-bottom:4px}\n" + 
+".grd pre{margin-top:0px;margin-bottom:0px}\n" + 
+".tnote{margin-top:8px;margin-bottom:12px;font-size:8pt;font-style:italic}\n" + 
+".tnote a{text-decoration:none}\n" + 
+".imgline{border:1px solid #ffffff}\n" +
+".copytbl{border:1px solid #e0e0e0;margin-top:12px;margin-bottom:-4px;padding:0px}\n" +
+".copyhead{border:1px dotted #ffffff;background-color:#eeeeee;padding:5px;font-size:8pt;color:#666666;width:100px}\n" +
+".copyinfo{border:1px dotted #ffffff;background-color:#f5f5f5;padding:5px;font-size:8pt;color:#666666}\n" +
+".copyinfo p{background-color:#f5f5f5;font-size:8pt;margin-top:2px;margin-bottom:2px;color:#666666}\n" +
+".changes{background-color:#f5f5f5}\n" +
+".docinfo{table-layout:fixed;border:0px;padding:0px;width:100%}\n" +
+".docinfo td{text-align:center;background-color:#336699;white-space:nowrap;width:100%;height:17px}\n" +
+".dsc-item{padding-top:6px;margin-left:4px}\n" +
+".stepxmp{font-family:Verdana,Helvetica,Arial,sans-serif;color:#000000}\n" +
+".stepresult b{font-size:10pt; font-family: Verdana,Helvetica,Arial,sans-serif; color:#333333}\n" +
+".stepresult {font-family:monospace;font-size:10pt}\n" +
+".substep{padding-top:6px;margin-left:4px}\n" +
+".note dt, .NOTE dt, .OPTION dt{float:left;}\n" +
+".note dd, .NOTE dd, .OPTION dd{margin-left:60px}\n" +
+".toc2 td{padding-top:4px}\n" +
+".search-hit{background:#ffeeaa}\n" +
+".atictadd *{color:#008000;text-decoration:none}\n" +
+".atictdel *{color:#ff0000;text-decoration:line-through}\n" +
+"ins{color:#008000;text-decoration:none}\n" +
+"del{color:#ff0000;text-decoration:line-through}\n" +
+"a:link,a:visited{color:#004499;text-decoration:none}\n" +
+"a:hover,a:active{color:#6699CC;text-decoration:underline}\n" + 
+"a.pnolink{color:#f08a00;text-decoration:none}\n" + 
+"a.cnolink{color:#000000;text-decoration:none}\n" + 
+"a.glossexpansion {color:#00285f;text-decoration:none}\n" + 
+"div#parlcpy{text-align:right;white-space:nowrap;margin-top:10px;margin-bottom:-26px}\n" + 
+"div#header{width:100%;bottom:0;right:0;left:0}\n" + 
+"div#footer{position:fixed;width:100%;bottom:0;right:0;left:0}\n" + 
+"div#footer2{width:100%;bottom:0;right:0;left:0;margin-bottom:-10px}\n" + 
+"div#c_buttons{position:fixed;top:16px;right:5px;padding:1px;background-color:#d5e4af}\n" + 
+".c_but_tab{width:112px;padding:0px;border:0px;background-color:#eeeeee}\n" + 
+".c_but_show{width:104px;height:26px;white-space:nowrap}\n" + 
+".c_but_hide{width:42px;height:26px;white-space:nowrap}\n" + 
+".c_{background-color:#fff1d6}\n" + 
+".c_pbut_img{width:35px;height:30px;padding:0px;border:0px;opacity:0.2;filter:alpha(opacity=20)}\n" + 
+".c_nbut_img{width:35px;height:30px;padding:0px;border:0px}\n" + 
+"@media print {.OnScreen {display:none};}\n" + 
+".xref:hover{color:#6699CC;text-decoration:underline;cursor:pointer}\n" + 
+"#ht{position:absolute;display:block;border-left:1px double #bbbbbb;border-top:1px double #bbbbbb;border-right:1px double #bbbbbb;border-bottom:1px double #bbbbbb;background:#ffffed;border-radius:6px;box-shadow:0 0 10px #cccccc;color:#333333;padding:3px;}\n" + 
+"#httop{position:relative;height:auto;display:block;background:#ffffed;color:#333333;font-size:140%;font-family:monospace;font-weight:bold;padding:0px 7px 0px 7px;overflow:hidden;}\n" + 
+"#htcont{display:block;background:#ffffed;color:#333333;font-size:100%;padding:10px 7px 7px 7px;overflow:hidden;}\n" + 
+"img#htclose {width:30px;height:30px;position:absolute;right:0;top:0;}\n" + 
+"img#link_img{width:22px;height:22px;border:0px;margin-top:4px}\n" + 
+".hd {color:#333333;font-family:monospace;font-weight:bold}\n" + 
+"#THSSTYLE0 {list-style-type: square} \n"+
+"#THSSTYLE1 {list-style-type: square; padding-top:6pt} \n"+
+"#THSSTYLE2 {list-style-type: circle} \n"+
+"#THSSTYLE3 {list-style-type: circle; padding-top:6pt} \n"+
+"#THSSTYLE4 {padding-top:6pt} \n"+
+"</style>\n";
+"\n";
+
+var BODY_START= "</head><bo"+"dy>";
+
+var PAGE_END="</body></html>";
+
+var bodyForIndex = "";
+if(document.layers)
+  bodyForIndex = "<bo"+"dy onresize='parent.parent.showIndex_Forced()'>\n";
+else
+  bodyForIndex = "<bo"+"dy>\n";
+
+var INDEX=
+"<html>\n" +
+"<head>\n" +
+"<title>Index</title>\n" +
+"<style type='text/css'>\n" +
+"<!--\n" +
+"a:link,a:visited{color:#004499;text-decoration:none}\n" +
+"a:hover{color:#6699CC;text-decoration:none}\n" +
+"p{font-family:helvetica,arial,sans-serif}\n" +
+"body{background-color:#FFFFFF}\n" +
+"//-->\n" +
+"</style>\n" +
+"</head>\n" +
+bodyForIndex +
+"<font size=2>" +
+"<p>" +
+"<b>A</b><br />" +
+"<a href='javascript:parent.sC2(\"C1\")'>About This Document</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_5\")'>Activating and Inactivating Types</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_7\")'>Adjusting Partition Plans</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_6\")'>Adjusting Storage Times</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_5\")'>Admin Configuration</a><br />" +
+"<a href='javascript:parent.sC2(\"C3\")'>AdminUI</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_11\")'>Alarm Changes for Database Corruption</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>C</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_1_5\")'>Checking Active Processes</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_9_1\")'>Checking Data Row Information</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_1_3\")'>Checking Disk Space</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_1_4\")'>Checking Installed Modules</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_4\")'>Checking Partition Status</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_9_2\")'>Checking Reference Data Tables</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_1_1\")'>Checking System Status</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_1_2\")'>Checking System Version and Installed Tech Packs</a><br />" +
+"<a href='javascript:parent.sC2(\"C4\")'>Corrective Maintenance</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>D</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_2\")'>Daily Database Maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_2\")'>Data Flow Monitoring</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_9\")'>Data Verification</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_8\")'>Datasource Log</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>E</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_1\")'>ENIQ Database Maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_1\")'>Ericsson Network OSS Directory Structure</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_4\")'>ETLC Logging</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_3_3\")'>Executing Partitioning Manually</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>G</b><br />" +
+"<a href='javascript:parent.sC2(\"C6\")'>Glossary</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>M</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_3\")'>Maintenance Operations</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>P</b><br />" +
+"<a href='javascript:parent.sC2(\"C1_2\")'>Prerequisites</a><br />" +
+"<a href='javascript:parent.sC2(\"C1_1\")'>Purpose</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>R</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_2_2\")'>Reaggregating Data</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_2_3\")'>Reaggregating PM Data</a><br />" +
+"<a href='javascript:parent.sC2(\"C7\")'>Reference List</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_2_1\")'>Reloading Data</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>S</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_10\")'>Security Administration</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_7\")'>Session Logging</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_1\")'>System Monitoring</a><br />" +
+"<a href='javascript:parent.sC2(\"C2\")'>System Overview</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>T</b><br />" +
+"<a href='javascript:parent.sC2(\"C5\")'>Troubleshooting</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1\")'>Troubleshooting Ericsson Network OSS</a><br />" +
+"<a href='javascript:parent.sC2(\"C1_3\")'>Typographic Conventions</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>U</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_6\")'>Unmatched Topology</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"</font>" +
+"<script type='text\/javascript' language='JavaScript'>\n" +
+"var isTreeView=false;\n" +
+"window.history.forward(+1);\n" + 
+"<\/script>\n" +
+"</body>\n" +
+"</html>";
+
+
+var chl;
+chl = new Array;
+var chlCount;
+chlCount = new Array;
+var activeFolder = "C_";
+
+var fT = 0;
+var nextNodeId = 0;
+var scrollPx = 0;
+var treeStatus = 0;
+
+function generateTree() {
+fT=cN("&nbsp;Ericsson Network IQ Events, AdminUI","C0");
+h1=aN(fT,cN("About This Document","C1"));
+h2=aN(h1,cN("Purpose","C1_1"));
+h3=aN(h1,cN("Prerequisites","C1_2"));
+h4=aN(h1,cN("Typographic Conventions","C1_3"));
+h5=aN(fT,cN("System Overview","C2"));
+h6=aN(h5,cN("Ericsson Network OSS Directory Structure","C2_1"));
+h7=aN(fT,cN("AdminUI","C3"));
+h8=aN(h7,cN("System Monitoring","C3_1"));
+h9=aN(h8,cN("Checking System Status","C3_1_1"));
+h10=aN(h8,cN("Checking System Version and Installed Tech Packs","C3_1_2"));
+h11=aN(h8,cN("Checking Disk Space","C3_1_3"));
+h12=aN(h8,cN("Checking Installed Modules","C3_1_4"));
+h13=aN(h8,cN("Checking Active Processes","C3_1_5"));
+h14=aN(h7,cN("Data Flow Monitoring","C3_2"));
+h15=aN(h14,cN("Reloading Data","C3_2_1"));
+h16=aN(h14,cN("Reaggregating Data","C3_2_2"));
+h17=aN(h14,cN("Reaggregating PM Data","C3_2_3"));
+h18=aN(h7,cN("Maintenance Operations","C3_3"));
+h19=aN(h18,cN("ENIQ Database Maintenance","C3_3_1"));
+h20=aN(h18,cN("Daily Database Maintenance","C3_3_2"));
+h21=aN(h18,cN("Executing Partitioning Manually","C3_3_3"));
+h22=aN(h18,cN("Checking Partition Status","C3_3_4"));
+h23=aN(h18,cN("Activating and Inactivating Types","C3_3_5"));
+h24=aN(h18,cN("Adjusting Storage Times","C3_3_6"));
+h25=aN(h18,cN("Adjusting Partition Plans","C3_3_7"));
+h26=aN(h7,cN("ETLC Logging","C3_4"));
+h27=aN(h7,cN("Admin Configuration","C3_5"));
+h28=aN(h7,cN("Unmatched Topology","C3_6"));
+h29=aN(h7,cN("Session Logging","C3_7"));
+h30=aN(h7,cN("Datasource Log","C3_8"));
+h31=aN(h7,cN("Data Verification","C3_9"));
+h32=aN(h31,cN("Checking Data Row Information","C3_9_1"));
+h33=aN(h31,cN("Checking Reference Data Tables","C3_9_2"));
+h34=aN(h7,cN("Security Administration","C3_10"));
+h35=aN(h7,cN("Alarm Changes for Database Corruption","C3_11"));
+h36=aN(fT,cN("Corrective Maintenance","C4"));
+h37=aN(fT,cN("Troubleshooting","C5"));
+h38=aN(h37,cN("Troubleshooting Ericsson Network OSS","C5_1"));
+h39=aN(fT,cN("Glossary","C6"));
+h40=aN(fT,cN("Reference List","C7"));
+}
+
+function aN(parent, child) {
+    parent[parent.length] = child;
+    return child;
+}
+
+function cN(chapterTitle, chapterLevel) {
+    var newNode;
+    newNode = new Array;
+    newNode[0] = 0;
+    newNode[1] = nextNodeId++;
+    newNode[2] = chapterTitle;
+    newNode[3] = chapterLevel;
+    return newNode;
+}
+
+function renderTree() {
+    var doc = hlextree.document;
+    doc.open();
+    doc.write("<html>\n<head>\n");
+    doc.write("<title>Tree</title>\n");
+    doc.write("<script type='text\/javascript' language='JavaScript'>\n");
+    doc.write("var isTreeView=true;\n");
+    doc.write("window.history.forward(+1);\n"); 
+    doc.write("<\/script>\n");
+    doc.write("<style type='text/css'>\n<!--\na:link,a:visited{color:#004499;text-decoration:none}\nbody{background-color:#FFFFFF}\n");
+    doc.write("a:hover{color:#6699CC;text-decoration:none}\ntd{font-family:helvetica,arial,sans-serif}\n--\>\n</style>\n");
+    doc.write("</head>\n<bo" + "dy onload='scrollTo(0," + scrollPx + ");parent.checkTree()' onresize='parent.checkTree()'>\n");
+    doc.write("<table border='0' cellspacing='0' cellpadding='0'>\n");
+    chlCount[1] = 0;
+    renderNode(fT, doc, 0, 1, "");
+    doc.write("</table>\n");
+    doc.write("\n</body>\n</html>");
+    doc.close();
+}
+
+function renderNode(foldersNode, doc, level, lastNode, leftSide) {
+    var html;
+    var image = "CF.gif";
+    treeStatus = 1;
+    var hasChildren = (foldersNode.length > 4);
+    doc.write("<tr><td nowrap>" + leftSide);
+    if (level>0) {
+      chlCount[level]++;
+      if (chl[level] == chlCount[level])
+        foldersNode[0] = 1;
+      if (lastNode) {
+        if (hasChildren) {
+          if (foldersNode[0])
+            html="<img src='CLM.gif' border=0 align=top>";
+          else
+            html="<img src='CLP.gif' border=0 align=top>";
+        }
+        else
+          html="<img src='CL.gif' border=0 align=top>";
+      }
+      else {
+        if (hasChildren) {
+          if (foldersNode[0])
+            html="<img src='CTM.gif' border=0 align=top>";
+          else
+            html="<img src='CTP.gif' border=0 align=top>";
+        }
+        else
+          html="<img src='CT.gif' border=0 align=top>";
+      }
+      if (hasChildren) {
+        html = "<a href='javascript:parent.tN(" + foldersNode[1] + ")'>" + html + "</a>";
+      }
+      doc.write(html);
+      if (lastNode)
+        leftSide = leftSide + "<img src='BL.gif' align=top>";
+      else
+        leftSide = leftSide + "<img src='LI.gif' align=top>";
+    }
+    else
+      image = "DF.gif";
+
+    html = "<a href='javascript:parent.sC(\"" + foldersNode[3] + "\")'><img src='" + image + "' name='" + foldersNode[3] + "' border=0 align=top>";
+    doc.write(html + "<font size=2> " + foldersNode[2] + "</font></a></td></tr>\n");
+
+    if (hasChildren && foldersNode[0]) {
+      var i=0;
+      level++;
+      chlCount[level] = 0;
+
+      for (i=4; i<foldersNode.length;i++) {
+        if (i==foldersNode.length-1)
+          renderNode(foldersNode[i], doc, level, 1, leftSide);
+        else
+          renderNode(foldersNode[i], doc, level, 0, leftSide);
+      }
+    }
+}
+
+function clickOnFolderRec(foldersNode, nodeId) {
+    if (foldersNode[1] == nodeId) {
+      if (foldersNode[0])
+        foldersNode[0] = 0;
+      else
+        foldersNode[0] = 1;
+    }
+    else {
+      var i=0;
+      if (foldersNode.length) {
+        for (i=4; i<foldersNode.length; i++)
+          clickOnFolderRec(foldersNode[i], nodeId);
+      }
+    }
+}
+
+function tN(nodeId) {
+    clickOnFolderRec(fT, nodeId);
+    if (navigator.appVersion.indexOf('MSIE') == -1)
+      scrollPx = hlextree.pageYOffset;
+    else
+      scrollPx = hlextree.document.body.scrollTop;
+
+    parseChapterLevels("");
+    setTimeout("renderTree()", 1);
+    folderAct(activeFolder);
+}
+
+function parseChapterLevels(chapterLevel) {
+    chl[1] = "";
+    chl[2] = "";
+    chl[3] = "";
+    chl[4] = "";
+    chl[5] = "";
+
+    if ((chapterLevel) && (chapterLevel.length)) {
+      var i=1;
+      var j=1;
+      for (i=1; i<chapterLevel.length; i++)
+        if (chapterLevel.substr(i,1) == "_")
+          j++;
+        else
+          chl[j] = chl[j] + chapterLevel.substr(i,1);
+    }
+}
+
+function folderAct(imageName) {
+    if (imageName != activeFolder) {
+      if (hlextree.document [activeFolder])
+        if (activeFolder == "C0")
+          hlextree.document [activeFolder].src = parent.DF.src;
+        else
+          hlextree.document [activeFolder].src = parent.CF.src;
+
+      activeFolder = imageName;
+    }
+    if (hlextree.document [activeFolder])
+      if (activeFolder == "C0")
+        hlextree.document [activeFolder].src = parent.BF.src;
+      else
+        hlextree.document [activeFolder].src = parent.AF.src;
+}
+
+function checkTree() {
+    if (treeStatus == 0) {
+      initializeTree();
+      setTimeout("renderTree()", 1);
+    }
+    else
+      folderAct(activeFolder);
+}
+
+function initializeTree() {
+    nextNodeId = 0;
+    generateTree();
+    fT[0] = 1;
+}
+
+function showTree(chapterLevel) {
+    if (treeStatus == 0)
+      initializeTree();
+    if (navigator.appVersion.indexOf('MSIE') == -1)
+      scrollPx = hlextree.pageYOffset;
+    else
+      scrollPx = hlextree.document.body.scrollTop;
+    parseChapterLevels(chapterLevel);
+    setTimeout("renderTree()", 1);
+    folderAct(chapterLevel);
+}
+
+function sC(chapterLevel) {
+    folderAct(chapterLevel);
+    parent.showChapter(chapterLevel, false);
+}
+
+function sC2(chapterLevel) {
+    folderAct(chapterLevel);
+    parent.showChapter(chapterLevel, true);
+}
+
+var histArray = new Array();
+var currentChapter = "";
+
+if(document.layers) {
+  window.onresize=updateOldNetscape;
+  function updateOldNetscape() {
+    if(parent.hlexmain.hlexdoc && parent.hlexmain.hlexdoc.isHelp)
+      setTimeout("parent.showHelp()", 1);
+    else
+      setTimeout("parent.writeChap(currentChapter, false, false)", 1);
+    if(parent.canEnableTree())
+      setTimeout("parent.showIndex_Forced()", 1);
+    setTimeout("refreshToolbar()", 200);
+  }
+}
+
+function refreshToolbar() {
+  parent.hlextbar.location.href = parent.hlextbar.location.href;
+}
+
+//-->
+</script>
+</head>
+<frameset cols="309, *" frameborder="1" framespacing="3" border="6" bordercolor="#eeeeee">
+<frame src="hlex_tree.html" name="hlextree" marginwidth="5" marginheight="5">
+<frame src="hlex_dummy.html" name="hlexdummy" marginwidth="5" marginheight="5">
+</frameset>
+</html>

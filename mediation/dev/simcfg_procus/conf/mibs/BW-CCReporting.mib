@@ -1,0 +1,587 @@
+--===============================================================
+-- File Name : BW-CCReporting.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2010, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-CCReporting DEFINITIONS ::= BEGIN
+    IMPORTS
+      DisplayString 
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201008230000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the CC Reporting application."
+    REVISION    "201008230000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  ccReporting OBJECT IDENTIFIER
+    ::= { broadworks 25 }
+
+  ccrDatabaseModule OBJECT IDENTIFIER
+    ::= { ccReporting 1 }
+
+  ccrDatabaseStats OBJECT IDENTIFIER
+    ::= { ccrDatabaseModule 1 }
+
+  ccrOracle OBJECT IDENTIFIER
+    ::= { ccrDatabaseStats 1 }
+
+  smtp OBJECT IDENTIFIER
+      ::= { ccReporting 2 }
+
+  reportRequests OBJECT IDENTIFIER
+      ::= { ccReporting 3 }
+
+  queueStats OBJECT IDENTIFIER
+      ::= { ccReporting 4 }
+
+  bwCCReportingMibConformance OBJECT IDENTIFIER
+    ::= { ccReporting 1000 }
+
+-- ccrOracle ::  ...............................
+
+   bwCCReportingOpenedTransactions  OBJECT-TYPE
+      SYNTAX         Gauge32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of opened transaction with the database."
+      ::=  {  ccrOracle  1  }
+
+   bwCCReportingCommittedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of committed transactions to the database since the last restart."
+      ::=  {  ccrOracle  2  }
+
+   bwCCReportingFailedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of failed transactions with the database."
+      ::=  {  ccrOracle  3  }
+
+   bwCCReportingCriticalErrors  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of critical errors encountered during processing with the database."
+      ::=  {  ccrOracle  4  }
+      
+  bwCCReportingOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application."
+-- @feature:162466              
+    ::= { ccrOracle 5 }
+  
+  bwCCReportingOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCCReportingOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwCCReportingOracleDbCount."
+-- @feature:162466              
+    ::= { ccrOracle 6 }
+  
+  bwCCReportingOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwCCReportingOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwCCReportingOracleDbStatsIndex }
+-- @feature:162466            
+    ::= { bwCCReportingOracleDbStatsTable 1 }
+    
+  BwCCReportingOracleDbStatsEntry ::= SEQUENCE {
+    bwCCReportingOracleDbStatsIndex           Unsigned32,
+    bwCCReportingOracleDbName                 DisplayString,
+    bwCCReportingOracleDbNbConnectionsCreated Counter32,
+    bwCCReportingOracleDbConnectionPoolSize   Gauge32,
+    bwCCReportingOracleDbAvgUpdateTime        Gauge32,
+    bwCCReportingOracleDbAvgRowsUpdated       Gauge32,
+    bwCCReportingOracleDbAvgQueryTime         Gauge32,
+    bwCCReportingOracleDbAvgRowsQueried       Gauge32,
+    bwCCReportingOracleDbUpdateCount          Counter32,
+    bwCCReportingOracleDbQueryCount           Counter32
+  }
+  
+   bwCCReportingOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:162466               
+   ::= { bwCCReportingOracleDbStatsEntry 1 }
+   
+   bwCCReportingOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:162466               
+   ::= { bwCCReportingOracleDbStatsEntry 2 }
+   
+   bwCCReportingOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 3 }
+   
+   bwCCReportingOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 4 }
+   
+   bwCCReportingOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 5 }
+   
+   bwCCReportingOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 6 }
+   
+   bwCCReportingOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 7 }
+   
+   bwCCReportingOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 8 }
+   
+   bwCCReportingOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 9 }
+   
+   bwCCReportingOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:162466                
+   ::= { bwCCReportingOracleDbStatsEntry 10 }
+      
+   bwCCReportingOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwCCReportingOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwCCReportingOracleDbCount."
+-- @feature:162466                 
+       ::= { ccrOracle 7 }
+     
+     bwCCReportingOracleDbHWMEntry OBJECT-TYPE
+         SYNTAX      BwCCReportingOracleDbHWMEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "An entry containing high water mark information applicable to a particular oracle database."
+         INDEX   { bwCCReportingOracleDbHWMIndex }
+-- @feature:162466               
+    ::= { bwCCReportingOracleDbHWMTable 1 }
+    
+    BwCCReportingOracleDbHWMEntry ::= SEQUENCE {
+        bwCCReportingOracleDbHWMIndex           Unsigned32,
+        bwCCReportingOracleDbHWMDbName          DisplayString,
+        bwCCReportingOracleDbHWMStatName        DisplayString,
+        bwCCReportingOracleDbHWMStatValue       Gauge32,
+        bwCCReportingOracleDbHWMTimestamp       DisplayString,
+        bwCCReportingOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwCCReportingOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:162466                   
+    ::= { bwCCReportingOracleDbHWMEntry 1 }
+       
+    bwCCReportingOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:162466                   
+    ::= { bwCCReportingOracleDbHWMEntry 2 }
+    
+    bwCCReportingOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:162466                   
+   ::= { bwCCReportingOracleDbHWMEntry 3 }
+   
+    bwCCReportingOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:162466                   
+   ::= { bwCCReportingOracleDbHWMEntry 4 }
+   
+    bwCCReportingOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:162466                   
+   ::= { bwCCReportingOracleDbHWMEntry 5 }
+   
+    bwCCReportingOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:162466                   
+   ::= { bwCCReportingOracleDbHWMEntry 6 }
+  
+
+-- SMTP ::  ...............................
+
+   bwSMTPTotalPrimaryEmailSendAttempts  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of message deliveries to the primary SMTP server."
+      ::=  {  smtp  1  }
+
+   bwSMTPTotalSecondaryEmailSendAttempts  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of message deliveries to the secondary SMTP server."
+      ::=  {  smtp  2  }
+
+   bwSMTPPrimaryUnSuccessfulEmailSendAttempts  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of message deliveries that failed on the primary SMTP server."
+      ::=  {  smtp  3  }
+
+   bwSMTPSecondaryUnSuccessfulEmailSendAttempts  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of message deliveries that failed on the secondary SMTP server."
+      ::=  {  smtp  4  }
+
+-- Report Requests ::  ...............................
+
+   bwReportRequests  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This is the number of report requests received by the application."
+      ::=  {  reportRequests  1  }
+
+   bwReportFailures  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This is the number of report requests that could not be processed by the application."
+      ::=  {  reportRequests  2  }
+
+   bwRealTimeStatsAccess  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This is the number of report requests received by the application that required the computation of real-time statistics."
+      ::=  {  reportRequests  3  }
+
+-- Queue Stats ::  ...............................
+
+  bwCCReportingQueueResets  OBJECT-TYPE
+    SYNTAX         Counter32
+    MAX-ACCESS     read-only
+    STATUS         current
+    DESCRIPTION
+          "When set to a value other then 0, all the queue statistic stored under queueStatsTable are reset to 0."
+    ::=  {  queueStats 1  }
+
+  bwCCReportingQueueStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCCReportingQueueStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the CC Reporting internal queues"
+    ::= { queueStats 2 }
+
+  bwCCReportingQueueStatsEntry OBJECT-TYPE
+    SYNTAX      BwCCReportingQueueStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Each row contains"
+    INDEX       { bwCCReportingQueueIndex }
+    ::= { bwCCReportingQueueStatsTable 1 }
+
+  BwCCReportingQueueStatsEntry ::= SEQUENCE {
+    bwCCReportingQueueIndex                 Unsigned32,
+    bwCCReportingQueueName                  DisplayString,
+    bwCCReportingQueueSize                  Counter32,
+    bwCCReportingQueueTimeAvg               Gauge32,
+    bwCCReportingQueueTimeMin               Gauge32,
+    bwCCReportingQueueTimeMax               Gauge32,
+    bwCCReportingQueueLengthCurrent         Gauge32,
+    bwCCReportingQueueLengthAvg             Gauge32,
+    bwCCReportingQueueLengthMax             Gauge32,
+    bwCCReportingQueueTimeMaxTimestampMSB   Gauge32,
+    bwCCReportingQueueTimeMaxTimestampLSB   Gauge32,
+    bwCCReportingQueueLengthMaxTimestampMSB Gauge32,
+    bwCCReportingQueueLengthMaxTimestampLSB Gauge32    
+  }
+
+  bwCCReportingQueueIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This is the index of the queue stats table entry."
+    ::= { bwCCReportingQueueStatsEntry 1 }
+
+  bwCCReportingQueueName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the name of the queue stats table entry."
+    ::= { bwCCReportingQueueStatsEntry 2 }
+
+  bwCCReportingQueueSize OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Displays the size of the queue."
+    ::= { bwCCReportingQueueStatsEntry 3 }
+
+  bwCCReportingQueueTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the average time that an element spends in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 4 }
+
+  bwCCReportingQueueTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the minimum time that an element spent in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 5 }
+
+  bwCCReportingQueueTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the maximum time that an element spent in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 6 }
+
+  bwCCReportingQueueLengthCurrent OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the current number of elements in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 7 }
+
+  bwCCReportingQueueLengthAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the average number of elements in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 8 }
+
+  bwCCReportingQueueLengthMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the maximum number ofelements in the queue since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 9 }
+
+  bwCCReportingQueueTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the most significant bytes of the timestamp at which the maximum queue time was recorded, since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 10 }
+
+  bwCCReportingQueueTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the least significant bytes of the timestamp at which the maximum queue time was recorded, since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 11 }
+
+  bwCCReportingQueueLengthMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the most significant bytes of the timestamp at which the maximum queue length was recorded, since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 12 }
+
+  bwCCReportingQueueLengthMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Displays the least significant bytes of the timestamp at which the maximum queue length was recorded, since the last reset."
+    ::= { bwCCReportingQueueStatsEntry 13 }
+
+-- BroadWorks CC Reporting MIB Conformance Definition  ...........................................
+
+bwCCReportingMibGroups     OBJECT IDENTIFIER ::= { bwCCReportingMibConformance 1 }
+bwCCReportingMibCompliancy OBJECT IDENTIFIER ::= { bwCCReportingMibConformance 2 }
+
+bwCCReportingPersistencyStatsGroup OBJECT-GROUP
+    OBJECTS { bwCCReportingOpenedTransactions,
+              bwCCReportingCommittedTransactions,
+              bwCCReportingFailedTransactions,
+              bwCCReportingCriticalErrors,
+              bwCCReportingOracleDbCount,
+              bwCCReportingOracleDbStatsIndex,
+              bwCCReportingOracleDbName,
+              bwCCReportingOracleDbNbConnectionsCreated,
+              bwCCReportingOracleDbConnectionPoolSize,
+              bwCCReportingOracleDbAvgUpdateTime,
+              bwCCReportingOracleDbAvgRowsUpdated,
+              bwCCReportingOracleDbAvgQueryTime,
+              bwCCReportingOracleDbAvgRowsQueried,
+              bwCCReportingOracleDbUpdateCount,
+              bwCCReportingOracleDbQueryCount,
+              bwCCReportingOracleDbHWMIndex,
+              bwCCReportingOracleDbHWMDbName,
+              bwCCReportingOracleDbHWMStatName,
+              bwCCReportingOracleDbHWMStatValue,
+              bwCCReportingOracleDbHWMTimestamp,
+              bwCCReportingOracleDbHWMStackTrace }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the CC Reporting."
+  ::= { bwCCReportingMibGroups 1 }
+
+bwCCReportingSMTPStatsGroup OBJECT-GROUP
+    OBJECTS { bwSMTPTotalPrimaryEmailSendAttempts,
+              bwSMTPTotalSecondaryEmailSendAttempts,
+              bwSMTPPrimaryUnSuccessfulEmailSendAttempts,
+              bwSMTPSecondaryUnSuccessfulEmailSendAttempts }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the CC Reporting SMTP stats."
+  ::= { bwCCReportingMibGroups 2 }
+
+bwCCReportingReportRequestStatsGroup OBJECT-GROUP
+    OBJECTS { bwReportRequests, bwReportFailures, bwRealTimeStatsAccess }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the CC Reporting Report Request."
+  ::= { bwCCReportingMibGroups 3 }
+
+bwCCReportingQueueStatsGroup OBJECT-GROUP
+    OBJECTS { bwCCReportingQueueIndex, bwCCReportingQueueName, 
+              bwCCReportingQueueSize, bwCCReportingQueueTimeAvg,
+              bwCCReportingQueueTimeMin, bwCCReportingQueueTimeMax,
+              bwCCReportingQueueLengthCurrent, bwCCReportingQueueLengthAvg,
+              bwCCReportingQueueLengthMax, bwCCReportingQueueTimeMaxTimestampMSB,
+              bwCCReportingQueueTimeMaxTimestampLSB,
+              bwCCReportingQueueLengthMaxTimestampMSB,
+              bwCCReportingQueueLengthMaxTimestampLSB }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the CC Reporting Queue Stats."
+  ::= { bwCCReportingMibGroups 4 }
+
+  bwCCReportingBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks CC Reporting MIB compliance"
+    MODULE
+        MANDATORY-GROUPS        { bwCCReportingPersistencyStatsGroup,
+                                  bwCCReportingSMTPStatsGroup,
+                                  bwCCReportingReportRequestStatsGroup,
+                                  bwCCReportingQueueStatsGroup }
+    ::= { bwCCReportingMibCompliancy 1 }
+
+END

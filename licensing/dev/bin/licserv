@@ -1,0 +1,54 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ ETLC engine control script
+#
+# Usage: engine start|stop|restart|status
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+unalias stop 2> /dev/null
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 32
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+#Log file:
+thisdate=`date +%Y_%m_%d`
+LOGFILE=${LOG_DIR}/licensemanager/licensemanager-${thisdate}.log
+
+start() {
+
+  ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s sentinel -a start
+}
+
+stop() {
+
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s sentinel -a stop
+}
+
+case "$1" in
+start)
+      start
+      ;;
+stop)
+     stop
+     ;;
+restart)
+     stop
+     start
+     ;;
+*)
+     echo "Usage: licserv start|stop|restart"
+     exit 10
+     ;;
+esac

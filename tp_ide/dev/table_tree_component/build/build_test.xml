@@ -1,0 +1,31 @@
+<project name="table_tree_component" default="test_all">
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="module.name" value="table_tree_component"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.base" value="${module.table_tree_component.base}"/>
+    <property name="module.source" value="${module.table_tree_component.base}"/>
+    <property name="module.test.source" value="${module.table_tree_component.base}"/>
+	<property name="module.build" value="${module.table_tree_component.build}"/>
+    <property name="module.dependants" value="${module.table_tree_component.dependants}"/>
+	
+    <property name="module.src.includes" value="tableTree/*.java tableTreeUtils/*.java"/>
+    <property name="module.test.includes" value="unitTests/*.java"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="junitp.testFileDir" value="${module.test.source}"/>
+    <property name="junitp.templateDir" value="5.2"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+	<property name="tests.to.exclude" value="**/TableTreeComponentTest*"/> <!-- Excluding this test as its got one test that needs manualy input -->
+    <property name="mods.needed" value=""/>
+	
+    <path id="table_tree_component.lib.classpath">
+		<path refid="plaform.lib.classpath"/>
+        <path refid="appframework"/>
+    </path>
+    <path id="table_tree_component.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="table_tree_component.lib.classpath"/>
+		<path location="${module.table_tree_component.base}/"/> <!-- For the images...-->
+    </path>
+	
+</project>

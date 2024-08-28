@@ -1,0 +1,12 @@
+;[GENERAL]
+;tagId=CompressedVector_V
+;dataFormatID=DC_E_PARSER:((1)):DC_E_PARSER_COMPRESSEDVECTOR_V:mdc
+;folderName=DC_E_PARSER_COMPRESSEDVECTOR_V
+;dItems_imports=__ENIQ__.txt
+
+;[compressedvector_counter]
+;pi=COMPRESSEDVECTOR
+;dataType=numeric
+;dataSize=18
+;dataScale=8
+;isCounter=1

@@ -1,0 +1,158 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# ENIQ Platform RMI Registry Start/Stop script for SMF to use
+#
+#
+# Usage: rmi_registry start|stop|restart|status
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2011 AB Ericsson. All rights reserved.
+# ----------------------------------------------------------------------
+
+unalias stop 2> /dev/null
+
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+# Source the common functions
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+    echo "File /eniq/admin/lib/common_functions.lib not found"
+    exit 3
+fi
+
+PROCESS_DEBUG=true
+RMI_NAME="PlatformRmiRegistry"
+RMI_EXE="${RT_DIR}/jdk/bin/rmiregistry"
+
+RMI_LOGDIR=${LOG_DIR}/rmiregistry
+mkdir -p ${RMI_LOGDIR}
+
+#Get it from ini file
+RMI_PORT=$(iniget ETLC -v RmiPort -f ${CONF_DIR}/niq.ini)
+
+#Not set in ini file, read from ETLCServer.properties
+if [ -s ${RMI_PORT} ] ; then
+        RMI_PORT=$(grep "^ENGINE_PORT" ${CONF_DIR}/ETLCServer.properties | nawk '{print $3}')
+fi
+
+#Not in ETLCServer either, default to 1200
+if [ -s ${RMI_PORT} ] ; then
+        RMI_PORT=1200
+fi
+
+port_process_kill() {
+		RMI_PORT_COMM=$(pfiles `ls /proc` 2>/dev/null | nawk "/^[^ \\t]/{smatch=\$0;next}/port:[ \\t]*${1}/{print smatch, \$0}{next}" | grep -i "port: ${RMI_PORT}" | nawk '{print substr($1, 1, length($1)-1)}' | tr ' ' '\n' | sort -u | tr '\n' '')
+        for _process_ in $RMI_PORT_COMM ; do
+				/usr/ucb/ps -auxw ${_process_} | tee -a ${LOGFILE}
+        done
+		for _pid_ in $RMI_PORT_COMM ; do
+				echo "Killing process id ${_pid_} using port ${RMI_PORT}" >> ${LOGFILE}
+				while kill -9 "$_pid_" > /dev/null 2>&1 ; do
+						sleep 1
+				done
+		done
+}
+
+status() {
+        /usr/ucb/ps -auxwww | grep -v grep | grep ${RMI_NAME} > /dev/null 2>&1
+        rmiOnline=$?
+        if [ ${rmiOnline} -eq 0 ] ; then
+                echo "RMI Registry is online"
+        else
+                echo "RMI Registry is offline"
+        fi
+}
+
+stop(){
+        LOGFILE=${RMI_LOGDIR}/stop_rmiregistry_`date '+%y%m%d_%H%M%S'`.log
+        echo "Stopping RMI Registry" | tee -a ${LOGFILE}
+        process=$(/usr/ucb/ps -auxwww | grep -v grep | grep ${RMI_NAME})
+        if [ $? -eq 0 ] ; then
+                rmi_pid=$(echo ${process} | nawk '{print $2}')
+                echo "Killing process id $rmi_pid" >> ${LOGFILE}
+                while kill "$rmi_pid" > /dev/null 2>&1 ; do
+                        sleep 1
+                done
+				echo "RMI Registry process ${rmi_pid} stopped" | tee -a ${LOGFILE}
+				netstat -an | egrep "\.${RMI_PORT}.*LISTEN*" > /dev/null
+                if [ $? -eq 0 ] ; then
+                        echo "RMI process named ${RMI_NAME} killed but the port ${RMI_PORT} is in use!!!!" | tee -a ${LOGFILE}
+                        echo "Processes using port ${RMI_PORT}:"
+						port_process_kill
+				else
+						echo "Port ${RMI_PORT} is free now" | tee -a ${LOGFILE}
+				fi
+        else
+                netstat -an | egrep "\.${RMI_PORT}.*LISTEN*" > /dev/null
+                if [ $? -eq 0 ] ; then
+                        echo "No RMI process named ${RMI_NAME} found but the port ${RMI_PORT} is in use!!!!" | tee -a ${LOGFILE}
+                        echo "Processes using port ${RMI_PORT}:"
+						port_process_kill
+				else
+						echo "No RMI registry was running." | tee -a ${LOGFILE}
+				fi
+        fi
+}
+
+start (){
+        LOGFILE=${RMI_LOGDIR}/start_rmiregistry_`date '+%y%m%d_%H%M%S'`.log
+        echo "Starting RMI Registry" | tee -a ${LOGFILE}
+        process=$(/usr/ucb/ps -auxwww | grep -v grep | grep ${RMI_NAME})
+        if [ $? -eq 1 ] ; then
+                netstat -an | egrep "\.${RMI_PORT}.*LISTEN*" > /dev/null
+                if [ $? -eq 0 ] ; then
+                        echo "No RMI process named ${RMI_NAME} found but the port ${RMI_PORT} is already in use, can not start!" | tee -a ${LOGFILE}
+                        echo "Processes using port ${RMI_PORT}:"
+						port_process_kill
+                fi
+                ${RMI_EXE} -J-Djava.rmi.server.codebase="${CODEBASE}" -J-D${RMI_NAME} ${RMI_PORT} > ${LOGFILE} 2>&2 &
+                _pid_=$(/usr/ucb/ps -auxwww | grep -v grep | grep ${RMI_NAME} | nawk '{print $2}')
+                echo "RMI Registry started on port ${RMI_PORT} as PID $_pid_" | tee -a ${LOGFILE}
+
+                if  $PROCESS_DEBUG ; then
+                        ptree -a `pgrep ${RMI_NAME}` >>${LOGFILE}
+                fi
+        else
+                _pid_=`echo $process | nawk '{print $2}'`
+                echo "RMI Registry already online as PID $_pid_" | tee -a ${LOGFILE}
+        fi
+}
+
+COMMON_JAR=`ls ${PLATFORM_DIR}/common*/dclib/common.jar`
+if [ -d ${PLATFORM_DIR}/licensing*/ ] ; then
+	LICENSING_JAR=`ls ${PLATFORM_DIR}/licensing*/dclib/licensing.jar`
+fi 
+if [ -d ${PLATFORM_DIR}/scheduler*/ ] ; then
+	SCHEDULER_JAR=`ls ${PLATFORM_DIR}/scheduler*/dclib/scheduler.jar`
+fi
+if [ -d ${PLATFORM_DIR}/engine*/ ] ; then
+	ENGINE_JAR=`ls ${PLATFORM_DIR}/engine*/dclib/engine.jar`
+fi
+CODEBASE="file://${SCHEDULER_JAR} file://${COMMON_JAR} file://${ENGINE_JAR} file://${LICENSING_JAR}"
+
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+     stop
+     start
+     ;;
+  status)
+    status
+    ;;
+  *)
+    echo "Usage: ${0} start|stop|restart|status"
+    exit 10
+    ;;
+esac

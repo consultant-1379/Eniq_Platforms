@@ -1,0 +1,11 @@
+#Fri Jul 18 16:50:15 EEST 2008
+tech_pack.metadata_version=$metadataversion
+#foreach($col in $required_tech_packs)
+required_tech_packs.$col.getTechpackname()=$col.getVersion()
+#end
+tech_pack.name=$techpackname
+author=$author
+tech_pack.version=$version
+build.number=$buildnumber
+build.tag=$buildtag
+license.name=$licenseName

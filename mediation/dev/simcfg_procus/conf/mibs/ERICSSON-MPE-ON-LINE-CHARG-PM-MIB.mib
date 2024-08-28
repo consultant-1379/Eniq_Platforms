@@ -1,0 +1,369 @@
+ERICSSON-MPE-ON-LINE-CHARG-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeOnLineChargPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the On-line Charging 
+                    functionality."
+::= { mpeModules 20 }
+
+onLineChargPmObjects  OBJECT IDENTIFIER ::= { mpeOnLineChargPmModule 1 }
+
+requests  OBJECT IDENTIFIER ::= { onLineChargPmObjects 1 }
+
+transactions  OBJECT IDENTIFIER ::= { onLineChargPmObjects 2 }
+
+sessions  OBJECT IDENTIFIER ::= { onLineChargPmObjects 3 }
+
+totReqSent  OBJECT IDENTIFIER ::= { onLineChargPmObjects 4 }
+
+totTimeouts  OBJECT IDENTIFIER ::= { onLineChargPmObjects 5 }
+
+onLineCharg  OBJECT IDENTIFIER ::= { onLineChargPmObjects 6 }
+
+onLineChargPmConformance  OBJECT IDENTIFIER ::= { mpeOnLineChargPmModule 3 }
+
+onLineChargPmGroups  OBJECT IDENTIFIER ::= { onLineChargPmConformance 1 }
+
+onLineChargPmCompliances  OBJECT IDENTIFIER ::= { onLineChargPmConformance 2 }
+
+requestsTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF RequestsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { requests 1 } 
+
+requestsEntry OBJECT-TYPE
+   SYNTAX          RequestsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The number of on-line charging requests sent to the 
+                    On-line Charging system for which responses have been 
+                    received."
+   INDEX { applIndex }
+::= { requestsTable  1 }
+
+RequestsEntry  ::= SEQUENCE
+{
+   requestsOpRating  Counter32,
+   requestsOpCheck   Counter32,
+   requestsOpDebit   Counter32,
+   requestsOpRefund  Counter32,
+   requestsOpReserve Counter32,
+   requestsOpConsume Counter32,
+   requestsOpCommit  Counter32
+}
+
+requestsOpRating  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of rating request operations sent to 
+                    the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 1 }
+
+requestsOpCheck  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of check balance request operations 
+                    sent to the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 2 }
+
+requestsOpDebit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of direct debit request operations 
+                    sent to the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 3 }
+
+requestsOpRefund  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of direct refund request operations 
+                    sent to the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 4 }
+
+requestsOpReserve  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of reserve request operations sent 
+                    to the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 5 }
+
+requestsOpConsume  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of consume request operations sent 
+                    to the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 6 }
+
+requestsOpCommit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of commit request operations sent to 
+                    the On-line Charging system.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { requestsEntry 7 }
+
+transactionsTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TransactionsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { transactions 1 } 
+
+transactionsEntry OBJECT-TYPE
+   SYNTAX          TransactionsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Active Charging Transactions"
+   INDEX { applIndex }
+::= { transactionsTable  1 }
+
+TransactionsEntry  ::= SEQUENCE
+{
+   transactionsActive Gauge32,
+   transactionsDelay  Gauge32
+}
+
+transactionsActive  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of transactions currently active in 
+                    on-line charging, i.e pending requests to the On-line 
+                    Charging System."
+::= { transactionsEntry 1 }
+
+transactionsDelay  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The response time in milliseconds of the latest 
+                    charging request."
+::= { transactionsEntry 2 }
+
+sessionsTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SessionsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { sessions 1 } 
+
+sessionsEntry OBJECT-TYPE
+   SYNTAX          SessionsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Active Charging Sessions"
+   INDEX { applIndex }
+::= { sessionsTable  1 }
+
+SessionsEntry  ::= SEQUENCE
+{
+   sessionsActive   Gauge32,
+   sessionsLifetime Gauge32
+}
+
+sessionsActive  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of sessions currently active in on-line 
+                    charging, i.e active charging sessions in the On-line 
+                    Charging System."
+::= { sessionsEntry 1 }
+
+sessionsLifetime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The age of the latest removed session in milliseconds"
+::= { sessionsEntry 2 }
+
+totReqSentTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TotReqSentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { totReqSent 1 } 
+
+totReqSentEntry OBJECT-TYPE
+   SYNTAX          TotReqSentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The number of on-line charging.requests that have 
+                    been sent."
+   INDEX { applIndex }
+::= { totReqSentTable  1 }
+
+TotReqSentEntry  ::= SEQUENCE
+{
+   totReqSentCount Counter32
+}
+
+totReqSentCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of on-line charging requests that 
+                    have been sent from this stack since it was started.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { totReqSentEntry 1 }
+
+totTimeoutsTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TotTimeoutsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { totTimeouts 1 } 
+
+totTimeoutsEntry OBJECT-TYPE
+   SYNTAX          TotTimeoutsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The total number of on-line charging.requests sent 
+                    from this stack that have timed out."
+   INDEX { applIndex }
+::= { totTimeoutsTable  1 }
+
+TotTimeoutsEntry  ::= SEQUENCE
+{
+   totTimeoutsCount Counter32
+}
+
+totTimeoutsCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of on-line charging requests that have 
+                    timed out.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { totTimeoutsEntry 1 }
+
+onLineChargTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF OnLineChargEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the on-line charging module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { onLineCharg 1 } 
+
+onLineChargEntry OBJECT-TYPE
+   SYNTAX          OnLineChargEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The warnings and alarms used by the On-line Charging 
+                    Interface."
+   INDEX { applIndex }
+::= { onLineChargTable  1 }
+
+OnLineChargEntry  ::= SEQUENCE
+{
+   onLineChargCfgError ItuPerceivedSeverity
+}
+
+onLineChargCfgError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Cannot access the On-line Charging Radius Server. The 
+                    cause of the error is given in the dynamic text."
+::= { onLineChargEntry 1 }
+
+-- Compliance Statements
+
+onLineChargCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for on-line charging."
+   MODULE          -- this module
+   MANDATORY-GROUPS {onLineChargConfGroup}
+::= { onLineChargPmCompliances 1 }
+
+-- Units of Conformance
+
+onLineChargConfGroup OBJECT-GROUP
+   OBJECTS { requestsOpRating,
+             requestsOpCheck,
+             requestsOpDebit,
+             requestsOpRefund,
+             requestsOpReserve,
+             requestsOpConsume,
+             requestsOpCommit,
+             transactionsActive,
+             transactionsDelay,
+             sessionsActive,
+             sessionsLifetime,
+             totReqSentCount,
+             totTimeoutsCount,
+             onLineChargCfgError}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a on-line charging."
+::= { onLineChargPmGroups 1 }
+END

@@ -1,0 +1,130 @@
+<project name="adminui" default="compile">
+
+	<property name="pack.version" value="5-0-0" />
+	<property name="pack.name" value="AdminUI" />
+	
+	<property name="3pp.dir" value="/vobs/eniq/3pp"/>	
+	<!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there -->
+	<property name="pack.dir" value="/vobs/eniq/design/plat/admin_ui/dev/admin_ui/" />
+	<property name="project.home" value="${pack.dir}" />
+
+	<!-- ENIQ Jars -->
+	<property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine" />
+	<property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository" />
+	<property name="eniq.scheduler.dir" value="/vobs/eniq/design/plat/etl_controller/build/scheduler" />
+	<property name="eniq.licensing.dir" value="/vobs/eniq/design/plat/licensing/build/licensing" />
+	<property name="eniq.afjmanager.dir" value="/vobs/eniq/design/plat/management/build/afj_manager" />
+	<property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities" />
+	<property name="eniq.symboliclinkcreator.dir" value="/vobs/eniq/design/plat/etl_controller/build/symboliclinkcreator" />
+
+	<!-- 3PP Jars -->
+	<property name="3pp.commons_configuration.dir" value="${3pp.dir}/apache/configuration/v1_1/prod" />
+	<property name="3pp.commons_dbcp.dir" value="${3pp.dir}/apache/dbcp/v1_0/prod" />
+	<property name="3pp.commons_lang.dir" value="${3pp.dir}/apache/comm_lang/v1_0/prod" />
+	<property name="3pp.commons_logging.dir" value="${3pp.dir}/apache/comm_logging/v1_2/prod" />
+	<property name="3pp.sybase.dir" value="${3pp.dir}/sybase/sybase_iq/" />
+	<!-- jconn4.jar -->
+	<property name="3pp.log4j.dir" value="${3pp.dir}/apache/log4j/v1_2_11/prod" />
+	<property name="3pp.velocity.dir" value="${3pp.dir}/apache/jakarta_velocity/v1_5/prod" />
+	<property name="3pp.servlet.dir" value="${3pp.dir}/apache/tomcat/v7_0_32/prod" />
+	<property name="3pp.junit.dir" value="${3pp.dir}/junit/v4_5/prod" />
+	<!-- junit.jar -->
+	<property name="3pp.jsch.dir" value="${3pp.dir}/jsch_ssh2/jsch_ssh2/v0_1_51/prod/" />
+	<!-- jsch.jar -->
+
+	<target name="precompile" />
+
+	<target name="compile" depends="create_war" />
+	<!--====================================================================
+ 	 Task: create_war
+	=====================================================================-->
+	<target name="create_war" depends="compile_java">
+		<!-- Copy resources to classpath root -->
+		<copy todir="${project.home}/classes">
+			<fileset dir="${project.home}/web/conf">
+				<include name="general.properties" />
+			</fileset>
+		</copy>
+
+		<war destfile="${project.home}/install/adminui.war" webxml="${project.home}/web/WEB-INF/web.xml">
+			<classes dir="${project.home}/classes" />
+			<fileset dir="${project.home}/web">
+				<exclude name="WEB-INF/web.xml" />
+				<exclude name="conf/general.properties" />
+			</fileset>
+		</war>
+	</target>
+
+	<target name="compile_java">
+		<delete dir="${project.home}/classes" />
+		<mkdir dir="${project.home}/classes" />
+		<javac srcdir="${project.home}/src" destdir="${project.home}/classes" failonerror="true" debug="true" optimize="off" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${eniq.engine.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.repository.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.scheduler.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.licensing.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.afjmanager.dir}">
+					<include name="afj_manager.jar" />
+				</fileset>
+				<fileset dir="${eniq.common.dir}">
+					<include name="common.jar" />
+				</fileset>
+				<fileset dir="${eniq.symboliclinkcreator.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.commons_configuration.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.commons_dbcp.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.commons_lang.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.commons_logging.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.sybase.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.log4j.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.velocity.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.servlet.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.junit.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.jsch.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<!--====================================================================
+ 	 Task: create_zip
+	=====================================================================-->
+	<!--<target name="create_zip" depends="create_war">
+  		<zip destfile="${project.home}/build/${pack.name}_${build.number}.zip">
+	    <fileset dir="${project.home}/build/" includes="adminui.war"/>
+		</zip>
+	</target>	
+	-->
+	<target name="postcompile" />
+
+</project>

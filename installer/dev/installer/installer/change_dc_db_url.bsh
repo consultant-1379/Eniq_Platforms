@@ -1,0 +1,308 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ - change_dc_db_url (from dwhdb to dwh_reader_1 or vice versa).
+# This should only be used during installation.
+#
+# ----------------------------------------------------------------------
+# Copyright (C) 2010 LM Ericsson Limited.  All rights reserved.
+# ----------------------------------------------------------------------
+NAWK=/usr/bin/nawk
+usage_msg()
+{
+  echo ""
+  echo "Usage: change_dc_db_url.bsh [-n <service_name>]"
+  echo "options:"
+  echo "-n  : Service name. Engine will use this service for database connections."
+  echo "-n parameter is optional. If run without -n then service name will be dwh_reader_1."
+  echo "-dm parameter. To set MAX_HASH_ROW=40000000."
+}
+
+usage_msg1()
+{
+  echo ""
+  echo "Usage: change_dc_db_url.bsh [-dm <service_name>]"
+  echo "options:"
+  echo "If run without service_name then service name will be dwh_reader_1."
+  echo "-dm parameter <service_name>. To set MAX_HASH_ROW=40000000."
+}
+
+CAT=/usr/bin/cat
+# Select the servicename from $2, otherwise use default
+
+MAX_HASH_ROW=18000000
+SERVICE_NAME=dwh_reader_1
+
+ if [ "$1" == "-dm" ] ; then
+                echo ""
+                echo "======================================="
+                echo "-dm parameter. Assuming MAX_HASH_ROW =40000000."
+                echo "======================================="
+                echo ""
+                MAX_HASH_ROW=40000000
+                SERVICE_NAME=$2
+                ISVALID=`$CAT /etc/hosts |grep -i "$SERVICE_NAME$"`
+                if [ -z "$ISVALID" ] ; then
+                        echo ""
+                        echo "Service name='$SERVICE_NAME' not supported."
+                        usage_msg1
+                        exit 1;
+                  fi
+
+   elif [ "$1" == "-n" ] ; then
+                SERVICE_NAME=$2
+                ISVALID=`$CAT /etc/hosts |grep -i "$SERVICE_NAME$"`
+                if [ -z "$ISVALID" ] ; then
+                        echo ""
+                        echo "Service name='$SERVICE_NAME' not supported."
+                        usage_msg
+                        exit 1;
+                  fi
+  elif [ -z "$1" ] ; then
+                echo ""
+                echo "======================================="
+                echo "No -n parameter for service name. Assuming service name is equal to dwh_reader_1."
+                echo "If MAX_HASH_ROW is not set,it will be set to 18000000 for dwh_reader_1."
+                echo "If MAX_HASH_ROW is already set, it will be retained."
+                echo "======================================="
+                echo ""
+   else
+                usage_msg
+                usage_msg1
+                exit 1;
+        fi
+
+
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+if [ ! -r "${CONF_DIR}/niq.rc" ] ; then
+  echo "ERROR: Source file is not readable at ${CONF_DIR}/niq.rc"
+  exit 2
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ -s ${CONF_DIR}/dwh.ini ]; then
+	if [ "${SERVICE_NAME}" == "dwhdb" ]; then
+		DWH_READER_PORT=`${ADMIN_BIN}/iniget DWH -v PortNumber -f ${CONF_DIR}/dwh.ini`
+	else
+		DWH_READER_PORT=`${ADMIN_BIN}/iniget DWH_READER_SETTINGS -v PortNumber -f ${CONF_DIR}/dwh.ini`
+	fi
+else
+	if [ "${SERVICE_NAME}" == "dwhdb" ]; then
+		DWH_READER_PORT=`${ADMIN_BIN}/iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+	else
+		DWH_READER_PORT=`${ADMIN_BIN}/iniget DWH_READER_SETTINGS -v PortNumber -f ${CONF_DIR}/niq.ini`
+	fi
+fi
+
+if [ -z "${SERVICE_NAME}" ] ; then
+	echo "Error: could not determine SERVICE_NAME='$SERVICE_NAME' from ${CONF_DIR}/dwh.ini (or niq.ini)"
+	exit 3
+fi
+if [ -z "${DWH_READER_PORT}" ] ; then
+	echo "Error: could not determine DWH_READER_PORT='$DWH_READER_PORT' ${CONF_DIR}/dwh.ini (or niq.ini)"
+	exit 3
+fi
+
+CPATH="${INSTALLER_DIR}/lib/installer.jar"
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in $DIRS
+do
+  if [ -d ${PLATFORM_DIR}/$file/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/$file/dclib/*.jar`
+
+    for jar in $JARS
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+TIMESTAMP=`date +%y.%m.%d_%H:%M:%S`
+
+if [ ! -d ${LOG_DIR}/change_dc_db_url ] ; then
+  mkdir -p ${LOG_DIR}/change_dc_db_url
+fi
+
+LOGFILE=${LOG_DIR}/change_dc_db_url/execute_${TIMESTAMP}.log
+
+HSTNAME=`hostname`
+
+if [ ! -d ${LOG_DIR}/change_dc_db_url ] ; then
+  mkdir -p ${LOG_DIR}/change_dc_db_url  | tee -a ${LOGFILE}
+fi
+
+SQL_DIR="${INSTALLER_DIR}/change_dc_db_url_sql"
+
+if [ ! -d ${SQL_DIR} ] ; then
+  mkdir -p ${SQL_DIR}  | tee -a ${LOGFILE}
+fi
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+PATH=${RT_DIR}/java/bin:${PATH}
+export PATH
+
+# 20111130 EANGUAN :: TR HP17781:: Commenting it out this as it is not needed
+#${JAVA_HOME}/bin/java -Dpname="DBUsers" -DCONF_DIR=${CONF_DIR} -classpath ${CPATH} com.ericsson.eniq.repository.dbusers.GetDBConnectionString dc dwh | tee -a ${LOGFILE}
+
+# Finalizing MAX_HASH_ROWS here
+
+ if [ -f ${LOGFILE} ] ; then
+  EXISTING_MHR=`cat ${LOGFILE} | grep "MAX_HASH_ROWS" | cut -f 4 -d " " | cut -f 2 -d "="`
+  if [ ! -z "${EXISTING_MHR}" ] && [ "$1" != "-dm" ] ; then
+  MAX_HASH_ROW=${EXISTING_MHR}
+  fi
+fi
+
+echo "MAX_HASH_ROW selected for sql is ${MAX_HASH_ROW}" | tee -a ${LOGFILE}
+
+# ======================= Create SQL File ===================
+# =================================================================
+
+SQL_FILE="${SQL_DIR}/change_url.sql"
+
+cat > ${SQL_FILE} << SQL_EOF
+update META_DATABASES set CONNECTION_STRING='jdbc:sqlanywhere:host=${SERVICE_NAME}:${DWH_READER_PORT};InitString=''SET TEMPORARY OPTION MAX_HASH_ROWS=18000000''' where CONNECTION_NAME ='dwh';
+update META_DATABASES set CONNECTION_STRING='jdbc:sqlanywhere:host=${SERVICE_NAME}:${DWH_READER_PORT};InitString=''SET TEMPORARY OPTION MAX_HASH_ROWS=18000000''' where CONNECTION_NAME ='dwh_reader_1' and TYPE_NAME in ('USER', 'DBA');
+SQL_EOF
+
+echo "====================================================================" | tee -a ${LOGFILE}
+echo "  Ericsson Network IQ - Apply change_dc_db_url on @ ${HSTNAME}" | tee -a ${LOGFILE}
+echo "===================================================================="  | tee -a ${LOGFILE}
+
+  echo "Shutdown scheduler & engine before upgrade." | tee -a ${LOG_FILE}
+
+  echo "SMF is running. Stopping engine with SMF scripts." | tee -a ${LOG_FILE}
+  echo "Stopping engine" | tee -a ${LOG_FILE}
+  ${BIN_DIR}/engine stop >> /dev/null 2>&1
+
+  ENGINE_STOP_STATUS=$?
+  if [ ${ENGINE_STOP_STATUS} -ne 0 ] ; then
+    echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOG_FILE}
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s engine -a clear | tee -a ${LOG_FILE}
+        echo "Engine status cleared" | tee -a ${LOG_FILE}
+        sleep 10
+        ${BIN_DIR}/engine -e shutdown_forceful 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOG_FILE}
+        sleep 10
+  fi
+
+  ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+  if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+        echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOG_FILE}
+        ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s engine -a clear | tee -a ${LOG_FILE}
+        echo "Engine status cleared" | tee -a ${LOG_FILE}
+        sleep 10
+        ${BIN_DIR}/engine -e shutdown_forceful 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOG_FILE}
+        sleep 10
+        ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+        if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+                RETRY_COUNT=0
+                until [ "${ENGINE_SMF_STATUS}" = "online" ]
+                do
+                        if [ $RETRY_COUNT -gt 30 ]; then
+                                break
+                        fi
+                        sleep 10
+                        ENGINE_SMF_STATUS=`svcs -a | grep 'eniq/engine' | $NAWK '{print $1}'`
+                        RETRY_COUNT=`expr $RETRY_COUNT + 1`
+                        echo "Waiting for engine to go online" | tee -a ${LOG_FILE}
+                done
+                echo "Engine initially started" | tee -a ${LOG_FILE}
+                ${BIN_DIR}/engine stop | tee -a ${LOG_FILE}
+        fi
+  fi
+  echo "Engine stopped successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+
+  echo "SMF is running. Stoping scheduler with SMF scripts." | tee -a ${LOG_FILE}
+  echo "Stopping scheduler" | tee -a ${LOG_FILE}
+  ${BIN_DIR}/scheduler stop >> /dev/null 2>&1
+
+  SCHEDULER_SMF_STATUS=`svcs -a | grep 'eniq/scheduler' | $NAWK '{print $1}'`
+	if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+	        RETRY_COUNT=0
+	        until [ "${SCHEDULER_SMF_STATUS}" = "online" ]
+	        do
+	                if [ $RETRY_COUNT -gt 30 ]; then
+	                        break
+	                fi
+	                sleep 10
+	                SCHEDULER_SMF_STATUS=`svcs -a | grep 'eniq/scheduler' | $NAWK '{print $1}'`
+	                RETRY_COUNT=`expr $RETRY_COUNT + 1`
+	                echo "Waiting for scheduler to go online" | tee -a ${LOG_FILE}
+	        done
+	        echo "Scheduler initially started" | tee -a ${LOG_FILE}
+	        ${BIN_DIR}/scheduler stop | tee -a ${LOG_FILE}
+	fi
+
+  echo "Scheduler stopped successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOG_FILE}
+
+#########################
+
+## Start repdb service: TR HP24092: evivrao  ##
+
+echo "Tryng to start repdb.."  | tee -a ${LOGFILE}
+${BIN_DIR}/repdb start
+
+REPDB_START_STATUS=$?
+
+if [ ${REPDB_START_STATUS} -ne 0 ] ; then
+  echo "Repdb could not be started. " | tee -a ${LOG_FILE}
+  exit 45
+ else
+  echo "Repdb started succesfully" | tee -a ${LOG_FILE}
+fi
+
+##########################
+
+
+
+DBNAME="ETLREP"
+
+cd ${INSTALLER_DIR}; ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_install_utils.xml -lib ${CPATH} -Ddc.installer.dir=${INSTALLER_DIR} -Ddbname=${DBNAME} -Dsqlfile=${SQL_FILE} -Dcon_type=USER -Ddc.conf.dir=${CONF_DIR} -Ddc.platform.dir=${PLATFORM_DIR} execute_sql | tee -a ${LOGFILE}
+
+if [ -f ${LOGFILE} ] ; then
+  SUC=`cat ${LOGFILE} | grep "BUILD SUCCESSFUL"`
+  if [ ! -z "${SUC}" ] ; then
+    echo "======================================="  | tee -a ${LOGFILE}
+    echo "Successfully changed dc urls in ETLREP database"  | tee -a ${LOGFILE}
+    echo "======================================="  | tee -a ${LOGFILE}
+  else
+    echo "================================"  | tee -a ${LOGFILE}
+    echo "change_dc_db_url upgrade failed"  | tee -a ${LOGFILE}
+    echo "================================"  | tee -a ${LOGFILE}
+  fi
+fi
+
+###########################
+
+${BIN_DIR}/engine start
+
+ENGINE_START_STATUS=$?
+
+if [ ${ENGINE_START_STATUS} -ne 0 ] ; then
+  echo "Engine could not be started. Plese restart manually." | tee -a ${LOG_FILE}
+  exit 44
+ else
+  echo "Engine restarted succesfully" | tee -a ${LOG_FILE}
+fi
+
+${BIN_DIR}/scheduler start
+
+SCHEDULER_START_STATUS=$?
+
+if [ ${SCHEDULER_START_STATUS} -ne 0 ] ; then
+  echo "Scheduler could not be started. Plese restart manually." | tee -a ${LOG_FILE}
+  exit 44
+ else
+  echo "Scheduler restarted succesfully" | tee -a ${LOG_FILE}
+fi

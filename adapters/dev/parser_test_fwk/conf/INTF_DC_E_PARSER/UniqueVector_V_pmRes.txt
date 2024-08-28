@@ -1,0 +1,12 @@
+[GENERAL]
+tagId=UniqueVector_V_pmRes
+dataFormatID=DC_E_PARSER:((1)):DC_E_PARSER_UNIQUEVECTOR_V_PMRES:mdc
+folderName=DC_E_PARSER_UNIQUEVECTOR_V_PMRES
+dItems_imports=__ENIQ__.txt
+
+[uniquevector_counter]
+pi=UNIQUEVECTOR
+dataType=numeric
+dataSize=2
+dataScale=8
+isCounter=1

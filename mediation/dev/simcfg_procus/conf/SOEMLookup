@@ -1,0 +1,89 @@
+<NE-Type>,<ENIQ Input Directory>
+AMM 20P,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 6P,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 6PB,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 2P,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+ATU,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+ATU B,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 6PD,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 6PC,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 2PB,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 20PB,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+AMM 1P,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MLCN,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK PT2010,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK CN210,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK CN510,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK CN500,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MLCN 500,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK SP110,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK SP210,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MINI-LINK SP310,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+MLPT6010,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+GenericSNMP,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_tnsppt
+SPO1460,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt800_1400
+SPO1410,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt800_1400
+OMS846,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt800_1400
+OMS860,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt800_1400
+OMS870,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt800_1400
+Extender II,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA16 [Series 3],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA1/4CP [Series 4],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA1/4c [Series 4],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA1/4 (4+4) [Series 4],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA1/4 (8) [Series 4],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA1/4c [Series 3],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA4/16c [Series 3],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+SMA16c+ [Series 3],/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1240-4,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS840,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+VC-TM Compact (4 slot),/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+VC-TM Compact (2 slot),/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1240-16,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1260-4,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1260-16,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+VC-TMS,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1664,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+OMS1654,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt1600_1200
+MLE_1+0,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MLE_1+1,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MLE_SAU,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+E_MICRO,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ATU_C,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML10_13,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML15,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML18,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML23,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML26,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML28,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML38,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+SMM_1+0,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+SMM_1+1,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+SMM_2+1,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ANT7,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ANT_SW,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ML15-C,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+DMC23NP,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+DMC23P,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+DMC38NP,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+DMC_23SW,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ADP_SERVER,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MHC_1+0,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MHC_1+1_FD,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MHC_1+1_HS,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MHC_1+1_EP,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MDRS 155S,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MDRS 155E,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+XQI,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+MDRS 155EC,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+ETU 155,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+CP,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+CAAS,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+RAAS,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+AT,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_ml_hc_e
+OMS3210/MSH256R,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt3200
+OMS3250/MSH2K,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt3200
+OMS3240/MSH64C,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt3200
+OMS3255 (720 G),/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt3200
+OMS3255 (160 G),/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt3200
+MHL3000,/eniq/data/pmdata_sim/eniq_oss_1/dc_e_opt_MHL3000

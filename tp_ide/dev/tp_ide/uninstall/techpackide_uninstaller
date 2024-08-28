@@ -1,0 +1,63 @@
+#!/usr/sunos/bin/sh
+# ----------------------------------------------------------------------
+# Ericsson Network IQ TechPackIDE Uninstaller script
+#
+# Usage: techpackIDE_uninstaller 
+#  
+# Author: ejohabd 
+# ----------------------------------------------------------------------
+# Copyright (c) AB LM Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# Ensure that all variables set in this script are exported
+#--------------------------------------------------------------------
+
+set -a
+
+#Environment Configuration
+#--------------------------------------------------------------------
+RM=/usr/bin/rm
+SED=/usr/bin/sed
+MV=/usr/bin/mv
+
+#--------------------------------------------------------------------
+#Exporting Environment Variable
+#--------------------------------------------------------------------
+export RM
+export SED
+export MV
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+CURR_DIR=`pwd`
+IDE_DIR=/eniq/sw/runtime/tomcat/webapps/techpackide
+#--------------------------------------------------------------------
+
+#Main
+
+if [ -d "$IDE_DIR" ]
+then
+        $RM -rf $IDE_DIR
+fi
+$SED '/techpackide/d' $CURR_DIR/versiondb.properties > $CURR_DIR/tmp/versiondb_tmp.properties
+$MV $CURR_DIR/tmp/versiondb_tmp.properties $CURR_DIR/versiondb.properties
+
+str=`grep techpackide versiondb.properties`
+if [ -d "$IDE_DIR" ]
+then
+        echo "Failed to delete $IDE_DIR directory"
+fi
+if [ ! -z "$str" ]
+then
+        echo "Failed to delete techpackide from versiondb.properties"
+fi
+
+if [ ! -d "$IDE_DIR" ] && [  -z "$str" ]
+then
+        $RM -rf $CURR_DIR/techpackide_uninstaller
+        echo "TechPackIDE uninstalled Successfully"
+fi
+

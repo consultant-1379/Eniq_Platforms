@@ -1,0 +1,154 @@
+# !/bin/bash
+# ----------------------------------------------------------------------
+# 
+# 
+# Copyright (c) 1999 - 2013 AB LM Ericsson  All rights reserved.
+# ----------------------------------------------------------------------
+#
+#set -x
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 1
+fi
+CONF_DIR=/eniq/sw/conf
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+#--------------------------------------------------------------------
+#Global variable
+#--------------------------------------------------------------------
+
+ENIQ_BIN_DIR=/eniq/sw/bin
+
+. ${CONF_DIR}/niq.rc
+
+_dir_=`/usr/bin/dirname $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || echo $_dir_`
+
+if [ -s $SCRIPTHOME/../../admin/lib/common_functions.lib ]; then
+    . $SCRIPTHOME/../../admin/lib/common_functions.lib
+else
+        echo "Could not find $SCRIPTHOME/../../admin/lib/common_functions.lib"
+        exit 63
+fi
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+DBA_PASSWORD=`inigetpassword DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+DWH_PORT=`inigetpassword DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_NAME=`inigetpassword DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+SYBASE_IQ_PATH=${IQ_DIR}/${SYBASE_OCS}/bin/isql
+
+if [ ! -f ${ENIQ_BIN_DIR}/PLM_Merge_Scripts.bsh ] ; then
+        echo "${ENIQ_BIN_DIR}/PLM_Merge_Scripts.bsh does not exist"
+        exit 1
+fi
+
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dc;pwd=${DWHDBPASSWORD};eng=dwhdb;links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Executing  change_DIM_E_RAN_RBSLOCALCELL script.." 
+
+${SYBASE_IQ_PATH} -Udc -P${DWHDBPASSWORD} -Sdwhdb <<EOISQL
+print "Executing change_DIM_E_RAN_RBSLOCALCELL script .."
+
+print "Deleting duplicate entries for all nodes .."
+
+delete DIM_E_RAN_RBSLOCALCELL  where SEQUENCE_INDEX  IS null AND RBSLOCALCELL_FDN||':'||RBSLOCALCELL_ID||':'||RBSLOCALCELL_CARRIER||':'||RNC_ID||':'||RBS_ID IN(select RBSLOCALCELL_FDN||':'||RBSLOCALCELL_ID||':'||RBSLOCALCELL_CARRIER||':'||RNC_ID||':'||RBS_ID from DIM_E_RAN_RBSLOCALCELL where SEQUENCE_INDEX is NOT NULL)
+go
+
+
+print "Coping data for 13A and prior nodes which are deactive."
+
+
+select * into temp1 from DIM_E_RAN_RBSLOCALCELL where status='DEACTIVE' and SEQUENCE_INDEX  IS null and RBSLOCALCELL_ID||':'||rnc_id||':'||rbs_id in (select a.RBSLOCALCELL_ID||':'||a.rnc_id||':'||a.rbs_id from dc.DIM_E_RAN_RBSLOCALCELL a,dc.DIM_E_RAN_UCELL b where a.RBSLOCALCELL_ID=b.LOCALCellID and a.rnc_id=b.rnc_id and a.rbs_id=b.rbs_id and a.SEQUENCE_INDEX  IS null and a.STATUS='DEACTIVE' and b.STATUS='ACTIVE')
+go
+               
+
+print "Deleting the entries of 13A and Prior nodes which are deactive ."
+
+DELETE   DIM_E_RAN_RBSLOCALCELL  where RBSLOCALCELL_FDN||':'||RBSLOCALCELL_CARRIER||':'||RBSLOCALCELL_ID IN (select RBSLOCALCELL_FDN||':'||RBSLOCALCELL_CARRIER||':'||RBSLOCALCELL_ID from temp1)
+go
+       
+update temp1 set status='ACTIVE'
+go
+
+print "Inserting data into RBSLOCALCELL."
+INSERT INTO DIM_E_RAN_RBSLOCALCELL  select * from  temp1
+go
+
+drop table temp1
+go
+
+print "Deleting data from RBSLOCALCELL which is present in RBSLOCALCELL_CURRENT table."
+
+DELETE DIM_E_RAN_RBSLOCALCELL  where RBSLOCALCELL_FDN||':'||RBSLOCALCELL_ID||':'||RBSLOCALCELL_CARRIER IN (SELECT  RBSLOCALCELL_FDN||':'||RBSLOCALCELL_ID||':'||RBSLOCALCELL_CARRIER FROM   DIM_E_RAN_RBSLOCALCELL_CURRENT_DC )
+go
+
+print "Inserting data from CURRENT table to RBSLOCALCELL table with updated values."
+INSERT INTO DIM_E_RAN_RBSLOCALCELL  select * from  DIM_E_RAN_RBSLOCALCELL_CURRENT_DC 
+go
+
+
+print "Update the SEQUENCE_INDEX as 1 for 13A entries."
+Update  DIM_E_RAN_RBSLOCALCELL  set  SEQUENCE_INDEX = '1'  where  SEQUENCE_INDEX is null 
+go
+quit
+
+
+EOISQL
+echo "Dropped temp1"
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dc;pwd=${DWHDBPASSWORD};eng=dwhdb;links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Executing  remove_duplicates_DIM_E_GRAN_TG script.." 
+
+${SYBASE_IQ_PATH} -Udc -P${DWHDBPASSWORD} -Sdwhdb <<EOISQL
+select * into #DIM_E_GRAN_TG_copy from DIM_E_GRAN_TG
+go           
+print "Taking backup from DIM_E_GRAN_TG to #DIM_E_GRAN_TG_copy"
+
+delete from DIM_E_GRAN_TG 
+go       
+print "Removing entries DIM_E_GRAN_TG"
+
+Insert into DIM_E_GRAN_TG(OSS_ID,TG_NAME,STN_NAME,BSC,SCGR,TG_TRANS,BTSME,VENDOR,STATUS,CREATED,MODIFIED,MODIFIER)Select OSS_ID,TG_NAME,STN_NAME,BSC,SCGR,TG_TRANS,BTSME,VENDOR,STATUS,max(Created) as CREATED,max(MODIFIED) as MODIFIED,MODIFIER FROM #DIM_E_GRAN_TG_copy where OSS_ID+TG_NAME+BSC IN (select distinct OSS_ID+TG_NAME+BSC from #DIM_E_GRAN_TG_copy) group by OSS_ID,TG_NAME,STN_NAME,BSC,SCGR,TG_TRANS,BTSME,VENDOR,STATUS,MODIFIER
+go
+print "Inserting data into DIM_E_GRAN_TG"
+
+drop table #DIM_E_GRAN_TG_copy
+go
+EOISQL
+echo "Dropped #DIM_E_GRAN_TG_copy"
+
+
+#--------------------------------------------------------------------
+#Creating Stored procedures. 
+#--------------------------------------------------------------------
+DWH_CONN_STR_USER_DBA="uid=dc;pwd=${DWHDBPASSWORD};eng=dwhdb;links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+echo "Executing  retain_histdata_DIM_E_LTE_EUCELL_CELL.bsh script.." 
+
+${SYBASE_IQ_PATH} -Udc -P${DWHDBPASSWORD} -Sdwhdb <<EOISQL
+print "Deleting entries from DIM_E_LTE_EUCELL_CELL"
+
+delete from DIM_E_LTE_EUCELL_CELL
+go
+
+print "Popultaing entries into DIM_E_LTE_EUCELL_CELL"
+
+Insert into DIM_E_LTE_EUCELL_CELL(OSS_ID,EUTRANCELL_FDN,CELL_TYPE,ERBS_ID,ENodeBFunction,EUtranCellId,CELL_ID,tac,earfcndl,earfcnul,earfcn,userLabel,hostingDigitalUnit,noOfPucchCqiUsers,noOfPucchSrUsers,cellRange,ulChannelBandwidth,pdcchCfiMode,VENDOR,STATUS,CREATED,MODIFIED,MODIFIER)Select distinct OSS_ID,EUTRANCELL_FDN,CELL_TYPE,ERBS_ID,ENodeBFunction,EUtranCellId,CELL_ID,tac,earfcndl,earfcnul,earfcn,userLabel,
+hostingDigitalUnit,noOfPucchCqiUsers,noOfPucchSrUsers,cellRange,ulChannelBandwidth,pdcchCfiMode,VENDOR,STATUS,CREATED,MODIFIED,MODIFIER FROM DIM_E_LTE_EUCELL  where ROWID(DIM_E_LTE_EUCELL) IN(  SELECT MIN(ROWID(DIM_E_LTE_EUCELL))rownumber FROM DIM_E_LTE_EUCELL group by EUTRANCELL_FDN) AND MODIFIED IN (select max(MODIFIED) from DIM_E_LTE_EUCELL group by OSS_ID,EUTRANCELL_FDN,EUtranCellId,ERBS_ID)
+go
+
+print "Executing the script,restoring the historical data "
+
+EOISQL
+

@@ -1,0 +1,29 @@
+<project name="3GPP32435" default="test_all">
+    <property name="module.name" value="3GPP32435"/>
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.build" value="${module.3GPP32435.build}"/>
+    <property name="module.base" value="${module.3GPP32435.base}"/>
+    <property name="module.dependants" value="${module.3GPP32435.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+
+    <path id="3GPP32435.lib.classpath">
+        <path refid="plaform.lib.classpath"/>
+        <path location="${module.common_utilities.pkg}"/>
+        <path location="${module.parser.pkg}"/>
+		<path location="${module.repository.pkg}"/>
+    	<path location="${module.engine.pkg}"/>
+    	<path location="${module.testhelper.pkg}"/>
+        <path location="${module.helpclass.pkg}"/>
+    	<path location="${module.junit.pkg}"/>
+    	<path location="${eniq_3pp.apache.xerces_parser.pkg}"/>
+    	
+    </path>
+    <path id="3GPP32435.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="3GPP32435.lib.classpath"/>
+        <path location="${eniq.plat.base}/adapters/dev/3GPP32435/"/>
+    </path>
+</project>

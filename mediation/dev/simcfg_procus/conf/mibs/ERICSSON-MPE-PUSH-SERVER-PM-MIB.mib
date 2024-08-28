@@ -1,0 +1,3508 @@
+ERICSSON-MPE-PUSH-SERVER-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpePushServerPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201603231116Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Alarms and Counters for Push Server."
+::= { mpeModules 35 }
+
+pushServerPmObjects  OBJECT IDENTIFIER ::= { mpePushServerPmModule 1 }
+
+pANMT1Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 1 }
+
+pANMT2Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 2 }
+
+pANMT3Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 3 }
+
+pANMT4Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 4 }
+
+pANMT5Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 5 }
+
+pANMT6Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 6 }
+
+pANMT7Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 7 }
+
+pANMT8Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 8 }
+
+pANMT9Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 9 }
+
+pANMT10Cnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 10 }
+
+pANAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 11 }
+
+pAFCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 12 }
+
+pAFAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 13 }
+
+pSRCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 14 }
+
+pSRAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 15 }
+
+pANMT1StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 16 }
+
+pANMT2StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 17 }
+
+pANMT3StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 18 }
+
+pANMT4StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 19 }
+
+pANMT5StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 20 }
+
+pANMT6StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 21 }
+
+pANMT7StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 22 }
+
+pANMT8StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 23 }
+
+pANMT9StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 24 }
+
+pANMT10StatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 25 }
+
+pANDropAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 26 }
+
+sGRCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 27 }
+
+sGAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 28 }
+
+sSMTPRCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 29 }
+
+sSMTPStatCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 30 }
+
+sSMTPAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 31 }
+
+sAICnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 32 }
+
+sTCCnt  OBJECT IDENTIFIER ::= { pushServerPmObjects 33 }
+
+sRmtAlarm  OBJECT IDENTIFIER ::= { pushServerPmObjects 34 }
+
+sRetryDB  OBJECT IDENTIFIER ::= { pushServerPmObjects 35 }
+
+pushServerPmConformance  OBJECT IDENTIFIER ::= { mpePushServerPmModule 3 }
+
+pushServerPmGroups  OBJECT IDENTIFIER ::= { pushServerPmConformance 1 }
+
+pushServerPmCompliances  OBJECT IDENTIFIER ::= { pushServerPmConformance 2 }
+
+pANMT1CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT1CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT1Cnt 1 } 
+
+pANMT1CntEntry OBJECT-TYPE
+   SYNTAX          PANMT1CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 1."
+   INDEX { applIndex }
+::= { pANMT1CntTable  1 }
+
+PANMT1CntEntry  ::= SEQUENCE
+{
+   pANMT1CntSC0   Counter32,
+   pANMT1CntSC1   Counter32,
+   pANMT1CntSC2   Counter32,
+   pANMT1CntSC3   Counter32,
+   pANMT1CntSC4   Counter32,
+   pANMT1CntSC5   Counter32,
+   pANMT1CntSC6   Counter32,
+   pANMT1CntSC7   Counter32,
+   pANMT1CntSC8   Counter32,
+   pANMT1CntSC10  Counter32,
+   pANMT1CntSC255 Counter32,
+   pANMT1CntLink  Counter32
+}
+
+pANMT1CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 2 }
+
+pANMT1CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 3 }
+
+pANMT1CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 4 }
+
+pANMT1CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 5 }
+
+pANMT1CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 6 }
+
+pANMT1CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 7 }
+
+pANMT1CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 8 }
+
+pANMT1CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 9 }
+
+pANMT1CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 10 }
+
+pANMT1CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 11 }
+
+pANMT1CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 12 }
+
+pANMT1CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1CntEntry 13 }
+
+pANMT2CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT2CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT2Cnt 1 } 
+
+pANMT2CntEntry OBJECT-TYPE
+   SYNTAX          PANMT2CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 2."
+   INDEX { applIndex }
+::= { pANMT2CntTable  1 }
+
+PANMT2CntEntry  ::= SEQUENCE
+{
+   pANMT2CntSC0   Counter32,
+   pANMT2CntSC1   Counter32,
+   pANMT2CntSC2   Counter32,
+   pANMT2CntSC3   Counter32,
+   pANMT2CntSC4   Counter32,
+   pANMT2CntSC5   Counter32,
+   pANMT2CntSC6   Counter32,
+   pANMT2CntSC7   Counter32,
+   pANMT2CntSC8   Counter32,
+   pANMT2CntSC10  Counter32,
+   pANMT2CntSC255 Counter32,
+   pANMT2CntLink  Counter32
+}
+
+pANMT2CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 2 }
+
+pANMT2CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 3 }
+
+pANMT2CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 4 }
+
+pANMT2CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 5 }
+
+pANMT2CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 6 }
+
+pANMT2CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 7 }
+
+pANMT2CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 8 }
+
+pANMT2CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 9 }
+
+pANMT2CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 10 }
+
+pANMT2CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 11 }
+
+pANMT2CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 12 }
+
+pANMT2CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2CntEntry 13 }
+
+pANMT3CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT3CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT3Cnt 1 } 
+
+pANMT3CntEntry OBJECT-TYPE
+   SYNTAX          PANMT3CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 3."
+   INDEX { applIndex }
+::= { pANMT3CntTable  1 }
+
+PANMT3CntEntry  ::= SEQUENCE
+{
+   pANMT3CntSC0   Counter32,
+   pANMT3CntSC1   Counter32,
+   pANMT3CntSC2   Counter32,
+   pANMT3CntSC3   Counter32,
+   pANMT3CntSC4   Counter32,
+   pANMT3CntSC5   Counter32,
+   pANMT3CntSC6   Counter32,
+   pANMT3CntSC7   Counter32,
+   pANMT3CntSC8   Counter32,
+   pANMT3CntSC10  Counter32,
+   pANMT3CntSC255 Counter32,
+   pANMT3CntLink  Counter32
+}
+
+pANMT3CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 2 }
+
+pANMT3CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 3 }
+
+pANMT3CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 4 }
+
+pANMT3CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 5 }
+
+pANMT3CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 6 }
+
+pANMT3CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 7 }
+
+pANMT3CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 8 }
+
+pANMT3CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 9 }
+
+pANMT3CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 10 }
+
+pANMT3CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 11 }
+
+pANMT3CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 12 }
+
+pANMT3CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3CntEntry 13 }
+
+pANMT4CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT4CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT4Cnt 1 } 
+
+pANMT4CntEntry OBJECT-TYPE
+   SYNTAX          PANMT4CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 4."
+   INDEX { applIndex }
+::= { pANMT4CntTable  1 }
+
+PANMT4CntEntry  ::= SEQUENCE
+{
+   pANMT4CntSC0   Counter32,
+   pANMT4CntSC1   Counter32,
+   pANMT4CntSC2   Counter32,
+   pANMT4CntSC3   Counter32,
+   pANMT4CntSC4   Counter32,
+   pANMT4CntSC5   Counter32,
+   pANMT4CntSC6   Counter32,
+   pANMT4CntSC7   Counter32,
+   pANMT4CntSC8   Counter32,
+   pANMT4CntSC10  Counter32,
+   pANMT4CntSC255 Counter32,
+   pANMT4CntLink  Counter32
+}
+
+pANMT4CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 2 }
+
+pANMT4CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 3 }
+
+pANMT4CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 4 }
+
+pANMT4CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 5 }
+
+pANMT4CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 6 }
+
+pANMT4CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 7 }
+
+pANMT4CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 8 }
+
+pANMT4CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 9 }
+
+pANMT4CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 10 }
+
+pANMT4CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 11 }
+
+pANMT4CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 12 }
+
+pANMT4CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4CntEntry 13 }
+
+pANMT5CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT5CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT5Cnt 1 } 
+
+pANMT5CntEntry OBJECT-TYPE
+   SYNTAX          PANMT5CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 5."
+   INDEX { applIndex }
+::= { pANMT5CntTable  1 }
+
+PANMT5CntEntry  ::= SEQUENCE
+{
+   pANMT5CntSC0   Counter32,
+   pANMT5CntSC1   Counter32,
+   pANMT5CntSC2   Counter32,
+   pANMT5CntSC3   Counter32,
+   pANMT5CntSC4   Counter32,
+   pANMT5CntSC5   Counter32,
+   pANMT5CntSC6   Counter32,
+   pANMT5CntSC7   Counter32,
+   pANMT5CntSC8   Counter32,
+   pANMT5CntSC10  Counter32,
+   pANMT5CntSC255 Counter32,
+   pANMT5CntLink  Counter32
+}
+
+pANMT5CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 2 }
+
+pANMT5CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 3 }
+
+pANMT5CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 4 }
+
+pANMT5CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 5 }
+
+pANMT5CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 6 }
+
+pANMT5CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 7 }
+
+pANMT5CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 8 }
+
+pANMT5CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 9 }
+
+pANMT5CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 10 }
+
+pANMT5CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 11 }
+
+pANMT5CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 12 }
+
+pANMT5CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5CntEntry 13 }
+
+pANMT6CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT6CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT6Cnt 1 } 
+
+pANMT6CntEntry OBJECT-TYPE
+   SYNTAX          PANMT6CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 6."
+   INDEX { applIndex }
+::= { pANMT6CntTable  1 }
+
+PANMT6CntEntry  ::= SEQUENCE
+{
+   pANMT6CntSC0   Counter32,
+   pANMT6CntSC1   Counter32,
+   pANMT6CntSC2   Counter32,
+   pANMT6CntSC3   Counter32,
+   pANMT6CntSC4   Counter32,
+   pANMT6CntSC5   Counter32,
+   pANMT6CntSC6   Counter32,
+   pANMT6CntSC7   Counter32,
+   pANMT6CntSC8   Counter32,
+   pANMT6CntSC10  Counter32,
+   pANMT6CntSC255 Counter32,
+   pANMT6CntLink  Counter32
+}
+
+pANMT6CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 2 }
+
+pANMT6CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 3 }
+
+pANMT6CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 4 }
+
+pANMT6CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 5 }
+
+pANMT6CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 6 }
+
+pANMT6CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 7 }
+
+pANMT6CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 8 }
+
+pANMT6CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 9 }
+
+pANMT6CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 10 }
+
+pANMT6CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 11 }
+
+pANMT6CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 12 }
+
+pANMT6CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6CntEntry 13 }
+
+pANMT7CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT7CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT7Cnt 1 } 
+
+pANMT7CntEntry OBJECT-TYPE
+   SYNTAX          PANMT7CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 7."
+   INDEX { applIndex }
+::= { pANMT7CntTable  1 }
+
+PANMT7CntEntry  ::= SEQUENCE
+{
+   pANMT7CntSC0   Counter32,
+   pANMT7CntSC1   Counter32,
+   pANMT7CntSC2   Counter32,
+   pANMT7CntSC3   Counter32,
+   pANMT7CntSC4   Counter32,
+   pANMT7CntSC5   Counter32,
+   pANMT7CntSC6   Counter32,
+   pANMT7CntSC7   Counter32,
+   pANMT7CntSC8   Counter32,
+   pANMT7CntSC10  Counter32,
+   pANMT7CntSC255 Counter32,
+   pANMT7CntLink  Counter32
+}
+
+pANMT7CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 2 }
+
+pANMT7CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 3 }
+
+pANMT7CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 4 }
+
+pANMT7CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 5 }
+
+pANMT7CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 6 }
+
+pANMT7CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 7 }
+
+pANMT7CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 8 }
+
+pANMT7CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 9 }
+
+pANMT7CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 10 }
+
+pANMT7CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 11 }
+
+pANMT7CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 12 }
+
+pANMT7CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7CntEntry 13 }
+
+pANMT8CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT8CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT8Cnt 1 } 
+
+pANMT8CntEntry OBJECT-TYPE
+   SYNTAX          PANMT8CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 8."
+   INDEX { applIndex }
+::= { pANMT8CntTable  1 }
+
+PANMT8CntEntry  ::= SEQUENCE
+{
+   pANMT8CntSC0   Counter32,
+   pANMT8CntSC1   Counter32,
+   pANMT8CntSC2   Counter32,
+   pANMT8CntSC3   Counter32,
+   pANMT8CntSC4   Counter32,
+   pANMT8CntSC5   Counter32,
+   pANMT8CntSC6   Counter32,
+   pANMT8CntSC7   Counter32,
+   pANMT8CntSC8   Counter32,
+   pANMT8CntSC10  Counter32,
+   pANMT8CntSC255 Counter32,
+   pANMT8CntLink  Counter32
+}
+
+pANMT8CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 2 }
+
+pANMT8CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 3 }
+
+pANMT8CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 4 }
+
+pANMT8CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 5 }
+
+pANMT8CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 6 }
+
+pANMT8CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 7 }
+
+pANMT8CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 8 }
+
+pANMT8CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 9 }
+
+pANMT8CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 10 }
+
+pANMT8CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 11 }
+
+pANMT8CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 12 }
+
+pANMT8CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8CntEntry 13 }
+
+pANMT9CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT9CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT9Cnt 1 } 
+
+pANMT9CntEntry OBJECT-TYPE
+   SYNTAX          PANMT9CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 9."
+   INDEX { applIndex }
+::= { pANMT9CntTable  1 }
+
+PANMT9CntEntry  ::= SEQUENCE
+{
+   pANMT9CntSC0   Counter32,
+   pANMT9CntSC1   Counter32,
+   pANMT9CntSC2   Counter32,
+   pANMT9CntSC3   Counter32,
+   pANMT9CntSC4   Counter32,
+   pANMT9CntSC5   Counter32,
+   pANMT9CntSC6   Counter32,
+   pANMT9CntSC7   Counter32,
+   pANMT9CntSC8   Counter32,
+   pANMT9CntSC10  Counter32,
+   pANMT9CntSC255 Counter32,
+   pANMT9CntLink  Counter32
+}
+
+pANMT9CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 2 }
+
+pANMT9CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 3 }
+
+pANMT9CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 4 }
+
+pANMT9CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 5 }
+
+pANMT9CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 6 }
+
+pANMT9CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 7 }
+
+pANMT9CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 8 }
+
+pANMT9CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 9 }
+
+pANMT9CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 10 }
+
+pANMT9CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 11 }
+
+pANMT9CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 12 }
+
+pANMT9CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9CntEntry 13 }
+
+pANMT10CntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT10CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT10Cnt 1 } 
+
+pANMT10CntEntry OBJECT-TYPE
+   SYNTAX          PANMT10CntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server APNS Notification for 
+                    Message Type 10."
+   INDEX { applIndex }
+::= { pANMT10CntTable  1 }
+
+PANMT10CntEntry  ::= SEQUENCE
+{
+   pANMT10CntSC0   Counter32,
+   pANMT10CntSC1   Counter32,
+   pANMT10CntSC2   Counter32,
+   pANMT10CntSC3   Counter32,
+   pANMT10CntSC4   Counter32,
+   pANMT10CntSC5   Counter32,
+   pANMT10CntSC6   Counter32,
+   pANMT10CntSC7   Counter32,
+   pANMT10CntSC8   Counter32,
+   pANMT10CntSC10  Counter32,
+   pANMT10CntSC255 Counter32,
+   pANMT10CntLink  Counter32
+}
+
+pANMT10CntSC0  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 0 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 2 }
+
+pANMT10CntSC1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 1 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 3 }
+
+pANMT10CntSC2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 2 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 4 }
+
+pANMT10CntSC3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 3 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 5 }
+
+pANMT10CntSC4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 4 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 6 }
+
+pANMT10CntSC5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 5 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 7 }
+
+pANMT10CntSC6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 6 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 8 }
+
+pANMT10CntSC7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 7 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 9 }
+
+pANMT10CntSC8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 8 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 10 }
+
+pANMT10CntSC10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 10 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 11 }
+
+pANMT10CntSC255  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 12 }
+
+pANMT10CntLink  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Status Code 255 from APNS for 
+                    Notification for Message Type 10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10CntEntry 13 }
+
+pANAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANAlarm 1 } 
+
+pANAlarmEntry OBJECT-TYPE
+   SYNTAX          PANAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for Push Server notificates to APNS failed."
+   INDEX { applIndex }
+::= { pANAlarmTable  1 }
+
+PANAlarmEntry  ::= SEQUENCE
+{
+   pANAlarmFailed ItuPerceivedSeverity
+}
+
+pANAlarmFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server notificates to APNS failed or Push Server 
+                    configuration error."
+::= { pANAlarmEntry 2 }
+
+pAFCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PAFCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pAFCnt 1 } 
+
+pAFCntEntry OBJECT-TYPE
+   SYNTAX          PAFCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server gets Feedback from APNS."
+   INDEX { applIndex }
+::= { pAFCntTable  1 }
+
+PAFCntEntry  ::= SEQUENCE
+{
+   pAFCntMT1  Counter32,
+   pAFCntMT2  Counter32,
+   pAFCntMT3  Counter32,
+   pAFCntMT4  Counter32,
+   pAFCntMT5  Counter32,
+   pAFCntMT6  Counter32,
+   pAFCntMT7  Counter32,
+   pAFCntMT8  Counter32,
+   pAFCntMT9  Counter32,
+   pAFCntMT10 Counter32
+}
+
+pAFCntMT1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    1.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 2 }
+
+pAFCntMT2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    2.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 3 }
+
+pAFCntMT3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    3.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 4 }
+
+pAFCntMT4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    4.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 5 }
+
+pAFCntMT5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    5.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 6 }
+
+pAFCntMT6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    6.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 7 }
+
+pAFCntMT7  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    7.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 8 }
+
+pAFCntMT8  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    8.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 9 }
+
+pAFCntMT9  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    9.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 10 }
+
+pAFCntMT10  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server get Feedback from APNS for Message Type 
+                    10.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pAFCntEntry 11 }
+
+pAFAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PAFAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pAFAlarm 1 } 
+
+pAFAlarmEntry OBJECT-TYPE
+   SYNTAX          PAFAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for Push Server gets Feedback from APNS 
+                    failed."
+   INDEX { applIndex }
+::= { pAFAlarmTable  1 }
+
+PAFAlarmEntry  ::= SEQUENCE
+{
+   pAFAlarmFailed ItuPerceivedSeverity
+}
+
+pAFAlarmFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server gets Feedback from APNS failed or Push 
+                    Server configuration error."
+::= { pAFAlarmEntry 2 }
+
+pSRCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PSRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pSRCnt 1 } 
+
+pSRCntEntry OBJECT-TYPE
+   SYNTAX          PSRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Push Server gets response from SES."
+   INDEX { applIndex }
+::= { pSRCntTable  1 }
+
+PSRCntEntry  ::= SEQUENCE
+{
+   pSRCntGIBM0to1kms         Counter32,
+   pSRCntGIBM1001to5kms      Counter32,
+   pSRCntGIBM5001to10kms     Counter32,
+   pSRCntGIBM10001toTimeout  Counter32,
+   pSRCntGIBMOverTimeout     Counter32,
+   pSRCntGDTBI0to1kms        Counter32,
+   pSRCntGDTBI1001to5kms     Counter32,
+   pSRCntGDTBI5001to10kms    Counter32,
+   pSRCntGDTBI10001toTimeout Counter32,
+   pSRCntGDTBIOverTimeout    Counter32,
+   pSRCntUA0to1kms           Counter32,
+   pSRCntUA1001to5kms        Counter32,
+   pSRCntUA5001to10kms       Counter32,
+   pSRCntUA10001toTimeout    Counter32,
+   pSRCntUAOverTimeout       Counter32,
+   pSRCntQA0to1kms           Counter32,
+   pSRCntQA1001to5kms        Counter32,
+   pSRCntQA5001to10kms       Counter32,
+   pSRCntQA10001toTimeout    Counter32,
+   pSRCntQAOverTimeout       Counter32,
+   pSRCntSC0to199            Counter32,
+   pSRCntSC200               Counter32,
+   pSRCntSC201to299          Counter32,
+   pSRCntSC300to399          Counter32,
+   pSRCntSC400to499          Counter32,
+   pSRCntSC500to599          Counter32
+}
+
+pSRCntGIBM0to1kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get IMSI By MSISDN gets response from SES in 0 to 1k 
+                    ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 2 }
+
+pSRCntGIBM1001to5kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get IMSI By MSISDN gets response from SES in 1001 to 
+                    5k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 3 }
+
+pSRCntGIBM5001to10kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get IMSI By MSISDN gets response from SES in 5001 to 
+                    10k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 4 }
+
+pSRCntGIBM10001toTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get IMSI By MSISDN gets response from SES in 10001 to 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 5 }
+
+pSRCntGIBMOverTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get IMSI By MSISDN gets response from SES over 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 6 }
+
+pSRCntGDTBI0to1kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get Device Type By IMSI gets response from SES in 0 
+                    to 1k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 7 }
+
+pSRCntGDTBI1001to5kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get Device Type By IMSI gets response from SES in 
+                    1001 to 5k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 8 }
+
+pSRCntGDTBI5001to10kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get Device Type By IMSI gets response from SES in 
+                    5001 to 10k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 9 }
+
+pSRCntGDTBI10001toTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get Device Type By IMSI gets response from SES in 
+                    10001 to Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 10 }
+
+pSRCntGDTBIOverTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Get Device Type By IMSI gets response from SES over 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 11 }
+
+pSRCntUA0to1kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Update APNS Push Server gets response from SES in 0 
+                    to 1k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 12 }
+
+pSRCntUA1001to5kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Update APNS Push Server gets response from SES in 
+                    1001 to 5k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 13 }
+
+pSRCntUA5001to10kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Update APNS Push Server gets response from SES in 
+                    5001 to 10k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 14 }
+
+pSRCntUA10001toTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Update APNS Push Server gets response from SES in 
+                    10001 to Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 15 }
+
+pSRCntUAOverTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Update APNS Push Server gets response from SES over 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 16 }
+
+pSRCntQA0to1kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Query APNS Push Server gets response from SES in 0 to 
+                    1k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 17 }
+
+pSRCntQA1001to5kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Query APNS Push Server gets response from SES in 1001 
+                    to 5k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 18 }
+
+pSRCntQA5001to10kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Query APNS Push Server gets response from SES in 5001 
+                    to 10k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 19 }
+
+pSRCntQA10001toTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Query APNS Push Server gets response from SES in 
+                    10001 to Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 20 }
+
+pSRCntQAOverTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Query APNS Push Server gets response from SES over 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 21 }
+
+pSRCntSC0to199  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 0 to 199.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 22 }
+
+pSRCntSC200  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 200.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 23 }
+
+pSRCntSC201to299  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 201 to 299.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 24 }
+
+pSRCntSC300to399  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 300 to 399.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 25 }
+
+pSRCntSC400to499  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 400 to 499.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 26 }
+
+pSRCntSC500to599  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from SES in 500 to 599.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pSRCntEntry 27 }
+
+pSRAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PSRAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pSRAlarm 1 } 
+
+pSRAlarmEntry OBJECT-TYPE
+   SYNTAX          PSRAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for Push Server connects to SES failed."
+   INDEX { applIndex }
+::= { pSRAlarmTable  1 }
+
+PSRAlarmEntry  ::= SEQUENCE
+{
+   pSRAlarmFailed ItuPerceivedSeverity
+}
+
+pSRAlarmFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server connects to SES failed or Push Server 
+                    configuration error."
+::= { pSRAlarmEntry 2 }
+
+pANMT1StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT1StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT1StatCnt 1 } 
+
+pANMT1StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT1StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 1."
+   INDEX { applIndex }
+::= { pANMT1StatCntTable  1 }
+
+PANMT1StatCntEntry  ::= SEQUENCE
+{
+   pANMT1StatCntInco Counter32,
+   pANMT1StatCntSucc Counter32,
+   pANMT1StatCntDrop Counter32
+}
+
+pANMT1StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 1 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1StatCntEntry 2 }
+
+pANMT1StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 1 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1StatCntEntry 3 }
+
+pANMT1StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 1 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT1StatCntEntry 4 }
+
+pANMT2StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT2StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT2StatCnt 1 } 
+
+pANMT2StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT2StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 2."
+   INDEX { applIndex }
+::= { pANMT2StatCntTable  1 }
+
+PANMT2StatCntEntry  ::= SEQUENCE
+{
+   pANMT2StatCntInco Counter32,
+   pANMT2StatCntSucc Counter32,
+   pANMT2StatCntDrop Counter32
+}
+
+pANMT2StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 2 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2StatCntEntry 2 }
+
+pANMT2StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 2 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2StatCntEntry 3 }
+
+pANMT2StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 2 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT2StatCntEntry 4 }
+
+pANMT3StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT3StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT3StatCnt 1 } 
+
+pANMT3StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT3StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 3."
+   INDEX { applIndex }
+::= { pANMT3StatCntTable  1 }
+
+PANMT3StatCntEntry  ::= SEQUENCE
+{
+   pANMT3StatCntInco Counter32,
+   pANMT3StatCntSucc Counter32,
+   pANMT3StatCntDrop Counter32
+}
+
+pANMT3StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 3 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3StatCntEntry 2 }
+
+pANMT3StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 3 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3StatCntEntry 3 }
+
+pANMT3StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 3 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT3StatCntEntry 4 }
+
+pANMT4StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT4StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT4StatCnt 1 } 
+
+pANMT4StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT4StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 4."
+   INDEX { applIndex }
+::= { pANMT4StatCntTable  1 }
+
+PANMT4StatCntEntry  ::= SEQUENCE
+{
+   pANMT4StatCntInco Counter32,
+   pANMT4StatCntSucc Counter32,
+   pANMT4StatCntDrop Counter32
+}
+
+pANMT4StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 4 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4StatCntEntry 2 }
+
+pANMT4StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 4 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4StatCntEntry 3 }
+
+pANMT4StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 4 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT4StatCntEntry 4 }
+
+pANMT5StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT5StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT5StatCnt 1 } 
+
+pANMT5StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT5StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 5."
+   INDEX { applIndex }
+::= { pANMT5StatCntTable  1 }
+
+PANMT5StatCntEntry  ::= SEQUENCE
+{
+   pANMT5StatCntInco Counter32,
+   pANMT5StatCntSucc Counter32,
+   pANMT5StatCntDrop Counter32
+}
+
+pANMT5StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 5 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5StatCntEntry 2 }
+
+pANMT5StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 5 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5StatCntEntry 3 }
+
+pANMT5StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 5 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT5StatCntEntry 4 }
+
+pANMT6StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT6StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT6StatCnt 1 } 
+
+pANMT6StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT6StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 6."
+   INDEX { applIndex }
+::= { pANMT6StatCntTable  1 }
+
+PANMT6StatCntEntry  ::= SEQUENCE
+{
+   pANMT6StatCntInco Counter32,
+   pANMT6StatCntSucc Counter32,
+   pANMT6StatCntDrop Counter32
+}
+
+pANMT6StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 6 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6StatCntEntry 2 }
+
+pANMT6StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 6 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6StatCntEntry 3 }
+
+pANMT6StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 6 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT6StatCntEntry 4 }
+
+pANMT7StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT7StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT7StatCnt 1 } 
+
+pANMT7StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT7StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 7."
+   INDEX { applIndex }
+::= { pANMT7StatCntTable  1 }
+
+PANMT7StatCntEntry  ::= SEQUENCE
+{
+   pANMT7StatCntInco Counter32,
+   pANMT7StatCntSucc Counter32,
+   pANMT7StatCntDrop Counter32
+}
+
+pANMT7StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 7 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7StatCntEntry 2 }
+
+pANMT7StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 7 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7StatCntEntry 3 }
+
+pANMT7StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 7 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT7StatCntEntry 4 }
+
+pANMT8StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT8StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT8StatCnt 1 } 
+
+pANMT8StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT8StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 8."
+   INDEX { applIndex }
+::= { pANMT8StatCntTable  1 }
+
+PANMT8StatCntEntry  ::= SEQUENCE
+{
+   pANMT8StatCntInco Counter32,
+   pANMT8StatCntSucc Counter32,
+   pANMT8StatCntDrop Counter32
+}
+
+pANMT8StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 8 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8StatCntEntry 2 }
+
+pANMT8StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 8 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8StatCntEntry 3 }
+
+pANMT8StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 8 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT8StatCntEntry 4 }
+
+pANMT9StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT9StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT9StatCnt 1 } 
+
+pANMT9StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT9StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 9."
+   INDEX { applIndex }
+::= { pANMT9StatCntTable  1 }
+
+PANMT9StatCntEntry  ::= SEQUENCE
+{
+   pANMT9StatCntInco Counter32,
+   pANMT9StatCntSucc Counter32,
+   pANMT9StatCntDrop Counter32
+}
+
+pANMT9StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 9 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9StatCntEntry 2 }
+
+pANMT9StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 9 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9StatCntEntry 3 }
+
+pANMT9StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 9 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT9StatCntEntry 4 }
+
+pANMT10StatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANMT10StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANMT10StatCnt 1 } 
+
+pANMT10StatCntEntry OBJECT-TYPE
+   SYNTAX          PANMT10StatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server APNS Notification for 
+                    Message Type 8."
+   INDEX { applIndex }
+::= { pANMT10StatCntTable  1 }
+
+PANMT10StatCntEntry  ::= SEQUENCE
+{
+   pANMT10StatCntInco Counter32,
+   pANMT10StatCntSucc Counter32,
+   pANMT10StatCntDrop Counter32
+}
+
+pANMT10StatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming Type 10 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10StatCntEntry 2 }
+
+pANMT10StatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Successful Type 10 APNS 
+                    Notification Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10StatCntEntry 3 }
+
+pANMT10StatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of Dropped Type 10 APNS Notification 
+                    Message.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pANMT10StatCntEntry 4 }
+
+pANDropAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PANDropAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { pANDropAlarm 1 } 
+
+pANDropAlarmEntry OBJECT-TYPE
+   SYNTAX          PANDropAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for Push Server notificates to APNS drop rate 
+                    exceeds threshold."
+   INDEX { applIndex }
+::= { pANDropAlarmTable  1 }
+
+PANDropAlarmEntry  ::= SEQUENCE
+{
+   pANDropAlarmExceed ItuPerceivedSeverity
+}
+
+pANDropAlarmExceed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Push Server notificates to APNS drop rate exceeds 
+                    threshold."
+::= { pANDropAlarmEntry 2 }
+
+sGRCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SGRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sGRCnt 1 } 
+
+sGRCntEntry OBJECT-TYPE
+   SYNTAX          SGRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SPP get the response from GCM."
+   INDEX { applIndex }
+::= { sGRCntTable  1 }
+
+SGRCntEntry  ::= SEQUENCE
+{
+   sGRCntPN0to1kms        Counter32,
+   sGRCntPN1001to5kms     Counter32,
+   sGRCntPN5001to10kms    Counter32,
+   sGRCntPN10001toTimeout Counter32,
+   sGRCntPNOverTimeout    Counter32,
+   sGRCntSC0to199         Counter32,
+   sGRCntSC200            Counter32,
+   sGRCntSC201to299       Counter32,
+   sGRCntSC300to399       Counter32,
+   sGRCntSC400to499       Counter32,
+   sGRCntSC500to599       Counter32
+}
+
+sGRCntPN0to1kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from GCM for Push Notification in 0 
+                    to 1k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 2 }
+
+sGRCntPN1001to5kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from GCM for Push Notification in 
+                    1001 to 5k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 3 }
+
+sGRCntPN5001to10kms  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from GCM for Push Notification in 
+                    5001 to 10k ms.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 4 }
+
+sGRCntPN10001toTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from GCM for Push Notification in 
+                    10001 to Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 5 }
+
+sGRCntPNOverTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from GCM for Push Notification over 
+                    Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 6 }
+
+sGRCntSC0to199  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 0 to 199.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 7 }
+
+sGRCntSC200  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 200.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 8 }
+
+sGRCntSC201to299  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 201 to 299.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 9 }
+
+sGRCntSC300to399  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 300 to 399.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 10 }
+
+sGRCntSC400to499  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 400 to 499.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 11 }
+
+sGRCntSC500to599  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Status code from GCM in 500 to 599.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sGRCntEntry 12 }
+
+sGAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SGAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sGAlarm 1 } 
+
+sGAlarmEntry OBJECT-TYPE
+   SYNTAX          SGAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for SPP connects GCM failed."
+   INDEX { applIndex }
+::= { sGAlarmTable  1 }
+
+SGAlarmEntry  ::= SEQUENCE
+{
+   sGAlarmFailed ItuPerceivedSeverity
+}
+
+sGAlarmFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP Connects GCM Failed or SPP and GCM Configuration 
+                    Error."
+::= { sGAlarmEntry 2 }
+
+sSMTPRCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SSMTPRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sSMTPRCnt 1 } 
+
+sSMTPRCntEntry OBJECT-TYPE
+   SYNTAX          SSMTPRCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SPP get the response from Smtp Server."
+   INDEX { applIndex }
+::= { sSMTPRCntTable  1 }
+
+SSMTPRCntEntry  ::= SEQUENCE
+{
+   sSMTPRCntTimeout    Counter32,
+   sSMTPRCntRC201to299 Counter32,
+   sSMTPRCntRC300to399 Counter32,
+   sSMTPRCntRC400to499 Counter32,
+   sSMTPRCntRC500to599 Counter32
+}
+
+sSMTPRCntTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP get response from Smtp Server for Timeout.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPRCntEntry 2 }
+
+sSMTPRCntRC201to299  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Reply code from Smtp Server in 201 to 299.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPRCntEntry 3 }
+
+sSMTPRCntRC300to399  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Reply code from Smtp Server in 300 to 399.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPRCntEntry 4 }
+
+sSMTPRCntRC400to499  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Reply code from Smtp Server in 400 to 499.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPRCntEntry 5 }
+
+sSMTPRCntRC500to599  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Reply code from Smtp Server in 500 to 599.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPRCntEntry 6 }
+
+sSMTPStatCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SSMTPStatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sSMTPStatCnt 1 } 
+
+sSMTPStatCntEntry OBJECT-TYPE
+   SYNTAX          SSMTPStatCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Static Counters for Push Server smtp module."
+   INDEX { applIndex }
+::= { sSMTPStatCntTable  1 }
+
+SSMTPStatCntEntry  ::= SEQUENCE
+{
+   sSMTPStatCntInco Counter32,
+   sSMTPStatCntSucc Counter32,
+   sSMTPStatCntDrop Counter32
+}
+
+sSMTPStatCntInco  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of incoming email.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPStatCntEntry 2 }
+
+sSMTPStatCntSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of success email.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPStatCntEntry 3 }
+
+sSMTPStatCntDrop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Total Number of drop email.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sSMTPStatCntEntry 4 }
+
+sSMTPAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SSMTPAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sSMTPAlarm 1 } 
+
+sSMTPAlarmEntry OBJECT-TYPE
+   SYNTAX          SSMTPAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for SPP connects Smtp Server failed."
+   INDEX { applIndex }
+::= { sSMTPAlarmTable  1 }
+
+SSMTPAlarmEntry  ::= SEQUENCE
+{
+   sSMTPAlarmFailed ItuPerceivedSeverity
+}
+
+sSMTPAlarmFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SPP Connects Smtp Server Failed or SPP and Smtp 
+                    Server Configuration Error."
+::= { sSMTPAlarmEntry 2 }
+
+sAICntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SAICntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sAICnt 1 } 
+
+sAICntEntry OBJECT-TYPE
+   SYNTAX          SAICntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for calling SPP API function."
+   INDEX { applIndex }
+::= { sAICntTable  1 }
+
+SAICntEntry  ::= SEQUENCE
+{
+   sAICntNorthbound Counter32
+}
+
+sAICntNorthbound  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counters for calling SPP Northbound API function.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sAICntEntry 2 }
+
+sTCCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF STCCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 
+                    5=W-HTTP)."
+::= { sTCCnt 1 } 
+
+sTCCntEntry OBJECT-TYPE
+   SYNTAX          STCCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SPP token cache hit performance."
+   INDEX { applIndex }
+::= { sTCCntTable  1 }
+
+STCCntEntry  ::= SEQUENCE
+{
+   sTCCntHit    Counter32,
+   sTCCntNotHit Counter32
+}
+
+sTCCntHit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counters for SPP Token Cache Hit number.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sTCCntEntry 2 }
+
+sTCCntNotHit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counters for SPP Token Cache Not Hit number.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sTCCntEntry 3 }
+
+sRmtAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SRmtAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { sRmtAlarm 1 } 
+
+sRmtAlarmEntry OBJECT-TYPE
+   SYNTAX          SRmtAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for SPP Retry_Message database table."
+   INDEX { applIndex }
+::= { sRmtAlarmTable  1 }
+
+SRmtAlarmEntry  ::= SEQUENCE
+{
+   sRmtAlarmLimitReached ItuPerceivedSeverity
+}
+
+sRmtAlarmLimitReached  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Retry_Message database table size reached Limit."
+::= { sRmtAlarmEntry 2 }
+
+sRetryDBTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SRetryDBEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { sRetryDB 1 } 
+
+sRetryDBEntry OBJECT-TYPE
+   SYNTAX          SRetryDBEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counter for SPD Retry message database records."
+   INDEX { applIndex }
+::= { sRetryDBTable  1 }
+
+SRetryDBEntry  ::= SEQUENCE
+{
+   sRetryDBNum Gauge32
+}
+
+sRetryDBNum  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the record number in redelivery database during 
+                    the sampling interval."
+::= { sRetryDBEntry 2 }
+
+-- Compliance Statements
+
+pushServerCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for push server."
+   MODULE          -- this module
+   MANDATORY-GROUPS {pushServerConfGroup}
+::= { pushServerPmCompliances 1 }
+
+-- Units of Conformance
+
+pushServerConfGroup OBJECT-GROUP
+   OBJECTS { pANMT1CntSC0,
+             pANMT1CntSC1,
+             pANMT1CntSC2,
+             pANMT1CntSC3,
+             pANMT1CntSC4,
+             pANMT1CntSC5,
+             pANMT1CntSC6,
+             pANMT1CntSC7,
+             pANMT1CntSC8,
+             pANMT1CntSC10,
+             pANMT1CntSC255,
+             pANMT1CntLink,
+             pANMT2CntSC0,
+             pANMT2CntSC1,
+             pANMT2CntSC2,
+             pANMT2CntSC3,
+             pANMT2CntSC4,
+             pANMT2CntSC5,
+             pANMT2CntSC6,
+             pANMT2CntSC7,
+             pANMT2CntSC8,
+             pANMT2CntSC10,
+             pANMT2CntSC255,
+             pANMT2CntLink,
+             pANMT3CntSC0,
+             pANMT3CntSC1,
+             pANMT3CntSC2,
+             pANMT3CntSC3,
+             pANMT3CntSC4,
+             pANMT3CntSC5,
+             pANMT3CntSC6,
+             pANMT3CntSC7,
+             pANMT3CntSC8,
+             pANMT3CntSC10,
+             pANMT3CntSC255,
+             pANMT3CntLink,
+             pANMT4CntSC0,
+             pANMT4CntSC1,
+             pANMT4CntSC2,
+             pANMT4CntSC3,
+             pANMT4CntSC4,
+             pANMT4CntSC5,
+             pANMT4CntSC6,
+             pANMT4CntSC7,
+             pANMT4CntSC8,
+             pANMT4CntSC10,
+             pANMT4CntSC255,
+             pANMT4CntLink,
+             pANMT5CntSC0,
+             pANMT5CntSC1,
+             pANMT5CntSC2,
+             pANMT5CntSC3,
+             pANMT5CntSC4,
+             pANMT5CntSC5,
+             pANMT5CntSC6,
+             pANMT5CntSC7,
+             pANMT5CntSC8,
+             pANMT5CntSC10,
+             pANMT5CntSC255,
+             pANMT5CntLink,
+             pANMT6CntSC0,
+             pANMT6CntSC1,
+             pANMT6CntSC2,
+             pANMT6CntSC3,
+             pANMT6CntSC4,
+             pANMT6CntSC5,
+             pANMT6CntSC6,
+             pANMT6CntSC7,
+             pANMT6CntSC8,
+             pANMT6CntSC10,
+             pANMT6CntSC255,
+             pANMT6CntLink,
+             pANMT7CntSC0,
+             pANMT7CntSC1,
+             pANMT7CntSC2,
+             pANMT7CntSC3,
+             pANMT7CntSC4,
+             pANMT7CntSC5,
+             pANMT7CntSC6,
+             pANMT7CntSC7,
+             pANMT7CntSC8,
+             pANMT7CntSC10,
+             pANMT7CntSC255,
+             pANMT7CntLink,
+             pANMT8CntSC0,
+             pANMT8CntSC1,
+             pANMT8CntSC2,
+             pANMT8CntSC3,
+             pANMT8CntSC4,
+             pANMT8CntSC5,
+             pANMT8CntSC6,
+             pANMT8CntSC7,
+             pANMT8CntSC8,
+             pANMT8CntSC10,
+             pANMT8CntSC255,
+             pANMT8CntLink,
+             pANMT9CntSC0,
+             pANMT9CntSC1,
+             pANMT9CntSC2,
+             pANMT9CntSC3,
+             pANMT9CntSC4,
+             pANMT9CntSC5,
+             pANMT9CntSC6,
+             pANMT9CntSC7,
+             pANMT9CntSC8,
+             pANMT9CntSC10,
+             pANMT9CntSC255,
+             pANMT9CntLink,
+             pANMT10CntSC0,
+             pANMT10CntSC1,
+             pANMT10CntSC2,
+             pANMT10CntSC3,
+             pANMT10CntSC4,
+             pANMT10CntSC5,
+             pANMT10CntSC6,
+             pANMT10CntSC7,
+             pANMT10CntSC8,
+             pANMT10CntSC10,
+             pANMT10CntSC255,
+             pANMT10CntLink,
+             pANAlarmFailed,
+             pAFCntMT1,
+             pAFCntMT2,
+             pAFCntMT3,
+             pAFCntMT4,
+             pAFCntMT5,
+             pAFCntMT6,
+             pAFCntMT7,
+             pAFCntMT8,
+             pAFCntMT9,
+             pAFCntMT10,
+             pAFAlarmFailed,
+             pSRCntGIBM0to1kms,
+             pSRCntGIBM1001to5kms,
+             pSRCntGIBM5001to10kms,
+             pSRCntGIBM10001toTimeout,
+             pSRCntGIBMOverTimeout,
+             pSRCntGDTBI0to1kms,
+             pSRCntGDTBI1001to5kms,
+             pSRCntGDTBI5001to10kms,
+             pSRCntGDTBI10001toTimeout,
+             pSRCntGDTBIOverTimeout,
+             pSRCntUA0to1kms,
+             pSRCntUA1001to5kms,
+             pSRCntUA5001to10kms,
+             pSRCntUA10001toTimeout,
+             pSRCntUAOverTimeout,
+             pSRCntQA0to1kms,
+             pSRCntQA1001to5kms,
+             pSRCntQA5001to10kms,
+             pSRCntQA10001toTimeout,
+             pSRCntQAOverTimeout,
+             pSRCntSC0to199,
+             pSRCntSC200,
+             pSRCntSC201to299,
+             pSRCntSC300to399,
+             pSRCntSC400to499,
+             pSRCntSC500to599,
+             pSRAlarmFailed,
+             pANMT1StatCntInco,
+             pANMT1StatCntSucc,
+             pANMT1StatCntDrop,
+             pANMT2StatCntInco,
+             pANMT2StatCntSucc,
+             pANMT2StatCntDrop,
+             pANMT3StatCntInco,
+             pANMT3StatCntSucc,
+             pANMT3StatCntDrop,
+             pANMT4StatCntInco,
+             pANMT4StatCntSucc,
+             pANMT4StatCntDrop,
+             pANMT5StatCntInco,
+             pANMT5StatCntSucc,
+             pANMT5StatCntDrop,
+             pANMT6StatCntInco,
+             pANMT6StatCntSucc,
+             pANMT6StatCntDrop,
+             pANMT7StatCntInco,
+             pANMT7StatCntSucc,
+             pANMT7StatCntDrop,
+             pANMT8StatCntInco,
+             pANMT8StatCntSucc,
+             pANMT8StatCntDrop,
+             pANMT9StatCntInco,
+             pANMT9StatCntSucc,
+             pANMT9StatCntDrop,
+             pANMT10StatCntInco,
+             pANMT10StatCntSucc,
+             pANMT10StatCntDrop,
+             pANDropAlarmExceed,
+             sGRCntPN0to1kms,
+             sGRCntPN1001to5kms,
+             sGRCntPN5001to10kms,
+             sGRCntPN10001toTimeout,
+             sGRCntPNOverTimeout,
+             sGRCntSC0to199,
+             sGRCntSC200,
+             sGRCntSC201to299,
+             sGRCntSC300to399,
+             sGRCntSC400to499,
+             sGRCntSC500to599,
+             sGAlarmFailed,
+             sSMTPRCntTimeout,
+             sSMTPRCntRC201to299,
+             sSMTPRCntRC300to399,
+             sSMTPRCntRC400to499,
+             sSMTPRCntRC500to599,
+             sSMTPStatCntInco,
+             sSMTPStatCntSucc,
+             sSMTPStatCntDrop,
+             sSMTPAlarmFailed,
+             sAICntNorthbound,
+             sTCCntHit,
+             sTCCntNotHit,
+             sRmtAlarmLimitReached,
+             sRetryDBNum}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a push server."
+::= { pushServerPmGroups 1 }
+END

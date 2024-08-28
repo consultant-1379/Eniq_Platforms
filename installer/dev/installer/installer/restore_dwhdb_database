@@ -1,0 +1,449 @@
+#!/usr/sunos/bin/sh
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Restore DWHDB database.
+# This should only be used for restoring the DWHDB database.
+#
+#
+# ----------------------------------------------------------------------
+# Copyright (C) 2010 LM Ericsson Limited.  All rights reserved.
+# ----------------------------------------------------------------------
+ENIQ_BASE_DIR=/eniq
+ENIQ_CORE_DIR=${ENIQ_BASE_DIR}/installation/core_install
+ENIQ_CONF_DIR=${ENIQ_BASE_DIR}/installation/config
+PING=/usr/sbin/ping
+NAWK=/usr/bin/nawk
+
+if [ -z "${CONF_DIR}" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+if [ ! -r "${CONF_DIR}/niq.rc" ] ; then
+  echo "ERROR: Source file is not readable at ${CONF_DIR}/niq.rc"
+  exit 2
+fi
+
+. ${CONF_DIR}/niq.rc
+
+_ip_address_=`cat /etc/hosts |grep engine |$NAWK '{print $1}'`
+if [ ! "${_ip_address_}" ]; then
+    echo "Error: Could not determine ip adress on engine server"
+    exit 1
+fi
+
+_installed_server_type_=`cat ${ENIQ_CONF_DIR}/installed_server_type`
+if [ ! "${_installed_server_type_}" ]; then
+    echo "Error: Could not determine which server type this is"
+    exit 1
+fi
+
+### Function: run_remote_cmd ###
+#
+#Runs a command on a remote sever and returns the return value from the command
+#
+# Arguments:
+#   $1 : hostname/ip
+#   $2 : command to be ran
+#   $3 : optional logfile
+#   $4 : optional user, defaults to root
+#   $5 : disable force tty. If set to "disable_tty", disable forcing tty.
+#        Should be disabled to run a command remotely and leave it
+#        running on the remote machine after the calling script disconnects.
+# Return Values:
+#      : Return value from the command
+
+run_remote_cmd()
+{
+        if  [ "${1}" = "" ]; then
+                echo "Error: Must provide server"
+                exit 1
+        fi
+        if  [ "${2}" = "" ]; then
+                echo "Error: Must provide next available dbfile"
+                exit 1
+        fi
+        if  [ "${3}" != "" ]; then
+                 _logfile_="${3}"
+        fi
+        if  [ "${4}" != "" ]; then
+                 _user_="${4}"
+        else
+                 _user_="root"
+        fi
+        if  [ "${5}" != "" ]; then
+                 _disable_tty_="${5}"
+        else
+                 _disable_tty_=""
+        fi
+
+         _server_="${1}"
+         _cmd_="${2}"
+        $PING $_server_ 3 >> /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+                echo "failed to ping server $_server" | tee -a $_logfile_
+                return 1
+
+        fi
+
+        # Default value for tty option is -t -t (unchanged):
+    _tty_value="-t -t"
+    if [ "${_disable_tty_}" = "disable_tty" ]; then
+                _tty_value=""
+    fi
+
+        ssh ${_tty_value} -o StrictHostKeyChecking=no -o BatchMode=yes -q $_user_@$_server_ ${_cmd_}
+        return $?
+}
+
+run_remote_engine()
+{
+        if [ "${_installed_server_type_}" = "stats_coordinator" ]; then
+
+           run_remote_cmd "${_ip_address_}" ". .profile; $1 " "$LOGFILE" dcuser
+
+        else
+
+           $1
+
+        fi
+}
+
+
+CPATH="${INSTALLER_DIR}/lib/installer.jar"
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in $DIRS
+do
+  if [ -d ${PLATFORM_DIR}/$file/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/$file/dclib/*.jar`
+
+    for jar in $JARS
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+TIMESTAMP=`date +%y.%m.%d_%H:%M:%S`
+
+LOGFILE=${LOG_DIR}/restore_dwhdb_database/restore_${TIMESTAMP}.log
+HSTNAME=`hostname`
+
+if [ ! -d ${LOG_DIR}/restore_dwhdb_database ] ; then
+  mkdir -p ${LOG_DIR}/restore_dwhdb_database
+  echo "${LOG_DIR}/restore_dwhdb_database Directory created successfully" | tee -a ${LOGFILE}
+fi
+
+echo "====================================================================" | tee -a ${LOGFILE}
+echo "  Ericsson Network IQ Restore DWHDB database @ ${HSTNAME}" | tee -a ${LOGFILE}
+echo "===================================================================="  | tee -a ${LOGFILE}
+
+
+echo "Changing engine profile to NoLoads" | tee -a ${LOGFILE}
+
+run_remote_engine "${BIN_DIR}/engine -e changeProfile NoLoads"
+
+NOLOADS_EXIT_STATUS=$?
+
+if [ ${NOLOADS_EXIT_STATUS} -ne 0 ] ; then
+  echo "Engine status NoLoads could not be changed. Aborting techpack installation." | tee -a ${LOGFILE}
+  exit 43
+  else
+  echo "Engine status changed to NoLoads" | tee -a ${LOGFILE}
+fi
+
+echo "Engine profile NoLoads changed successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+  #SMF is running
+  echo "SMF is running. Setting scheduler on hold and shutting it down with SMF scripts." | tee -a ${LOGFILE}
+
+  ${BIN_DIR}/scheduler hold
+  SCHEDULER_HOLD_EXIT_STATUS=$?
+
+  if [ ${SCHEDULER_HOLD_EXIT_STATUS} -ne 0 ] ; then
+    echo "Scheduler could not be set on hold. Scheduler is not running." | tee -a ${LOGFILE}
+   else
+    echo "Scheduler set on hold at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+  fi
+
+  echo "Restarting engine before techpack installation" | tee -a ${LOGFILE}
+
+  #SMF is running
+  echo "SMF is running. Restarting engine with SMF scripts." | tee -a ${LOGFILE}
+  echo "Stopping engine" | tee -a ${LOGFILE}
+  run_remote_engine "${BIN_DIR}/engine stop" >> /dev/null 2>&1
+
+  ENGINE_STOP_STATUS=$?
+  if [ ${ENGINE_STOP_STATUS} -ne 0 ] ; then
+    echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOGFILE}
+    run_remote_engine "${ADMIN_BIN}/eniq_service_start_stop.bsh -s engine -a clear"| tee -a ${LOGFILE}
+        echo "Engine status cleared" | tee -a ${LOGFILE}
+        sleep 10
+        run_remote_engine "${BIN_DIR}/engine -e shutdown_forceful" 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOGFILE}
+        sleep 10
+  fi
+
+  ENGINE_SMF_STATUS=`run_remote_engine "svcs -a " | grep 'eniq/engine'| $NAWK '{print $1}'`
+  if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+        echo "Engine had running sets. Force shutdown initiated." | tee -a ${LOGFILE}
+        run_remote_engine "${ADMIN_BIN}/eniq_service_start_stop.bsh -s engine -a clear "| tee -a ${LOGFILE}
+        echo "Engine status cleared" | tee -a ${LOGFILE}
+        sleep 10
+        run_remote_engine "${BIN_DIR}/engine -e shutdown_forceful " 1> /dev/null 2> /dev/null
+        echo "Engine forced to shutdown" | tee -a ${LOGFILE}
+        sleep 10
+        ENGINE_SMF_STATUS=`run_remote_engine "svcs -a "| grep 'eniq/engine'| $NAWK '{print $1}'`
+        if [ "${ENGINE_SMF_STATUS}" != "disabled" ]; then
+                RETRY_COUNT=0
+                until [ "${ENGINE_SMF_STATUS}" = "online" ]
+                do
+                        if [ $RETRY_COUNT -gt 30 ]; then
+                                break
+                        fi
+                        sleep 10
+                        ENGINE_SMF_STATUS=`run_remote_engine "svcs -a "| grep 'eniq/engine'| $NAWK '{print $1}'`
+                        RETRY_COUNT=`expr $RETRY_COUNT + 1`
+                        echo "Waiting for engine to go online" | tee -a ${LOGFILE}
+                done
+                echo "Engine initially started" | tee -a ${LOGFILE}
+                run_remote_engine "${BIN_DIR}/engine stop" | tee -a ${LOGFILE}
+        fi
+  fi
+  echo "Engine stopped successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+  run_remote_engine "${BIN_DIR}/engine start"
+
+  ENGINE_START_STATUS=$?
+
+  if [ ${ENGINE_START_STATUS} -ne 0 ] ; then
+    echo "Engine could not be started. Aborting techpack installation." | tee -a ${LOGFILE}
+    exit 44
+   else
+    echo "Engine restarted succesfully" | tee -a ${LOGFILE}
+  fi
+
+
+# Disable the schedule UpdateMonitoring for DWH_MONITOR
+UPDATE_MONITORING_STATUS=`scheduler -e disable_schedule DWH_MONITOR UpdateMonitoring`
+until [ "${UPDATE_MONITORING_STATUS}" = "Schedule UpdateMonitoring disabled successfully. Please reload scheduler for the changes to take effect" -o "${UPDATE_MONITORING_STATUS}" = "Schedule UpdateMonitoring is already disabled." ]
+  do
+        sleep 10
+        UPDATE_MONITORING_STATUS=`scheduler -e disable_schedule DWH_MONITOR UpdateMonitoring`
+        echo "Disabling UpdateMonitoring"
+  done
+echo "Disabled UpdateMonitoring successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+# Disable the schedule UpdateMonitoringOnStartup for DWH_MONITOR
+UPDATE_MONITORING_ONSTARTUP_STATUS=`scheduler -e disable_schedule DWH_MONITOR UpdateMonitoringOnStartup`
+until [ "${UPDATE_MONITORING_ONSTARTUP_STATUS}" = "Schedule UpdateMonitoringOnStartup disabled successfully. Please reload scheduler for the changes to take effect" -o "${UPDATE_MONITORING_ONSTARTUP_STATUS}" = "Schedule UpdateMonitoringOnStartup is already disabled." ]
+  do
+        sleep 10
+        UPDATE_MONITORING_ONSTARTUP_STATUS=`scheduler -e disable_schedule DWH_MONITOR UpdateMonitoringOnStartup`
+        echo "Disabling UpdateMonitoringOnStartup"
+  done
+echo "Disabled UpdateMonitoringOnStartup successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+# Disable the schedule SessionLoader_Starter for DWH_MONITOR
+SESSIONLOADER_STARTER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLoader_Starter`
+until [ "${SESSIONLOADER_STARTER_STATUS}" = "Schedule SessionLoader_Starter disabled successfully. Please reload scheduler for the changes to take effect" -o "${SESSIONLOADER_STARTER_STATUS}" = "Schedule SessionLoader_Starter is already disabled." ]
+  do
+        sleep 10
+        SESSIONLOADER_STARTER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLoader_Starter`
+        echo "Disabling SessionLoader_Starter"
+  done
+echo "Disabled SessionLoader_Starter successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+
+# Disable the schedule SessionLogLoader_Loader for DWH_MONITOR
+SESSIONLOGLOADER_LOADER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Loader`
+until [ "${SESSIONLOGLOADER_LOADER_STATUS}" = "Schedule SessionLogLoader_Loader disabled successfully. Please reload scheduler for the changes to take effect" -o "${SESSIONLOGLOADER_LOADER_STATUS}" = "Schedule SessionLogLoader_Loader is already disabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_LOADER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Loader`
+        echo "Disabling SessionLogLoader_Loader"
+  done
+echo "Disabled SessionLogLoader_Loader successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+# Disable the schedule SessionLogLoader_Aggregator for DWH_MONITOR
+SESSIONLOGLOADER_AGGREGATOR_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Aggregator`
+until [ "${SESSIONLOGLOADER_AGGREGATOR_STATUS}" = "Schedule SessionLogLoader_Aggregator disabled successfully. Please reload scheduler for the changes to take effect" -o "${SESSIONLOGLOADER_AGGREGATOR_STATUS}" = "Schedule SessionLogLoader_Aggregator is already disabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_AGGREGATOR_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Aggregator`
+        echo "Disabling SessionLogLoader_Aggregator"
+  done
+echo "Disabled SessionLogLoader_Aggregator successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+# Disable the schedule SessionLogLoader_Adapter for DWH_MONITOR
+SESSIONLOGLOADER_ADAPTER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Adapter`
+until [ "${SESSIONLOGLOADER_ADAPTER_STATUS}" = "Schedule SessionLogLoader_Adapter disabled successfully. Please reload scheduler for the changes to take effect" -o "${SESSIONLOGLOADER_ADAPTER_STATUS}" = "Schedule SessionLogLoader_Adapter is already disabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_ADAPTER_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Adapter`
+        echo "Disabling SessionLogLoader_Adapter"
+  done
+echo "Disabled SessionLogLoader_Adapter successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+# Disable the schedule SessionLogLoader_Collected_Data for DWH_MONITOR
+SessionLogLoader_Collected_Data_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Collected_Data`
+until [ "${SessionLogLoader_Collected_Data_STATUS}" = "Schedule SessionLogLoader_Collected_Data disabled successfully. Please reload scheduler for the changes to take effect" -o "${SessionLogLoader_Collected_Data_STATUS}" = "Schedule SessionLogLoader_Collected_Data is already disabled." ]
+  do
+        sleep 10
+        SessionLogLoader_Collected_Data_STATUS=`scheduler -e disable_schedule DWH_MONITOR SessionLogLoader_Collected_Data`
+        echo "Disabling SessionLogLoader_Collected_Data"
+  done
+echo "Disabled SessionLogLoader_Collected_Data successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+  ${BIN_DIR}/scheduler start
+
+  ENGINE_SMF_STATUS=`run_remote_engine "svcs -a "| grep 'eniq/engine'| $NAWK '{print $1}'`
+  RETRY_COUNT=0
+  until [ "${ENGINE_SMF_STATUS}" = "online" ]
+  do
+        if [ $RETRY_COUNT -gt 30 ]; then
+                                break
+        fi
+                sleep 10
+                ENGINE_SMF_STATUS=`run_remote_engine "svcs -a "| grep 'eniq/engine' | $NAWK '{print $1}'`
+                RETRY_COUNT=`expr $RETRY_COUNT + 1`
+                echo "Waiting for engine to go online" | tee -a ${LOGFILE}
+  done
+  ENGINE_INIT_STATUS=`run_remote_engine "engine status" 2>&1 | egrep "Priority Queue disabled|Connection to engine refused" | wc -m | $NAWK '{print $1}'`
+  RETRY_COUNT=0
+  until [ "${ENGINE_INIT_STATUS}" = "0" ]
+  do
+        if [ $RETRY_COUNT -gt 30 ]; then
+                                break
+        fi
+                sleep 10
+                ENGINE_INIT_STATUS=`run_remote_engine "engine status" 2>&1 | egrep "Priority Queue disabled|Connection to engine refused" | wc -m | $NAWK '{print $1}'`
+                RETRY_COUNT=`expr $RETRY_COUNT + 1`
+                echo "Waiting for engine to initialize properly" | tee -a ${LOGFILE}
+  done
+  echo "Engine started and initialized at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+cd ${INSTALLER_DIR}; ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_restore_dwhdb_utils.xml -lib ${CPATH} -DbinDirectory=${BIN_DIR} -DinstallDirectory=${INSTALLER_DIR} restore | tee -a ${LOGFILE}
+
+# re-create show_db_usage() procedure in dwhdb
+CREATE_DWHDB_USAGE="${INSTALLER_DIR}/sqlfiles/ASA_repository_create_show_dwhdb_usage.sql"
+if [ -f ${CREATE_DWHDB_USAGE} ] ; then
+  cd ${INSTALLER_DIR}; ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_install_utils.xml -lib ${CPATH} -Ddc.installer.dir=${INSTALLER_DIR} -Ddbname=dwh -Dsqlfile=${CREATE_DWHDB_USAGE} -Dcon_type=DBA -Ddc.conf.dir=${CONF_DIR} -Ddc.platform.dir=${PLATFORM_DIR} execute_sql | tee -a ${LOGFILE}
+fi
+
+# re-create check dwhdb size events
+CHECK_DWHDB_SIZE="${INSTALLER_DIR}/sqlfiles/ASA_repository_create_check_dwhdb_db_size.sql"
+if [ -f ${CHECK_DWHDB_SIZE} ] ; then
+  cd ${INSTALLER_DIR}; ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_install_utils.xml -lib ${CPATH} -Ddc.installer.dir=${INSTALLER_DIR} -Ddbname=dwh -Dsqlfile=${CHECK_DWHDB_SIZE} -Dcon_type=DBA -Ddc.conf.dir=${CONF_DIR} -Ddc.platform.dir=${PLATFORM_DIR} execute_sql | tee -a ${LOGFILE}
+fi
+
+if [ -f ${LOGFILE} ] ; then
+  SUC=`cat ${LOGFILE} | grep "BUILD SUCCESSFUL"`
+  if [ ! -z "${SUC}" ] ; then
+    echo "===================================="  | tee -a ${LOGFILE}
+    echo "Successfully restored DWHDB database"  | tee -a ${LOGFILE}
+    echo "===================================="  | tee -a ${LOGFILE}
+  else
+    echo "============================="  | tee -a ${LOGFILE}
+    echo "DWHDB database restore failed"  | tee -a ${LOGFILE}
+    echo "============================="  | tee -a ${LOGFILE}
+  fi
+fi
+
+#Enable the UpdateMonitoring in the scheduler.
+UPDATE_MONITORING_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR UpdateMonitoring`
+until [ "${UPDATE_MONITORING_SCHEDULE}" = "Schedule UpdateMonitoring enabled successfully. Please reload scheduler for the changes to take effect." -o "${UPDATE_MONITORING_SCHEDULE}" = "Schedule UpdateMonitoring is already enabled." ]
+  do
+        sleep 10
+        UPDATE_MONITORING_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR UpdateMonitoring`
+        echo "Enabling UpdateMonitoring"
+  done
+echo "Enabled UpdateMonitoring successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the UpdateMonitoringOnStartup in the scheduler.
+UPDATE_MONITORING_ONSTARTUP_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR UpdateMonitoringOnStartup`
+until [ "${UPDATE_MONITORING_ONSTARTUP_SCHEDULE}" = "Schedule UpdateMonitoringOnStartup enabled successfully. Please reload scheduler for the changes to take effect." -o "${UPDATE_MONITORING_ONSTARTUP_SCHEDULE}" = "Schedule UpdateMonitoringOnStartup is already enabled." ]
+  do
+        sleep 10
+        UPDATE_MONITORING_ONSTARTUP_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR UpdateMonitoringOnStartup`
+        echo "Enabling UpdateMonitoringOnStartup"
+  done
+echo "Enabled UpdateMonitoringOnStartup successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the SessionLoader_Starter in the scheduler.
+SESSIONLOADER_STARTER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLoader_Starter`
+until [ "${SESSIONLOADER_STARTER_SCHEDULE}" = "Schedule SessionLoader_Starter enabled successfully. Please reload scheduler for the changes to take effect." -o "${SESSIONLOADER_STARTER_SCHEDULE}" = "Schedule SessionLoader_Starter is already enabled." ]
+  do
+        sleep 10
+        SESSIONLOADER_STARTER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLoader_Starter`
+        echo "Enabling SessionLoader_Starter"
+  done
+echo "Enabled SessionLoader_Starter successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the SessionLogLoader_Loader in the scheduler.
+SESSIONLOGLOADER_LOADER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Loader`
+until [ "${SESSIONLOGLOADER_LOADER_SCHEDULE}" = "Schedule SessionLogLoader_Loader enabled successfully. Please reload scheduler for the changes to take effect." -o "${SESSIONLOGLOADER_LOADER_SCHEDULE}" = "Schedule SessionLogLoader_Loader is already enabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_LOADER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Loader`
+        echo "Enabling SessionLogLoader_Loader"
+  done
+echo "Enabled SessionLogLoader_Loader successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the SessionLogLoader_Aggregator in the scheduler.
+SESSIONLOGLOADER_AGGREGATOR_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Aggregator`
+until [ "${SESSIONLOGLOADER_AGGREGATOR_SCHEDULE}" = "Schedule SessionLogLoader_Aggregator enabled successfully. Please reload scheduler for the changes to take effect." -o "${SESSIONLOGLOADER_AGGREGATOR_SCHEDULE}" = "Schedule SessionLogLoader_Aggregator is already enabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_AGGREGATOR_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Aggregator`
+        echo "Enabling SessionLogLoader_Aggregator"
+  done
+echo "Enabled SessionLogLoader_Aggregator successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the SessionLogLoader_Adapter in the scheduler.
+SESSIONLOGLOADER_ADAPTER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Adapter`
+until [ "${SESSIONLOGLOADER_ADAPTER_SCHEDULE}" = "Schedule SessionLogLoader_Adapter enabled successfully. Please reload scheduler for the changes to take effect." -o "${SESSIONLOGLOADER_ADAPTER_SCHEDULE}" = "Schedule SessionLogLoader_Adapter is already enabled." ]
+  do
+        sleep 10
+        SESSIONLOGLOADER_ADAPTER_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Adapter`
+        echo "Enabling SessionLogLoader_Adapter"
+  done
+echo "Enabled SessionLogLoader_Adapter successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Enable the SessionLogLoader_Collected_Data in the scheduler.
+SessionLogLoader_Collected_Data_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Collected_Data`
+until [ "${SessionLogLoader_Collected_Data_SCHEDULE}" = "Schedule SessionLogLoader_Collected_Data enabled successfully. Please reload scheduler for the changes to take effect." -o "${SessionLogLoader_Collected_Data_SCHEDULE}" = "Schedule SessionLogLoader_Collected_Data is already enabled." ]
+  do
+        sleep 10
+        SessionLogLoader_Collected_Data_SCHEDULE=`scheduler -e enable_schedule DWH_MONITOR SessionLogLoader_Collected_Data`
+        echo "Enabling SessionLogLoader_Collected_Data"
+  done
+echo "Enabled SessionLogLoader_Collected_Data successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+#Activate the scheduler
+SCHEDULER_ACTIVATE=`scheduler activate | grep "scheduler is running OK"`
+until [ "${SCHEDULER_ACTIVATE}" = "scheduler is running OK" ]
+  do
+        sleep 10
+        SCHEDULER_ACTIVATE=`scheduler activate | grep "scheduler is running OK"`
+        echo "Activating scheduler."
+  done
+echo "Activated scheduler successfully at "`date +%Y.%m.%d_%H:%M:%S` | tee -a ${LOGFILE}
+
+run_remote_engine "${BIN_DIR}/engine -e changeProfile Normal"
+
+NORMAL_EXIT_STATUS=$?
+
+if [ ${NORMAL_EXIT_STATUS} -ne 0 ] ; then
+  echo "Engine status Normal could not be changed." | tee -a ${LOGFILE}
+  exit 43
+  else
+  echo "Engine status changed to Normal" | tee -a ${LOGFILE}
+fi
+exit 0
+

@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<project name="FileLimAlert" default="build" basedir=".">
+	<property name="environment" value="local" />
+	<property name="BODllPath" value=".\obj" overwrite="false" />
+	<property name="outputDirectory" value=".\bin_test" overwrite="false" />
+	<property name="debug" value="true"  unless="${property::exists('debug')}" />
+	<property name="verbose" value="true" />
+	<property name="basename" value="TPIDE_BOIntf" />
+  	
+  	<!-- Config file target -->
+  	<target name="config">  
+  		<property name="configFile" value="${environment}.properties" />
+  			<if test="${file::exists(configFile)}">         
+  			<echo message="Loading ${configFile}..." />         
+  			<include buildfile="${configFile}" />
+  			</if>
+  			
+  		<if test="${not file::exists(configFile) and environment != 'local'}">       
+  			<fail message="Configuration file '${configFile}' could not be found." />
+  		</if>
+  	</target>
+	
+	<!-- Main build target -->
+	<target name="build" description="compiles the source code" depends="config">	
+	<delete verbose="true">
+    	<fileset>
+        	<include name="${outputDirectory}\${basename}.exe" />
+        	<include name="${outputDirectory}\${basename}.pdb" />
+        	<include name="${outputDirectory}\${basename}_Test.dll" />
+        	<include name="${outputDirectory}\${basename}_Test.pdb" />
+    	</fileset>
+	</delete>
+
+	<vbc target="exe" output="${outputDirectory}\${basename}.exe" debug="${debug}">
+		<imports>
+                        <import namespace="Microsoft.VisualBasic"/>
+                        <import namespace="System.Windows.Forms"/>
+                        <import namespace="System.Diagnostics"/>
+                </imports>
+ 		<sources>
+ 		<include name="**\*.vb" />
+ 		<!-- We are excluding test classes here -->
+  		<exclude name="**\*Test.vb" />
+  		<exclude name="TPInstallFunctionsTPIDE2.vb" />
+  		<exclude name="**\*TestApplication.vb" />
+  		<exclude name="**\*Application.Designer.vb" />
+  		<exclude name="**\*Test1.vb" />
+  		<exclude name="**\*TestApplication.vb" />
+  		<exclude name="**\RegressionTest*.vb" />
+  		<exclude name="**\DatabaseFacade*.vb" />
+  		<exclude name="**\DBProxyFactory*.vb" />
+ 		</sources>
+ 		<references>
+ 			<include name="${BODllPath}\*.dll" />
+			<include name="System.dll"/>
+			<include name="System.Data.dll"/>
+  			<include name="System.Web.dll" />
+  			<include name="System.Web.Services.dll" />
+  			<include name="System.XML.dll" />
+  			<include name="System.Windows.Forms.dll" />
+  			<include name="Microsoft.VisualBasic.dll"/>
+  			<include name="${nUnitPath}\*.dll"/>	
+		</references>
+	</vbc>
+	<echo>Finished compiling source code</echo>
+	<call target="build_tests" />
+	</target>
+	
+	<!-- Build dll files with unit tests included -->
+	<target name="build_tests" description="compiles the test source code" depends="config">
+		<vbc target="library" output="${outputDirectory}\${basename}_Test.dll" debug="${debug}">
+		<imports>
+                        <import namespace="Microsoft.VisualBasic"/>
+                        <import namespace="System.Windows.Forms"/>
+                        <import namespace="NUnit.Framework"/>
+                        <import namespace="NMock2"/>
+                </imports>
+                
+ 		<sources>
+  		<include name="**\*Test.vb" />
+  		<exclude name="**\RegressionTest*.vb" />
+ 		</sources>
+ 		
+ 		<references>
+ 			<include name="${BODllPath}\*.dll" />
+			<include name="System.dll" />
+  			<include name="System.Web.dll" />
+  			<include name="System.Web.Services.dll" />
+  			<include name="System.XML.dll" />
+  			<include name="System.Windows.Forms.dll" />
+  			<include name="Microsoft.VisualBasic.dll"/>
+  			<include name="${nUnitPath}\*.dll"/>
+  			<include name="${nMockPath}\NMock2.dll"/>
+  			<include name="${outputDirectory}\${basename}.exe"/>
+		</references>		
+	</vbc>
+	
+	<echo>Finished compiling unit test classes</echo>	
+			<nunit2 verbose="true">	
+    				<formatter type="Xml" usefile="true" extension=".xml" outputdir="${outputDirectory}\nUnitReport" />
+    				<test assemblyname="${outputDirectory}\${basename}_Test.dll" appconfig="BOIntf_Test.exe.config"/>
+			</nunit2>			
+		<echo>Finished executing tests</echo>
+	</target>
+	
+</project>
+
+
+<!--
+Run this build script with nant: 
+1. nant -buildfile:test.build. This compiles the main source code to BOIntf.exe, compiles tests to BOIntf_test.dll.
+
+2. Run the following command to run NCover. This will run the tests in BOIntf_test.dll, then generate the Coverage.xml file:
+"C:\Program files\NCover\NCover.Console.exe" "c:\My Tools\NUnit-2.5.5.10112\bin\net-2.0\nunit-console.exe" TPIDE_BOIntf_Test.dll //a TPIDE_BOIntf
+
+4. Transform the coverage.xml file in XML Notepad to get a html output that can be uploaded to a webpage.
+-->
+

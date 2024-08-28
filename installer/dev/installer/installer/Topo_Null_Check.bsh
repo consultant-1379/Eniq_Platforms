@@ -1,0 +1,58 @@
+#!/bin/bash
+TEMP_DIR=/tmp/TopologyCleaner
+IQ_DIR=/eniq/sybase_iq
+IQISQL=${IQ_DIR}/${SYBASE_OCS}/bin/isql
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+
+mkdir -p $TEMP_DIR
+if [ -f out.txt ] && [ -f out1.txt ]; then
+rm out*.txt
+fi
+
+if [ "${1}" = "" ] || [ "${1}" = "-fix" ] || [ "${1}" = "-FIX" ] || [ "${1}" = "-Fix" ]; then
+Tables=`$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb << EOF -b > out.txt
+select name from sysobjects where name like "%DIM_%" and name not like "%_V_%" and name not like "%BHTYPE%"  and name not like "%WLE%" and name not like "%WIFI%" and name not like "%LLE%" and type ="U"
+go
+exit
+EOF`
+
+cat out.txt | sed '$d' | sed '$d' > out1.txt
+
+for TableName in $(cat out1.txt)
+do
+        echo "select count(*) from $TableName where oss_id='' and modified=NULL and created=NULL and status=''" > $TEMP_DIR/query.txt
+        echo "go" >> $TEMP_DIR/query.txt
+       	        # Get CountNull and remove the whitespace using | tr d ' '
+			CountNull=`$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -i $TEMP_DIR/query.txt | grep "[0-9]"|grep -v row | tr -d ' '`
+			# check if CountNull is a number, if not, set it to 0 so a valid check can be run and outputting value to file is then skipped as CountNull is 0
+			case $CountNull in
+				(*[^0-9]*|'') CountNull=0;;				
+			esac
+                if [ "$CountNull" -gt 0 ]; then
+                echo "Found $CountNull Nulls on Table $TableName"
+                if [ "${1}" = "-fix" ] || [ "${1}" = "-FIX" ] || [ "${1}" = "-Fix" ]; then
+                echo "delete from $TableName where oss_id='' and modified=NULL and created=NULL and status=''" > $TEMP_DIR/delete.txt
+                echo "go" >> $TEMP_DIR/delete.txt
+                DeleteCount=`$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -i $TEMP_DIR/delete.txt | grep "[0-9]"`
+                echo "$DeleteCount rows Deleted on Table $TableName"
+                fi
+                else
+                echo "No Null Values found on table $TableName"
+                #echo ""
+                fi
+                rm -rf $TEMP_DIR/*.txt
+done
+else
+echo "Usage: bash $0 > test.txt"
+#echo "bash $0 -fix > test.txt"
+fi
+rm -rf $TEMP_DIR

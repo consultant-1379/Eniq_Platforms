@@ -1,0 +1,12 @@
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSG:((3))', 'All', 'TOTAL_DAY', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSG:((3))', 'All', 'TOTAL_RAW', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSG:((3))', 'All', 'TOTAL_RAW', 'Time', 'Hour');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSG:((3))', 'All', 'TOTAL_RAW', 'Time', 'Min');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSS:((2))', 'All', 'TOTAL_DAY', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSS:((2))', 'All', 'TOTAL_RAW', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSS:((2))', 'All', 'TOTAL_RAW', 'Time', 'Hour');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSS:((2))', 'All', 'TOTAL_RAW', 'Time', 'Min');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSW:((2))', 'All', 'TOTAL_DAY', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSW:((2))', 'All', 'TOTAL_RAW', 'Time', 'Date');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSW:((2))', 'All', 'TOTAL_RAW', 'Time', 'Hour');
+insert into Verificationobject (VERSIONID, MEASTYPE, MEASLEVEL, OBJECTCLASS, OBJECTNAME) values ('PM_E_EBSW:((2))', 'All', 'TOTAL_RAW', 'Time', 'Min');

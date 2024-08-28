@@ -1,0 +1,690 @@
+ERICSSON-MPE-RTSP-PROXY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeRtspProxyPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the RTSP Proxy 
+                    functionality."
+::= { mpeModules 24 }
+
+rtspProxyPmObjects  OBJECT IDENTIFIER ::= { mpeRtspProxyPmModule 1 }
+
+rtspReqCnt  OBJECT IDENTIFIER ::= { rtspProxyPmObjects 1 }
+
+rtspRespCnt  OBJECT IDENTIFIER ::= { rtspProxyPmObjects 2 }
+
+rtspPrxCnt  OBJECT IDENTIFIER ::= { rtspProxyPmObjects 3 }
+
+rtspEvent  OBJECT IDENTIFIER ::= { rtspProxyPmObjects 4 }
+
+rtspSup  OBJECT IDENTIFIER ::= { rtspProxyPmObjects 5 }
+
+rtspProxyPmConformance  OBJECT IDENTIFIER ::= { mpeRtspProxyPmModule 3 }
+
+rtspProxyPmGroups  OBJECT IDENTIFIER ::= { rtspProxyPmConformance 1 }
+
+rtspProxyPmCompliances  OBJECT IDENTIFIER ::= { rtspProxyPmConformance 2 }
+
+rtspReqRtspReqV4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of IPv4 RTSP requests that have been 
+                    received by the streaming proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 1 }
+
+rtspReqRtspReqV6  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Ipv6 RTSP requests that have been 
+                    received by the streaming proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 2 }
+
+rtspReqRtspDescReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP DESCRIBE requests that have 
+                    been sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 3 }
+
+rtspReqRtspSetupReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP SETUP requests that have 
+                    been sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 4 }
+
+rtspReqRtspPlayReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP PLAY requests that have been 
+                    sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 5 }
+
+rtspReqRtspPauseReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP PAUSE requests that have 
+                    been sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 6 }
+
+rtspReqRtspTrDwnReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP TEARDOWN requests that have 
+                    been sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 7 }
+
+rtspReqRtspOtherReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of other RTSP requests that have 
+                    been sent through the RTSP Proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspReqCnt 8 }
+
+rtspRespRtspResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTSP responses that have been 
+                    received.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 1 }
+
+rtspRespDescResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP DESCRIBE 
+                    requests that have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 2 }
+
+rtspRespDescResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP DESCRIBE 
+                    requests that have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 3 }
+
+rtspRespDescResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP DESCRIBE 
+                    requests that have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 4 }
+
+rtspRespDescResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP DESCRIBE 
+                    requests that have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 5 }
+
+rtspRespSetupResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP SETUP requests 
+                    that have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 6 }
+
+rtspRespSetupResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP SETUP requests 
+                    that have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 7 }
+
+rtspRespSetupResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP SETUP requests 
+                    that have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 8 }
+
+rtspRespSetupResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP SETUP requests 
+                    that have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 9 }
+
+rtspRespPlayResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PLAY requests 
+                    that have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 10 }
+
+rtspRespPlayResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PLAY requests 
+                    that have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 11 }
+
+rtspRespPlayResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PLAY requests 
+                    that have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 12 }
+
+rtspRespPlayResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PLAY requests 
+                    that have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 13 }
+
+rtspRespPauseResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PAUSE requests 
+                    that have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 14 }
+
+rtspRespPauseResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PAUSE requests 
+                    that have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 15 }
+
+rtspRespPauseResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PAUSE requests 
+                    that have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 16 }
+
+rtspRespPauseResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP PAUSE requests 
+                    that have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 17 }
+
+rtspRespTrDwnResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP TEARDOWN 
+                    requests that have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 18 }
+
+rtspRespTrDwnResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP TEARDOWN 
+                    requests that have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 19 }
+
+rtspRespTrDwnResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP TEARDOWN 
+                    requests that have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 20 }
+
+rtspRespTrDwnResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to RTSP TEARDOWN 
+                    requests that have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 21 }
+
+rtspRespOtherResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to Other requests than 
+                    RTSP DESCRIBE, SETUP, PLAY, PAUSE and TEARDOWN that 
+                    have any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 22 }
+
+rtspRespOtherResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to Other requests than 
+                    RTSP DESCRIBE, SETUP, PLAY, PAUSE and TEARDOWN that 
+                    have any 3xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 23 }
+
+rtspRespOtherResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to Other requests than 
+                    RTSP DESCRIBE, SETUP, PLAY, PAUSE and TEARDOWN that 
+                    have any 4xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 24 }
+
+rtspRespOtherResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of responses to Other requests than 
+                    RTSP DESCRIBE, SETUP, PLAY, PAUSE and TEARDOWN that 
+                    have any 5xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspRespCnt 25 }
+
+rtspPrxRetrieveTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time in milliseconds between when a 
+                    request is received from a terminal until a response 
+                    is returned back to the terminal during the last 10 
+                    seconds."
+::= { rtspPrxCnt 1 }
+
+rtspPrxMaxRetrTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum time in milliseconds between when a 
+                    request was received from a terminal until the 
+                    response was returned back to the terminal during last 5 
+                    minutes."
+::= { rtspPrxCnt 2 }
+
+rtspPrxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average response time in milliseconds 
+                    between when a request is sent to a streaming server until 
+                    a response is received (DNS lookup and TCP/IP connect 
+                    times are included) during the last 10 seconds."
+::= { rtspPrxCnt 3 }
+
+rtspPrxMaxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum response time in milliseconds 
+                    between when a request is sent to a streaming server until 
+                    the response was received (DNS lookup and TCP/IP 
+                    connect times are included) during last 5 minutes."
+::= { rtspPrxCnt 4 }
+
+rtspPrxProcTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time in milliseconds to handle a 
+                    request in MIEP. Retrieve time minus response time. The 
+                    times for calling external nodes are included."
+::= { rtspPrxCnt 5 }
+
+rtspPrxMaxProcTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum processing time in milliseconds 
+                    during last 5 minutes."
+::= { rtspPrxCnt 6 }
+
+rtspPrxLat  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time that is added to the round 
+                    trip time by the Streaming Proxy in milliseconds. 
+                    Retrieve time minus response time. The times for calling 
+                    external nodes are excluded."
+::= { rtspPrxCnt 7 }
+
+rtspPrxMaxLat  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum latency time in milliseconds during 
+                    last 5 minutes."
+::= { rtspPrxCnt 8 }
+
+rtspPrxNbrRtspSess  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the current number of active RTSP sessions."
+::= { rtspPrxCnt 9 }
+
+rtspPrxNbrOpenedRtspSess  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of opened RTSP Sessions.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 10 }
+
+rtspPrxNbrClosedRtspSess  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of closed RTSP Sessions.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 11 }
+
+rtspPrxOngoingStream  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the current number of ongoing streams."
+::= { rtspPrxCnt 12 }
+
+rtspPrxNbrRtcpRr  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of handled RTCP Receiver Reports.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 13 }
+
+rtspPrxNbrRtcpSr  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of handled RTCP Sender Reports.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 14 }
+
+rtspPrxBandwidthUsage  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of KBits RTP and RDT data that has 
+                    been transferred from streaming servers to clients.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 15 }
+
+rtspPrxTransDataPack  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of RTP and RDT data packets that has 
+                    been transferred from streaming servers to clients.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 16 }
+
+rtspPrxNbrLostPack  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of data packets that has been 
+                    reported as lost by clients.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 17 }
+
+rtspPrxRtspTpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Transparent Proxy requests that 
+                    have been received by the streaming proxy.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { rtspPrxCnt 18 }
+
+rtspPrxServerConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of established TCP/IP connections 
+                    in the RTSP Server module."
+::= { rtspPrxCnt 19 }
+
+rtspPrxClientConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of established TCP/IP connections 
+                    between the RTSP Client module and streaming servers."
+::= { rtspPrxCnt 20 }
+
+rtspEventRtspSocket  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "RTSP process cannot open configured RTSP Server Port."
+::= { rtspEvent 2 }
+
+rtspEventRtspSessLimit  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Consider increasing the number of sessions allowed 
+                    for the Virtual Gateway. This is controlled by the 
+                    parameter Maximum number of parallel RTSP sessions in the 
+                    Virtual Gateway configuration. Information about the 
+                    concerned Virtual Gateway is given in the dynamic text."
+::= { rtspEvent 3 }
+
+rtspEventStreamSockets  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The Data Tranport module has run out of ports."
+::= { rtspEvent 4 }
+
+rtspEventRtspClSocket  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "RTSP process cannot bind to configured RTSP client 
+                    address."
+::= { rtspEvent 5 }
+
+rtspSupAsConfErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when reading configuration data. The cause of 
+                    the error is given in the dynamic text."
+::= { rtspSup 1 }
+
+rtspSupAsProcDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-functioning."
+::= { rtspSup 2 }
+
+-- Compliance Statements
+
+rtspProxyCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for rtsp proxy."
+   MODULE          -- this module
+   MANDATORY-GROUPS {rtspProxyConfGroup}
+::= { rtspProxyPmCompliances 1 }
+
+-- Units of Conformance
+
+rtspProxyConfGroup OBJECT-GROUP
+   OBJECTS { rtspReqRtspReqV4,
+             rtspReqRtspReqV6,
+             rtspReqRtspDescReq,
+             rtspReqRtspSetupReq,
+             rtspReqRtspPlayReq,
+             rtspReqRtspPauseReq,
+             rtspReqRtspTrDwnReq,
+             rtspReqRtspOtherReq,
+             rtspRespRtspResp,
+             rtspRespDescResp2xx,
+             rtspRespDescResp3xx,
+             rtspRespDescResp4xx,
+             rtspRespDescResp5xx,
+             rtspRespSetupResp2xx,
+             rtspRespSetupResp3xx,
+             rtspRespSetupResp4xx,
+             rtspRespSetupResp5xx,
+             rtspRespPlayResp2xx,
+             rtspRespPlayResp3xx,
+             rtspRespPlayResp4xx,
+             rtspRespPlayResp5xx,
+             rtspRespPauseResp2xx,
+             rtspRespPauseResp3xx,
+             rtspRespPauseResp4xx,
+             rtspRespPauseResp5xx,
+             rtspRespTrDwnResp2xx,
+             rtspRespTrDwnResp3xx,
+             rtspRespTrDwnResp4xx,
+             rtspRespTrDwnResp5xx,
+             rtspRespOtherResp2xx,
+             rtspRespOtherResp3xx,
+             rtspRespOtherResp4xx,
+             rtspRespOtherResp5xx,
+             rtspPrxRetrieveTime,
+             rtspPrxMaxRetrTime,
+             rtspPrxRespTime,
+             rtspPrxMaxRespTime,
+             rtspPrxProcTime,
+             rtspPrxMaxProcTime,
+             rtspPrxLat,
+             rtspPrxMaxLat,
+             rtspPrxNbrRtspSess,
+             rtspPrxNbrOpenedRtspSess,
+             rtspPrxNbrClosedRtspSess,
+             rtspPrxOngoingStream,
+             rtspPrxNbrRtcpRr,
+             rtspPrxNbrRtcpSr,
+             rtspPrxBandwidthUsage,
+             rtspPrxTransDataPack,
+             rtspPrxNbrLostPack,
+             rtspPrxRtspTpReq,
+             rtspPrxServerConnections,
+             rtspPrxClientConnections,
+             rtspEventRtspSocket,
+             rtspEventRtspSessLimit,
+             rtspEventStreamSockets,
+             rtspEventRtspClSocket,
+             rtspSupAsConfErr,
+             rtspSupAsProcDefunct}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a rtsp proxy."
+::= { rtspProxyPmGroups 1 }
+END

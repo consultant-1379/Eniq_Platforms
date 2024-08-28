@@ -1,0 +1,9 @@
+<project name="mediation" basedir="." default="all">
+	
+	<property name="dcinstall.require.libs" value="> 5-0-0b14"/>
+
+	<target name="install" depends="copyTmpToDeploy"/>
+
+	<target name="update" depends="moveToObsolete,install"/>
+
+</project>

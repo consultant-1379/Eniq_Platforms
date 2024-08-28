@@ -1,0 +1,2276 @@
+--===============================================================
+-- File Name : AbrazoCFunction.mib
+-- Author    : Tango-Networks Inc.
+-- Copyright   
+-- Proprietary Property of Tango-Networks, Inc. Gaithersburg, MD.
+--===============================================================
+
+AbrazoCFunction-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+      DateAndTime, DisplayString
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP           
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-IDENTITY,OBJECT-TYPE, Gauge32, 
+      Counter32, Integer32, Unsigned32, NOTIFICATION-TYPE
+        FROM SNMPv2-SMI;
+
+  abrazoCSysModule MODULE-IDENTITY
+    LAST-UPDATED  "201008130000Z"
+    ORGANIZATION  "Tango-Networks, Inc"
+    CONTACT-INFO  "Tango-Networks, Inc,
+			5465 Legacy Dr., Suite 550
+			Plano, TX  75024-3106
+			469-229-3000"
+    DESCRIPTION
+      "This is the MIB for the Abrazo Carrier system monitoring."
+    REVISION    "201011300000Z"
+      DESCRIPTION     "Creation."
+-- 1.3.6.1.4.1.x
+    ::= { enterprises 30359 }
+
+   abrazoMIB	 OBJECT IDENTIFIER
+    ::= { abrazoCSysModule 1}
+    
+   abrazoSysMIB	 OBJECT IDENTIFIER
+      ::= { abrazoMIB 1}
+
+   abrazoCSysInfo OBJECT IDENTIFIER
+     ::= { abrazoSysMIB 1 }
+
+   abrazoC OBJECT IDENTIFIER
+    ::= { abrazoSysMIB 2 }
+
+   abrazoE OBJECT IDENTIFIER
+    ::= { abrazoSysMIB 3 }
+
+   abrazoTraps OBJECT IDENTIFIER ::= {abrazoSysMIB 4} 
+  
+   mibConformanceAc OBJECT IDENTIFIER
+    ::= { abrazoC 5000 }
+
+-- AbrazoC :: historical Counters,Tables, and groups  ........................
+
+   abrazoCSessCondActiveCounters OBJECT IDENTIFIER
+    ::= { abrazoCSysInfo 4 }
+    
+   announcementPlayFailAc OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of unrecognized application ID in USSD payload.
+
+	     Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  1 }
+
+
+   announcementPlaySuccessAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of format error in USSD payload.
+
+	     Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  2 }
+
+
+   busyTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Busy Termination trigger received from wireless network.
+
+Note 1: In the case of an IMS carrier network, this counter is pegged on receipt of a final response of 486 or 586 for Busy. Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  3 }
+
+   busyTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Busy Termination attempt NOT routed into enterprise due to:
+		1. resources unavailable to handle call at enterprise,
+		2. subscriber not found.
+
+Note 1: In the case of an IMS carrier network, this counter is only pegged if the mobile's termination policy is Direct or Personal, the response received from the network is 486 or 586 indicating Busy and the call is unable to be routed into the Enterprise due to a failure of the type described above.
+Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  4 }
+
+   emergencyServiceNumberTerminationAc     OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Emergency Service Terminations
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  5 }
+
+   enterpriseConnectionFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of request to an Abrazo-E failed due to a lack of secure TLS connection.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  6 }
+
+   enterpriseSmsAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of SMS terminations to the Abrazo-E
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+       ::=  {  abrazoCSessCondActiveCounters  7 }
+
+
+   enterpriseSmsFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of failed SMS terminations to the Abrazo-E
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  8 }
+
+
+   hotlineAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter incremented every time an incoming call to the hotline number received.
+Note 1: This counter value is reset to 0 every 15 minutes."
+       ::=  {  abrazoCSessCondActiveCounters  9 }
+
+   longCallAuditReleaseAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of unrecognized service code in USSD payload.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+       ::=  {  abrazoCSessCondActiveCounters  10 }
+
+   mobileOriginationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Origination trigger received from wireless network (destination party is not enterprise Voice Mail number).
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  11  }
+
+   mobileOriginationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Origination attempt NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  12 }
+
+   mobileTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Termination trigger received from wireless network.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  13 }
+
+   mobileTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Termination attempt NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+       ::=  {  abrazoCSessCondActiveCounters  14 }
+
+   noAnswerTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of No Answer Termination trigger received from wireless network.
+            
+Note 1: In the case of an IMS carrier network, this counter is pegged on receipt of a final error response (4XX, 5XX or 6XX) other than 486 or 586.
+Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  15 }
+
+   noAnswerTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of No Answer Termination attempt NOT routed into enterprise due to:
+1. resources unavailable to handle call at enterprise,
+2. subscriber not found.
+
+Note 1: In the case of an IMS carrier network, this counter is only pegged if the mobile's termination policy is Direct or Personal, the response received from the network is an error response other than 486 or 586 and the call is unable to be routed into the Enterprise due to a failure of the type described above.
+Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  16 }
+
+   smppDeliveryFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of failure occurred during SMS delivery attempt.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  17 }
+
+   tldnQueryAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of TLDN request (Send Route Request) sent to the wireless network and Mobile Routing Number received in response.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network.
+Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  18 }
+
+   tldnQueryFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of error received attempting to send TLDN request to wireless network, OR
+No Mobile Routing Number received from wireless network in response to TLDN request.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network.
+Note 2: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  19 }
+
+   unsupportedTriggerAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Trigger received not currently supported.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network.
+Note 2: This counter value is reset to 0 every 15 minutes."
+       ::=  {  abrazoCSessCondActiveCounters  20 }
+
+
+   vmNotificationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of MWI notification delivered to wireless network.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  21 }
+
+   vmNotificationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of error in delivering MWI notification to wireless network.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters 22 }
+
+   voiceMailRetrievalAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Origination trigger received from wireless network where destination party is an enterprise Voice Mail number.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  23 }
+
+   voiceMailRetrievalFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Origination attempt with enterprise Voice Mail as destination NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCSessCondActiveCounters  24 }
+
+  abrazoCProvActiveCounters OBJECT IDENTIFIER
+    ::= { abrazoCSysInfo 5 }
+  
+    provLoginFailuresAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of login failures to provisioning
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCProvActiveCounters  1 }
+ 
+  abrazoCMediaCondActiveCounters OBJECT IDENTIFIER
+    ::= { abrazoCSysInfo 6 }
+  
+    mcActiveMediaStreamsAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of current Active Media Session Streams
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCMediaCondActiveCounters  1 }
+  
+    mcConnectionCreateSuccessAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of current Media Conductor's connections successfully created
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCMediaCondActiveCounters  2 }
+  
+    mcConnectionCreateFailureAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of  Media Conductor's connections failure
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCMediaCondActiveCounters  3 }
+  
+  abrazoCManagementActiveCounters OBJECT IDENTIFIER
+    ::= { abrazoCSysInfo 7 }
+  
+    mgmtLoginFailuresAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of attempted login failures to management
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCManagementActiveCounters  1 }
+  
+    mgmtCpuRequestAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of times a CPU request to management
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCManagementActiveCounters  2 }
+  
+    mgmtDiskUtilizationRequestAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of times a Disk Utilization request to management
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCManagementActiveCounters  3 }
+      
+    mgmtTrapsSentAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of Abrazo Traps sent by management
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  abrazoCManagementActiveCounters  4 }
+ 
+-- AbrazoC Conductor :: historicalCounters ...............................
+
+   historicalTablesAc OBJECT IDENTIFIER
+      ::= { abrazoC 1 }
+
+   historicalSessCondCountersAc OBJECT IDENTIFIER
+      ::= { historicalTablesAc 1 }
+
+   historicalSessCondCountersTableAc  OBJECT-TYPE
+      SYNTAX      SEQUENCE  OF  historicalSessCondCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "This table contains the historical data for the abrazoC. Rows are dynamically added to this table on a 15 minutes basis, i.e. everytime the counters are reset to 0. 
+Note 1: This table contains a maximum of 7 days of data. 
+Note 2: External management systems shall use the timestamp column to index the rows as the index column is only valid up until a restart of the application."
+      ::=  { historicalSessCondCountersAc 1 }
+
+   historicalSessCondCountersEntryAc  OBJECT-TYPE
+      SYNTAX      historicalSessCondCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "Definition of the entries for Session Conductor Historical Stats."
+      INDEX    {  historicalScCountersIndexAc  }
+      ::=  { historicalSessCondCountersTableAc 1 }
+
+   historicalSessCondCountersEntryAc  ::=  SEQUENCE {
+      historicalScCountersIndexAc Unsigned32,
+      historicalScCountersTimestampAc DateAndTime,
+      historicalAnnouncementPlayFailAc Counter32,
+      historicalAnnouncementPlaySuccessAc Counter32,
+      historicalBusyTerminationAc Counter32, 
+      historicalBusyTerminationFailAc Counter32,
+      historicalEmergencyServiceNumberTerminationAc Counter32,	      
+      historicalEnterpriseConnectionFailAc Counter32, 
+      historicalEnterpriseSmsAc Counter32, 
+      historicalEnterpriseSmsFailAc Counter32,
+      historicalHotlineAc Counter32, 
+      historicalLongCallAuditReleaseAc Counter32,
+      historicalMobileOriginationAc Counter32, 
+      historicalMobileOriginationFailAc Counter32, 
+      historicalMobileTerminationAc Counter32, 
+      historicalMobileTerminationFailAc Counter32, 
+      historicalNoAnswerTerminationAc Counter32, 
+      historicalNoAnswerTerminationFailAc Counter32, 
+      historicalSmppDeliveryFailAc Counter32,
+      historicalTLDNQueryAc Counter32,
+      historicalTLDNQueryFailAc Counter32,
+      historicalUnsupportedTriggerAc Counter32,              
+      historicalVMNotificationAc Counter32, 
+      historicalVMNotificationFailAc Counter32,
+      historicalVoiceMailRetrievalAc Counter32, 
+      historicalVoiceMailRetrievalFailAc Counter32
+   }
+
+   historicalScCountersIndexAc  OBJECT-TYPE
+      SYNTAX         Unsigned32
+      MAX-ACCESS     not-accessible
+      STATUS         current
+      DESCRIPTION
+            "This integer represents an index in table historicalCountersTable. The index simply represent an entry in the SNMP table. 
+
+Note 1: Indexes in this table are not persisted over a restart of the application. But repopulated from .xml files upon a restart"
+      ::=  {  historicalSessCondCountersEntryAc  1  }
+
+   historicalScCountersTimestampAc  OBJECT-TYPE
+      SYNTAX         DateAndTime
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "The timestamp on which this row of data was persisted."
+      ::=  {  historicalSessCondCountersEntryAc  2  }
+
+   historicalAnnouncementPlayFailAc OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of unrecognized application ID in USSD payload.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  historicalSessCondCountersEntryAc  3 }
+
+   historicalAnnouncementPlaySuccessAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of format error in USSD payload.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {  historicalSessCondCountersEntryAc  4 }
+
+   historicalBusyTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Busy Termination trigger received from wireless network.
+
+Note 1: In the case of an IMS carrier network, this counter is pegged on receipt of a final response of 486 or 586 for Busy."
+      ::=  {  historicalSessCondCountersEntryAc  5  }
+
+   historicalBusyTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Busy Termination attempt NOT routed into enterprise due to:
+1. resources unavailable to handle call at enterprise,
+2. subscriber not found.
+
+Note 1: In the case of an IMS carrier network, this counter is only pegged if the mobile's termination policy is Direct or Personal, the response received from the network is 486 or 586 indicating Busy and the call is unable to be routed into the Enterprise due to a failure of the type described above."
+      ::=  {  historicalSessCondCountersEntryAc  6  }
+
+   historicalEmergencyServiceNumberTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Emergency Service Terminations
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {   historicalSessCondCountersEntryAc  7  }
+
+
+   historicalEnterpriseConnectionFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of request to an Abrazo-E failed due to a lack of secure TLS connection."
+      ::=  {  historicalSessCondCountersEntryAc  8  }
+
+   historicalEnterpriseSmsAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of SMS terminations to the Abrazo-E
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {   historicalSessCondCountersEntryAc  9  }
+
+   historicalEnterpriseSmsFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of failed SMS terminations to the Abrazo-E
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {   historicalSessCondCountersEntryAc  10  }
+
+   historicalHotlineAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter incremented every time an incoming call to the hotline number received.
+Note 1: This counter value is reset to 0 every 15 minutes."
+      ::=  {   historicalSessCondCountersEntryAc  11  }
+
+   historicalLongCallAuditReleaseAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of unrecognized service code in USSD payload.
+
+Note 1: This counter value is reset to 0 every 15 minutes."
+    ::=  {  historicalSessCondCountersEntryAc  12  }
+
+   historicalMobileOriginationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Origination trigger received from wireless network (destination party is not enterprise Voice Mail number."
+      ::=  {  historicalSessCondCountersEntryAc  13  }
+
+   historicalMobileOriginationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Origination attempt NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found."
+      ::=  {  historicalSessCondCountersEntryAc  14  }
+
+   historicalMobileTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Termination trigger received from wireless network."
+      ::=  {  historicalSessCondCountersEntryAc  15  }
+
+   historicalMobileTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Termination attempt NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found."
+      ::=  {  historicalSessCondCountersEntryAc  16  }
+
+   historicalNoAnswerTerminationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of No Answer Termination trigger received from wireless network.
+            
+Note 1: In the case of an IMS carrier network, this counter is pegged on receipt of a final error response (4XX, 5XX or 6XX) other than 486 or 586."
+      ::=  {  historicalSessCondCountersEntryAc  17 }
+
+   historicalNoAnswerTerminationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of No Answer Termination attempt NOT routed into enterprise due to:
+1. resources unavailable to handle call at enterprise,
+2. subscriber not found.
+
+Note 1: In the case of an IMS carrier network, this counter is only pegged if the mobile's termination policy is Direct or Personal, the response received from the network is an error response other than 486 or 586 and the call is unable to be routed into the Enterprise due to a failure of the type described above."
+      ::=  {  historicalSessCondCountersEntryAc  18 }
+
+   historicalSmppDeliveryFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of failure occurred during SMS delivery attempt."
+      ::=  {  historicalSessCondCountersEntryAc  19 }
+
+   historicalTLDNQueryAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of TLDN request (Send Route Request) sent to the wireless network and Mobile Routing Number received in response.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network."
+      ::=  {  historicalSessCondCountersEntryAc  20 }
+
+   historicalTLDNQueryFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of error received attempting to send TLDN request to wireless network, OR
+No Mobile Routing Number received from wireless network in response to TLDN request.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network."
+      ::=  {  historicalSessCondCountersEntryAc  21 }
+
+   historicalUnsupportedTriggerAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Trigger received not currently supported.
+
+Note 1: This OM is not pegged in the case of an IMS carrier network."
+      ::=  {  historicalSessCondCountersEntryAc  22 }
+
+   historicalVMNotificationAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of MWI notification delivered to wireless network."
+      ::=  {  historicalSessCondCountersEntryAc  23 }
+
+   historicalVMNotificationFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of error in delivering MWI notification to wireless network."
+      ::=  {  historicalSessCondCountersEntryAc  24 }
+
+   historicalVoiceMailRetrievalAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Mobile Origination trigger received from wireless network where destination party is an enterprise Voice Mail number."
+      ::=  { historicalSessCondCountersEntryAc  25 }
+
+   historicalVoiceMailRetrievalFailAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter represents the number of Origination attempt with enterprise Voice Mail as destination NOT routed into enterprise due to:
+1. enterprise call denial policy,
+2. resources unavailable to handle call at enterprise,
+3. subscriber not found."
+      ::=  {  historicalSessCondCountersEntryAc  26 }
+
+  historicalProvCountersAc OBJECT IDENTIFIER
+      ::= { historicalTablesAc 2 }
+
+   historicalProvCountersTableAc  OBJECT-TYPE
+      SYNTAX      SEQUENCE  OF  historicalProvCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "This table contains the historical data for the abrazoC provisioning. Rows are dynamically added to this table on a 15 minutes basis, i.e. everytime the counters are reset to 0. 
+Note 1: This table contains a maximum of 7 days of data. 
+Note 2: External management systems shall use the timestamp column to index the rows as the index column is only valid up until a restart of the application."
+      ::=  { historicalProvCountersAc 1 }
+
+   historicalProvCountersEntryAc  OBJECT-TYPE
+      SYNTAX      historicalProvCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "Definition of the entries for Session Conductor Historical Stats."
+      INDEX    {  historicalPvCountersIndexAc  }
+      ::=  { historicalProvCountersTableAc 1 }
+
+   historicalProvCountersEntryAc  ::=  SEQUENCE {
+      historicalPvCountersIndexAc Unsigned32,
+      historicalPvCountersTimestampAc DateAndTime,
+      historicalProvLoginFailuresAc Counter32
+   }
+
+ historicalPvCountersIndexAc  OBJECT-TYPE
+      SYNTAX         Unsigned32
+      MAX-ACCESS     not-accessible
+      STATUS         current
+      DESCRIPTION
+            "This integer represents an index in table historicalCountersTable. The index simply represent an entry in the SNMP table. 
+
+Note 1: Indexes in this table are not persisted over a restart of the application. But repopulated from .xml files upon a restart"
+      ::=  {  historicalProvCountersEntryAc  1  }
+
+   historicalPvCountersTimestampAc  OBJECT-TYPE
+      SYNTAX         DateAndTime
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "The timestamp on which this row of data was persisted."
+      ::=  {  historicalProvCountersEntryAc  2  }
+
+   historicalProvLoginFailuresAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "The timestamp on which this row of data was persisted."
+      ::=  {  historicalProvCountersEntryAc  3  }
+  
+  historicalMediaCondCountersAc OBJECT IDENTIFIER
+      ::= { historicalTablesAc 3 }
+
+  historicalMediaCondCountersTableAc  OBJECT-TYPE
+      SYNTAX      SEQUENCE  OF  historicalMediaCondCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "This table contains the historical data for the abrazoC Media Conductor. Rows are dynamically added to this table on a 15 minutes basis, i.e. everytime the counters are reset to 0. 
+Note 1: This table contains a maximum of 7 days of data. 
+Note 2: External management systems shall use the timestamp column to index the rows as the index column is only valid up until a restart of the application."
+      ::=  { historicalMediaCondCountersAc 1 }
+
+   historicalMediaCondCountersEntryAc  OBJECT-TYPE
+      SYNTAX      historicalMediaCondCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "Definition of the entries for Session Conductor Historical Stats."
+      INDEX    {  historicalMcCountersIndexAc  }
+      ::=  { historicalMediaCondCountersTableAc 1 }
+
+   historicalMediaCondCountersEntryAc  ::=  SEQUENCE {
+      historicalMcCountersIndexAc Unsigned32,
+      historicalMcCountersTimestampAc DateAndTime,
+      historicalMcActiveMediaStreamsAc Counter32,
+      historicalMcConnectionCreateSuccessAc Counter32,
+      historicalMcConnectionCreateFailureAc Counter32      
+   }
+
+ historicalMcCountersIndexAc  OBJECT-TYPE
+      SYNTAX         Unsigned32
+      MAX-ACCESS     not-accessible
+      STATUS         current
+      DESCRIPTION
+            "This integer represents an index in table historicalCountersTable for Media Conductor at AbrazoC. The index simply represent an entry in the SNMP table. 
+
+Note 1: Indexes in this table are not persisted over a restart of the application. But repopulated from .xml files upon a restart"
+      ::=  {  historicalMediaCondCountersEntryAc  1  }
+
+   historicalMcCountersTimestampAc  OBJECT-TYPE
+      SYNTAX         DateAndTime
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "The timestamp on which this row of data was persisted."
+      ::=  {  historicalMediaCondCountersEntryAc  2  }
+
+   historicalMcActiveMediaStreamsAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of current Active Media Session Streams."
+      ::=  {  historicalMediaCondCountersEntryAc  3  }
+  
+    historicalMcConnectionCreateSuccessAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of current Media Conductor's connections successfully created."
+      ::=  {  historicalMediaCondCountersEntryAc  4  }
+  
+    historicalMcConnectionCreateFailureAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of  Media Conductor's connections failure."
+      ::=  {  historicalMediaCondCountersEntryAc  5  }  
+
+  historicalManagementCountersAc OBJECT IDENTIFIER
+      ::= { historicalTablesAc 4 }
+
+   historicalManagementCountersTableAc  OBJECT-TYPE
+      SYNTAX      SEQUENCE  OF  historicalManagementCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "This table contains the historical data for the abrazoC Media Conductor. Rows are dynamically added to this table on a 15 minutes basis, i.e. everytime the counters are reset to 0. 
+Note 1: This table contains a maximum of 7 days of data. 
+Note 2: External management systems shall use the timestamp column to index the rows as the index column is only valid up until a restart of the application."
+      ::=  { historicalManagementCountersAc 1 }
+
+   historicalManagementCountersEntryAc  OBJECT-TYPE
+      SYNTAX      historicalManagementCountersEntryAc
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+         "Definition of the entries for Session Conductor Historical Stats."
+      INDEX    {  historicalMgmtCountersIndexAc  }
+      ::=  { historicalManagementCountersTableAc 1 }
+
+   historicalManagementCountersEntryAc  ::=  SEQUENCE {
+      historicalMgmtCountersIndexAc Unsigned32,
+      historicalMgmtCountersTimestampAc DateAndTime,
+      historicalMgmtLoginFailuresAc Counter32,
+      historicalMgmtCpuRequestAc Counter32,
+      historicalMgmtDiskUtilizationRequestAc Counter32,
+      historicalMgmtTrapsSentAc Counter32      
+   }
+
+ historicalMgmtCountersIndexAc  OBJECT-TYPE
+      SYNTAX         Unsigned32
+      MAX-ACCESS     not-accessible
+      STATUS         current
+      DESCRIPTION
+            "This integer represents an index in table historicalCountersTable. The index simply represent an entry in the SNMP table. 
+
+Note 1: Indexes in this table are not persisted over a restart of the application. But repopulated from .xml files upon a restart"
+      ::=  {  historicalManagementCountersEntryAc  1  }
+
+   historicalMgmtCountersTimestampAc  OBJECT-TYPE
+      SYNTAX         DateAndTime
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "The timestamp on which this row of data was persisted."
+      ::=  {  historicalManagementCountersEntryAc  2  }
+
+   historicalMgmtLoginFailuresAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of current Active Media Session Streams."
+      ::=  {  historicalManagementCountersEntryAc  3  }
+  
+    historicalMgmtCpuRequestAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of times a CPU request to management."
+      ::=  {  historicalManagementCountersEntryAc  4  }
+  
+    historicalMgmtDiskUtilizationRequestAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of times a Disk Utilization request to management."
+      ::=  {  historicalManagementCountersEntryAc  5  }  
+  
+     historicalMgmtTrapsSentAc  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter indicates the number of Abrazo Traps sent by management."
+      ::=  {  historicalManagementCountersEntryAc  6  }  
+
+-- AbrazoC Function MIB Conformance Definition  ...........................................
+
+   mibGroupsAc     OBJECT IDENTIFIER ::= { mibConformanceAc 1 }
+   mibCompliancyAc OBJECT IDENTIFIER ::= { mibConformanceAc 2 }
+
+   criticalAc				OBJECT IDENTIFIER ::= {abrazoTraps 1}
+   majorAc        			OBJECT IDENTIFIER ::= {abrazoTraps 2}
+   minorAc        			OBJECT IDENTIFIER ::= {abrazoTraps 3}
+   criticalHardwareAc 			OBJECT IDENTIFIER ::= {criticalAc 4}
+   majorHardwareAc   			OBJECT IDENTIFIER ::= {majorAc 4}
+   minorHardwareAc  	 		OBJECT IDENTIFIER ::= {minorAc 4}
+   criticalConnectivityAc	 	OBJECT IDENTIFIER ::= {criticalAc 5}
+   majorConnectivityAc 			OBJECT IDENTIFIER ::= {majorAc 5}
+   minorConnectivityAc 			OBJECT IDENTIFIER ::= {minorAc 5}
+   criticalGenericAc			OBJECT IDENTIFIER ::= {criticalAc 6}
+   majorGenericAc    			OBJECT IDENTIFIER ::= {majorAc 6}
+   minorGenericAc    			OBJECT IDENTIFIER ::= {minorAc 6}
+   criticalSS7Ac     	        	OBJECT IDENTIFIER ::= {criticalAc 7}
+   majorSS7Ac           	     	OBJECT IDENTIFIER ::= {majorAc 7}
+   minorSS7Ac                		OBJECT IDENTIFIER ::= {minorAc 7}
+   criticalRAAc    	          	OBJECT IDENTIFIER ::= {criticalAc 8}
+   majorRAAc            	     	OBJECT IDENTIFIER ::= {majorAc 8}
+   minorRAAc    	             	OBJECT IDENTIFIER ::= {minorAc 8}
+   criticalSleeAc  	  		OBJECT IDENTIFIER ::= {criticalAc 9}
+   majorSleeAc    	           	OBJECT IDENTIFIER ::= {majorAc 9}
+   minorSleeAc          	     	OBJECT IDENTIFIER ::= {minorAc 9}
+   clearedCriticalHardwareAc 		OBJECT IDENTIFIER ::= {criticalHardwareAc 2}
+   clearedMajorHardwareAc 	  	OBJECT IDENTIFIER ::= {majorHardwareAc 2}
+   clearedMinorHardwareAc	   	OBJECT IDENTIFIER ::= {minorHardwareAc 2}
+   clearedCriticalConnectivityAc 	OBJECT IDENTIFIER ::= {criticalConnectivityAc 2}
+   clearedMajorConnectivityAc 		OBJECT IDENTIFIER ::= {majorConnectivityAc 2}
+   clearedMinorConnectivityAc 		OBJECT IDENTIFIER ::= {minorConnectivityAc 2}
+   clearedCriticalGenericAc		OBJECT IDENTIFIER ::= {criticalGenericAc 2}
+   clearedMajorGenericAc    		OBJECT IDENTIFIER ::= {majorGenericAc 2}
+   clearedMinorGenericAc    		OBJECT IDENTIFIER ::= {minorGenericAc 2}
+   clearedCriticalSS7Ac		        OBJECT IDENTIFIER ::= {criticalSS7Ac 2}
+   clearedMajorSS7Ac              	OBJECT IDENTIFIER ::= {majorSS7Ac 2}
+   clearedMinorSS7Ac              	OBJECT IDENTIFIER ::= {minorSS7Ac 2}
+   clearedCriticalRAAc            	OBJECT IDENTIFIER ::= {criticalRAAc 2}
+   clearedMajorRAAc               	OBJECT IDENTIFIER ::= {majorRAAc 2}
+   clearedMinorRAAc               	OBJECT IDENTIFIER ::= {minorRAAc 2}
+   clearedCriticalSleeAc    		OBJECT IDENTIFIER ::= {criticalSleeAc 2}
+   clearedMajorSleeAc             	OBJECT IDENTIFIER ::= {majorSleeAc 2}
+   clearedMinorSleeAc             	OBJECT IDENTIFIER ::= {minorSleeAc 2}
+
+  abrazoCSysDescr OBJECT-TYPE
+       SYNTAX DisplayString
+       MAX-ACCESS read-only
+       STATUS current
+       DESCRIPTION
+            "The Abrazo system CPU and Disk utilization"
+       ::= { abrazoCSysInfo 1}
+
+   nodePctCpuAc OBJECT-TYPE
+       SYNTAX DisplayString
+       UNITS "%"
+       MAX-ACCESS read-only
+       STATUS current
+       DESCRIPTION
+            "The percentage of CPU used on the reporting node"
+       ::= { abrazoCSysInfo 2 }
+
+   nodePctDuAc OBJECT-TYPE
+        SYNTAX DisplayString
+        UNITS "%"
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+             "The percentage of Disk used on the reporting node"
+        ::= { abrazoCSysInfo 3 } 
+
+   criticalIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The criticalAc alarm identification number"
+	::= { criticalAc 21}
+
+   criticalDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the critical alarm"
+	::= { criticalAc 22}
+
+   criticalActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action to take to clear the critical alarm"
+	::= { criticalAc 23}
+	
+   criticalSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the alarm"
+	::= { criticalAc 24}
+	
+   criticalNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the critical alarm"
+	::= { criticalAc 25}
+	
+   criticalComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the critical alarm"
+	::= { criticalAc 26}
+	
+   criticalContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the critical alarm"
+	::= { criticalAc 27}
+	
+   criticalTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+        DESCRIPTION
+		"The time at which the critical alarm was raised"
+	::= { criticalAc 28}
+	
+   criticalDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The enterprise/carrier domain that raised the critical alarm"
+	::= { criticalAc 29}
+	
+	
+   majorIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The major alarm identification number"
+	::= { majorAc 21}
+
+   majorDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the major alarm"
+	::= { majorAc 22}
+
+   majorActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action to take to clear the major alarm"
+	::= { majorAc 23}
+	
+   majorSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the alarm"
+	::= { majorAc 24}
+	
+   majorNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the major alarm"
+	::= { majorAc 25}
+	
+   majorComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the major alarm"
+	::= { majorAc 26}
+	
+   majorContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the major alarm"
+	::= { majorAc 27}
+	
+   majorTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The time at which the major alarm was raised"
+	::= { majorAc 28}
+	
+   majorDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The enterprise/carrier domain that raised the major alarm"
+	::= { majorAc 29}
+	
+   minorIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The minor alarm identification number"
+	::= { minorAc 21}
+
+   minorDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the minor alarm"
+	::= { minorAc 22}
+
+   minorActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action to take to clear the minor alarm"
+	::= { minorAc 23}
+	
+   minorSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the alarm"
+	::= { minorAc 24}
+	
+   minorNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the minor alarm"
+	::= { minorAc 25}
+	
+   minorComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the minor alarm"
+	::= { minorAc 26}
+	
+   minorContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the minor alarm"
+	::= { minorAc 27}
+	
+   minorTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The time at which the minor alarm was raised"
+	::= { minorAc 28}
+	
+   minorDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The enterprise/carrier domain that raised the minor alarm"
+	::= { minorAc 29}
+	
+   criticalClearIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The cleared critical alarm identification number"
+	::= { criticalAc 51}
+
+   criticalClearDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the cleared critical alarm"
+	::= { criticalAc 52}
+	
+   criticalClearActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action of the cleared critical alarm"
+	::= { criticalAc 53}
+	
+   criticalClearSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the cleared alarm"
+	::= { criticalAc 54}
+	
+   criticalClearNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the cleared the critical alarm"
+	::= { criticalAc 55}
+	
+   criticalClearComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the cleared critical alarm"
+	::= { criticalAc 56}
+	
+   criticalClearContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the cleared critical alarm"
+	::= { criticalAc 57}
+	
+   criticalClearTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The time at which the critical alarm was cleared"
+	::= { criticalAc 58}
+	
+   criticalClearDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		        "The enterprise/carrier domain that cleared the critical alarm"
+	::= { criticalAc 59}
+	
+   majorClearIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The cleared alarm identification number"
+	::= { majorAc 51}
+
+   majorClearDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the cleared alarm"
+	::= { majorAc 52}
+	
+   majorClearActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action of the cleared major alarm"
+	::= { majorAc 53}
+	
+   majorClearSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the cleared alarm"
+	::= { majorAc 54}
+	
+   majorClearNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the cleared the major alarm"
+	::= { majorAc 55}
+	
+   majorClearComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the cleared major alarm"
+	::= { majorAc 56}
+	
+   majorClearContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the cleared major alarm"
+	::= { majorAc 57}
+	
+   majorClearTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The time at which the major alarm was cleared"
+	::= { majorAc 58}
+	
+   majorClearDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The enterprise/carrier domain that cleared the major alarm"
+	::= { majorAc 59}
+
+   minorClearIdAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION	
+		"The cleared alarm identification number"
+	::= { minorAc 51}
+
+   minorClearDescAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The description of the cleared alarm"
+	::= { minorAc 52}
+	
+   minorClearActionAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The action of the cleared minor alarm"
+	::= { minorAc 53}
+	
+   minorClearSeverityAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The severity of the cleared alarm"
+	::= { minorAc 54}
+	
+   minorClearNodeAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The node name that raised the cleared the minor alarm"
+	::= { minorAc 55}
+	
+   minorClearComponentAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The component name that raised the cleared minor alarm"
+	::= { minorAc 56}
+	
+   minorClearContextAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The context of the cleared minor alarm"
+	::= { minorAc 57}
+	
+   minorClearTimestampAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The time at which the minor alarm was cleared"
+	::= { minorAc 58}
+	
+   minorClearDomainAc OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"The enterprise/carrier domain that cleared the minor alarm"
+	::= { minorAc 59}
+	
+   hardwareLinkGenAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, criticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Generic Hardware/Link Alarm"
+        ::= {criticalHardwareAc 1000}
+        
+  clearedHardwareLinkGenAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc,
+		 criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Generic Hardware/Link Alarm"
+        ::= {clearedCriticalHardwareAc 1000}
+
+  cpuPassedThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "CPU Occupancy passed minor threshold"
+        ::= {minorHardwareAc 1001}
+        
+   clearedCpuPassedThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared CPU Occupancy passed minor threshold"
+        ::= {clearedMinorHardwareAc 1001}
+
+   cpuPassedThresholdAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, criticalSeverityAc, criticalNodeAc, criticalComponentAc,
+		 criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "CPU Occupancy passed critical threshold"
+        ::= {criticalHardwareAc 1002}
+        
+   clearedCpuPassedThresholdAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc,
+		 criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared CPU Occupancy passed critical threshold"
+        ::= {clearedCriticalHardwareAc 1002}
+
+   diskPassedThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Disk Occupancy passed minor threshold"
+        ::= {minorHardwareAc 1003}
+
+   clearedDiskPassedThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorClearId, minorClearDesc, minorClearAction, minorClearSeverity, minorClearNode, minorClearComponent,
+		 minorClearContext, minorClearTimestamp, minorClearDomain, minorClearTimestamp, minorClearDomain}
+        STATUS current
+        DESCRIPTION "Cleared Disk Occupancy passed minor threshold"
+        ::= {clearedMinorHardwareAc 1003}
+        
+   diskPassedThresholdAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc,
+		 criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Disk Occupancy passed critical threshold"
+        ::= {criticalHardwareAc 1004}
+        
+   clearedDiskPassedThresholdAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Disk Occupancy passed criticahreshold"
+        ::= {clearedCriticalHardwareAc 1004}
+
+   connectivityGenAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Generic connectivity alarm"
+        ::= {criticalConnectivityAc 2000}
+
+   clearedConnectivityGenAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Generic connectivity alarm"
+        ::= {clearedCriticalConnectivityAc 2000}
+
+   meUnrecoverableAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Managed element is unrecoverable"
+        ::= {criticalConnectivityAc 2001}
+
+   clearedMeUnrecoverableAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Managed element is unrecoverable"
+        ::= {clearedCriticalConnectivityAc 2001}
+
+   lostTargetAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "Communication to the target has been lost"
+        ::= {majorConnectivityAc 2002}
+
+   clearedLostTargetAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Communication to the target has been lost"
+        ::= {clearedMajorConnectivityAc 2002}
+
+   timeSourceConfigIncompleteAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Initial Network time source (NTP) has not been completed"
+        ::= {minorConnectivityAc 2004}
+
+   clearedTimeSourceConfigIncompleteAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Initial Network time source (NTP) has not been completed"
+        ::= {clearedMinorConnectivityAc 2004}
+
+   timeSourceConnectionLostAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Connection has been lost to Network time source (NTP)"
+        ::= {minorConnectivityAc 2005}
+
+   clearedTimeSourceConnectionLostAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Connection has been lost to Network time source (NTP)"
+        ::= {clearedMinorConnectivityAc 2005}
+
+   locationServerNotResolvableAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Location Server Domain not resolvable"
+        ::= {criticalConnectivityAc 2100}
+
+   clearedlocationServerNotResolvableAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Location Server Domain not resolvable"
+        ::= {clearedCriticalConnectivityAc 2100}
+
+   locationServerUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Location Server Unavailable"
+        ::= {minorConnectivityAc 2110}
+
+   clearedlocationServerNotUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Location Server Unavailable"
+        ::= {clearedMinorConnectivityAc 2110}
+
+   locationServerClusterMajorityUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "Location Server Cluster Majority Unavailable"
+        ::= {majorConnectivityAc 2120}
+
+   clearedlocationServerClusterMajorityUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Location Server Cluster Majority Unavailable"
+        ::= {clearedMajorConnectivityAc 2120}
+
+   locationServerClusterAllUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Location Server Cluster All Unavailable"
+        ::= {criticalConnectivityAc 2130}
+
+   clearedlocationServerClusterAllUnavailableAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Location Server Cluster All Unavailable"
+        ::= {clearedCriticalConnectivityAc 2130}
+
+   usageGenAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Generic usage alarm"
+        ::= {minorGenericAc 3000}
+
+   clearedUsageGenAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Generic usage alarm"
+        ::= {clearedMinorGenericAc 3000}
+
+   hardwareGenAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "Generic hardware alarm"
+        ::= {majorGenericAc 4000}
+
+   clearedHardwareGenAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Generic hardware alarm"
+        ::= {clearedMajorGenericAc 4000}
+
+   dbBackupFailedAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Database backup failed"
+        ::= {minorGenericAc 4001}
+
+   clearedDbBackupFailedAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Database backup failed"
+        ::= {clearedMinorGenericAc 4001}
+
+   softwareGenAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Generic software alarm"
+        ::= {minorGenericAc 5000}
+
+   clearedSoftwareGenAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc, minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Generic software alarm"
+        ::= {clearedMinorGenericAc 5000}
+
+   outboundLinkCongestionAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 has detected outbound link congestion"
+        ::= {minorSS7Ac 6103}
+
+   clearedOutboundLinkCongestionAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 has detected outbound link congestion"
+        ::= {clearedMinorSS7Ac 6103}
+
+   signalingPointInaccessibleAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signaling point is inaccessible"
+        ::= {criticalSS7Ac 6200}
+
+   clearedSignalingPointInaccessibleAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signaling point is inaccessible"
+        ::= {clearedCriticalSS7Ac 6200}
+
+   signalingLinkFailedLocallyAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signaling link has failed locally"
+        ::= {majorSS7Ac 6201}
+
+   clearedSignalingLinkFailedLocallyAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signaling link has failed locally"
+        ::= {clearedMajorSS7Ac 6201}
+
+   remotelyBlockedAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signaling is remotely blocked"
+        ::= {minorSS7Ac 6202}
+
+   clearedRemotelyBlockedAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signaling is remotely blocked"
+        ::= {clearedMinorSS7Ac 6202}
+
+   signalingLinkBlockedLocallyAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signaling link is locally blocked"
+        ::= {majorSS7Ac 6203}
+
+   clearedSignalingLinkBlockedLocallyAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signaling link is locally blocked"
+        ::= {clearedMajorSS7Ac 6203}
+
+   manuallyRemovedAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signaling link has manually been removed from service"
+        ::= {minorSS7Ac 6204}
+
+   clearedManuallyRemovedAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signaling link has manually been removed from service"
+        ::= {clearedMinorSS7Ac 6204}
+
+   manuallyRemovedRemoteAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signalling link has been manually removed from 
+        service on the remote system"
+        ::= {minorSS7Ac 6205}
+
+   clearedManuallyRemovedRemoteAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signalling link has been manually removed from 
+        service on the remote system"
+        ::= {clearedMinorSS7Ac 6205}
+
+   linksetNotAvailableAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 linkset is not available on the remote SS7 endpoint"
+        ::= {criticalSS7Ac 6206}
+
+   clearedLinksetNotAvailableAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 linkset is not available on the remote SS7 endpoint"
+        ::= {clearedCriticalSS7Ac 6206}
+
+   signalingLinkRemotelyInhibitedAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc,
+		 majorDomainAc}
+        STATUS current
+        DESCRIPTION "SS7 signalling link has been remotely inhibited"
+        ::= {majorSS7Ac 6207}
+
+   clearedSignalingLinkRemotelyInhibitedAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SS7 signalling link has been remotely inhibited"
+        ::= {clearedMajorSS7Ac 6207}
+
+   outboundTPSValuesExceededAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc,
+		 majorDomainAc}
+        STATUS current
+        DESCRIPTION "Outbound SS7 TPS has exceeded configured values - 
+                Dropping TLDN Query"
+        ::= {majorSS7Ac 6208}
+
+   clearedOutboundTPSValuesExceededAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Outbound SS7 TPS has exceeded configured values - 
+                Dropping TLDN Query"
+        ::= {clearedMajorSS7Ac 6208}
+
+   jtapiRemoteProviderOutOfServiceAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "JTAPI remote provider Out of Service"
+        ::= {criticalRAAc 7100}
+
+   clearedJtapiRemoteProviderOutOfServiceAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared JTAPI remote provider Out of Service"
+        ::= {clearedCriticalRAAc 7100}
+
+   googleConnectionOutOfServiceAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Google Connection Out of Service"
+        ::= {criticalRAAc 7200}
+
+   clearedGoogleConnectionOutOfServiceAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Google Connection Out of Service"
+        ::= {clearedCriticalRAAc 7200}
+
+   smdiRemoteLostAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "SMDI lost connection to remote provider"
+        ::= {majorRAAc 7300}
+
+   clearedSmdiRemoteLostAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SMDI lost connection to remote provider"
+        ::= {clearedMajorRAAc 7300}
+
+   mediaConductorOverLoadedAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Media Conductor is in Overload"
+        ::= {criticalRAAc 7500}
+
+   clearedMediaConductorOverLoadedAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Media Conductor is in Overload"
+        ::= {clearedCriticalRAAc 7500}
+
+  
+   sessionAgentExceededThresholdAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "Session agent resources exceeded major threshold"
+        ::= {majorRAAc 7501}
+
+   clearedSessionAgentExceededThresholdAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestamp, majorClearDomain}
+        STATUS current
+        DESCRIPTION "Cleared Session agent resources exceeded major threshold"
+        ::= {clearedMajorRAAc 7501}
+
+   sessionAgentExceededThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "Session agent resources exceeded minor threshold"
+        ::= {minorRAAc 7503}
+
+   clearedSessionAgentExceededThresholdMinorAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Session agent resources exceeded minor threshold"
+        ::= {clearedMinorRAAc 7503}
+
+
+   unableToStartCAPconnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC unable to start CAP "
+        ::= {majorSleeAc 8100}
+      
+   clearedUnableToStartCAPconnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC unable to start CAP "
+        ::= {clearedMajorSleeAc 8100}
+
+   unableToStartMAPconnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC unable to start MAP 
+        (Mobile Application Part) Connection"
+        ::= {majorSleeAc 8101}
+        
+   clearedUnableToStartMAPconnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC unable to start MAP 
+        (Mobile Application Part) Connection"
+        ::= {clearedMajorSleeAc 8101}
+  
+   noSMSCConnectionAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC cannot connect to the SMSC via SMPP"
+        ::= {criticalSleeAc 8103}
+
+   clearedNoSMSCConnectionAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC Conductor cannot connect to the SMSC via SMPP"
+        ::= {clearedCriticalSleeAc 8103}
+
+   permSipConnectionNotOperationalAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC permanent connection to a SIP "
+        ::= {minorSleeAc 8104}
+
+   clearedPermSipConnectionNotOperationalAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC permanent connection to a SIP "
+        ::= {clearedMinorSleeAc 8104}
+
+   unableToStartIS41ConnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC unable to start IS-41 Connection"
+        ::= {majorSleeAc 8105}
+
+   clearedUnableToStartIS41ConnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC unable to start IS-41 Connection"
+        ::= {clearedMajorSleeAc 8105}
+        
+   unableToStartInapCS1RConnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC unable to start INAP CS1-R Connection"
+        ::= {majorSleeAc 8106}
+
+   clearedUnableToStartInapCS1RConnectionAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC unable to start INAP CS1-R Connection"
+        ::= {clearedMajorSleeAc 8106}
+
+   smppPartialFailureAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "SMPP Partial Failure"
+        ::= {minorSleeAc 8113}
+        
+   clearedSmppPartialFailureAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SMPP Partial Failure"
+        ::= {clearedMinorSleeAc 8113}
+        
+   smppTotalFailureAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, crticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "SMPP Total Failure"
+        ::= {criticalSleeAc 8114}
+        
+   clearedSmppTotalFailureAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared SMPP Total Failure"
+        ::= {clearedCriticalSleeAc 8114}
+
+   LostConnectionToTelemessageFailureAc NOTIFICATION-TYPE
+	OBJECTS {criticalIdAc, criticalDescAc, criticalActionAc, criticalSeverityAc, criticalNodeAc, criticalComponentAc, criticalContextAc, criticalTimestampAc, criticalDomainAc}
+        STATUS current
+        DESCRIPTION "Lost connection to Telemessage Failure"
+        ::= {criticalSleeAc 8115}
+
+   clearedLostConnectionToTelemessageFailureAc NOTIFICATION-TYPE
+	OBJECTS {criticalClearIdAc, criticalClearDescAc, criticalClearActionAc, criticalClearSeverityAc, criticalClearNodeAc, criticalClearComponentAc, criticalClearContextAc, criticalClearTimestampAc, criticalClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Lost connection to Telemessage Failure"
+        ::= {clearedCriticalSleeAc 8115}
+
+   allPermSipConnectionsNotOperationalAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC permanent SIP connections to all 
+        SIP endpoints are not operational"
+        ::= {majorSleeAc 8125}
+
+   clearedAllPermSipConnectionsNotOperationalAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC permanent SIP connections to all 
+        SIP endpoints are not operational"
+        ::= {clearedMajorSleeAc 8125}
+
+   runTimeLicenseInvalidAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC does not have a valid runtime license"
+        ::= {majorSleeAc 8300}
+
+   clearedRunTimeLicenseInvalidAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC does not have a valid runtime license"
+        ::= {clearedMajorSleeAc 8300}
+
+   runTimeLicenseExpiredAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC has an expired runtime license"
+        ::= {majorSleeAc 8301}
+
+   clearedRunTimeLicenseExpiredAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC has an expired runtime license"
+        ::= {clearedMajorSleeAc 8301}
+
+   operationOvrRuntimeCapacityAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC is operating over runtime license capacity"
+        ::= {majorSleeAc 8302}
+
+   clearedOperationOvrRuntimeCapacityAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC is operating over runtime license capacity"
+        ::= {clearedMajorSleeAc 8302}
+
+   licenseDueToExpireAc NOTIFICATION-TYPE
+	OBJECTS {minorIdAc, minorDescAc, minorActionAc, minorSeverityAc, minorNodeAc, minorComponentAc, minorContextAc, minorTimestampAc, minorDomainAc}
+        STATUS current
+        DESCRIPTION "abrazoC runtime license is due to expire soon"
+        ::= {minorSleeAc 8303}
+
+   clearedLicenseDueToExpireAc NOTIFICATION-TYPE
+	OBJECTS {minorClearIdAc, minorClearDescAc, minorClearActionAc, minorClearSeverityAc, minorClearNodeAc, minorClearComponentAc,
+		 minorClearContextAc, minorClearTimestampAc, minorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared abrazoC runtime license is due to expire soon"
+        ::= {clearedMinorSleeAc 8303}
+
+   postgressDBUnrecoverableAc NOTIFICATION-TYPE
+	OBJECTS {majorIdAc, majorDescAc, majorActionAc, majorSeverityAc, majorNodeAc, majorComponentAc, majorContextAc, majorTimestampAc, majorDomainAc}
+        STATUS current
+        DESCRIPTION "Postgress Database unrecoverable"
+        ::= {majorSleeAc 8400}
+
+   clearedPostgressDBUnrecoverableAc NOTIFICATION-TYPE
+	OBJECTS {majorClearIdAc, majorClearDescAc, majorClearActionAc, majorClearSeverityAc, majorClearNodeAc, majorClearComponentAc,
+		 majorClearContextAc, majorClearTimestampAc, majorClearDomainAc}
+        STATUS current
+        DESCRIPTION "Cleared Postgress Database unrecoverable"
+        ::= {clearedMajorSleeAc 8400}
+	
+   
+   activeSessCondStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { announcementPlayFailAc,announcementPlaySuccessAc,
+		   	   busyTerminationAc, busyTerminationFailAc,
+ 			   emergencyServiceNumberTerminationAc,	      
+        	   enterpriseConnectionFailAc, 
+	      	   enterpriseSmsAc, enterpriseSmsFailAc,
+  	           hotlineAc, longCallAuditReleaseAc,
+	      	   mobileOriginationAc, mobileOriginationFailAc, 
+	           mobileTerminationAc, mobileTerminationFailAc, 
+	           noAnswerTerminationAc, noAnswerTerminationFailAc, 
+	           smppDeliveryFailAc,
+		       tldnQueryAc, tldnQueryFailAc,
+               unsupportedTriggerAc,              
+               vmNotificationAc, vmNotificationFailAc,
+               voiceMailRetrievalAc, voiceMailRetrievalFailAc
+         }
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Session Conductor Active OMs at abrazoC"
+	::= { mibGroupsAc 1 }
+	
+	activeProvStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { provLoginFailuresAc 
+    }
+  
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Prov historical at abrazoC."
+	::= { mibGroupsAc 2 }
+	
+	activeMediaCondStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { mcActiveMediaStreamsAc,
+        	   mcConnectionCreateSuccessAc,
+        	   mcConnectionCreateFailureAc      
+	}
+
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Media Conductor active OMs at abrazoC."
+	::= { mibGroupsAc 3 }	
+		
+    activeMgmtStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { mgmtLoginFailuresAc,
+        	   mgmtCpuRequestAc,
+        	   mgmtDiskUtilizationRequestAc,
+        	   mgmtTrapsSentAc
+	}
+
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the management active OMs at abrazoC."
+	::= { mibGroupsAc 4 }	
+	
+
+   historicalSessCondStatsGroupAc OBJECT-GROUP
+   	OBJECTS { historicalScCountersIndexAc,
+        	  historicalScCountersTimestampAc,
+	          historicalAnnouncementPlayFailAc,
+	          historicalAnnouncementPlaySuccessAc,
+	          historicalBusyTerminationAc, 
+	          historicalBusyTerminationFailAc,
+	          historicalEmergencyServiceNumberTerminationAc,	      
+              historicalEnterpriseConnectionFailAc, 
+	          historicalEnterpriseSmsAc, 
+	          historicalEnterpriseSmsFailAc,
+	          historicalHotlineAc, 
+	          historicalLongCallAuditReleaseAc,
+	          historicalMobileOriginationAc, 
+	          historicalMobileOriginationFailAc, 
+	          historicalMobileTerminationAc, 
+	          historicalMobileTerminationFailAc, 
+	          historicalNoAnswerTerminationAc, 
+	          historicalNoAnswerTerminationFailAc, 
+	          historicalSmppDeliveryFailAc,
+              historicalTLDNQueryAc, historicalTLDNQueryFailAc,
+              historicalUnsupportedTriggerAc,              
+              historicalVMNotificationAc, 
+	          historicalVMNotificationFailAc,
+              historicalVoiceMailRetrievalAc, 
+	          historicalVoiceMailRetrievalFailAc
+	}
+
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Session Conductor historical OMs at abrazoC."
+	::= { mibGroupsAc 5 }
+	
+	historicalProvStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { historicalPvCountersIndexAc,
+        	   historicalPvCountersTimestampAc,	
+        	   historicalProvLoginFailuresAc 
+    }
+  
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Provioning historical OMs at abrazoC."
+	::= { mibGroupsAc 6 }
+	
+	historicalMediaCondStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { historicalMcCountersIndexAc,
+        	   historicalMcCountersTimestampAc,	        	      
+         	   historicalMcActiveMediaStreamsAc,
+        	   historicalMcConnectionCreateSuccessAc,
+        	   historicalMcConnectionCreateFailureAc      
+	}
+
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the Media Conductor OMs at abrazoC."
+	::= { mibGroupsAc 7 }	
+		
+    historicalMgmtStatsGroupAc OBJECT-GROUP
+   	 OBJECTS { historicalMgmtCountersIndexAc,
+        	   historicalMgmtCountersTimestampAc,	        	      
+         	   historicalMgmtLoginFailuresAc,
+        	   historicalMgmtCpuRequestAc,
+        	   historicalMgmtDiskUtilizationRequestAc,
+        	   historicalMgmtTrapsSentAc
+	}
+
+	STATUS  current
+	DESCRIPTION
+	     "This group defines statistics for the management historical OMs at abrazoC."
+	::= { mibGroupsAc 8 }	
+	
+  alarmTrapGroupAc NOTIFICATION-GROUP
+        NOTIFICATIONS {hardwareLinkGenAc, cpuPassedThresholdAc, diskPassedThresholdAc,
+  		       cpuPassedThresholdMinorAc, diskPassedThresholdMinorAc,
+ 		       connectivityGenAc, meUnrecoverableAc,lostTargetAc, timeSourceConfigIncompleteAc, 
+		       timeSourceConnectionLostAc, locationServerNotResolvableAc, locationServerUnavailableAc, 
+		       locationServerClusterMajorityUnavailableAc, locationServerClusterAllUnavailableAc, 
+		       usageGenAc, softwareGenAc,hardwareGenAc, dbBackupFailedAc, signalingPointInaccessibleAc, 
+		       linksetNotAvailableAc, signalingLinkFailedLocallyAc, signalingLinkBlockedLocallyAc,
+		       signalingLinkRemotelyInhibitedAc, outboundTPSValuesExceededAc,
+		       outboundLinkCongestionAc, remotelyBlockedAc, manuallyRemovedAc, 
+		       manuallyRemovedRemoteAc, jtapiRemoteProviderOutOfServiceAc, mediaConductorOverLoadedAc,
+		       smdiRemoteLostAc, sessionAgentExceededThresholdAc, sessionAgentExceededThresholdMinorAc,
+		       noSMSCConnectionAc, smppTotalFailureAc, unableToStartCAPconnectionAc, 
+		       allPermSipConnectionsNotOperationalAc, runTimeLicenseInvalidAc, runTimeLicenseExpiredAc,
+		       operationOvrRuntimeCapacityAc, postgressDBUnrecoverableAc,
+		       unableToStartMAPconnectionAc,unableToStartIS41ConnectionAc,
+		       clearedUnableToStartCAPconnectionAc, clearedAllPermSipConnectionsNotOperationalAc,
+		       clearedRunTimeLicenseInvalidAc, clearedRunTimeLicenseExpiredAc, 
+		       clearedOperationOvrRuntimeCapacityAc, clearedPostgressDBUnrecoverableAc,		      
+		       licenseDueToExpireAc, permSipConnectionNotOperationalAc,
+		       invalidLocationServerDomainAc,locationServerUnavailAc,
+		       locationServerClusterMajorityUnavailAc, invalidLocationServerDomainAc		       
+	}
+	STATUS current
+	DESCRIPTION " The group of traps that can be sent when an alarm takes place"
+	::= { mibGroupsAc 9}
+
+    alarmClearTrapGroupAc NOTIFICATION-GROUP
+        NOTIFICATIONS {clearedHardwareLinkGenAc, clearedCpuPassedThresholdAc, clearedDiskPassedThresholdAc,
+		       clearedCpuPassedThresholdMinorAc, clearedDiskPassedThresholdMinorAc,
+ 		       clearedConnectivityGenAc, clearedMeUnrecoverableAc, clearedLostTargetAc,
+		       clearedTimeSourceConfigIncompleteAc, clearedTimeSourceConnectionLostAc,
+		       clearedlocationServerNotResolvableAc, clearedlocationServerNotUnavailableAc, 
+		       clearedlocationServerClusterMajorityUnavailableAc, clearedlocationServerClusterAllUnavailableAc,
+		       clearedUsageGenAc, clearedSoftwareGenAc, clearedHardwareGenAc, clearedDbBackupFailedAc,
+		       clearedSignalingPointInaccessibleAc, clearedLinksetNotAvailableAc,
+       		   clearedSignalingLinkFailedLocallyAc, clearedSignalingLinkBlockedLocallyAc,
+		       clearedSignalingLinkRemotelyInhibitedAc, clearedOutboundTPSValuesExceededAc,
+		       clearedOutboundLinkCongestionAc, clearedRemotelyBlockedAc, clearedManuallyRemovedAc,
+		       clearedManuallyRemovedRemoteAc,clearedJtapiRemoteProviderOutOfServiceAc,
+		       clearedMediaConductorOverLoadedAc,clearedSmdiRemoteLostAc, 
+		       clearedSessionAgentExceededThresholdAc, clearedSessionAgentExceededThresholdMinorAc,
+		       clearedNoSMSCConnectionAc, clearedSmppTotalFailureAc,
+		       clearedUnableToStartCAPconnectionAc, clearedAllPermSipConnectionsNotOperationalAc,
+		       clearedRunTimeLicenseInvalidAc, clearedRunTimeLicenseExpiredAc, 
+		       clearedOperationOvrRuntimeCapacityAc, clearedPostgressDBUnrecoverableAc,
+		       clearedUnableToStartMAPconnectionAc,clearedUnableToStartIS41ConnectionAc,
+		       clearedLicenseDueToExpireAc, clearedPermSipConnectionNotOperationalAc,
+		       clearedInvalidLocationServerDomainAc, clearedLocationServerUnavailAc,
+		       clearedLocationServerClusterMajorityUnavailAc, clearedInvalidLocationServerDomainAc
+	}
+	STATUS current
+	DESCRIPTION " The group of traps that can be sent when an alarm is cleared"
+	::= { mibGroupsAc 10}
+
+    abrazoSysInfoGroupAc OBJECT-GROUP
+        OBJECTS{abrazoCSysDescr, nodePctCpuAc, nodePctDuAc
+	}
+	STATUS current
+	DESCRIPTION " The Abrazo system related information such as diskAc, CPU utilization"
+	::= { mibGroupsAc 11}
+
+   abrazoComplianceAc MODULE-COMPLIANCE
+    	STATUS      current
+	DESCRIPTION 
+        	"AbrazoC Function MIB compliance"
+
+   MODULE
+
+        MANDATORY-GROUPS        { activeSessCondStatsGroupAc,
+        						  activeProvStatsGroupAc,
+                                  activeMediaCondStatsGroupAc,
+                                  activeMgmtStatsGroupAc,                                  
+                                  historicalSessCondStatsGroupAc,
+                                  historicalProvStatsGroupAc,
+                                  historicalMediaCondStatsGroupAc,
+                                  historicalMgmtStatsGroupAc,
+				  				  alarmTrapGroupAc, 
+				  				  alarmClearTrapGroupAc,
+								  abrazoSysInfoGroupAc
+				}
+
+   ::= { mibCompliancyAc 1 }
+
+END

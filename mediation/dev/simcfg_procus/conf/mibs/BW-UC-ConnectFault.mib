@@ -1,0 +1,123 @@
+-- File Name : BW-UC-ConnectFault.mib
+BW-UC-ConnectFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExceptionMessage, npMessage, npUserId, npRequestUriUser, npCallId, npTreatment, npSipErrorCode, npInstanceName, npPolicyFeature, npRemoteAddress, npStackTrace, npReason, npRequest, npReceivedVersion, npExpectedVersion, npDeviceType, npDeviceName, npNodeId, npNbTransactions, npPeriod, npCurrentThresholdValue, npUserUid, npSessionKey, npEndpointId
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201105020000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks UC-Connect Application."
+    REVISION    "201105020000Z"
+                DESCRIPTION     "Added object 'correlationParameter' in the OBJECTS clause of applicable faults."
+    REVISION    "201009140000Z"
+                DESCRIPTION     "Moved object 'alarmState' after object 'severity' in the OBJECTS clause of applicable faults."
+    REVISION    "200906020000Z"
+                DESCRIPTION     "Added Session Audit fault."
+    REVISION    "200903310000Z"
+                DESCRIPTION     "Creation of the UC-Connect Fault MIB."
+    ::=  {  common  1  }
+
+  bwCapClientConnectionFailure NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npRemoteAddress }
+    STATUS      current
+    DESCRIPTION
+        "The connection to the Application Server is down.
+@severity:high
+@subcomponent:cap
+@correlationrules:This alarm is cleared once the connection is restored."
+    ::=  {  systemFaults 8500  }
+
+  bwLocationApiClientNetworkServerConnectionFailure NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npRemoteAddress }
+    STATUS      current
+    DESCRIPTION
+        "The connection to the Network Server or Location Server is down.
+@severity:high
+@subcomponent:nslocation
+@correlationrules:This alarm is cleared once the connection is restored."
+    ::=  {  systemFaults 8501  }
+
+  bwCSTASessionRegistrationFailure NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npRemoteAddress }
+    STATUS      current
+    DESCRIPTION
+        "MOC client registration failed.
+@severity:informational
+@subcomponent:sip
+@correlationrules:This alarm is cleared once the connection is restored."
+    ::=  {  systemFaults 8502  }
+
+bwAuditAbnormalCallTermination  NOTIFICATION-TYPE
+  OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npUserUid, npSessionKey, npEndpointId }
+    STATUS  current
+    DESCRIPTION
+      "This notification is sent when the MOC server does not respond to the SIP audit. Session audit has terminated the SIP dialog when this notification is sent.
+@severity:low
+@subcomponent:sip"
+    ::= { systemFaults 8503 }
+    
+  bwPMUCConnectLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the UC-Connect application has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUCConnectLaunched, bwPMUCConnectShutDown, bwPMUCConnectRestarted, bwPMUCConnectDeath and bwPMUCConnectOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the UCConnect process"
+-- @feature:165352
+    ::=  {  systemFaults 8504  }
+
+  bwPMUCConnectShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the UC-Connect application has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUCConnectLaunched, bwPMUCConnectShutDown, bwPMUCConnectRestarted, bwPMUCConnectDeath and bwPMUCConnectOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the UCConnect process"
+-- @feature:165352
+    ::=  {  systemFaults 8505 }
+
+  bwPMUCConnectRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the UC-Connect application restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMUCConnectLaunched, bwPMUCConnectShutDown, bwPMUCConnectRestarted, bwPMUCConnectDeath and bwPMUCConnectOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the UCConnect process"
+-- @feature:165352
+    ::=  {  systemFaults 8506 }
+
+  bwPMUCConnectDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the UC-Connect application death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMUCConnectLaunched, bwPMUCConnectShutDown, bwPMUCConnectRestarted, bwPMUCConnectDeath and bwPMUCConnectOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the UCConnect process"
+-- @feature:165352
+    ::=  {  systemFaults 8507 }
+    
+bwPMUCConnectOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the UC-Connect application ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMUCConnectLaunched, bwPMUCConnectShutDown, bwPMUCConnectRestarted, bwPMUCConnectDeath, and bwPMUCConnectOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the UCConnect process"
+-- @feature:165352
+    ::=  {  systemFaults 8508 }  
+    
+END

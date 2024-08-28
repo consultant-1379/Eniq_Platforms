@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groupmgt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/group_management.xsd">
+	<group type="imsi" name="imsi-4">
+		<group-element>
+			<key name="imsi" value="93"/>
+		</group-element>
+		<group-element>
+			<key name="imsi" value="42"/>
+		</group-element>
+	</group>
+</groupmgt>

@@ -1,0 +1,12 @@
+[GENERAL]
+tagId=CmVector_V
+dataFormatID=DC_E_PARSER:((1)):DC_E_PARSER_CMVECTOR_V:mdc
+folderName=DC_E_PARSER_CMVECTOR_V
+dItems_imports=__ENIQ__.txt
+
+[cmvector_counter]
+pi=CMVECTOR
+dataType=numeric
+dataSize=18
+dataScale=8
+isCounter=1

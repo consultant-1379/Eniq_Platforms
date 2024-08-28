@@ -1,0 +1,120 @@
+ERICSSON-MPE-CAE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeCaePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the Content Adaptation 
+                    Engine functionality."
+::= { mpeModules 31 }
+
+caePmObjects  OBJECT IDENTIFIER ::= { mpeCaePmModule 1 }
+
+caeCnt  OBJECT IDENTIFIER ::= { caePmObjects 1 }
+
+caeEvent  OBJECT IDENTIFIER ::= { caePmObjects 2 }
+
+caePmConformance  OBJECT IDENTIFIER ::= { mpeCaePmModule 3 }
+
+caePmGroups  OBJECT IDENTIFIER ::= { caePmConformance 1 }
+
+caePmCompliances  OBJECT IDENTIFIER ::= { caePmConformance 2 }
+
+caeCntRespMod  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of received ICAP RESPMOD requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { caeCnt 1 }
+
+caeCntReqMod  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of received ICAP REQMOD requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { caeCnt 2 }
+
+caeCntOptions  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of received ICAP OPTIONS requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { caeCnt 3 }
+
+caeCntAvgProcTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time in milliseconds to handle a 
+                    request in Cae."
+::= { caeCnt 4 }
+
+caeCntConn  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the current number of active Content Adaptation 
+                    Engine connections."
+::= { caeCnt 5 }
+
+caeEventCaeSocket  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Cae process cannot open configured Cae Server Port."
+::= { caeEvent 1 }
+
+-- Compliance Statements
+
+caeCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for content adaptation 
+                    engine."
+   MODULE          -- this module
+   MANDATORY-GROUPS {caeConfGroup}
+::= { caePmCompliances 1 }
+
+-- Units of Conformance
+
+caeConfGroup OBJECT-GROUP
+   OBJECTS { caeCntRespMod,
+             caeCntReqMod,
+             caeCntOptions,
+             caeCntAvgProcTime,
+             caeCntConn,
+             caeEventCaeSocket}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a content adaptation 
+                    engine."
+::= { caePmGroups 1 }
+END

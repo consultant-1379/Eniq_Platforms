@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pm xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='PM-MOM.xsd'>
+
+    <pmMimVersion>1.0</pmMimVersion>
+    <applicationVersion>6</applicationVersion>
+    <measurements>
+        <measObjClass name="cell">
+            <group name="CounterGroup1">
+                <counter>
+                    <measType>
+                        <measName>c3</measName>
+                    </measType>
+                    <description/>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c4</measName>
+                    </measType>
+                    <description/>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="AverageFERDLGSM">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c3</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c4</measName>
+                    </argument>
+                </formula>
+                <counter>
+                    <measType>
+                        <measName>c8</measName>
+                    </measType>
+                    <description/>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c9</measName>
+                    </measType>
+                    <description/>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="AverageFERULGSM">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c8</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c9</measName>
+                    </argument>
+                </formula>
+            </group>
+            <group name="CounterGroup2">
+                <counter>
+                    <measType>
+                        <measName>c10</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="FERDLDistribution">
+                    <function>IDENTITY</function>
+                    <argument seq="1">
+                        <measName>c10</measName>
+                    </argument>
+                </formula>
+            </group>
+            <group name="Handover">
+                <counter>
+                    <measType>
+                        <measName>c24</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c22</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="HandoverLost">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c24</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c22</measName>
+                    </argument>
+                </formula>
+                <counter>
+                    <measType>
+                        <measName>c23</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="HandoverReversion">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c23</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c22</measName>
+                    </argument>
+                </formula>
+                <counter>
+                    <measType>
+                        <measName>c21</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="HandoverSuccess">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c21</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c22</measName>
+                    </argument>
+                </formula>
+            </group>
+        </measObjClass>
+        <measObjClass name="trx">
+            <group name="FFAX">
+                <counter>
+                    <measType>
+                        <measName>c14</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c15</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c16</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="FFAXNumberofObservations">
+                    <function>IDENTITY</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXAverageRxLevDifference">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXFaultIndication">
+                    <function>FFAX_INDICATION</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                    <argument seq="3">
+                        <measName>c16</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXStandardDeviationofRxLevDifference">
+                    <function>FFAX_STDDEV</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                    <argument seq="3">
+                        <measName>c16</measName>
+                    </argument>
+                </formula>
+            </group>
+        </measObjClass>
+    </measurements>
+</pm>

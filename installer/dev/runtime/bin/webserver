@@ -1,0 +1,88 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Webserver control script
+#
+# Usage: webserver start|stop|restart|status
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+unalias stop 2> /dev/null
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 32
+fi
+
+start() {
+  #-----------
+  # To remove the session file if its already there on start of webserver
+  #-----------
+  sessionFilePath=${RT_DIR}"/tomcat/work/Catalina/localhost/adminui/SESSIONS.ser"
+  if [ -s ${sessionFilePath} ]
+  then
+  	rm -f ${sessionFilePath}
+  fi
+  ${RT_DIR}/ant/bin/ant -f ${BIN_DIR}/before_webserver_start.xml -Ddc.runtime.dir=${RT_DIR} -Ddc.platform.dir=${PLATFORM_DIR} -Ddc.log.dir=${LOG_DIR} >> /dev/null 2>&1
+  if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s webserver -a start
+  else
+  	${ADMIN_BIN}/eniq_service_start_stop.bsh -s webserver -a start
+  fi
+}
+
+stop() {
+  if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s webserver -a stop
+  else
+  	${ADMIN_BIN}/eniq_service_start_stop.bsh -s webserver -a stop
+  fi
+}
+
+status() {
+
+  cd /tmp
+  /usr/sfw/bin/wget -q -T 10 -t 1 http://localhost:8080/ >> /dev/null 2>&1
+
+  ECODE=$?
+
+  if [ ${ECODE} -eq 0 ] ; then
+    echo "webserver is running OK"
+  else
+    echo "webserver is not running"
+  fi
+
+  if [ -f /tmp/EniqMain ] ; then
+    rm -f /tmp/EniqMain
+  fi 
+  
+  exit ${ECODE}
+}
+
+case "$1" in
+start)
+      start
+      ;;
+stop)
+     stop
+     ;;
+restart)
+     stop
+     start
+     ;;
+status)
+     status
+     ;;
+*)
+     echo "Usage: webserver start|stop|restart|status"
+     exit 10
+     ;;
+esac

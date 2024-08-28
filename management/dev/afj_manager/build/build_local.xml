@@ -1,0 +1,80 @@
+<project name="afjmanager" default="compile">
+
+  <property name="pack.name" value="afjmanager"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="platform.dir" value="C:/esunbal_views/generic_siu_development"/>
+  <property name="3pp.dir" value="C:/esunbal_views/generic_siu_development/eniq_3pp"/>
+  <property name="pack.dir" value="${platform.dir}/management/dev/afj_manager"/>  
+  <property name="schema.package" value="com.ericsson.eniq.afj.schema"/>  
+  <property name="schema.file" value="C:/Ericsson/E4E/workspace/TestProject/conf/oss_rc_pm_mim_PA5.xsd"/>
+  <property name="classes" value="${pack.dir}/classes"/>
+  <property name="gen.src" value="C:/Ericsson/E4E/workspace/TestProject/gen-src"/>
+  <property name="binding.src" value="C:/Ericsson/E4E/workspace/TestProject/conf"/>
+  <property name="binding.file" value="${binding.src}/first.xjb"/>
+  
+  <!-- Eniq Jars -->
+  <property name="eniq.common.dir" value="${platform.dir}/common_utilities/build/common_utilities"/>
+  <!-- <property name="eniq.engine.dir" value="${platform.dir}/etl_controller/build/engine"/> -->
+  <property name="eniq.repository.dir" value="${platform.dir}/installer/build/repository"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.dbunit.dir" value="${3pp.dir}/dbunit/dbunit/v2_1/prod"/>
+  <property name="3pp.velocity.dir" value="${3pp.dir}/apache/jakarta_velocity/v1_2/prod"/>
+  <property name="3pp.junit.dir" value="${3pp.dir}/junit/v4_5/prod"/>
+  
+  	<target name="compile.schema">
+		<mkdir dir="${classes}"/>
+		<exec executable="xjc">
+			<arg value="-d"/>
+			<arg value="${gen.src}"/>
+			<arg value="-p"/>
+			<arg value="${schema.package}"/>
+			<arg value="${schema.file}"/>
+		</exec>
+		<javac destdir="${classes}" debug="true">
+			<src path="${gen.src}"/>
+		</javac>
+	</target>
+  
+  <target name="precompile" depends="compile.schema"/>	
+  
+  <target name="compile" depends="precompile">
+      <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="on"
+           optimize="off" 
+           deprecation="off">      
+      <classpath>
+        <pathelement path="${classpath}"/>
+		<fileset dir="${eniq.common.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+	<!-- <fileset dir="${eniq.engine.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset> -->
+		<fileset dir="${eniq.repository.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${3pp.dbunit.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+		<fileset dir="${3pp.velocity.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+ 		<fileset dir="${3pp.junit.dir}">
+	    	<include name="**/*.jar"/>
+	    </fileset>
+     </classpath>
+    </javac> 	
+  	
+
+  </target>
+
+  <target name="postcompile">
+  		<mkdir dir="${jar}"/>
+  		<copy todir="${pack.dir}/classes">
+			<fileset dir="${pack.dir}/jar"/> 
+		</copy>
+  </target>	
+</project>

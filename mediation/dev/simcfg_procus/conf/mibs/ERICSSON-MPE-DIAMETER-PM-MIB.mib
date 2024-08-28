@@ -1,0 +1,450 @@
+ERICSSON-MPE-DIAMETER-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeDiameterPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201511200053Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by Diameter functionality."
+::= { mpeModules 29 }
+
+diameterPmObjects  OBJECT IDENTIFIER ::= { mpeDiameterPmModule 1 }
+
+dEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 1 }
+
+dZxEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 4 }
+
+dShEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 7 }
+
+dGxEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 2 }
+
+dCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 3 }
+
+dZhEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 5 }
+
+dZhCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 6 }
+
+diameterPmConformance  OBJECT IDENTIFIER ::= { mpeDiameterPmModule 3 }
+
+diameterPmGroups  OBJECT IDENTIFIER ::= { diameterPmConformance 1 }
+
+diameterPmCompliances  OBJECT IDENTIFIER ::= { diameterPmConformance 2 }
+
+dEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { dEvt 1 } 
+
+dEvtEntry OBJECT-TYPE
+   SYNTAX          DEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Base."
+   INDEX { applIndex }
+::= { dEvtTable  1 }
+
+DEvtEntry  ::= SEQUENCE
+{
+   dEvtPeerCommErr ItuPerceivedSeverity
+}
+
+dEvtPeerCommErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication Error with the Diameter Peer has been 
+                    detected."
+::= { dEvtEntry 2 }
+
+dZxEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { dZxEvt 1 } 
+
+dZxEvtEntry OBJECT-TYPE
+   SYNTAX          DZxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Zx Interface."
+   INDEX { applIndex }
+::= { dZxEvtTable  1 }
+
+DZxEvtEntry  ::= SEQUENCE
+{
+   dZxEvtSlowZxPeerCom ItuPerceivedSeverity
+}
+
+dZxEvtSlowZxPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected."
+::= { dZxEvtEntry 2 }
+
+dShEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DShEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { dShEvt 1 } 
+
+dShEvtEntry OBJECT-TYPE
+   SYNTAX          DShEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Sh Interface."
+   INDEX { applIndex }
+::= { dShEvtTable  1 }
+
+DShEvtEntry  ::= SEQUENCE
+{
+   dShEvtSlowShPeerCom ItuPerceivedSeverity
+}
+
+dShEvtSlowShPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected."
+::= { dShEvtEntry 2 }
+
+dGxEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DGxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { dGxEvt 1 } 
+
+dGxEvtEntry OBJECT-TYPE
+   SYNTAX          DGxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Gx Interface."
+   INDEX { applIndex }
+::= { dGxEvtTable  1 }
+
+DGxEvtEntry  ::= SEQUENCE
+{
+   dGxEvtSlowGxPeerCom ItuPerceivedSeverity
+}
+
+dGxEvtSlowGxPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the PCRF has been detected."
+::= { dGxEvtEntry 2 }
+
+dCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { dCnt 1 } 
+
+dCntEntry OBJECT-TYPE
+   SYNTAX          DCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Interface."
+   INDEX { applIndex }
+::= { dCntTable  1 }
+
+DCntEntry  ::= SEQUENCE
+{
+   dCntCcrSuccMsgs Counter32,
+   dCntCcrErrMsgs  Counter32,
+   dCntCcaSuccMsgs Counter32,
+   dCntCcaErrMsgs  Counter32,
+   dCntRarMsgs     Counter32,
+   dCntRaaSuccMsgs Counter32,
+   dCntRaaErrMsgs  Counter32,
+   dCntCcAvgTime   Gauge32,
+   dCntCcMaxTime   Gauge32,
+   dCntGxSession   Gauge32
+}
+
+dCntCcrSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx CC-R messages that 
+                    successfully have been sent from MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 2 }
+
+dCntCcrErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx CC-R messages that 
+                    was not possible to send from MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 3 }
+
+dCntCcaSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx CC-A messages that 
+                    have been received in MSP with a success response code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 4 }
+
+dCntCcaErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx CC-A messages that 
+                    have been received in MSP with an error response code 
+                    set.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 5 }
+
+dCntRarMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx RA-R messages that 
+                    have been received in MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 6 }
+
+dCntRaaSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx RA-A messages that 
+                    have been sent from MSP with a success response code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 7 }
+
+dCntRaaErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the number of Diameter Gx RA-A messages that 
+                    have been sent from MSP with an error response code set.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dCntEntry 8 }
+
+dCntCcAvgTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time in milliseconds between 
+                    sending a CC-R and receiving a CC-A message during the 
+                    sampling interval."
+::= { dCntEntry 9 }
+
+dCntCcMaxTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum time in milliseconds between 
+                    sending a CC-R and receiving a CC-A message during the 
+                    sampling interval."
+::= { dCntEntry 10 }
+
+dCntGxSession  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of Gx Control Sessions currently in use."
+::= { dCntEntry 11 }
+
+dZhEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZhEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { dZhEvt 1 } 
+
+dZhEvtEntry OBJECT-TYPE
+   SYNTAX          DZhEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Zh Interface."
+   INDEX { applIndex }
+::= { dZhEvtTable  1 }
+
+DZhEvtEntry  ::= SEQUENCE
+{
+   dZhEvtSlowZhPeerCom ItuPerceivedSeverity
+}
+
+dZhEvtSlowZhPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected."
+::= { dZhEvtEntry 2 }
+
+dZhCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZhCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { dZhCnt 1 } 
+
+dZhCntEntry OBJECT-TYPE
+   SYNTAX          DZhCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Zh Interface."
+   INDEX { applIndex }
+::= { dZhCntTable  1 }
+
+DZhCntEntry  ::= SEQUENCE
+{
+   dZhCntAuthTotal      Counter32,
+   dZhCntAuthFailed     Counter32,
+   dZhCntAuthSuccessful Counter32,
+   dZhCntAuthAvgTime    Gauge32,
+   dZhCntAuthMaxTime    Gauge32
+}
+
+dZhCntAuthTotal  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "number of all HSS authentications
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 2 }
+
+dZhCntAuthFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "number of all failed HSS authentications.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 3 }
+
+dZhCntAuthSuccessful  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "number of all successful HSS authentications.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 4 }
+
+dZhCntAuthAvgTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the average time in milliseconds between 
+                    sending a MAR and receiving a successful MAA during the 
+                    sampling interval."
+::= { dZhCntEntry 5 }
+
+dZhCntAuthMaxTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Shows the maximum time in milliseconds between 
+                    sending a MAR and receiving a successful MAA during the 
+                    sampling interval."
+::= { dZhCntEntry 6 }
+
+-- Compliance Statements
+
+diameterCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for diameter."
+   MODULE          -- this module
+   MANDATORY-GROUPS {diameterConfGroup}
+::= { diameterPmCompliances 1 }
+
+-- Units of Conformance
+
+diameterConfGroup OBJECT-GROUP
+   OBJECTS { dEvtPeerCommErr,
+             dZxEvtSlowZxPeerCom,
+             dShEvtSlowShPeerCom,
+             dGxEvtSlowGxPeerCom,
+             dCntCcrSuccMsgs,
+             dCntCcrErrMsgs,
+             dCntCcaSuccMsgs,
+             dCntCcaErrMsgs,
+             dCntRarMsgs,
+             dCntRaaSuccMsgs,
+             dCntRaaErrMsgs,
+             dCntCcAvgTime,
+             dCntCcMaxTime,
+             dCntGxSession,
+             dZhEvtSlowZhPeerCom,
+             dZhCntAuthTotal,
+             dZhCntAuthFailed,
+             dZhCntAuthSuccessful,
+             dZhCntAuthAvgTime,
+             dZhCntAuthMaxTime}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a diameter."
+::= { diameterPmGroups 1 }
+END

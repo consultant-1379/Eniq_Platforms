@@ -1,0 +1,510 @@
+--===============================================================
+-- File Name : BW-SoftwareManagement.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-SoftwareManagement DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-COMPLIANCE, OBJECT-GROUP
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Unsigned32, Counter32, Gauge32, Integer32
+      FROM SNMPv2-SMI
+    DateAndTime, DisplayString, TimeStamp
+      FROM SNMPv2-TC;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201511060000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This is the MIB for the BroadWorks Software Management application."
+    REVISION    "201511060000Z"
+                DESCRIPTION    "Creation."
+    ::=  {  enterprises 6431  }
+
+  broadworks OBJECT IDENTIFIER
+    ::=  {  broadsoft 1  }
+
+  softwareManagement OBJECT IDENTIFIER
+    ::=  {  broadworks 60  }
+
+  executors OBJECT IDENTIFIER
+    ::=  {  softwareManagement 2  }
+
+  ssh OBJECT IDENTIFIER
+    ::=  {  softwareManagement 3  }
+
+-- MIB Compliance - Root
+  bwSoftwareManagementMibConformance OBJECT IDENTIFIER
+    ::=  {  softwareManagement 1000  }
+
+-- MIB Compliance - Groups
+  bwSoftwareManagementMibGroups OBJECT IDENTIFIER
+    ::=  {  bwSoftwareManagementMibConformance 1  }
+
+-- MIB Compliance - Module
+  bwSoftwareManagementMibCompliancy OBJECT IDENTIFIER
+    ::=  {  bwSoftwareManagementMibConformance 2  }
+
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).softwareManagement(60).executors(2)
+-- ################### ...............................
+
+  bwSMExecutorReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "When set to a value other than '0', all statistics stored under executorTable are reset to '0'."
+-- @feature:217550
+    ::=  {  executors 1  }
+
+  bwSMExecutorTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSMExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+    "This table exposes the SoftwareManagement executor statistics."
+    ::=  {  executors 2  }
+
+  bwSMExecutorTableEntry OBJECT-TYPE
+    SYNTAX      BwSMExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+      "This row contains information about a SoftwareManagement executor."
+    INDEX       { bwSMExecutorIndex }
+    ::=  {  bwSMExecutorTable 1  }
+
+  BwSMExecutorTableEntry ::= SEQUENCE {
+    bwSMExecutorIndex  Unsigned32,
+    bwSMExecutorName  DisplayString,
+    bwSMExecutorQueueCapacity  Gauge32,
+    bwSMExecutorQueueSize  Gauge32,
+    bwSMExecutorQueueWaitingTimeAvg  Gauge32,
+    bwSMExecutorQueueWaitingTimeMin  Gauge32,
+    bwSMExecutorQueueWaitingTimeMax  Gauge32,
+    bwSMExecutorQueueWaitingTimeMaxTimestamp  DateAndTime,
+    bwSMExecutorMinPoolSize  Gauge32,
+    bwSMExecutorMaxPoolSize  Gauge32,
+    bwSMExecutorThreadsBusy  Gauge32,
+    bwSMExecutorCompletedTaskCount  Counter32,
+    bwSMExecutorThreadsAlive  Gauge32,
+    bwSMExecutorThreadsAliveMax  Gauge32,
+    bwSMExecutorTaskProcessingTimeAvg  Gauge32,
+    bwSMExecutorTaskProcessingTimeMin  Gauge32,
+    bwSMExecutorTaskProcessingTimeMax  Gauge32,
+    bwSMExecutorTaskProcessingTimeMaxTimestamp  DateAndTime
+  }
+
+  bwSMExecutorIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This integer represents an index to a given executor."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 1  }
+
+  bwSMExecutorName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the name of this executor."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 2  }
+
+  bwSMExecutorQueueCapacity OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the initial capacity of the executor queue."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 3  }
+
+  bwSMExecutorQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current size of the executor queue."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 4  }
+
+  bwSMExecutorQueueWaitingTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the average time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 5  }
+
+  bwSMExecutorQueueWaitingTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the minimum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 6  }
+
+  bwSMExecutorQueueWaitingTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 7  }
+
+  bwSMExecutorQueueWaitingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when executorQueueWaitingTime was obtained."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 8  }
+
+  bwSMExecutorMinPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the number of threads to keep in the pool, even if they are idle."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 9  }
+
+  bwSMExecutorMaxPoolSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads to allow in the pool."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 10  }
+
+  bwSMExecutorThreadsBusy OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the approximate number of threads that are actively executing tasks."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 11  }
+
+  bwSMExecutorCompletedTaskCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the approximate total number of tasks that have completed execution.  Because the states of tasks and threads may change dynamically during computation, the returned value is only an approximation; however, it does not ever decrease across successive calls."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 12  }
+
+  bwSMExecutorThreadsAlive OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the current number of threads instantiated."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 13  }
+
+  bwSMExecutorThreadsAliveMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum number of threads that can be allocated at the same time."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 14  }
+
+  bwSMExecutorTaskProcessingTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the average processing time spent by this executor."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 15  }
+
+  bwSMExecutorTaskProcessingTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the minimum amount of processing time spent by this executor."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 16  }
+
+  bwSMExecutorTaskProcessingTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the maximum amount of processing time spent by this executor."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 17  }
+
+  bwSMExecutorTaskProcessingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when taskProcessingTimeMax was obtained."
+-- @feature:217550
+    ::=  {  bwSMExecutorTableEntry 18  }
+
+-- ################### ...............................
+-- broadsoft(6431).broadworks(1).softwareManagement(60).ssh(3)
+-- ################### ...............................
+
+  bwSMSshResetStats OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+      "When set to a value other than '0', all statistics stored under SshSubsystem  are reset to '0'."
+-- @feature:217550
+    ::=  {  ssh 1  }
+
+  bwSMSshSessionConnectionRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of outbound SSH connection requests."
+-- @feature:217550
+    ::=  {  ssh 2  }
+
+  bwSMSshSessionConnectedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of outbound SSH connection events."
+-- @feature:217550
+    ::=  {  ssh 3  }
+
+  bwSMSshSessionDisconnectedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of outbound SSH connection termination events."
+-- @feature:217550
+    ::=  {  ssh 4  }
+
+  bwSMSshSessionAuthenticationFailureEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of authentication failures detected by the internal SSH client."
+-- @feature:217550
+    ::=  {  ssh 5  }
+
+  bwSMSshSessionConnectionFailureEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of connection failures detected by the internal SSH client."
+-- @feature:217550
+    ::=  {  ssh 6  }
+
+  bwSMSshChannelOpenRequestEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH channel open attempts."
+-- @feature:217550
+    ::=  {  ssh 7  }
+
+  bwSMSshChannelOpenedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH channels successfully opened."
+-- @feature:217550
+    ::=  {  ssh 8  }
+
+  bwSMSshChannelOpenFailedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of failures to open an SSH channel."
+-- @feature:217550
+    ::=  {  ssh 9  }
+
+  bwSMSshChannelInputAvailableEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of times the SSH client was notified that input was available for I/O read operation."
+-- @feature:217550
+    ::=  {  ssh 10  }
+
+  bwSMSshChannelOutputReadyEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of times the SSH client was notified that it could issue an I/O write operation."
+-- @feature:217550
+    ::=  {  ssh 11  }
+
+  bwSMSshChannelDisconnectedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH channels disconnected."
+-- @feature:217550
+    ::=  {  ssh 12  }
+
+  bwSMSshCommandStartedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH commands started."
+-- @feature:217550
+    ::=  {  ssh 13  }
+
+  bwSMSshCommandFailedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of failed SSH commands."
+-- @feature:217550
+    ::=  {  ssh 14  }
+
+  bwSMSshCommandTimeoutEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH command time-outs."
+-- @feature:217550
+    ::=  {  ssh 15  }
+
+  bwSMSshCommandCompletedEvents OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total number of SSH commands that were completed."
+-- @feature:217550
+    ::=  {  ssh 16  }
+
+  bwSMSshCmdAvgConnectionTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average time spent waiting for an SSH connection to complete."
+-- @feature:217550
+    ::=  {  ssh 17  }
+
+  bwSMSshCmdMinConnectionTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Minimum time spent waiting for an SSH connection to complete."
+-- @feature:217550
+    ::=  {  ssh 18  }
+
+  bwSMSshCmdMaxConnectionTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Maximum time spent waiting for an SSH connection to complete."
+-- @feature:217550
+    ::=  {  ssh 19  }
+
+  bwSMSshCmdTotalConnectionTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Total time spent waiting for an SSH connection to complete."
+-- @feature:217550
+    ::=  {  ssh 20  }
+
+  bwSMSshCmdAvgProcessingTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average time spent waiting for an SSH process to complete."
+-- @feature:217550
+    ::=  {  ssh 21  }
+
+  bwSMSshCmdMinProcessingTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Minimum time spent waiting for an SSH process to complete."
+-- @feature:217550
+    ::=  {  ssh 22  }
+
+  bwSMSshCmdMaxProcessingTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Maximum time spent waiting for an SSH process to complete."
+-- @feature:217550
+    ::=  {  ssh 23  }
+
+  bwSMSshCmdTotalProcessingTime OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Maximum time spent waiting for an SSH process to complete."
+-- @feature:217550
+    ::=  {  ssh 24  }
+
+-- BroadWorks MIB Conformance Definition  ...........................................
+
+  bwsoftwaremanagementExecutorsGroup OBJECT-GROUP
+    OBJECTS { bwSMExecutorReset, bwSMExecutorIndex, bwSMExecutorName, bwSMExecutorQueueCapacity, bwSMExecutorQueueSize, bwSMExecutorQueueWaitingTimeAvg, bwSMExecutorQueueWaitingTimeMin, bwSMExecutorQueueWaitingTimeMax, bwSMExecutorQueueWaitingTimeMaxTimestamp, bwSMExecutorMinPoolSize, bwSMExecutorMaxPoolSize, bwSMExecutorThreadsBusy, bwSMExecutorCompletedTaskCount, bwSMExecutorThreadsAlive, bwSMExecutorThreadsAliveMax, bwSMExecutorTaskProcessingTimeAvg, bwSMExecutorTaskProcessingTimeMin, bwSMExecutorTaskProcessingTimeMax, bwSMExecutorTaskProcessingTimeMaxTimestamp }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for softwareManagement executors."
+    ::=  {  bwSoftwareManagementMibGroups 1  }
+
+  bwsoftwaremanagementSshGroup OBJECT-GROUP
+    OBJECTS { bwSMSshResetStats, bwSMSshSessionConnectionRequests, bwSMSshSessionConnectedEvents, bwSMSshSessionDisconnectedEvents, bwSMSshSessionAuthenticationFailureEvents, bwSMSshSessionConnectionFailureEvents, bwSMSshChannelOpenRequestEvents, bwSMSshChannelOpenedEvents, bwSMSshChannelOpenFailedEvents, bwSMSshChannelInputAvailableEvents, bwSMSshChannelOutputReadyEvents, bwSMSshChannelDisconnectedEvents, bwSMSshCommandStartedEvents, bwSMSshCommandFailedEvents, bwSMSshCommandTimeoutEvents, bwSMSshCommandCompletedEvents, bwSMSshCmdAvgConnectionTime, bwSMSshCmdMinConnectionTime, bwSMSshCmdMaxConnectionTime, bwSMSshCmdTotalConnectionTime, bwSMSshCmdAvgProcessingTime, bwSMSshCmdMinProcessingTime, bwSMSshCmdMaxProcessingTime, bwSMSshCmdTotalProcessingTime }
+    STATUS  current
+    DESCRIPTION "This group defines the statistics for softwareManagement ssh."
+    ::=  {  bwSoftwareManagementMibGroups 2  }
+
+  bwSoftwareManagementBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "BW-SoftwareManagement MIB compliance."
+    MODULE
+      MANDATORY-GROUPS { bwsoftwaremanagementExecutorsGroup, bwsoftwaremanagementSshGroup }
+    ::=  {  bwSoftwareManagementMibCompliancy 1  }
+
+END

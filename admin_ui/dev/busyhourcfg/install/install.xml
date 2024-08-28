@@ -1,0 +1,82 @@
+<project name="busyhourcfg" basedir="." default="install">
+
+	<target name="install">
+
+		<!-- Shutdown if we have a running webserver -->
+
+		<if>
+			<available file="${dc.bin.dir}/webserver"/>
+			<then>
+				<exec dir="${dc.bin.dir}" executable="webserver">
+					<arg line="stop"/>
+				</exec>
+			</then>
+		</if>
+
+		<!-- Checks that directories exists -->
+
+		<mkdir dir="${dc.log.dir}/busyhourcfg"/>
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/adminui/busyhourcfg"/>
+
+		<!-- Extract jsp, css, etc. from the war package -->
+
+		<unwar src="${dc.installer.dir}/tmp/install/busyhourcfg.war" dest="${dc.runtime.dir}/tomcat/webapps/adminui/">
+			<patternset>
+				<exclude name="**/*.class"/>
+				<exclude name="**/*.properties"/>
+				<exclude name="WEB-INF/web.xml"/>
+			</patternset>
+		</unwar>
+
+		<!-- Extract classes and properties from the war package -->
+		
+		<unwar src="${dc.installer.dir}/tmp/install/busyhourcfg.war" dest="${dc.runtime.dir}/tomcat/webapps/adminui/">
+			<patternset>
+				<include name="**/*.class"/>
+				<include name="**/*.properties"/>
+			</patternset>
+		</unwar>
+		
+		<!-- Extract web.xml from the war package -->
+		
+		<unwar src="${dc.installer.dir}/tmp/install/busyhourcfg.war" dest="${dc.runtime.dir}/tomcat/webapps/adminui/install/">
+			<patternset>
+				<include name="WEB-INF/web.xml"/>
+			</patternset>
+		</unwar>
+		
+		<!-- add busyhourcfg stuff into adminui web.xml -->
+	  	<if>
+	  	  <available file="${dc.runtime.dir}/tomcat/webapps/adminui/WEB-INF/web.xml"/>
+	  	  <then>
+	  	  	<MergeWebXML sourcefile="${dc.runtime.dir}/tomcat/webapps/adminui/install/WEB-INF/web.xml" targetfile="${dc.runtime.dir}/tomcat/webapps/adminui/WEB-INF/web.xml"/>
+	  	  </then>
+	  	</if>
+		
+		
+		<!-- Starting up webserver -->
+
+		<if>
+			<available file="${dc.bin.dir}/webserver"/>
+			<then>
+				<exec dir="${dc.bin.dir}" executable="webserver">
+					<arg line="start"/>
+				</exec>
+			</then>
+		</if>
+
+	</target>
+
+	<target name="update">
+		<!-- Remove the Tomcat JSP cache. -->
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/work/Catalina" type="dir"/>
+			<then>
+				<delete dir="${dc.runtime.dir}/tomcat/work/Catalina" failonerror="false"/>
+			</then>
+		</if>
+
+		<antcall target="install"/>
+	</target>
+
+</project>

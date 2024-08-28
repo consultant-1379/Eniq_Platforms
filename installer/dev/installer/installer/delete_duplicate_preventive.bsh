@@ -1,0 +1,170 @@
+#!/bin/bash
+# ******************************************************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ******************************************************************************************************
+#
+# (c) Ericsson Radio Systems AB 2016 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ******************************************************************************************************
+# Name    		: delete_duplicate_preventive.bsh
+# Date    		: 11/05/2016
+# Usage   		: ./delete_duplicate_preventive.bsh  <Techpackname> <<NODE>_node.txt>
+# Created By	:  Fayazdeen Akbar
+# ******************************************************************************************************
+
+### Function: usage_msg ###
+#
+#   Print out the usage message
+#
+# Arguments:
+#       Techpackname <NODE>_node.txt
+# Return Values:
+#       none
+usage_msg()
+{
+echo ""
+echo "Usage: ./delete_duplicate_preventive.bsh  <Techpackname> <<NODE>_node.txt>"
+echo "Where"
+echo "Techpackname is either WCDMA or LTE"
+echo "<NODE>_node.txt is its corresponding WCDMA_node.txt or LTE_node.txt file which has lists of Node Names"
+
+}
+
+if [ $# != 2 ];then
+
+usage_msg
+exit 1
+
+fi
+
+INSTALLER_DIR=/eniq/sw/installer
+IQ_DIR=/eniq/sybase_iq
+DATE=/usr/bin/date
+HOME_DIR=/eniq/local_logs/iq
+IQISQL=${IQ_DIR}/${SYBASE_OCS}/bin/isql
+STARTTIMESTAMP=`$DATE '+%y%m%d_%H%M%S'`
+
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+
+#Creating directory to store the back up G1 data
+mkdir $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}
+chmod 777 $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}
+
+
+Techpackname=$1
+
+echo "$Techpackname"
+
+#Handling topology tables in LTE techpack
+
+if [ $Techpackname = 'LTE' ];then
+		
+			TAB=(DIM_E_LTE_EUREL DIM_E_LTE_EUCELL_CELL DIM_E_LTE_GERANCELLRELATION DIM_E_LTE_ULINTERFERENCEREP DIM_E_LTE_GIGABITETHERNET DIM_E_LTE_ENODEBFUNCTION DIM_E_LTE_UTRANCELLRELATION DIM_E_LTE_SECTORCARRIER DIM_E_LTE_BBPROCESSINGRESOURCE DIM_E_LTE_EUCELL DIM_E_LTE_PAGING)
+
+			FDN=(EUCELLREL_FDN EUTRANCELL_FDN GERANCELLRELATION_FDN ULINTERFERENCE_FDN GIGABITETHERNET_FDN ENODEB_FDN UTRANCELLRELATION_FDN SECTORCARRIER_FDN BBPROCESSING_FDN EUTRANCELL_FDN PAGING_FDN)
+
+			a=0
+			#Iterating the 11 affected tables to remove the Duplicate G1 entries in the Topology tables
+			while [ $a -lt 11 ]
+			do
+				#Reading the Node details from LTE_node.txt file
+				while read line           
+				do  
+
+							echo "select * from ${TAB[$a]} where ${FDN[$a]} like '%,MeContext=$line,%' and ${FDN[$a]} like'%,ManagedElement=1%'" > $INSTALLER_DIR/query1.txt							
+							echo "go" >> $INSTALLER_DIR/query1.txt
+							
+							echo "Saving backup of G1 entries of  ${TAB[$a]} " 
+							
+							$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -w9000 -i ${INSTALLER_DIR}/query1.txt | grep "[0-9]" > $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}/${TAB[$a]}.txt
+							
+							echo "Deleting duplicate G1 entries in  ${TAB[$a]} " 
+							
+							echo "delete from ${TAB[$a]} where ${FDN[$a]} like '%,MeContext=$line,%' and ${FDN[$a]} like'%,ManagedElement=1%'" > query2.txt							
+							echo "go" >> query2.txt
+							
+							$IQISQL -Udc -P${DWHDBPASSWORD}-Sdwhdb -i ${INSTALLER_DIR}/query2.txt | grep "[0-9]" 
+							
+				done < LTE_node.txt   
+
+			a=`expr $a + 1`
+
+		   done
+fi
+ 
+ #Handling topology tables in WCDMA techpack
+ 
+if [ $Techpackname = 'WCDMA' ];then
+		
+		TAB=(DIM_E_RAN_RBSLOCALCELL DIM_E_RAN_RBSIUBLINK)
+
+		FDN=(RBSLOCALCELL_FDN IUBLINK_FDN)
+
+		a=0
+		#Iterating the 2 affected tables to remove the Duplicate G1 entries in the Topology tables
+		while [ $a -lt 2 ]
+		do
+				#Reading the Node details from WCDMA_node.txt file
+				while read line           
+				do 
+						echo "select * from ${TAB[$a]} where ${FDN[$a]} like '%,MeContext=$line,%' and ${FDN[$a]} like '%,ManagedElement=1%'"> query3.txt
+						echo "go" >> query3.txt
+
+						echo "Saving backup of G1 entries of  ${TAB[$a]} " 
+						
+						$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -w9000 -i ${INSTALLER_DIR}/query3.txt | grep "[0-9]" > $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}/${TAB[$a]}.txt
+
+						echo "Deleting duplicate G1 entries in  ${TAB[$a]} " 
+
+						echo "delete from ${TAB[$a]} where ${FDN[$a]} like '%,MeContext=$line,%' and ${FDN[$a]} like '%,ManagedElement=1%'" > query4.txt
+						echo "go" >> query4.txt   
+						
+						$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb  -i ${INSTALLER_DIR}/query4.txt | grep "[0-9]" 
+
+				done < WCDMA_node.txt   
+
+
+
+			a=`expr $a + 1`
+
+		done
+
+fi
+
+#Cleanup steps
+rm -rf query1.txt query2.txt query3.txt query4.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

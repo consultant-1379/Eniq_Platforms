@@ -1,0 +1,195 @@
+--===============================================================
+-- File Name : BW-LicenseManager.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2014, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-LicenseManager DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString, DateAndTime, TimeStamp
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the BroadWorks LicenseManager daemon."
+      
+    REVISION    "201409100000Z"
+    DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  common OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  licenseManagerModule OBJECT IDENTIFIER
+    ::=  {  common  6  }
+
+  bwLicenseManagerMibConformance OBJECT IDENTIFIER
+    ::= { licenseManagerModule 1000 }
+
+-- License Manager Counters  ...........................................
+
+  bwLMLicensingMode OBJECT-TYPE
+    SYNTAX           INTEGER { noLicense (0), nonManagedLicense (1), managedLicense(2) }
+    MAX-ACCESS       read-only
+    STATUS       current
+    DESCRIPTION
+          "This integer gives the current licensing mode: NoLicense, NonManagedLicense or ManagedLicense."
+-- @feature:217550
+      ::= { licenseManagerModule 1 }
+
+  bwLMCurrentLicensePermission     OBJECT-TYPE
+    SYNTAX           INTEGER { successful (0), deniedNoLicenseFile (1), deniedSignatureValidation (2), deniedInvalidUuid (3), deniedUnspecifiedReason (4), deniedLicenseExpired (5), deniedCommunicationTimeout (6), deniedInvalidServerType (7), deniedByNfm (8), deniedOverAllocation (9) }
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the status of the current license permission: Successful, NoLicenseFile, DeniedSignatureValidation, DeniedInvalidUuid, DeniedUnspecifiedReason, DeniedLicenseExpired, DeniedCommunicationTimeout, DeniedInvalidServerType, DeniedByNfm, or DeniedOverAllocation"
+-- @feature:217550
+      ::= { licenseManagerModule 2 }
+
+  bwLMLastLicenseAssignmentTimestamp     OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This string gives the time stamp of the last time a license assignment request was received by the license manager. "
+-- @feature:217550
+      ::= { licenseManagerModule 3 }
+
+  bwLMLastLicenseUpdateTimestamp     OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This string gives the time stamp of the last time the license manager updated its license store with its assigned license. "
+-- @feature:217550
+      ::= { licenseManagerModule 4 }
+
+  bwLMLicenseIdInUse OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This string gives the license ID of the current license in use."
+-- @feature:217550
+      ::= { licenseManagerModule 5 }
+
+  bwLMLicenseRelease OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This string gives the BroadWorks release of the current license in use."
+-- @feature:217550
+      ::= { licenseManagerModule 6 }
+
+  bwLMLicenseInUseBuildDate OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This string gives the build time of the current license in use."
+-- @feature:217550
+      ::= { licenseManagerModule 7 }
+
+  bwLMLicensingViolationStatus OBJECT-TYPE
+    SYNTAX           INTEGER { noError (0), licenseViolated (1) }
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the current status of licensing violation error condition, whether it is NoError or LicenseViolation."
+-- @feature:217550
+      ::= { licenseManagerModule 8 }
+
+  bwLMLicensingViolationRemainingGrace OBJECT-TYPE
+    SYNTAX           INTEGER
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the remaining grace period in hours, of a LicenseViolation error."
+-- @feature:217550
+      ::= { licenseManagerModule 9 }
+
+  bwLMLicensingNFMCommunicationLossStatus OBJECT-TYPE
+    SYNTAX           INTEGER { noError (0), communicationLoss (1) }
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the current status of Network Function Manager licensing communication loss error condition, whether it is NoError or CommunicationLoss."
+-- @feature:217550
+      ::= { licenseManagerModule 10 }
+
+  bwLMLicensingNFMCommunicationLossRemainingGrace OBJECT-TYPE
+    SYNTAX           INTEGER 
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the remaining grace period in hours, of a licensing Network Function Manager communication loss error."
+-- @feature:217550
+      ::= { licenseManagerModule 11 }
+
+  bwLMLicensingOverAllocationStatus OBJECT-TYPE
+    SYNTAX           INTEGER { noError (0), overAllocated (1) }
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the current status of licensing over-allocation error condition, whether it is NoError or OverAllocated."
+-- @feature:217550
+      ::= { licenseManagerModule 12 }
+
+  bwLMLicensingOverAllocationRemainingGrace OBJECT-TYPE
+    SYNTAX           INTEGER 
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer gives the remaining grace period in hours, of a licensing over-allocation error."
+-- @feature:217550
+      ::= { licenseManagerModule 13 }
+
+-- BroadWorks License Manager MIB Conformance Definition  ......................................
+
+  bwLicenseManagerMibGroups OBJECT IDENTIFIER 
+    ::= { bwLicenseManagerMibConformance 1 }
+
+  bwLicenseManagerMibCompliancy OBJECT IDENTIFIER
+    ::= { bwLicenseManagerMibConformance 2 }
+
+  bwLicenseManagerStatsGroup OBJECT-GROUP
+      OBJECTS { bwLMLicensingMode, bwLMCurrentLicensePermission,
+                bwLMLastLicenseAssignmentTimestamp, bwLMLastLicenseUpdateTimestamp,
+                bwLMLicenseIdInUse, bwLMLicenseRelease,
+                bwLMLicenseInUseBuildDate, bwLMLicensingViolationStatus,
+                bwLMLicensingViolationRemainingGrace, bwLMLicensingNFMCommunicationLossStatus,
+                bwLMLicensingNFMCommunicationLossRemainingGrace, bwLMLicensingOverAllocationStatus,
+                bwLMLicensingOverAllocationRemainingGrace
+               }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the license manager statistics."
+    ::= { bwLicenseManagerMibGroups 1 }
+
+  bwLicenseManagerBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks license manager MIB compliance"
+
+    MODULE
+
+        MANDATORY-GROUPS        
+        { bwLicenseManagerStatsGroup }
+
+    ::= { bwLicenseManagerMibCompliancy 1 }
+
+END

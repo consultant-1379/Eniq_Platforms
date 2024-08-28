@@ -1,0 +1,17 @@
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSG:((3)):ALL:ebs', 'PM_E_EBSG:((3))', '', 'ALL');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSG:((3)):PM_E_EBSG_CELL:ebs', 'PM_E_EBSG:((3))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSG:((3)):PM_E_EBSG_TRX:ebs', 'PM_E_EBSG:((3))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):ALL:ebs', 'PM_E_EBSS:((2))', '', 'ALL');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_APN:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_CELL:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_GGSN:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_HLR:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_HNI:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_HZI:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_RA:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_SA:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_SGSN:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_TAC:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSS:((2)):PM_E_EBSS_TACSVN:ebs', 'PM_E_EBSS:((2))', '', 'SPECIFIC');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSW:((2)):ALL:ebs', 'PM_E_EBSW:((2))', '', 'ALL');
+insert into Transformer (TRANSFORMERID, VERSIONID, DESCRIPTION, TYPE) values ('PM_E_EBSW:((2)):PM_E_EBSW_CELL:ebs', 'PM_E_EBSW:((2))', '', 'SPECIFIC');

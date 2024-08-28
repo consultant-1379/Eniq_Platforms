@@ -1,0 +1,160 @@
+<project name="sim" basedir="." default="all">
+	
+	<property name="sim.runtime.dir" value="/eniq/data/pmdata_sim"/>
+	<property name="sim.3pp.dir" value="/eniq/sw/conf/sim/libs"/>
+	<property name="sim.config.dir" value="${dc.conf.dir}/sim"/>
+
+	<target name="install" depends="copyTmpToDeploy">
+		<!-- check if the data directories exists -->
+		<if>
+		  	  <available file="${sim.runtime.dir}/parsing" type="dir" />
+		  	  <then/>
+              <else>
+			    <mkdir dir="${sim.runtime.dir}/parsing"/>
+			 </else>
+		</if>
+		<if>
+		  	  <available file="${sim.runtime.dir}/tps" type="dir" />
+		  	  <then/>
+              <else>
+			    <mkdir dir="${sim.runtime.dir}/tps"/>
+			 </else>
+		</if>
+
+		<!-- Make the directory for the log files -->
+		<mkdir dir="${dc.log.dir}/sim"/>
+
+		<!-- Install the configuation files -->
+		<if>
+			<available file="${sim.config.dir}" type="dir" />
+			<then>
+				<if>
+					<available file="${sim.config.dir}/log.properties"/>
+					<then></then>
+					<else>
+						<copy file="${dc.installer.dir}/tmp/conf/log.properties" toFile="${sim.config.dir}/log.properties"/>
+						<chmod perm="ug+x" file="${sim.config.dir}/log.properties"/>
+					</else>
+				</if>
+				<if>
+					<available file="${sim.config.dir}/maverickLicense.txt"/>
+					<then>
+						<delete file="${sim.config.dir}/maverickLicense.txt"/>
+					</then>
+				</if>
+				
+				<copy file="${dc.installer.dir}/tmp/conf/maverickLicense.txt" toFile="${sim.config.dir}/maverickLicense.txt"/>
+				<chmod perm="ug+x" file="${sim.config.dir}/maverickLicense.txt"/>
+				
+			</then>
+			<else>
+				<mkdir dir="${sim.config.dir}"/>
+					<copy todir="${sim.config.dir}">
+						  <fileset dir="${dc.installer.dir}/tmp/conf"></fileset>
+				 	</copy>
+			</else>
+		</if>
+		
+		<!-- Install the 3PP jar files -->
+		<if>
+			<available file="${sim.3pp.dir}" type="dir" />
+			<then>
+				<delete>
+					<fileset dir="${sim.3pp.dir}" includes="**/*.jar"/>
+				</delete>
+			</then>
+			<else>
+				<mkdir dir="${sim.3pp.dir}"/>
+			</else>
+		</if> 
+		
+		<copy todir="${sim.3pp.dir}">
+			  <fileset dir="${dc.installer.dir}/tmp/3PP"></fileset>
+		</copy>
+		
+		
+		<!-- Install the SIM scripts -->
+		<if>
+	  	  <available file="${dc.admin.bin}/sim"/>
+	  	  <then>
+	  	    <delete file="${dc.admin.bin}/sim"/>
+	  	  </then>
+	  	</if>
+
+	  	<if>
+	  	  <available file="${dc.bin.dir}/sim"/>
+	  	  <then>
+	  	    <delete file="${dc.bin.dir}/sim"/>
+	  	  </then>
+	  	</if>
+
+	  	<if>
+	  	  <available file="${dc.bin.dir}/EniqEngineStatus.sh"/>
+	  	  <then>
+	  	    <delete file="${dc.bin.dir}/EniqEngineStatus.sh"/>
+	  	  </then>
+	  	</if>
+
+	  	<copy file="${dc.installer.dir}/tmp/smf/sim" toFile="${dc.admin.bin}/sim"/>
+  		<chmod perm="ug+x" file="${dc.admin.bin}/sim"/>
+
+  		<copy file="${dc.installer.dir}/tmp/bin/sim" toFile="${dc.bin.dir}/sim"/>
+  		<chmod perm="ug+x" file="${dc.bin.dir}/sim"/>
+
+  		<copy file="${dc.installer.dir}/tmp/bin/EniqEngineStatus.sh" toFile="${dc.bin.dir}/EniqEngineStatus.sh"/>
+  		<chmod perm="ug+x" file="${dc.bin.dir}/EniqEngineStatus.sh"/>
+		
+<if>
+	<available file="/nav" type="dir" />
+	<then>
+                                                
+	<exec executable="sh">
+	<arg value="-c"/>
+	<arg value="cd /nav/opt/esm/bin ; ./sim.sh stop"/>
+	</exec>
+                                                
+	<mkdir dir="${sim.runtime.dir}/backup"/>
+                                                                
+	<copy file="/nav/var/esm/repository/SystemTopology.xml" toFile="${sim.runtime.dir}/backup/SystemTopology.xml"/>
+                                                                
+	<mkdir dir="${sim.runtime.dir}/backup/logs"/>
+	<copy todir="${sim.runtime.dir}/backup/logs">
+		<fileset dir="/nav/var/esm/log"></fileset>
+	</copy>
+                                                                
+	<mkdir dir="${sim.runtime.dir}/backup/plugins"/>
+	<copy todir="${sim.runtime.dir}/backup/plugins">
+		<fileset dir="/nav/etc/custom/esm/plugins"></fileset>
+	</copy>
+                                                                
+	<mkdir dir="${sim.runtime.dir}/backup/countersets"/>
+	<copy todir="${sim.runtime.dir}/backup/countersets">
+		<fileset dir="/nav/etc/esm/countersets"></fileset>
+	</copy>
+                                                                
+	<mkdir dir="${sim.runtime.dir}/backup/ser"/>
+	<copy todir="${sim.runtime.dir}/backup/ser">
+		<fileset dir="/nav/var/esm/">
+			<include name="**/*.ser"/>
+		</fileset>
+	</copy>
+                                                                
+	<mkdir dir="${sim.runtime.dir}/backup/mibs"/>
+	<copy todir="${sim.runtime.dir}/backup/mibs">
+		<fileset dir="/nav/etc/custom/esm/mibs"></fileset>
+	</copy>
+                                                                
+	<exec executable="sh">
+		<arg value="-c"/>
+		<arg value="cd /eniq/data/pmdata_sim ; /usr/bin/zip -r SIM_Backup.zip backup/ ; rm -r backup/"/>
+	</exec>
+                                                                
+	</then>
+</if>
+
+		
+	</target>
+
+	<target name="update" depends="moveToObsolete,install"/>
+
+</project>

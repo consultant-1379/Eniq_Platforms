@@ -1,0 +1,82 @@
+<project name="tp_ide_unittest" default="test_all">
+	<property file="${user.home}/EniqBuild/BH/build.properties"/>	
+	<property name="module.name" value="tp_ide_unittest"/>
+	<property name="ant.common" value="${cc.base}/tools/ant_common"/>
+	<property file="${ant.common}/common.properties"/>
+	<property name="module.base" value="${module.tpide_gui_tests.base}"/>
+	<property name="module.build" value="${module.tpide_gui_tests.build}"/>
+	<property name="module.dependants" value="${module.tpide_gui_tests.dependants}"/>
+	<import file="${ant.common}/common.xml"/>
+	<property name="junitp.testFileDir" value="${module.test.source}"/>
+	<property name="junitp.templateDir" value="5.2"/>
+	<property name="tests.to.run" value="**/AllTests.class"/>
+	<!--property name="tests.to.exclude" value="**/com/ericsson/eniq/techpacksdk/view/etlSetHandling/setWizards/CreateRestoreSetTest.class"/--> 
+	<property name="mods.needed" value=""/>
+	<property name="ide.src" value="${module.tpide_junit.base}/src"/>
+	<property name="ide.cls" value="${module.build}/ide"/>
+	<property name="fest.dir" value="${eniq.plat.base}/tp_ide/3pp/fest-swing-1.1" />
+	<property name="3pp.unittesting.dir" value="${eniq.plat.base}/tp_ide/3pp/unittesting" />
+	<!--<property name="eniq.testhelper.dir" value="=${cc.base}/tools/testhelper/build}" /
+	<property name="eniq.ddlutils.dir" value="=${testhelper_3pp_lib}/DdlUtils-1.0-bin/" />
+	<property name="3pp.ddlutilsdist.dir" value="=${testhelper_3pp_lib}/DdlUtils-1.0-bin/dist"/>
+	<property name="3pp.ddlutilslib.dir" value="=${testhelper_3pp_lib}/DdlUtils-1.0-bin/lib"/>-->
+	<property name="rep.src" value="${module.repository.base}/src"/>
+	<property name="rep.cls" value="${module.build}/repo"/>
+
+	<target name="pre_compile">
+		<echo message="Compiling TechPack IDE first for dependency "/>
+		<delete dir="${rep.cls}" verbose="false"/>
+		<delete dir="${ide.cls}" verbose="false"/>	
+		<mkdir dir="${rep.cls}"/>			
+		<mkdir dir="${ide.cls}"/>
+		<mcompile destdir="${rep.cls}" srcpath="${rep.src}" classpathref="tp_ide_unittest.lib.classpath" include="**/*.java"/>
+		<mcompile destdir="${ide.cls}" srcpath="${ide.src}" classpathref="tp_ide_unittest.lib.classpath" include="**/*.java"/>
+	</target>
+
+	<path id="tp_ide_unittest.lib.classpath">
+		<path refid="plaform.lib.classpath"/>
+		<path refid="testhelper"/>
+		<fileset dir="${fest.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.unittesting.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<!--<fileset dir="${eniq.testhelper.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+				
+		<fileset dir="${eniq.ddlutils.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+				
+		<fileset dir="${3pp.ddlutilslib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+				
+		<fileset dir="${3pp.ddlutilsdist.dir}">
+			<include name="**/*.jar"/>
+		</fileset>-->
+	    <path location="${rep.cls}"/>
+		<path location="${ide.cls}"/>
+	    <path location="${module.common_utilities.pkg}"/>
+	    <path location="${module.installer.pkg}"/>
+	    <path location="${module.dwh_manager.pkg}"/>
+	    <path location="${module.engine.pkg}"/>
+	    <path location="${module.scheduler.pkg}"/>
+	    <path location="${module.parser.pkg}"/>
+	    <path location="${module.export.pkg}"/>
+	    <path location="${module.parser_debugger_component.pkg}"/>
+	    <path location="${module.table_tree_component.pkg}"/>
+	    <path refid="appframework"/>
+	    <path refid="jcalendar"/>
+	</path>
+	<path id="tp_ide_unittest.test.classpath">
+	    <path refid="platform.test.classpath"/>
+	    <path refid="tp_ide_unittest.lib.classpath"/>
+		<path location="${module.test.source}/"/>
+		<path location="${module.tpide_junit.base}/jar/"/> <!-- templates -->		
+	</path>	
+	    
+</project>
+	

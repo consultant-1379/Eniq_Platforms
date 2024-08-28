@@ -1,0 +1,372 @@
+--===============================================================
+-- File Name : BW-LicenseController.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2014, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-LicenseController DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString, DateAndTime, TimeStamp
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the BroadWorks LicenseContrller application."
+      
+    REVISION    "201409100000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  licenseController OBJECT IDENTIFIER
+    ::= { broadworks 46 }  
+
+  licenseStats OBJECT IDENTIFIER
+    ::= { licenseController 1 }  
+
+  executors OBJECT IDENTIFIER
+    ::= { licenseController 2 }  
+
+  bwLicenseControllerMibConformance OBJECT IDENTIFIER
+    ::= { licenseController 1000 }
+
+-- License Controller Counters  ...........................................
+
+  bwLCLicenseUpdate OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+  	STATUS       current
+  	DESCRIPTION
+          "Total number of license update operations performed by the license controller."
+-- @feature:217550
+      ::= { licenseStats 1 }
+
+  bwLCPermissionGrantRequest     OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of permission grant requests received by the license controller."
+-- @feature:217550
+      ::= { licenseStats 2 }
+
+  bwLCPermissionGrantSuccessResponse     OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of permission grant success responses sent by the license controller."
+-- @feature:217550
+      ::= { licenseStats 3 }
+
+  bwLCPermissionGrantFailureResponse     OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of permission grant failure responses sent by the license controller."
+-- @feature:217550
+      ::= { licenseStats 4 }
+
+  bwLCPermissionGrantUpdateBundleResponse     OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of update bundle responses sent by the license controller."
+-- @feature:217550
+      ::= { licenseStats 5 }
+
+  bwLCLicenseGetBundleRequest OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of bundle get requests received  by the license controller."
+-- @feature:217550
+      ::= { licenseStats 6 }
+
+  bwLCLicenseGetBundleResponseSuccess OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of get bundle success responses sent by the license controller."
+-- @feature:217550
+      ::= { licenseStats 7 }
+
+  bwLicenseGetBundleResponseFailure OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "Total number of get bundle failure responses sent by the license controller."
+-- @feature:217550
+      ::= { licenseStats 8 }
+
+-- Executor Counters  ...........................................
+
+  bwLCExecutorReset OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-write
+    STATUS           current
+    DESCRIPTION
+          "When set to a value other than '0', all statistics stored under executorTable are reset to '0'."
+-- @feature:217550
+      ::= { executors 1 }
+
+  bwLCExecutorTable  OBJECT-TYPE
+    SYNTAX  SEQUENCE  OF  BwLCExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION	
+      "This table exposes the license controller executor statistics."
+      ::=  {  executors  2 }
+
+  bwLCExecutorTableEntry  OBJECT-TYPE
+    SYNTAX      BwLCExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION	
+      "This row contains information about a license controller executor."
+    INDEX       {  bwLCExecutorIndex  }
+		::=  { bwLCExecutorTable 1 }
+
+  BwLCExecutorTableEntry  ::=  SEQUENCE {
+    bwLCExecutorIndex                             Unsigned32,
+    bwLCExecutorName                              DisplayString,
+    bwLCExecutorQueueCapacity                     Gauge32,
+    bwLCExecutorQueueSize                         Gauge32,
+    bwLCExecutorQueueWaitingTimeAvg               Gauge32,
+    bwLCExecutorQueueWaitingTimeMin               Gauge32,
+    bwLCExecutorQueueWaitingTimeMax               Gauge32,
+    bwLCExecutorQueueWaitingTimeMaxTimestamp      DateAndTime,
+    bwLCExecutorMinPoolSize                       Gauge32,
+    bwLCExecutorMaxPoolSize                       Gauge32,
+    bwLCExecutorThreadsBusy                       Gauge32,
+    bwLCExecutorCompletedTaskCount                Counter32,
+    bwLCExecutorThreadsAlive                      Gauge32,
+    bwLCExecutorThreadsAliveMax                   Gauge32,
+    bwLCExecutorTaskProcessingTimeAvg             Gauge32,
+    bwLCExecutorTaskProcessingTimeMin             Gauge32,
+    bwLCExecutorTaskProcessingTimeMax             Gauge32,
+    bwLCExecutorTaskProcessingTimeMaxTimestamp    DateAndTime
+    }
+
+  bwLCExecutorIndex OBJECT-TYPE
+    SYNTAX           Unsigned32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This integer represents an index to a given executor."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 1 }
+
+  bwLCExecutorName OBJECT-TYPE
+    SYNTAX           DisplayString
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the name of this executor."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 2 }
+
+  bwLCExecutorQueueCapacity OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the initial capacity of the executor queue."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 3 }
+
+  bwLCExecutorQueueSize OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the current size of the executor queue."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 4 }
+
+  bwLCExecutorQueueWaitingTimeAvg OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the average time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 5 }
+
+  bwLCExecutorQueueWaitingTimeMin OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the minimum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 6 }
+
+  bwLCExecutorQueueWaitingTimeMax OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the maximum amount of time spent waiting in the executor queue since the last reset."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 7 }
+
+  bwLCExecutorQueueWaitingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX           DateAndTime
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the time stamp indicating when executorQueueTimeMax was obtained."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 8 }
+
+  bwLCExecutorMinPoolSize OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the number of threads to keep in the pool, even if they are idle."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 9 }
+
+  bwLCExecutorMaxPoolSize OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS       current
+    DESCRIPTION
+          "This is the maximum number of threads to allow in the pool."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 10 }
+
+  bwLCExecutorThreadsBusy OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the approximate number of threads that are actively executing tasks."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 11 }
+
+  bwLCExecutorCompletedTaskCount OBJECT-TYPE
+    SYNTAX           Counter32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the approximate total number of tasks that have completed execution.  Because the states of tasks and threads may change dynamically during computation, the returned value is only an approximation; however, it does not ever decrease across successive calls."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 12 }
+
+  bwLCExecutorThreadsAlive OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS       current
+    DESCRIPTION
+          "This is the current number of threads instantiated."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 13 }
+
+  bwLCExecutorThreadsAliveMax OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS       current
+    DESCRIPTION
+          "This is the maximum number of threads that can be allocated at the same time."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 14 }
+
+  bwLCExecutorTaskProcessingTimeAvg OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the average processing time spent by this executor."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 15 }
+
+  bwLCExecutorTaskProcessingTimeMin OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the minimum amount of processing time spent by this executor."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 16 }
+
+  bwLCExecutorTaskProcessingTimeMax OBJECT-TYPE
+    SYNTAX           Gauge32
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the maximum amount of processing time spent by this executor."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 17 }
+
+  bwLCExecutorTaskProcessingTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX           DateAndTime
+    MAX-ACCESS       read-only
+    STATUS           current
+    DESCRIPTION
+          "This is the time stamp indicating when taskProcessingTimeMax was obtained."
+-- @feature:217550
+      ::= { bwLCExecutorTableEntry 18 }
+
+-- BroadWorks UVS MIB Conformance Definition  ......................................
+
+  bwLicenseControllerMibGroups OBJECT IDENTIFIER 
+    ::= { bwLicenseControllerMibConformance 1 }
+
+  bwLicenseControllerMibCompliancy OBJECT IDENTIFIER
+    ::= { bwLicenseControllerMibConformance 2 }
+
+  bwLicenseControllerStatsGroup OBJECT-GROUP
+      OBJECTS { bwLCLicenseUpdate, bwLCPermissionGrantRequest,
+                bwLCPermissionGrantSuccessResponse, bwLCPermissionGrantFailureResponse,
+                bwLCPermissionGrantUpdateBundleResponse, bwLCLicenseGetBundleRequest,
+                bwLCLicenseGetBundleResponseSuccess, bwLicenseGetBundleResponseFailure, 
+                bwLCExecutorReset, bwLCExecutorIndex, bwLCExecutorName,
+                bwLCExecutorQueueCapacity, bwLCExecutorQueueSize,
+                bwLCExecutorQueueWaitingTimeAvg, bwLCExecutorQueueWaitingTimeMin,
+                bwLCExecutorQueueWaitingTimeMax, bwLCExecutorQueueWaitingTimeMaxTimestamp,
+                bwLCExecutorMinPoolSize,
+                bwLCExecutorMaxPoolSize, bwLCExecutorThreadsBusy,
+                bwLCExecutorCompletedTaskCount, bwLCExecutorThreadsAlive,
+                bwLCExecutorThreadsAliveMax, bwLCExecutorTaskProcessingTimeAvg,
+                bwLCExecutorTaskProcessingTimeMin, bwLCExecutorTaskProcessingTimeMax,
+                bwLCExecutorTaskProcessingTimeMaxTimestamp
+               }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the license controller statistics."
+    ::= { bwLicenseControllerMibGroups 1 }
+   
+
+  bwLicenseControllerBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks license controller MIB compliance"
+
+    MODULE
+
+        MANDATORY-GROUPS        
+        { bwLicenseControllerStatsGroup }
+
+    ::= { bwLicenseControllerMibCompliancy 1 }
+
+END

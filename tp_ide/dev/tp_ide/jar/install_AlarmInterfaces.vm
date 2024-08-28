@@ -1,0 +1,113 @@
+<project name="imported_tech_pack_targets" basedir=".">
+				
+	<property name="doBusyhourActivation" value="true"/>
+		
+	<target name="pre_preinstall_check" depends="">
+	</target>
+
+	<target name="post_preinstall_check" depends="preinstall_check">
+	</target>
+
+	<target name="pre_metadata_installation" depends="post_preinstall_check">
+	</target>
+
+	<target name="post_metadata_installation" depends="metadata_installation">
+	</target>
+
+	<target name="pre_ETL_set_installation" depends="post_metadata_installation">
+	</target>
+
+	<target name="post_ETL_set_installation" depends="ETL_set_installation">
+	</target>
+
+	<target name="pre_tech_pack_and_type_activation" depends="post_ETL_set_installation">
+	</target>
+
+	<target name="post_tech_pack_and_type_activation" depends="tech_pack_and_type_activation">
+	</target>
+
+	<target name="pre_ETL_interface_metadata_installation" depends="post_tech_pack_and_type_activation">
+	</target>
+
+	<target name="post_ETL_interface_metadata_installation" depends="ETL_interface_metadata_installation">
+	</target>
+
+	<target name="pre_ETL_interface_set_installation" depends="post_ETL_interface_metadata_installation">
+	</target>
+
+	<target name="post_ETL_interface_set_installation" depends="ETL_interface_set_installation">
+	</target>
+
+	<target name="pre_directory_checker_and_DWHM_install" depends="post_ETL_interface_set_installation">
+	</target>
+
+	<target name="post_directory_checker_and_DWHM_install" depends="directory_checker_and_DWHM_install">
+		
+		<if>
+			<isset property="skipInstallationPhases" />
+			<then>
+				<echo message="Tech pack is already installed. Directory_Checkers will not be executed." />
+			</then>
+			<else>
+				<echo message="Inserting or updating AlarmInterface entries..." />				
+				<InsertAlarmInterface interfaceId="AlarmInterface_5min" status="active" queueNumber="1" description="Alarm interface for 5 minutes interval." configurationDirectory="${configurationDirectory}" />
+ 				<UpdateAlarmInterface interfaceId="AlarmInterface_5min" status="active" queueNumber="1" description="Alarm interface for 5 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_10min" status="active" queueNumber="2" description="Alarm interface for 10 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_10min" status="active" queueNumber="2" description="Alarm interface for 10 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_15min" status="active" queueNumber="3" description="Alarm interface for 15 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_15min" status="active" queueNumber="3" description="Alarm interface for 15 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_30min" status="active" queueNumber="4" description="Alarm interface for 30 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_30min" status="active" queueNumber="4" description="Alarm interface for 30 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_60min" status="active" queueNumber="5" description="Alarm interface for 60 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_60min" status="active" queueNumber="5" description="Alarm interface for 60 minutes interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_6h" status="active" queueNumber="6" description="Alarm interface for 6 hours interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_6h" status="active" queueNumber="6" description="Alarm interface for 6 hours interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_12h" status="active" queueNumber="7" description="Alarm interface for 12 hours interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_12h" status="active" queueNumber="7" description="Alarm interface for 12 hours interval." configurationDirectory="${configurationDirectory}" />
+				<InsertAlarmInterface interfaceId="AlarmInterface_24h" status="active" queueNumber="8" description="Alarm interface for 24 hours interval." configurationDirectory="${configurationDirectory}" />
+				<UpdateAlarmInterface interfaceId="AlarmInterface_24h" status="active" queueNumber="8" description="Alarm interface for 24 hours interval." configurationDirectory="${configurationDirectory}" />
+
+				<echo message="Starting custom execution of AlarmInterfaces Directory Checkers..." />
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_5min" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_5min" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_10min" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_10min" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_15min" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_15min" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_30min" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_30min" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_60min" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_60min" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_6h" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_6h" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_12h" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_12h" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_24h" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet AlarmInterfaces Directory_Checker_AlarmInterface_24h" />
+				</exec>
+				<echo message="AlarmInterfaces Directory Checkers executed." />				
+				<echo message="Reloading alarm cache" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e reloadAlarmCache" />
+				</exec>
+				<echo message="Finished reloading alarm cache." />
+			</else>
+		</if>
+	</target>
+
+</project>

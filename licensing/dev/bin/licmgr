@@ -1,0 +1,213 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ ETLC licensingmanager control script
+#
+# Usage: licensemanager.bsh start|stop|restart|status|update
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+# Some of the code has been shamelessly borrowed from the scheduler
+# start-up script.
+
+unalias stop 2> /dev/null
+
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit 32
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+SENTINEL_BIN=${SENTINEL_DIR}/bin
+
+thisdate=`date +%Y_%m_%d`
+LOGFILE=${LOG_DIR}/licensemanager/licensemanager-${thisdate}.log
+
+TEE=/usr/bin/tee
+JAVA_HOME="/eniq/sw/runtime/java"
+CPATH="${PLATFORM_DIR}:${SENTINEL_DIR}/Java/"
+DIRS=`ls ${PLATFORM_DIR} | grep -v mediator-R*`
+
+for file in ${DIRS}
+do
+  if [ -d ${PLATFORM_DIR}/${file}/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/${file}/dclib/*.jar`
+
+    for jar in ${JARS}
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+function start {
+  if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s licmgr -a start
+  else
+  	${ADMIN_BIN}/eniq_service_start_stop.bsh -s licmgr -a start
+  fi
+}
+
+function stop {
+  if [ -s ${SMF_BIN_DIR}/eniq_service_start_stop.bsh ]; then
+    ${SMF_BIN_DIR}/eniq_service_start_stop.bsh -s licmgr -a stop
+  else
+  	${ADMIN_BIN}/eniq_service_start_stop.bsh -s licmgr -a stop
+  fi
+}
+
+function serveradmin {
+  ${JAVA_HOME}/bin/java -d64 -classpath ${CPATH} -Djava.rmi.server.codebase="${CODEBASE}" -Djava.util.logging.config.file=${CONF_DIR}/licensingAdminLogging.properties -DLSHOST=${LSHOST} -DLOG_DIR=${LOG_DIR} -Ddc.conf.dir=${CONF_DIR} com.ericsson.eniq.licensing.server.LicensingServerAdmin $@
+}
+
+
+function manageradmin {
+  ${JAVA_HOME}/bin/java -d64 -classpath ${CPATH} -Djava.rmi.server.codebase="${CODEBASE}" -Djava.util.logging.config.file=${CONF_DIR}/licensingAdminLogging.properties -DLSHOST=${LSHOST} -DLOG_DIR=${LOG_DIR} -Ddc.conf.dir=${CONF_DIR} com.ericsson.eniq.licensing.cache.LicensingCacheAdmin $@
+
+  ECODE=$?
+
+  if [ "$1" == "status" ]; then
+    if [ ${ECODE} -eq 0 ] ; then
+      echo "License manager is running OK"  | ${TEE} -a ${LOGFILE}
+    else
+      echo "License manager is not running"  | ${TEE} -a ${LOGFILE}
+    fi
+  fi
+    
+  return ${ECODE}
+}
+
+function decode {
+    ${SENTINEL_BIN}/lsdecode $1 | tail +5
+}
+
+function getlockcode {
+	pushd ${SENTINEL_BIN} 2>&1 > /dev/null
+    ./echoid | egrep "Locking Code [0-9]+" | cut -f3-
+    popd 2>&1 > /dev/null
+}
+
+function usage {
+    echo "Usage: $0 [operation]"
+    echo "where [operation] is one of the following:"
+    echo "  -decode <file>        Decode the given license file"
+	echo "  -getlicinfo           Print basic information for currently installed licenses."
+ 	echo "  -getlockcode          Obtain this machines lock code"
+	echo "  -install <file>       Install new licenses from the specified file."
+	echo "  -isvalid <feature>    Check if the given CXC number has a valid license. The script"
+	echo "                        returns 0 if the license is valid, and 1 otherwize."
+	echo "  -listserv             List all servers that were found on the local sub-net."
+	echo "  -map <type> <feature> Prints the mappings of the given CXC number(s) onto the type"
+	echo "                        that was given. Type should be one of: faj, description,"
+	echo "                        interface. Multiple features can be checked with a space"
+	echo "                        separated list when the mapping type is set to interface."
+	echo "  -restart              Restarts the license manager."
+	echo "  -serverstatus         Prints out the status of the servers currently in use."
+	echo "  -start                Starts the license manager."
+#	echo "  -startdummy           REMOVE!"
+	echo "  -status               Prints the current status of the license manager."
+	echo "  -stop                 Stops the license manager."
+    echo "  -uninstall <feature>  Temporarily removes the given feature from the license server."
+	echo "  -update               Updates all licenses from the server(s) and saves them in the"
+	echo "                        license manager."
+	echo "  -checkcapacity <cpucapacitylicensenumber>  check the CPU capacity for the given license, is valid or not"
+	
+}
+
+#getting codebase
+COMMON_JAR=`ls ${PLATFORM_DIR}/common*/dclib/common.jar`
+LICENSING_JAR=`ls ${PLATFORM_DIR}/licensing*/dclib/licensing.jar`
+#SCHEDULER_JAR=`ls ${PLATFORM_DIR}/scheduler*/dclib/scheduler.jar`
+#ENGINE_JAR=`ls ${PLATFORM_DIR}/engine*/dclib/engine.jar`
+CODEBASE="file://${COMMON_JAR} file://${LICENSING_JAR}"
+case "$1" in
+#-startdummy)
+#      start dummy
+#      ;;
+-start|start)
+      start
+      ;;
+-getlicinfo)
+      manageradmin getlicinfo
+      ;;
+-map)
+      if [ $# -gt 2 ]; then
+        shift
+      	manageradmin map $@
+      else
+      	usage
+      fi
+      ;;
+-listserv)
+      serveradmin listserv
+      ;;
+-serverstatus)
+      serveradmin serverstatus
+      ;;
+-update)
+      manageradmin update
+      ;;
+-install)
+      if [ $# -gt 1 ]; then
+          serveradmin install $2
+      else
+          usage
+      fi
+      ;;
+-decode)
+      shift;
+      if [ $# -gt 0 ]; then
+      	decode "-s $1"
+      else
+      	usage
+      	exit 4;
+      fi
+      ;;
+-getlockcode)   getlockcode;;
+
+-uninstall)
+      if [ $# -gt 1 ]; then
+          serveradmin uninstall $2
+      else
+          usage
+      fi
+      ;;
+-isvalid)
+      if [ $# -gt 1 ]; then
+          manageradmin isvalid $2
+          exit $?
+      else
+          usage
+      fi
+      ;;
+-checkcapacity)
+      if [ $# -gt 1 ]; then
+          manageradmin checkcapacity $2
+          exit $?
+      else
+          usage
+      fi
+      ;;
+-stop|stop)
+     stop
+     ;;
+-restart)
+     stop
+     sleep 1
+     start
+     ;;
+-status)
+     manageradmin status
+     ;;
+*)
+     usage
+     ;;
+esac

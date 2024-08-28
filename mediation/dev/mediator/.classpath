@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/adventnet/AdventNetLogging.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/adventnet/AdventNetSnmp.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/beanshell/bsh-2.0b4.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/cobertura/cobertura.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/junit/jar/junit.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/log4j/log4j.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/maverick/dist/java/maverick-all.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/mockito/mockito-all-1.7.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/SSHD/SftpServer.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/trap_translator/TrapTranslator.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/xmlunit/xmlunit.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/eniq_mvm_3pp/licensing.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

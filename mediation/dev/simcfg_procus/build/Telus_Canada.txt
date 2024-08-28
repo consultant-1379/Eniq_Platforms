@@ -1,0 +1,8 @@
+DMF_D1_Plugin
+DMF_D2_Plugin
+ECE_Plugin
+MSP_AFG_Plugin
+E_GW_Plugin
+E_IMSM_Plugin
+E_MSGCORE_Plugin
+MSP_CORE_Plugin

@@ -1,0 +1,344 @@
+--===============================================================
+-- File Name : BW-EnhancedCallLogsDBManagement.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2012, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-EnhancedCallLogsDBManagement DEFINITIONS ::= BEGIN
+    IMPORTS
+      DisplayString
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201210110000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the Enhanced Call Logs DB Management application."
+    REVISION    "201008230000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  eclDBManagement OBJECT IDENTIFIER
+    ::= { broadworks 32 }
+
+  ecldbDatabaseModule OBJECT IDENTIFIER
+    ::= { eclDBManagement 1 }
+
+  ecldbDatabaseStats OBJECT IDENTIFIER
+    ::= { ecldbDatabaseModule 1 }
+
+  ecldbOracle OBJECT IDENTIFIER
+    ::= { ecldbDatabaseStats 1 }
+
+  bwEnhancedCallLogsDBManagementMibConformance OBJECT IDENTIFIER
+    ::= { eclDBManagement 1000 }
+
+-- ecldbOracle ::  ...............................
+
+   bwEnhancedCallLogsDBManagementOpenedTransactions  OBJECT-TYPE
+      SYNTAX         Gauge32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of opened transaction with the database."
+-- @feature:162466                  
+      ::=  {  ecldbOracle  1  }
+
+   bwEnhancedCallLogsDBManagementCommittedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of committed transactions to the database since the last restart."
+-- @feature:162466                  
+      ::=  {  ecldbOracle  2  }
+
+   bwEnhancedCallLogsDBManagementFailedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of failed transactions with the database."
+-- @feature:162466                  
+      ::=  {  ecldbOracle  3  }
+
+   bwEnhancedCallLogsDBManagementCriticalErrors  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of critical errors encountered during processing with the database."
+-- @feature:162466                  
+      ::=  {  ecldbOracle  4  }
+      
+  bwEnhancedCallLogsDBManagementOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application"
+-- @feature:162466              
+    ::= { ecldbOracle 5 }
+  
+  bwEnhancedCallLogsDBManagementOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwEnhancedCallLogsDBManagementOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwEnhancedCallLogsDBManagementOracleDbCount."
+-- @feature:162466              
+    ::= { ecldbOracle 6 }
+  
+  bwEnhancedCallLogsDBManagementOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwEnhancedCallLogsDBManagementOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwEnhancedCallLogsDBManagementOracleDbStatsIndex }
+-- @feature:162466            
+    ::= { bwEnhancedCallLogsDBManagementOracleDbStatsTable 1 }
+    
+  BwEnhancedCallLogsDBManagementOracleDbStatsEntry ::= SEQUENCE {
+    bwEnhancedCallLogsDBManagementOracleDbStatsIndex           Unsigned32,
+    bwEnhancedCallLogsDBManagementOracleDbName               DisplayString,
+    bwEnhancedCallLogsDBManagementOracleDbNbConnectionsCreated Counter32,
+    bwEnhancedCallLogsDBManagementOracleDbConnectionPoolSize   Gauge32,
+    bwEnhancedCallLogsDBManagementOracleDbAvgUpdateTime        Gauge32,
+    bwEnhancedCallLogsDBManagementOracleDbAvgRowsUpdated       Gauge32,
+    bwEnhancedCallLogsDBManagementOracleDbAvgQueryTime         Gauge32,
+    bwEnhancedCallLogsDBManagementOracleDbAvgRowsQueried       Gauge32,
+    bwEnhancedCallLogsDBManagementOracleDbUpdateCount          Counter32,
+    bwEnhancedCallLogsDBManagementOracleDbQueryCount           Counter32
+  }
+  
+   bwEnhancedCallLogsDBManagementOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:162466               
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 1 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:162466               
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 2 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 3 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 4 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 5 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 6 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 7 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 8 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 9 }
+   
+   bwEnhancedCallLogsDBManagementOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:162466                
+   ::= { bwEnhancedCallLogsDBManagementOracleDbStatsEntry 10 }
+      
+   bwEnhancedCallLogsDBManagementOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwEnhancedCallLogsDBManagementOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwEnhancedCallLogsDBManagementOracleDbCount."
+-- @feature:162466                 
+   ::= { ecldbOracle 7 }
+     
+   bwEnhancedCallLogsDBManagementOracleDbHWMEntry OBJECT-TYPE
+       SYNTAX      BwEnhancedCallLogsDBManagementOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "An entry containing high water mark information applicable to a particular oracle database."
+       INDEX   { bwEnhancedCallLogsDBManagementOracleDbHWMIndex }
+-- @feature:162466             
+    ::= { bwEnhancedCallLogsDBManagementOracleDbHWMTable 1 }
+    
+    BwEnhancedCallLogsDBManagementOracleDbHWMEntry ::= SEQUENCE {
+        bwEnhancedCallLogsDBManagementOracleDbHWMIndex           Unsigned32,
+        bwEnhancedCallLogsDBManagementOracleDbHWMDbName          DisplayString,
+        bwEnhancedCallLogsDBManagementOracleDbHWMStatName        DisplayString,
+        bwEnhancedCallLogsDBManagementOracleDbHWMStatValue       Gauge32,
+        bwEnhancedCallLogsDBManagementOracleDbHWMTimestamp       DisplayString,
+        bwEnhancedCallLogsDBManagementOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwEnhancedCallLogsDBManagementOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:162466                   
+    ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 1 }
+       
+    bwEnhancedCallLogsDBManagementOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:162466                   
+    ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 2 }
+    
+    bwEnhancedCallLogsDBManagementOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:162466                   
+   ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 3 }
+   
+    bwEnhancedCallLogsDBManagementOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:162466                   
+   ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 4 }
+   
+    bwEnhancedCallLogsDBManagementOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:162466                   
+   ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 5 }
+   
+    bwEnhancedCallLogsDBManagementOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:162466                   
+   ::= { bwEnhancedCallLogsDBManagementOracleDbHWMEntry 6 }
+        
+
+-- BroadWorks CC Reporting DB Management MIB Conformance Definition  ...........................................
+
+bwEnhancedCallLogsDbManagementMibGroups     OBJECT IDENTIFIER ::= { bwEnhancedCallLogsDBManagementMibConformance 1 }
+bwEnhancedCallLogsDbManagementMibCompliancy OBJECT IDENTIFIER ::= { bwEnhancedCallLogsDBManagementMibConformance 2 }
+
+bwEnhancedCallLogsDbManagementStatsGroup OBJECT-GROUP
+    OBJECTS { bwEnhancedCallLogsDBManagementOpenedTransactions,
+              bwEnhancedCallLogsDBManagementCommittedTransactions,
+              bwEnhancedCallLogsDBManagementFailedTransactions,
+              bwEnhancedCallLogsDBManagementCriticalErrors,
+              bwEnhancedCallLogsDBManagementOracleDbCount,
+              bwEnhancedCallLogsDBManagementOracleDbStatsIndex,
+              bwEnhancedCallLogsDBManagementOracleDbName,
+              bwEnhancedCallLogsDBManagementOracleDbNbConnectionsCreated,
+              bwEnhancedCallLogsDBManagementOracleDbConnectionPoolSize,
+              bwEnhancedCallLogsDBManagementOracleDbAvgUpdateTime,
+              bwEnhancedCallLogsDBManagementOracleDbAvgRowsUpdated,
+              bwEnhancedCallLogsDBManagementOracleDbAvgQueryTime,
+              bwEnhancedCallLogsDBManagementOracleDbAvgRowsQueried,
+              bwEnhancedCallLogsDBManagementOracleDbUpdateCount,
+              bwEnhancedCallLogsDBManagementOracleDbQueryCount,
+              bwEnhancedCallLogsDBManagementOracleDbHWMIndex,
+              bwEnhancedCallLogsDBManagementOracleDbHWMDbName,
+              bwEnhancedCallLogsDBManagementOracleDbHWMStatName,
+              bwEnhancedCallLogsDBManagementOracleDbHWMStatValue,
+              bwEnhancedCallLogsDBManagementOracleDbHWMTimestamp,
+              bwEnhancedCallLogsDBManagementOracleDbHWMStackTrace }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the ECL DB Management."
+  ::= { bwEnhancedCallLogsDbManagementMibGroups 1 }
+
+  bwEnhancedCallLogsDBManagementBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks ECL DB Management MIB compliance"
+
+    MODULE
+
+        MANDATORY-GROUPS        { bwEnhancedCallLogsDbManagementStatsGroup }
+
+    ::= { bwEnhancedCallLogsDbManagementMibCompliancy 1 }
+
+END

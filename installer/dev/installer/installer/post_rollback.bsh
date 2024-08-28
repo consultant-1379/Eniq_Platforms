@@ -1,0 +1,195 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network script to complete rollback procedure 
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2012 AB LM Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+if [ ${LOGNAME} != "dcuser"  ] ; then
+  echo "This script must be executed as dcuser"
+  exit
+fi
+
+if [ -d /tmp/eniq_post_rollback ] ; then
+   rm -rf /tmp/eniq_post_rollback_bkp
+   mv /tmp/eniq_post_rollback /tmp/eniq_post_rollback_bkp
+fi
+
+mkdir /tmp/eniq_post_rollback
+chmod 777 /tmp/eniq_post_rollback
+#-----------------------------------------------------------------------
+#Global variable
+#-----------------------------------------------------------------------
+ETLREP_USER=etlrep
+ETLREP_PASSWORD=etlrep
+DWH_NAME_repdb=repdb
+SYBASE_IQ_PATH=/eniq/sybase_iq//OCS-15_0/bin/isql
+log_path=/tmp/eniq_post_rollback/
+start_time=$(date "+%Y-%m-%d %H:%M:%S")
+#echo $start_time
+#-----------------------------------------------------------------------
+#function to create internal log dir
+#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#function to check engine status
+#-----------------------------------------------------------------------
+check_engineStatus()
+{
+echo "checking engine status"
+S_tmp=$(engine status |grep Normal|wc -l)
+#echo $S_tmp
+if [ $S_tmp != "1" ] ; then
+echo "engine is not running or in Noloads ,Please start engine in normal profile"
+echo "script will exit"
+exit
+fi
+}
+
+#-----------------------------------------------------------------------
+#function to run dwhbase sets
+#-----------------------------------------------------------------------
+run_dwhbase1()
+{
+echo "triggering Update_Dates,Cleanup_logdir,Cleanup_transfer_batches"
+
+engine -e startSet DWH_BASE Update_Dates
+engine -e startSet DWH_BASE Cleanup_logdir
+engine -e startSet DWH_BASE Cleanup_transfer_batches
+
+sleep 6
+check_isRunning
+
+check_isFinished Update_Dates
+check_isFinished Cleanup_logdir
+check_isFinished Cleanup_transfer_batches
+ 
+echo "Update_Dates,Cleanup_logdir,Cleanup_transfer_batches have been executed"
+}
+
+#-----------------------------------------------------------------------
+#function to run dwhmonitor sets
+#-----------------------------------------------------------------------
+run_dwhmonitor1()
+{
+echo "triggering UpdateFirstLoadings"
+
+engine -e startSet DWH_MONITOR UpdateFirstLoadings
+
+sleep 6
+check_isRunning
+check_isFinished UpdateFirstLoadings
+
+echo "UpdateFirstLoadings has been executed"
+}
+
+#-----------------------------------------------------------------------
+#function to run dwhbase sets
+#-----------------------------------------------------------------------
+run_dwhbase2()
+{
+echo "triggering Trigger_Partitioning "
+
+engine -e startSet DWH_BASE Trigger_Partitioning
+
+sleep 6
+check_isRunning
+check_isFinished Trigger_Partitioning
+
+echo "Trigger_Partitioning has been executed"
+}
+#-----------------------------------------------------------------------
+#function to run dwhmonitor sets
+#-----------------------------------------------------------------------
+run_dwhmonitor2()
+{
+echo "triggering AggregationRuleCopy"
+
+engine -e startSet DWH_MONITOR AggregationRuleCopy
+
+sleep 6
+check_isRunning
+check_isFinished AggregationRuleCopy
+
+echo "AggregationRuleCopy has been executed"
+}
+
+#-----------------------------------------------------------------------
+#function to check if sets are running/in queue
+#-----------------------------------------------------------------------
+check_isRunning()
+{
+
+for (( ; ; ))
+do
+#to check if any set in  Execution slot
+E_tmp=$(engine -e showSetsInExecutionSlots |egrep  'Partition|Support' |wc -l)
+#echo $E_tmp
+if [ $E_tmp == "0" ] ; then
+        #to check if any set in priority queue
+	Q_tmp=$(engine -e  showSetsInQueue |egrep  'Partition|Support' |wc -l)
+	#echo $Q_tmp
+	if [ $Q_tmp == "0" ] ; then
+${SYBASE_IQ_PATH} -U${ETLREP_USER} -P${ETLREP_PASSWORD} -S${DWH_NAME_repdb} -b << CHECK_RUNNING_MM > /${log_path}/CHECK_RUNNING
+select count(*) from META_TRANSFER_BATCHES where META_COLLECTION_NAME in('Update_Dates','Cleanup_logdir','Cleanup_transfer_batches','UpdateFirstLoadings','Trigger_Partitioning','AggregationRuleCopy')and status='STARTED' and start_date > '$start_time'  
+go
+CHECK_RUNNING_MM
+cd /${log_path}/
+cat CHECK_RUNNING | grep -v "affected" > CHECK_RUNNING_tmp
+sed '$d' CHECK_RUNNING_tmp > COUNT
+read COUNT_mm < "COUNT"
+#echo $COUNT_mm
+            if [ $COUNT_mm == "0" ] ; then 
+            break
+            fi
+	sleep 15
+	echo "Sets are  running"
+	fi
+sleep 15
+echo "Sets are  running"
+fi
+echo "Sets are  running"
+sleep 15
+done
+}
+#-----------------------------------------------------------------------
+#function to check if set is executed fine
+#-----------------------------------------------------------------------
+check_isFinished()
+{
+#checking if the set is finished
+
+
+${SYBASE_IQ_PATH} -U${ETLREP_USER} -P${ETLREP_PASSWORD} -S${DWH_NAME_repdb} -b << CHECK_FINISHED_MM > /${log_path}/CHECK_FINISHED
+select STATUS FROM META_TRANSFER_BATCHES where META_COLLECTION_NAME ='$1' and START_DATE > '$start_time'
+go
+CHECK_FINISHED_MM
+
+cd /${log_path}/
+cat CHECK_FINISHED | grep -v "affected" > CHECK_FINISHED_tmp
+sed '$d' CHECK_FINISHED_tmp > STATUS
+
+read STATUS_mm < "STATUS"
+#echo $STATUS_mm
+if [ "$STATUS_mm" == "FINISHED" ] ; then
+echo "set execution succesful" 
+else
+echo "following set failed to execute"
+#fetching failed set name
+${SYBASE_IQ_PATH} -U${ETLREP_USER} -P${ETLREP_PASSWORD} -S${DWH_NAME_repdb} -b << CHECK_FAILED_MM > /${log_path}/CHECK_FAILED 
+select * from META_TRANSFER_BATCHES where META_COLLECTION_NAME META_COLLECTION_NAME ='$1' and status='FAILED' and start_date > '$start_time'
+go
+CHECK_FAILED_MM
+echo "Please try to run the set mannually from adminui "
+echo "this script will now exit"
+exit
+fi
+}
+#-----------------------------------------------------------------------
+#Main Program starts here
+#-----------------------------------------------------------------------
+check_engineStatus
+run_dwhbase1
+run_dwhbase2
+run_dwhmonitor1
+run_dwhmonitor2
+echo "post_rollback script has finished sucessfully"
+#-----------------------------------------------------------------------

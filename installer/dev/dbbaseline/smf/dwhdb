@@ -1,0 +1,143 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ DWH database control script for SMF to use
+#
+# Usage: dwhdb start|stop
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2007 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+NAWK=/usr/bin/nawk
+unalias stop 2> /dev/null
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ ! -f ${CONF_DIR}/niq.ini ] ; then
+  echo "Panic: Configuration file niq.ini not found"
+  exit 30
+fi
+
+IQ_USER=`${BIN_DIR}/iniget DB -v IQUserName -f ${CONF_DIR}/niq.ini`
+
+if [ ${LOGNAME} != ${IQ_USER} ] ; then
+  echo "This script has to be installed by ${IQ_USER}"
+  exit 32
+fi
+
+start() {
+
+  if [ ! -d ${LOG_DIR}/iq/dwhdb ] ; then
+    mkdir -p ${LOG_DIR}/iq/dwhdb
+  fi
+
+  LOGFILE=${LOG_DIR}/iq/dwhdb/start_dwhdb_`date '+%y%m%d_%H%M%S'`.log
+
+  echo "Starting dwhdb..." > ${LOGFILE}
+
+  cd ${DWH_DIR} >> ${LOGFILE} 2>&1
+
+  DWH_PORT=`${BIN_DIR}/iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+  DWH_ENG=`${BIN_DIR}/iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+
+  if [ -f ${DWH_DIR}/${DWH_ENG}.iqmsg ] ; then
+    mv ${DWH_DIR}/${DWH_ENG}.iqmsg "${LOG_DIR}/iq/dwhdb/${DWH_ENG}.`date '+%y%m%d_%H%M%S'`.iqmsg" >> ${LOGFILE} 2>&1
+  fi
+
+  MAINCACHE=`${BIN_DIR}/iniget DWH -v MainCache -f ${CONF_DIR}/niq.ini`
+  TEMPCACHE=`${BIN_DIR}/iniget DWH -v TempCache -f ${CONF_DIR}/niq.ini`
+  CPUCORES=`${BIN_DIR}/iniget ENIQ_HW_INFO -v Eniq_Proc_Core -f ${CONF_DIR}/niq.ini`
+
+  ${ASDIR}/bin/start_asiq -STARTDIR ${DWH_DIR} @${DWH_DIR}/dwhdb.cfg -n ${DWH_ENG} -iqmc ${MAINCACHE} -iqtc ${TEMPCACHE} -x tcpip{port=${DWH_PORT}} -iqnumbercpus ${CPUCORES} ${DWH_DIR}/dwhdb.db >> ${LOGFILE} 2>&1
+
+  ${ASDIR}/bin/dbping -q -c "con=dwhdb;eng=$DWH_ENG;links=tcpip{host=dwhdb;port=${DWH_PORT};dobroadcast=none;verify=no};uid=dba;pwd=${DBA_PASSWORD}" >> ${LOGFILE} 2>&1
+    
+  if [ $? -eq 0 ] ; then
+    echo "Database dwhdb succesfully started" >> ${LOGFILE}
+    exit 0
+  else
+    echo "ERROR: dwhdb start failed" >> ${LOGFILE}
+    exit 1
+  fi
+
+}
+
+stop() {
+
+  LOGFILE=${LOG_DIR}/iq/dwhdb/stop_dwhdb_`date '+%y%m%d_%H%M%S'`.log
+
+  echo "Stoping dwhdb..." > ${LOGFILE}
+
+  PID=`ps -ef | grep asiqsrv12 | grep dwhdb | $NAWK '{print $2}'`
+
+  if [ -z "${PID}" ] ; then
+    echo "Can't find dwhdb process. Database not running." >> ${LOGFILE}
+    exit 0
+  else
+    echo "Database is running with PID ${PID}" >> ${LOGFILE}
+  fi
+
+  DWH_PORT=`${BIN_DIR}/iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+  DWH_ENG=`${BIN_DIR}/iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+  DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+  ${ASDIR}/bin/dbstop -y -q -c "con=dwhdb;eng=${DWH_ENG};links=tcpip{host=dwhdb;port=${DWH_PORT};dobroadcast=none;verify=no};uid=dba;pwd=${DBA_PASSWORD}" &
+ 
+  echo "dbstop forked" >> ${LOGFILE}
+ 
+  STOP_COUNT=`${BIN_DIR}/iniget DWH -v StopCount -f ${CONF_DIR}/niq.ini`
+  STOP_DELAY=`${BIN_DIR}/iniget DWH -v StopDelay -f ${CONF_DIR}/niq.ini`
+
+  cnt=0
+
+  while [ ${cnt} -lt ${STOP_COUNT} ] ; do
+    sleep ${STOP_DELAY}
+
+    xPS=`ps -ef | grep asiqsrv12 | grep dwhdb`
+    
+    if [ -z "${xPS}" ] ; then
+      echo "Database is down" >> ${LOGFILE}
+      exit 0
+    else
+      xPID=`echo ${xPS} | $NAWK '{print $2}'`
+      xNAM=`echo ${xPS} | $NAWK '{print $8}'`
+
+      echo "DB process ${xNAM} is still running with ${xPID}" >> ${LOGFILE}
+      let cnt=cnt+1
+
+      sleep ${STOP_DELAY}
+    fi
+
+  done
+
+  xPID=`ps -ef | grep asiqsrv12 | grep dwhdb | $NAWK '{print $2}'`
+
+  echo "Database dwhdb refused to stop trying to kill it." >> ${LOGFILE}
+
+  if [ ! -z ${xPID} ] ; then
+    kill -9 ${xPID}
+    echo "Database killed." >> ${LOGFILE}
+  else
+    echo "Database was dead before killing" >> ${LOGFILE}
+  fi
+
+  exit 0
+}
+
+case "$1" in
+start)
+      start
+      ;;
+stop)
+      stop
+      ;;
+*) 
+      echo "This script shall only be used by SMF!"
+      exit 10
+      ;;
+esac

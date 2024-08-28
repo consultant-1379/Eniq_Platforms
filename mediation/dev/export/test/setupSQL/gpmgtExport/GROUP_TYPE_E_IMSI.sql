@@ -1,0 +1,13 @@
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-4', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-4', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-5', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-5', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-6', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-6', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-7', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-7', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-8', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-8', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-9', '93');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('imsi-9', '42');
+insert into GROUP_TYPE_E_IMSI (GROUP_NAME, IMSI) values ('test-duplicate-group', '10111');

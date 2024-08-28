@@ -1,0 +1,731 @@
+TTV-WATCHPOINT-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+	NOTIFICATION-TYPE, MODULE-IDENTITY, OBJECT-TYPE, Integer32, enterprises
+		FROM SNMPv2-SMI
+	NOTIFICATION-GROUP, OBJECT-GROUP, MODULE-COMPLIANCE
+		FROM SNMPv2-CONF;
+
+
+wfs		MODULE-IDENTITY
+	LAST-UPDATED "201003241732Z"
+	ORGANIZATION 
+		"Ericsson Inc.
+		100 N Sepulveda blvd, suite 1600
+		El Segundo, CA 90245
+		"
+	CONTACT-INFO 
+		"support@Ericsson.com"
+	DESCRIPTION 
+		"This MIB Module provides information for tracking
+		the progress and status of WatchPoint Workflow application"
+	REVISION  
+		"201003241732Z"
+	DESCRIPTION
+		"WF performance monitoring added."
+	REVISION  
+		"200506061232Z"
+	DESCRIPTION
+		"Initial Version."
+	::= { tandbergtv 20 }
+
+tandbergtv		OBJECT IDENTIFIER ::= { enterprises 11021 }
+
+
+
+wfsNotifications	OBJECT IDENTIFIER ::= { wfs 0 }
+
+wfsObjects		OBJECT IDENTIFIER ::= { wfs 1 }
+
+wfsConformance		OBJECT IDENTIFIER ::= { wfs 2 }
+
+wfsMonitoring		OBJECT IDENTIFIER ::= {wfs 3}
+
+wfsCompliances		OBJECT IDENTIFIER ::= { wfsConformance 1 }
+
+wfsGroups		OBJECT IDENTIFIER ::= { wfsConformance 2 }
+
+
+-- *************************************************
+-- Objects
+-- *************************************************
+trapMessage			OBJECT-TYPE
+    SYNTAX      	OCTET STRING
+    MAX-ACCESS  	accessible-for-notify
+    STATUS      	current
+    DESCRIPTION
+        "The Message generated in the Workflow Application logs that triggered the trap."
+	::= { wfsObjects 1 }
+
+
+-- *************************************************
+-- Notifications
+-- *************************************************
+databaseOperationFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failed to save to database."
+	::= { wfsNotifications 1 }
+
+duplicateParameters  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Duplicate parameters detected while creating work order."
+	::= { wfsNotifications 2 }
+
+failedLoginAttempt  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"A failed login attempt was detected"
+	::= { wfsNotifications 4 }
+
+protectionKeyMismatch  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"The Protection Key for the Template does not match the Protection Key for the configured Resource Group."
+	::= { wfsNotifications 5 }
+
+resourceFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Resource failed."
+	::= { wfsNotifications 6 }
+
+resourceIntializationFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure detected during resource initialization."
+	::= { wfsNotifications 7 }
+
+saveWorkorderFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure detected while saving work order."
+	::= { wfsNotifications 8 }
+
+createWorkorderFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure detected while creating work order."
+	::= { wfsNotifications 9 }
+
+workorderFailed  NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure detected while completing work order."
+	::= { wfsNotifications 10 }
+
+invalidTemplateLicense NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Do not have license to ingest new template."
+	::= { wfsNotifications 11 }
+
+templateIngestFailed NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure detected while ingesting a Template"
+	::= { wfsNotifications 12 }
+
+pitchScheduleNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Title processing milestone was not achieved in the expected timeframe"
+	::= { wfsNotifications 13 }
+
+plannerNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Asset files for a title did not arrive by the expected date"
+	::= { wfsNotifications 14 }
+
+driveStatusNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Status notification for monitored drives"
+	::= { wfsNotifications 15 }
+
+epgFailureToTranslateNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure to translate EPG error"
+	::= { wfsNotifications 16 }
+
+epgValidationRuleCausedAbortNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Validation rule caused abort"
+	::= { wfsNotifications 17 }
+
+epgValidationRuleFailedNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Validation rule failed"
+	::= { wfsNotifications 18 }
+
+epgMergeFailedNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"EPG Merge failed"
+	::= { wfsNotifications 19 }
+
+epgDataPublishFailureNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Failure to publish EPG data"
+	::= { wfsNotifications 20 }
+
+businessContinuanceStatusNotification NOTIFICATION-TYPE
+	OBJECTS
+		{ trapMessage }
+	STATUS     current
+	DESCRIPTION 
+		"Status notification for Business continuance"
+	::= { wfsNotifications 21 }
+
+-- *************************************************
+-- Groups
+-- *************************************************
+
+wfsTraps			NOTIFICATION-GROUP
+	NOTIFICATIONS  
+		{ 
+			databaseOperationFailed, 
+			duplicateParameters, 
+			failedLoginAttempt,
+			protectionKeyMismatch,
+			resourceFailed,
+			resourceIntializationFailed,
+			saveWorkorderFailed,
+			createWorkorderFailed,
+			workorderFailed,
+			invalidTemplateLicense,
+			templateIngestFailed,
+			pitchScheduleNotification,
+			plannerNotification,
+			driveStatusNotification,
+			epgFailureToTranslateNotification, 
+			epgValidationRuleCausedAbortNotification, 
+			epgValidationRuleFailedNotification, 
+			epgMergeFailedNotification,
+			epgDataPublishFailureNotification,
+			businessContinuanceStatusNotification
+		}
+  STATUS         current
+  DESCRIPTION    
+  		"WatchPoint SNMP Traps."
+	::= { wfsGroups 1 }
+
+
+wfsTrapVariables	OBJECT-GROUP
+	OBJECTS
+		{ trapMessage }
+  STATUS         current
+  DESCRIPTION    
+  		"WatchPoint SNMP Trap Variables."
+	::= { wfsGroups 2 }
+
+wfsPerformanceVariables	OBJECT-GROUP
+	OBJECTS
+		{ 
+			cmsResourceGroupCount, 
+			cmsResourceGroupName, 
+			cmsResourceGroupQueueSize,
+			cmsWoProcessCacheSize,
+			cmsWoProcessCacheHits, 
+			cmsWoProcessCacheMisses, 
+			cmsWoTemplateCacheSize, 
+			cmsWoTemplateCacheHits, 
+			cmsWoTemplateCacheMisses, 
+			cmsWoPaused, 
+			cmsWoCancelled, 
+			cmsWoQueued, 
+			cmsWoCompleted, 
+			cmsWoFailed, 
+			cmsWoBranched, 
+			cmsWoCreated, 
+			cmsWoRunning, 
+			cmsWoBranchedPaused, 
+			cmsWoBranchedCancelled, 
+			cmsWoBranchedQueued, 
+			cmsWoBranchedCompleted, 
+			cmsWoBranchedFailed, 
+			cmsWoBranchedBranched, 
+			cmsWoBranchedCreated, 
+			cmsWoBranchedRunning, 
+			cmsWoCreationRatePerMin, 
+			cmsWoCreationRatePerSec, 
+			cmsTraffickingAlertsUnresolved, 
+			cmsQueuesResourceLogAverageQueueDelay, 
+			cmsQueuesResourceLogMaxSize, 
+			cmsQueuesResourceLogCurrentSize, 
+			cmsQueuesResourceLogTotal, 
+			cmsQueuesProcessLogAverageQueueDelay, 
+			cmsQueuesProcessLogMaxSize, 
+			cmsQueuesProcessLogCurrentSize, 
+			cmsQueuesProcessLogTotal, 
+			cmsQueuesMessageOffloadAverageQueueDelay, 
+			cmsQueuesMessageOffloadMaxSize, 
+			cmsQueuesMessageOffloadCurrentSize, 
+			cmsQueuesMessageOffloadTotal 
+}
+  STATUS         current
+  DESCRIPTION    
+  		"WatchPoint SNMP preformance monitoring variables."
+	::= { wfsGroups 3 }
+
+-- *************************************************
+-- Compliances
+-- *************************************************
+
+wfsFullCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION
+        "The compliance for receiving any of the notifications for this module and getting performance variables."
+    MODULE
+        MANDATORY-GROUPS
+        { wfsTraps, wfsTrapVariables, wfsPerformanceVariables }
+    ::= { wfsCompliances 1 }
+
+-- ***************************************************
+-- Monitoring
+-- ***************************************************
+
+cmsResourceGroupCount OBJECT-TYPE
+       SYNTAX      Integer32 
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+               "Number of Resource Groups."
+      ::= { wfsMonitoring 1 }
+
+cmsResourceGroupTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF CmsOResourceGroupEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+               "Resource Group Table."
+      ::= { wfsMonitoring 2 }
+
+
+cmsResourceGroupEntry OBJECT-TYPE
+       SYNTAX      CmsOResourceGroupEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+               "An entry (conceptual row) in the Resource Group Table."
+      INDEX   { cmsResourceGroupIndex }
+      ::= { cmsResourceGroupTable 1 }
+
+CmsOResourceGroupEntry ::=
+       SEQUENCE {
+           cmsResourceGroupIndex Integer32,
+           cmsResourceGroupName OCTET STRING,
+           cmsResourceGroupQueueSize Integer32
+       }
+
+cmsResourceGroupIndex OBJECT-TYPE
+       SYNTAX      Integer32 (1..64000)
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+               "The auxiliary variable used for identifying instances of
+               the Resource Groups in the Resource Group table."
+           ::= { cmsResourceGroupEntry 1 }
+
+cmsResourceGroupName OBJECT-TYPE
+       SYNTAX      OCTET STRING
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+               "Resource Group name."
+           ::= { cmsResourceGroupEntry 2 }
+
+cmsResourceGroupQueueSize OBJECT-TYPE
+       SYNTAX      Integer32 
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+               "Resource Group Queue Size."
+           ::= { cmsResourceGroupEntry 3 }
+
+cmsWoCache OBJECT IDENTIFIER ::= { wfsMonitoring 3 }
+
+cmsWoProcessCache 	OBJECT IDENTIFIER ::= { cmsWoCache 1 }
+
+cmsWoProcessCacheSize OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order process cache size."
+	::= { cmsWoProcessCache 1 } 
+
+cmsWoProcessCacheHits OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order process cache hits."
+	::= { cmsWoProcessCache 2 } 
+
+cmsWoProcessCacheMisses OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order process cache misses."
+	::= { cmsWoProcessCache 3 } 
+
+
+
+cmsWoTemplateCache OBJECT IDENTIFIER ::= { cmsWoCache 2 }
+
+cmsWoTemplateCacheSize OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order template cache size."
+	::= { cmsWoTemplateCache 1 } 
+
+cmsWoTemplateCacheHits OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order template cache hits."
+	::= { cmsWoTemplateCache 2 } 
+
+cmsWoTemplateCacheMisses OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order template cache misses."
+	::= { cmsWoTemplateCache 3 } 
+
+
+cmsWorkOrders OBJECT IDENTIFIER ::= { wfsMonitoring 4 }
+cmsWoStats OBJECT IDENTIFIER ::= { cmsWorkOrders 1 }
+
+
+cmsWoPaused OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Paused status."
+	::= { cmsWoStats 1 } 
+
+
+
+cmsWoCancelled OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Cancelled status."
+	::= { cmsWoStats 2 } 
+
+cmsWoQueued OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Queued status."
+	::= { cmsWoStats 3 } 
+
+cmsWoCompleted OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Completed status."
+	::= { cmsWoStats 4 } 
+
+cmsWoFailed OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Failed status."
+	::= { cmsWoStats 5 } 
+
+cmsWoBranched OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Branched status."
+	::= { cmsWoStats 6 } 
+
+
+cmsWoCreated OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Created status."
+	::= { cmsWoStats 7 } 
+
+cmsWoRunning OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work orders with Running status."
+	::= { cmsWoStats 8 } 
+
+
+cmsWoBranchedStats OBJECT IDENTIFIER ::= { cmsWorkOrders 2 }
+
+
+cmsWoBranchedPaused OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Paused status."
+	::= { cmsWoBranchedStats 1 } 
+
+
+
+cmsWoBranchedCancelled OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Cancelled status."
+	::= { cmsWoBranchedStats 2 } 
+
+cmsWoBranchedQueued OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Queued status."
+	::= { cmsWoBranchedStats 3 } 
+
+cmsWoBranchedCompleted OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Completed status."
+	::= { cmsWoBranchedStats 4 } 
+
+cmsWoBranchedFailed OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Failed status."
+	::= { cmsWoBranchedStats 5 } 
+
+cmsWoBranchedBranched OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Branched status."
+	::= { cmsWoBranchedStats 6 }
+
+
+cmsWoBranchedCreated OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Created status."
+	::= { cmsWoBranchedStats 7 }
+
+cmsWoBranchedRunning OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of work order branches with Running status."
+	::= { cmsWoBranchedStats 8 }
+
+
+
+
+cmsWoCreationStats OBJECT IDENTIFIER ::= { cmsWorkOrders 3 }
+
+cmsWoCreationRatePerMin OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order creation rate per min."
+	::= { cmsWoCreationStats 1 } 
+
+cmsWoCreationRatePerSec OBJECT-TYPE
+	SYNTAX OCTET STRING
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Work order creation rate per sec."
+	::= { cmsWoCreationStats 2 } 
+
+cmsTraffickingAlerts OBJECT IDENTIFIER ::= { wfsMonitoring 5 }
+
+cmsTraffickingAlertsUnresolved  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Count of unresolved Trafficking Alerts."
+	::= { cmsTraffickingAlerts 1 } 
+
+cmsQueues  OBJECT IDENTIFIER ::= { wfsMonitoring 6 }
+cmsQueuesResourceLog OBJECT IDENTIFIER ::= { cmsQueues 1 }
+
+cmsQueuesResourceLogAverageQueueDelay  OBJECT-TYPE
+	SYNTAX Integer32 
+	UNITS       "msec"
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Resource log events - average queue delay."
+	::= { cmsQueuesResourceLog 1 } 
+
+
+cmsQueuesResourceLogMaxSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Resource log events - max queue size."
+	::= { cmsQueuesResourceLog 2 } 
+
+cmsQueuesResourceLogCurrentSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Resource log events - current queue size."
+	::= { cmsQueuesResourceLog 3 } 
+
+cmsQueuesResourceLogTotal  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Resource log events - total added to queue."
+	::= { cmsQueuesResourceLog 4 } 
+
+
+cmsQueuesProcessLog OBJECT IDENTIFIER ::= { cmsQueues 2 }
+
+cmsQueuesProcessLogAverageQueueDelay  OBJECT-TYPE
+	SYNTAX Integer32 
+	UNITS       "msec"
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Process log events - average queue delay."
+	::= { cmsQueuesProcessLog 1 } 
+
+
+cmsQueuesProcessLogMaxSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Process log events - max queue size."
+	::= { cmsQueuesProcessLog 2 } 
+
+cmsQueuesProcessLogCurrentSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Process log events - current queue size."
+	::= { cmsQueuesProcessLog 3 } 
+
+cmsQueuesProcessLogTotal  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Process log events - total added to queue."
+	::= { cmsQueuesProcessLog 4 } 
+
+cmsQueuesMessageOffload OBJECT IDENTIFIER ::= { cmsQueues 3 }
+
+cmsQueuesMessageOffloadAverageQueueDelay  OBJECT-TYPE
+	SYNTAX Integer32 
+	UNITS       "msec"
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Message offload queue: received message for which work orders have not been created - average queue delay."
+	::= { cmsQueuesMessageOffload 1 } 
+
+
+cmsQueuesMessageOffloadMaxSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Message offload queue: received message for which work orders have not been created - max queue size."
+	::= { cmsQueuesMessageOffload 2 } 
+
+cmsQueuesMessageOffloadCurrentSize  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Message offload queue: received message for which work orders have not been created - current queue size."
+	::= { cmsQueuesMessageOffload 3 } 
+
+cmsQueuesMessageOffloadTotal  OBJECT-TYPE
+	SYNTAX Integer32 
+	MAX-ACCESS read-only 
+	STATUS	current
+	DESCRIPTION
+		"Message offload queue: received message for which work orders have not been created - total added to queue."
+	::= { cmsQueuesMessageOffload 4 } 
+
+
+END

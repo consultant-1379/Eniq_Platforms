@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+. ${CONF_DIR}/niq.rc
+
+JAVA_HOME="/eniq/sw/runtime/java"
+
+COMMON_JAR=`echo ${PLATFORM_DIR}/common-*/dclib/common.jar`
+EXPORT_CONF=`echo ${PLATFORM_DIR}/export-*/conf`
+EXPORT_JAR=`echo ${PLATFORM_DIR}/export-*/classes`
+LOG4J_JAR=`echo ${PLATFORM_DIR}/libs-*/dclib/log4j-*.jar`
+
+CLASSPATH=${EXPORT_JAR}:${EXPORT_CONF}:${COMMON_JAR}:${LOG4J_JAR}
+MAIN_CLASS=com.distocraft.dc5000.etl.importexport.CsvExporter
+ARGS=
+
+usage(){
+	echo "Used to create a CSV export file from log file(s)"
+	echo "	Usage: $0 -f [log_file|log_file_directory] -o output_csv_export_file"
+	echo "	To create CSV export file for one log file e.g."
+	echo "		$0 -f /tmp/sample_log_file.log.XX -o /tmp/output.csv"
+	echo "	To create CSV export file for all log files in a directory e.g."
+	echo "		$0 -f /tmp/log_file_dir/ -o /tmp/output.csv"
+	echo "	All input log files must end with .log.XX extension"
+}
+
+
+execute() {
+	${JAVA_HOME}/bin/java -d64 -Ddc5000.config.directory=${CONF_DIR} -cp ${CLASSPATH} ${MAIN_CLASS} ${ARGS}
+}
+
+if [ $# -eq 0 ] ; then	
+	usage
+	exit 2;
+fi
+
+while (( "$#" )); do
+	ARGS="$ARGS $1"
+	shift
+done
+
+execute

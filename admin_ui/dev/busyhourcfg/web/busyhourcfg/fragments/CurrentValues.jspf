@@ -1,0 +1,28 @@
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.TechPack"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.TargetTechPack"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.BusyhourSupport"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.Placeholder"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.PlaceholderCount"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.Source"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.Key"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.data.vo.MappedType"%>
+<%@ page import="java.util.List"%>
+<%@ page import="com.ericsson.eniq.busyhourcfg.common.Constants"%>
+
+<%
+  final TechPack currentTechPack = (TechPack) session.getAttribute("sourcetp");
+  TargetTechPack currentTargetTechPack = null;
+  BusyhourSupport currentBusyhourSupport = null;
+  Placeholder currentPlaceholder = null;
+
+  if (currentTechPack != null) {
+    currentTargetTechPack = (TargetTechPack) session.getAttribute("targettp");
+    if (currentTargetTechPack != null) {
+      currentBusyhourSupport = (BusyhourSupport) session.getAttribute("bhsupport");
+      if (currentBusyhourSupport != null) {
+        currentPlaceholder = (Placeholder) session.getAttribute("placeholder");
+      }
+    }
+  }
+%>
+

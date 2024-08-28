@@ -1,0 +1,23 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ - run_if_file_exists.
+# This should only be used during installation.
+#
+# ----------------------------------------------------------------------
+# Copyright (C) 2012 LM Ericsson Limited.  All rights reserved.
+# ----------------------------------------------------------------------
+usage_msg()
+{
+  echo ""
+  echo "Usage: run_if_file_exists.bsh FILE_NAME"
+  echo "FILE_NAME  : Name of file to run if it exists"
+}
+
+if [ -z "$1" ] ; then
+  usage_msg
+  exit 1
+fi
+
+if [ -f "$1" ] ; then 
+	"$1"; 
+fi

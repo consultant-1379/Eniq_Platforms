@@ -1,0 +1,69 @@
+#!/usr/sunos/bin/sh
+# ----------------------------------------------------------------------
+# Ericsson Network IQ utility database control script
+#
+# Usage: utildb start|stop|status
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+IQ_USER=`${BIN_DIR}/iniget DB -v IQUserName -f ${CONF_DIR}/niq.ini`
+
+if [ ${LOGNAME} != ${IQ_USER} ] ; then
+  echo "This script has to be installed by ${IQ_USER}"
+  return 32
+fi
+
+UTIL_PORT=`${BIN_DIR}/iniget DB -v UtilServerPort -f ${CONF_DIR}/niq.ini`
+DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+if [ "$1" = "start" ] ; then
+
+  ${ASDIR}/bin/start_asiq -n utility_srv -gu utility_db -sb 0 -x tcpip{port=${UTIL_PORT}}
+
+  RET=$?
+
+  if [ ${RET} != 0 ] ; then
+    echo "utildb startup failed"
+  fi
+
+  exit ${RET} 
+
+elif [ "$1" = "stop" ] ; then
+
+  ${ASDIR}/bin/dbstop -y -c "uid=dba;pwd=$DBA_PASSWORD;eng=utility_srv;dbn=utility_db;links=tcpip{host=localhost;port=$UTIL_PORT;dobroadcast=no;verify=no}"
+
+  RET=$?
+
+  if [ ${RET} != 0 ] ; then
+    echo "utildb shutdown failed"
+  fi
+
+  exit ${RET}
+
+elif [ "$1" = "status" ] ; then
+
+  RESP=`${ASDIR}/bin/dbping -q -c "uid=dba;pwd=$DBA_PASSWORD;eng=utility_srv;dbn=utility_db;links=tcpip{host=localhost;port=$UTIL_PORT;dobroadcast=no;verify=no}" 2>&1`
+
+  if [ ! -z "${RESP}" ] ; then
+    echo "utildb is not running."
+    exit 2
+  fi
+
+  echo "utildb is running OK"
+  exit 0
+
+else
+
+  echo "Usage: utildb.sh start|stop|status"
+  exit 1
+
+fi

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<techpack>
+		<Universeclass CLASSNAME="&apos;cell.CounterGroup1&apos;" DESCRIPTION="&apos;&apos;" DiffStatus="" ELEM_BH_REL="0" INHERITANCE="0" OBJ_BH_REL="0" ORDERNRO="0" PARENT="&apos;Computed Counters&apos;" UNIVERSEEXTENSION="&apos;ALL&apos;" VERSIONID="&apos;null&apos;" />
+		<Measurementcounter COLNUMBER="100" COUNTAGGREGATION="&apos;SUM&apos;" COUNTERPROCESS="&apos;PEG&apos;" COUNTERTYPE="&apos;PEG&apos;" DATAID="&apos;c3&apos;" DATANAME="&apos;c3&apos;" DATASCALE="0" DATASIZE="18" DATATYPE="&apos;numeric&apos;" DESCRIPTION="&apos;&apos;" DiffStatus="" GROUPAGGREGATION="&apos;SUM&apos;" INCLUDESQL="1" TIMEAGGREGATION="&apos;SUM&apos;" TYPEID="&apos;null&apos;" UNIVCLASS="&apos;&apos;" UNIVOBJECT="&apos;c3&apos;" />
+</techpack>

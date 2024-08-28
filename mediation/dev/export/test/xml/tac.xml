@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groupmgt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/group_management.xsd">
+	<group type="TAC" name="tac-group-1">
+		<group-element>
+			<key name="tac" value="123"/>
+		</group-element>
+		<group-element>
+			<key name="tac" value="901"/>
+		</group-element>
+	</group>
+</groupmgt>

@@ -1,0 +1,108 @@
+-- File Name : BW-CCReportingDBManagementFault.mib
+BW-CCReportingDBManagementFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npApplicationName, npDBSchemaName, npTaskName, npError, npExceptionMessage
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201206010000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks CCReportingDBManagement Application."
+    REVISION    "201206010000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMccReportingDBManagementLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the CCReporting DB Management has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMccReportingDBManagementLaunched, bwPMccReportingDBManagementShutDown, bwPMccReportingDBManagementRestarted, bwPMccReportingDBManagementDeath and bwPMccReportingDBManagementOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ccReportingDBManagement process"
+-- @feature:165352
+    ::=  {  systemFaults 11001  }
+
+  bwPMccReportingDBManagementShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the CCReporting DB Management has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMccReportingDBManagementLaunched, bwPMccReportingDBManagementShutDown, bwPMccReportingDBManagementRestarted, bwPMccReportingDBManagementDeath and bwPMccReportingDBManagementOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ccReportingDBManagement process"
+-- @feature:165352
+    ::=  {  systemFaults 11002  }
+
+  bwPMccReportingDBManagementRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the CCReporting DB Management restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMccReportingDBManagementLaunched, bwPMccReportingDBManagementShutDown, bwPMccReportingDBManagementRestarted, bwPMccReportingDBManagementDeath and bwPMccReportingDBManagementOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ccReportingDBManagement process"
+-- @feature:165352
+    ::=  {  systemFaults 11003  }
+
+  bwPMccReportingDBManagementDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the CCReporting DB Management death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMccReportingDBManagementLaunched, bwPMccReportingDBManagementShutDown, bwPMccReportingDBManagementRestarted, bwPMccReportingDBManagementDeath and bwPMccReportingDBManagementOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ccReportingDBManagement process"
+-- @feature:165352
+    ::=  {  systemFaults 11004  }
+    
+bwPMccReportingDBManagementOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the CCReporting DB Management ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMccReportingDBManagementLaunched, bwPMccReportingDBManagementShutDown, bwPMccReportingDBManagementRestarted, bwPMccReportingDBManagementDeath, and bwPMccReportingDBManagementOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ccReportingDBManagement process"
+-- @feature:165352
+    ::=  {  systemFaults 11005  }  
+
+bwCCReportingDBManagementScheduledJobExceededMaxDuration  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState,component, subcomponent, problemText, recommendedActionsText, npTaskName }
+     STATUS      current
+     DESCRIPTION
+         "This alarm indicates that a BWECCR schema job is executing beyond the elapsed time threshold. This may occur if the Database Server is recomputing interval statistics upon Application Server recovery, or when connectivity between the Application Server and Database Server has been restored.
+ @severity:high
+ @subcomponent:ccreporting"
+-- @feature:200349
+    ::=  {  systemFaults 11006  }  
+
+bwCCReportingDBManagementSchemaException  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npError, npExceptionMessage }
+     STATUS      current
+     DESCRIPTION
+         "This notification indicates that an unhandled exception has occurred in the BWECCR schema.
+ @severity:high
+ @subcomponent:ccreporting"
+-- @feature:200349
+    ::=  {  systemFaults 11007  }  
+    
+bwReportingRecomputingStats  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npApplicationName, npDBSchemaName }
+     STATUS      current
+     DESCRIPTION
+         "Reporting statistics are being recomputed.   Reports created while re-computation is in progress may not be accurate..
+ @severity:informational
+ @subcomponent:ccreporting"
+-- @feature:208204
+    ::=  {  systemFaults 11008  }  
+
+END

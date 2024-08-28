@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="VIEW_PATH/eniq_design_plat_adapters/build/parser/parser.jar"/>
+	<classpathentry kind="lib" path="VIEW_PATH/eniq_design_plat_installer/build/repository/repository.jar" sourcepath="/repository/src"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

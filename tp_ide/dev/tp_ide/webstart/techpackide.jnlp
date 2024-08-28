@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<jnlp spec="1.0+" codebase="https://@@IP@@:8443/techpackide" href="techpackide.jnlp">
+
+  <information>
+    <title>Ericsson Network IQ Web TechpackIDE</title>
+    <vendor>Ericsson, Ltd</vendor>
+    <homepage href="http://www.ericsson.com"/>
+    <description>Ericsson Network IQ Web TechpackIDE</description>
+    <icon href="ericsson_logo.gif"/>
+    <icon kind="splash" href="eniq_blue_banner.gif"/>
+  </information>
+
+
+  <resources>
+    <j2se version="1.6+" java-vm-args="-Xms384m -Xmx1024m"/>
+    <jar href="lib/techpackide.jar"/>
+    <jar href="lib/swing-worker.jar"/>
+    <jar href="lib/appframework.jar"/>
+ 	<jar href="lib/jconn4.jar"/>
+    <jar href="lib/velocity-dep-1.5.jar"/>
+    <jar href="lib/jcalendar.jar"/>
+    <jar href="lib/dbunit-2.1_dc.jar"/>
+    <jar href="lib/export.jar"/>
+    <jar href="lib/dwhmanager.jar"/>
+    <jar href="lib/common.jar"/>
+    <jar href="lib/repository.jar"/>   
+    <jar href="lib/scheduler.jar"/>
+    <jar href="lib/licensing.jar"/>
+    <jar href="lib/parser.jar"/>
+    <jar href="lib/engine.jar"/>
+    <jar href="lib/xerces-2.6.2.jar"/>
+    <jar href="lib/xml-apis.jar"/>
+    <jar href="lib/installer.jar"/>
+    <jar href="lib/ant.jar"/>
+    <jar href="lib/commons-io-2.0.1.jar"/>
+    <jar href="lib/commons-net-3.0.1.jar"/>
+    <jar href="lib/jsch-0.1.51.jar"/>
+    <property name="java.util.logging.config.file" value="/com/ericsson/eniq/techpacksdk/logger.properties"/>
+    <property name="TPIDE.startWithLog" value="false"/><property name="dwh.connection.details" value="@@DWHCON@@"/>
+    
+    <property name="ETC_DIR" value="C:/Windows/System32/drivers/etc"/>
+  </resources>
+
+  <application-desc main-class="com.ericsson.eniq.techpacksdk.TechPackIDE"/>
+
+</jnlp>

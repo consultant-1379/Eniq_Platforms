@@ -1,0 +1,365 @@
+--===============================================================
+-- File Name : BW-ECLQuery.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2010, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-ECLQuery DEFINITIONS ::= BEGIN
+    IMPORTS
+      DisplayString 
+        FROM SNMPv2-TC
+      MODULE-COMPLIANCE, OBJECT-GROUP          
+        FROM SNMPv2-CONF
+      enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Unsigned32
+        FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201008230000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the ECL Query application."
+    REVISION    "201311230000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  eclQuery OBJECT IDENTIFIER
+    ::= { broadworks 40 }
+
+  eclQueryDatabaseModule OBJECT IDENTIFIER
+    ::= { eclQuery 1 }
+
+  eclQueryDatabaseStats OBJECT IDENTIFIER
+    ::= { eclQueryDatabaseModule 1 }
+
+  eclQueryOracle OBJECT IDENTIFIER
+    ::= { eclQueryDatabaseStats 1 }
+
+  reportGenerationRequests OBJECT IDENTIFIER
+      ::= { eclQuery 2 }
+
+  bwECLQueryMibConformance OBJECT IDENTIFIER
+    ::= { eclQuery 1000 }
+
+-- eclQueryOracle ::  ...............................
+
+   bwECLQueryOpenedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-only
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of opened transaction with the database."
+      ::=  {  eclQueryOracle  1  }
+
+   bwECLQueryCommittedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of committed transactions to the database since the last restart."
+      ::=  {  eclQueryOracle  2  }
+
+   bwECLQueryFailedTransactions  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of failed transactions with the database."
+      ::=  {  eclQueryOracle  3  }
+
+   bwECLQueryCriticalErrors  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This counter reflects the total number of critical errors encountered during processing with the database."
+      ::=  {  eclQueryOracle  4  }
+      
+  bwECLQueryOracleDbCount  OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of oracle database defined for this application."
+-- @feature:206184              
+    ::= { eclQueryOracle 5 }
+  
+  bwECLQueryOracleDbStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwECLQueryOracleDbStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "A list of oracle database entries.  The number of entries is given by the value of bwECLQueryOracleDbCount."
+-- @feature:206184              
+    ::= { eclQueryOracle 6 }
+  
+  bwECLQueryOracleDbStatsEntry OBJECT-TYPE
+      SYNTAX      BwECLQueryOracleDbStatsEntry
+      MAX-ACCESS  not-accessible
+      STATUS      current
+      DESCRIPTION
+          "An entry containing statistics information applicable to a particular oracle database."
+      INDEX   { bwECLQueryOracleDbStatsIndex }
+-- @feature:206184            
+    ::= { bwECLQueryOracleDbStatsTable 1 }
+    
+  BwECLQueryOracleDbStatsEntry ::= SEQUENCE {
+    bwECLQueryOracleDbStatsIndex           Unsigned32,
+    bwECLQueryOracleDbName                 DisplayString,
+    bwECLQueryOracleDbNbConnectionsCreated Counter32,
+    bwECLQueryOracleDbConnectionPoolSize   Gauge32,
+    bwECLQueryOracleDbAvgUpdateTime        Gauge32,
+    bwECLQueryOracleDbAvgRowsUpdated       Gauge32,
+    bwECLQueryOracleDbAvgQueryTime         Gauge32,
+    bwECLQueryOracleDbAvgRowsQueried       Gauge32,
+    bwECLQueryOracleDbUpdateCount          Counter32,
+    bwECLQueryOracleDbQueryCount           Counter32
+  }
+  
+   bwECLQueryOracleDbStatsIndex OBJECT-TYPE
+     SYNTAX      Unsigned32
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This integer represents an OracleDb database index in the table."
+-- @feature:206184               
+   ::= { bwECLQueryOracleDbStatsEntry 1 }
+   
+   bwECLQueryOracleDbName OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION 
+         "This string represents the oracle database name."
+-- @feature:206184               
+   ::= { bwECLQueryOracleDbStatsEntry 2 }
+   
+   bwECLQueryOracleDbNbConnectionsCreated OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of total connection created to the oracle database."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 3 }
+   
+   bwECLQueryOracleDbConnectionPoolSize OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of connections residing in the oracle database connection pool."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 4 }
+   
+   bwECLQueryOracleDbAvgUpdateTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB update time in milliseconds."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 5 }
+   
+   bwECLQueryOracleDbAvgRowsUpdated OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows affected in oracle DB updates."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 6 }
+   
+   bwECLQueryOracleDbAvgQueryTime OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average oracle DB query time in milliseconds."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 7 }
+   
+   bwECLQueryOracleDbAvgRowsQueried OBJECT-TYPE
+      SYNTAX      Gauge32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Average number of rows processed in oracle DB queries."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 8 }
+   
+   bwECLQueryOracleDbUpdateCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB updates performed since the application started."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 9 }
+   
+   bwECLQueryOracleDbQueryCount OBJECT-TYPE
+      SYNTAX      Counter32
+      MAX-ACCESS  read-only
+      STATUS      current
+      DESCRIPTION 
+          "Number of oracle DB queries performed since the application started."
+-- @feature:206184                
+   ::= { bwECLQueryOracleDbStatsEntry 10 }
+      
+   bwECLQueryOracleDbHWMTable OBJECT-TYPE
+       SYNTAX      SEQUENCE OF BwECLQueryOracleDbHWMEntry
+       MAX-ACCESS  not-accessible
+       STATUS      current
+       DESCRIPTION
+           "A list of oracle database High Water Mark entries.  The number of entries is given by the value of bwECLQueryOracleDbCount."
+-- @feature:206184                 
+       ::= { eclQueryOracle 7 }
+     
+     bwECLQueryOracleDbHWMEntry OBJECT-TYPE
+         SYNTAX      BwECLQueryOracleDbHWMEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "An entry containing high water mark information applicable to a particular oracle database."
+         INDEX   { bwECLQueryOracleDbHWMIndex }
+-- @feature:206184               
+    ::= { bwECLQueryOracleDbHWMTable 1 }
+    
+    BwECLQueryOracleDbHWMEntry ::= SEQUENCE {
+        bwECLQueryOracleDbHWMIndex           Unsigned32,
+        bwECLQueryOracleDbHWMDbName          DisplayString,
+        bwECLQueryOracleDbHWMStatName        DisplayString,
+        bwECLQueryOracleDbHWMStatValue       Gauge32,
+        bwECLQueryOracleDbHWMTimestamp       DisplayString,
+        bwECLQueryOracleDbHWMStackTrace      DisplayString
+    }
+    
+    bwECLQueryOracleDbHWMIndex OBJECT-TYPE
+         SYNTAX      Unsigned32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This integer represents an OracleDb database index in the table."
+-- @feature:206184                   
+    ::= { bwECLQueryOracleDbHWMEntry 1 }
+       
+    bwECLQueryOracleDbHWMDbName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the oracle database name."
+-- @feature:206184                   
+    ::= { bwECLQueryOracleDbHWMEntry 2 }
+    
+    bwECLQueryOracleDbHWMStatName OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the statistic name."
+-- @feature:206184                   
+   ::= { bwECLQueryOracleDbHWMEntry 3 }
+   
+    bwECLQueryOracleDbHWMStatValue OBJECT-TYPE
+         SYNTAX      Gauge32
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This is the statistic value."
+-- @feature:206184                   
+   ::= { bwECLQueryOracleDbHWMEntry 4 }
+   
+    bwECLQueryOracleDbHWMTimestamp OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the timestamp of the high water mark."
+-- @feature:206184                   
+   ::= { bwECLQueryOracleDbHWMEntry 5 }
+   
+    bwECLQueryOracleDbHWMStackTrace OBJECT-TYPE
+         SYNTAX      DisplayString
+         MAX-ACCESS  read-only
+         STATUS      current
+         DESCRIPTION 
+             "This string represents the stack trace when the high water mark occured."
+-- @feature:206184                   
+   ::= { bwECLQueryOracleDbHWMEntry 6 }
+  
+-- Report Requests ::  ...............................
+
+   bwCallLogsReportGenerationRequests  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This is the number of enhanced call logs report generation requests received by the application."
+      ::=  {  reportGenerationRequests  1  }
+
+   bwCallLogsReportGenerationFailures  OBJECT-TYPE
+      SYNTAX         Counter32
+      MAX-ACCESS     read-write
+      STATUS         current
+      DESCRIPTION
+            "This is the number of enhanced call logs report generation failures."
+      ::=  {  reportGenerationRequests  2  }
+
+-- BroadWorks ECL Query MIB Conformance Definition  ...........................................
+
+  bwECLQueryMibGroups     OBJECT IDENTIFIER ::= { bwECLQueryMibConformance 1 }
+  bwECLQueryMibCompliancy OBJECT IDENTIFIER ::= { bwECLQueryMibConformance 2 }
+
+  bwECLQueryPersistencyStatsGroup OBJECT-GROUP
+    OBJECTS { bwECLQueryOpenedTransactions,
+              bwECLQueryCommittedTransactions,
+              bwECLQueryFailedTransactions,
+              bwECLQueryCriticalErrors,
+              bwECLQueryOracleDbCount,
+              bwECLQueryOracleDbStatsIndex,
+              bwECLQueryOracleDbName,
+              bwECLQueryOracleDbNbConnectionsCreated,
+              bwECLQueryOracleDbConnectionPoolSize,
+              bwECLQueryOracleDbAvgUpdateTime,
+              bwECLQueryOracleDbAvgRowsUpdated,
+              bwECLQueryOracleDbAvgQueryTime,
+              bwECLQueryOracleDbAvgRowsQueried,
+              bwECLQueryOracleDbUpdateCount,
+              bwECLQueryOracleDbQueryCount,
+              bwECLQueryOracleDbHWMIndex,
+              bwECLQueryOracleDbHWMDbName,
+              bwECLQueryOracleDbHWMStatName,
+              bwECLQueryOracleDbHWMStatValue,
+              bwECLQueryOracleDbHWMTimestamp,
+              bwECLQueryOracleDbHWMStackTrace }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the ECL Query."
+  ::= { bwECLQueryMibGroups 1 }
+
+  bwECLQueryReportGenerationRequestStatsGroup OBJECT-GROUP
+    OBJECTS { bwCallLogsReportGenerationRequests, bwCallLogsReportGenerationFailures }
+  STATUS  current
+  DESCRIPTION
+     "This group defines statistics for the ECL Query Report Request."
+  ::= { bwECLQueryMibGroups 2 }
+
+  bwECLQueryBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks ECL Query MIB compliance"
+    MODULE
+        MANDATORY-GROUPS        { bwECLQueryPersistencyStatsGroup,
+                                  bwECLQueryReportGenerationRequestStatsGroup }
+    ::= { bwECLQueryMibCompliancy 1 }
+
+END

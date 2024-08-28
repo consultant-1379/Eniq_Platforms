@@ -1,0 +1,122 @@
+#! /usr/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ report package extractor.
+#
+# Usage: extract_report_package [srcdir] [dstdir]
+#
+# Author: Carl-Magnus Björkell
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2008 AB LM Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+usage() {
+	echo "usage: $0 [srcdir] [dstdir]"
+	echo " srcdir: The dir that contains the deflated report packages"
+	echo " dstdir: The dir to which the report packages will be extracted"
+}
+
+
+# Set the default directories.
+SRC=/eniq/sw/installer/boreports/temp
+DST=/eniq/sw/installer/boreports
+
+
+# With the help of the first argument, the source directory can be specified.
+# $2 (if specified) will denote the destination directory. 
+if [ $# -gt 0 ]; then
+	if [ "$1" = "-h" ] || [ "$1" = "-help" ]; then
+		usage
+		exit 0
+	fi
+	SRC=$1
+fi
+
+if [ $# -gt 1 ]; then
+	DST=$2
+fi
+
+# export the variables so that they can be used by ANT.
+export DST
+export SRC
+
+if [ -z "$CONF_DIR" ] ; then
+    echo "Environment variable CONF_DIR is not set or empty. Tech pack installation aborted."
+    exit 48
+fi
+
+if [ ! -r "${CONF_DIR}/niq.rc" ] ; then
+  echo "ERROR: Source file is not readable at ${CONF_DIR}/niq.rc"
+  exit 22
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ -z "$PLATFORM_DIR" ] ; then
+    echo "Environment variable PLATFORM_DIR is not set or empty. Report pack installation aborted."
+    exit 23
+fi
+
+if [ ! -d ${DST} ] ; then
+	echo "The destination directory ${DST} does not exist. Extraction aborted."
+	exit 2
+fi
+
+if [ ! -d ${SRC} ] ; then
+	echo "The source directory ${SRC} does not exist. Extraction aborted."
+	exit 3
+fi
+
+if [ -z "$INSTALLER_DIR" ] ; then
+    echo "Environment variable INSTALLER_DIR is not set or empty. Report pack installation aborted."
+    exit 24
+fi
+
+CPATH="${INSTALLER_DIR}/lib/installer.jar"
+INSTALLER_JARPATH="${CPATH}"
+
+if [ ! -r "${CPATH}" ] ; then
+  echo "ERROR: Jar file "installer.jar" is not readable at ${CPATH}"
+  exit 27
+fi
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in $DIRS
+do
+  if [ -d ${PLATFORM_DIR}/$file/dclib ] ; then
+    JARS=`ls ${PLATFORM_DIR}/$file/dclib/*.jar`
+
+    for jar in $JARS
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+cd boreports
+rm -rf 19089-CXC*
+cd ..
+echo "Starting to extract report packages."
+
+if [ ! -x "${RT_DIR}/ant/bin/ant" ] ; then
+	echo "ANT was not found in ${RT_DIR}/ant/bin/ant. Tech pack installation aborted."
+	exit 34
+	#Remove the locking file
+    rm ${LOCK_FILE}
+fi
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+${RT_DIR}/ant/bin/ant -f tasks_extract_reportpacks.xml -lib ${CPATH} > /tmp/extractresult 2>&1
+
+cat /tmp/extractresult
+
+if [ -f /tmp/extractresult ] ; then
+  SUC=`cat /tmp/extractresult | grep "BUILD SUCCESSFUL"`
+  if [ -z "${SUC}" ] ; then
+    cat /tmp/extractresult
+    echo "Error in extract. Extraction failed."
+    exit 36
+  fi
+fi

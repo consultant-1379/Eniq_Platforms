@@ -1,0 +1,114 @@
+#!/bin/bash
+
+#
+# libs is installed using this script (rather than the platform_installer xml 
+# file) as some of the install tasks require repository & common to be 
+# installed who in turn require libs installed...
+# This script is called from the overall install_eniq script.
+#
+
+NIQ_RC=${CONF_DIR}/niq.rc
+
+if [ ! -f ${NIQ_RC} ] ; then
+	echo "Cant find \${CONF_DIR}/niq.rc file."
+	echo "Installation failed"
+    exit 69
+fi
+. ${NIQ_RC}
+
+if [ ! -f /eniq/admin/lib/common_functions.lib ] ; then
+        echo "Cant find /eniq/admin/lib/common_functions.lib file."
+        echo "Installation failed"
+        exit 69
+fi
+. /eniq/admin/lib/common_functions.lib
+
+INSTALLED_SERVER_TYPE=${ENIQ_CONF_DIR}/installed_server_type
+if [ -f ${INSTALLED_SERVER_TYPE} ] ; then
+    INSTALLED_SERVER_TYPE=`cat ${INSTALLED_SERVER_TYPE}`
+else
+  echo "${INSTALLED_SERVER_TYPE} not found"
+  exit 2
+fi
+echo "Install Server Type is ${INSTALLED_SERVER_TYPE}"
+
+_version_=install/version.properties
+
+if [ ! -f ${_version_} ] ; then
+	echo "Cant find ${_version_}"
+	exit 89
+fi
+
+module_name=$(grep module.name ${_version_} | cut -d= -f 2)
+new_version=$(grep module.version ${_version_} | cut -d= -f 2)
+new_build=$(grep module.build ${_version_} | cut -d= -f 2)
+
+old_label=$(ls -1 ${PLATFORM_DIR} | grep ^${module_name}-)
+new_label=${module_name}-${new_version}b${new_build}
+
+old_libs_dir=${PLATFORM_DIR}/${old_label}
+new_libs_dir=${PLATFORM_DIR}/${new_label}
+
+if [ ${#*} -eq 1 ] ; then
+	PACKAGE=${1}
+else
+	PACKAGE=${module_name}_${new_version}b${new_build}.zip
+fi
+TIMESTAMP=$(date +%y.%m.%d_%H:%M:%S)
+LOGFILE=${LOG_DIR}/platform_installer/${PACKAGE}_${TIMESTAMP}.log
+
+function _echo (){
+	echo ${*} | tee -a ${LOGFILE}
+}
+
+# Upgrade, if ${PLATFORM_DIR}/libs-???? exits, move it to the obsolete directory.
+if [ ${#old_label} -gt 0 ] ; then
+	_echo "Upgrading ${old_label} to ${new_label}"
+	mkdir -p ${INSTALLER_DIR}/obsolete
+	if [ -d ${INSTALLER_DIR}/obsolete/${old_label} ] ; then
+		rm -rf ${INSTALLER_DIR}/obsolete/${old_label}
+	fi
+	mv -f ${old_libs_dir} ${INSTALLER_DIR}/obsolete/
+	_echo "Moved old version of ${old_label} to ${INSTALLER_DIR}/obsolete"
+fi
+
+mkdir -p ${new_libs_dir}
+cp -rf * ${new_libs_dir}
+if [ "${INSTALLED_SERVER_TYPE}" != "eniq_es" ] ; then
+    echo "Linking JDBC Driver Container"
+    DWH_JAR=`iniget DWH -v Driver -f ${CONF_DIR}/niq.ini`
+    if [ ! -z "${DWH_JAR}" ] ; then
+      DWH_NAME=`basename ${DWH_JAR}`
+      if [ ! -h ${new_libs_dir}/dclib/${DWH_NAME} ] ; then
+        ln -s ${DWH_JAR} ${new_libs_dir}/dclib/${DWH_NAME}
+      fi
+    fi
+
+    REP_JAR=`iniget REP -v Driver -f ${CONF_DIR}/niq.ini`
+    if [ ! -z "${REP_JAR}" ] ; then
+      REP_NAME=`basename ${REP_JAR}`
+      if [ ! -h ${new_libs_dir}/dclib/${REP_NAME} ] ; then
+        ln -s ${DWH_JAR} ${new_libs_dir}/dclib/${REP_NAME}
+      fi
+    fi
+else
+    echo "Ignoring JDBC Container link"
+fi
+_echo "Updating versiondb"
+vdb=${INSTALLER_DIR}/versiondb.properties
+VTAG="module.libs=${new_version}b${new_build}"
+if [ ! -f ${vdb} ] ; then
+	_echo "${VTAG}" > ${vdb}
+	chmod 640 ${vdb}
+else
+	OLD=$(grep module.libs ${vdb})
+	if [ -z "${OLD}" ] ; then
+		echo "${VTAG}" >> ${vdb}
+	else
+		cp ${vdb} ${vdb}.tmp
+		sed -e "/${OLD}/s//${VTAG}/g" ${vdb}.tmp > ${vdb}
+		rm ${vdb}.tmp
+	fi
+fi
+_echo "New version installed to ${new_libs_dir}"
+_echo "Successfully installed"

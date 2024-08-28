@@ -1,0 +1,10 @@
+var C7=
+"<div id=\"content\" class=\"body-content\">\n"+
+"<h1 class=\"reference\"><span class=\"CHAPTITLE\"><a name=\"CHAPTER7\" href='javascript:parent.parent.sC2(\"TOP\")' class=\"CHAPLINK\">Reference List</a></span></h1>\n" +
+"<table><tr><th class=\"rf-subsection\"></th></tr><tr><td><a name=\"rf-OSSGlossary\"></a>[1] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Operations Support System (OSS) Glossary\" class=\"pnolink\" style=\"text-decoration:none\">Operations Support System\n" +
+"(OSS) Glossary</a></i>, <!--@doc-no-->0033-AOM 901 017/2<!--@/doc-no--></td></tr><tr><td><a name=\"rf-TypographicConventions\"></a>[2] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=OSS Library Typographic Conventions\" class=\"pnolink\" style=\"text-decoration:none\">OSS Library Typographic\n" +
+"Conventions</a></i>, <!--@doc-no-->1/154 43-AOM 901 017/4<!--@/doc-no--></td></tr><tr><td><a name=\"rf-ProdDesc\"></a>[3] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=ENIQ Events System Description\" class=\"pnolink\" style=\"text-decoration:none\">ENIQ Events System Description</a></i>. </td></tr><tr><td><a name=\"rf-EventsSAG\"></a>[4] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Ericsson Network IQ Events, System Administrator Guide\" class=\"pnolink\" style=\"text-decoration:none\">Ericsson Network IQ Events,\n" +
+"System Administrator Guide</a></i>. </td></tr><tr><td><a name=\"ENIQSecurityAdminGuide\"></a>[5] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Ericsson Network IQ Security Admin Guide\" class=\"pnolink\" style=\"text-decoration:none\">Ericsson Network IQ Security\n" +
+"Admin Guide</a></i>. </td></tr><tr><td>[6] <i class=\"rf-title\"><a title=\"urn:x-ericsson:r2:reg-doc:*-*:*:*?title=Trademark Information\" class=\"pnolink\" style=\"text-decoration:none\">Trademark Information</a></i>, <!--@doc-no-->006 51-AOM 901 046<!--@/doc-no--></td></tr></table>\n"+
+"</div>\n";
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+	<group type="THIS_DOES_NOT_EXIST" name="imsi-4">
+		<group-element>
+			<key name="THIS_DOES_NOT_EXIST" value="93"/>
+		</group-element>
+	</group>
+</groupmgt>

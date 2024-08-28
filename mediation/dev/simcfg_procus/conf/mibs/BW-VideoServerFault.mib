@@ -1,0 +1,226 @@
+-- File Name : BW-VideoServerFault.mib
+
+BW-VideoServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npUserId, npNetAddress, npRoomId, npReason, npError, npMethod, npStackTrace, npSessionId, npRemoteAddress, npBridgeParticipantId, npBridgeName
+      FROM BroadworksFault;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201406230000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+        "This MIB defines management information for the Video Server."
+    REVISION    "201406230000Z"
+                DESCRIPTION     "Creating the mib."
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  common  OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  systemFaults  OBJECT IDENTIFIER
+    ::=  {  common  1  }
+
+  bwPMVideoServerLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the UVSFE process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMVideoServerLaunched, bwPMVideoServerShutDown, bwPMVideoServerStarted, and bwPMVideoServerDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the uvsfe process running on some of the BroadWorks servers."
+-- @feature:222481
+    ::=  {  systemFaults 13601  }
+
+  bwPMVideoServerShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the uvsfe process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMVideoServerLaunched, bwPMVideoServerShutDown, bwPMVideoServerStarted, and bwPMVideoServerDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the uvsfe process running on some of the BroadWorks servers."
+-- @feature:222481
+    ::=  {  systemFaults 13602  }
+
+  bwPMVideoServerRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the uvsfe process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMVideoServerLaunched, bwPMVideoServerShutDown, bwPMVideoServerStarted, and bwPMVideoServerDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the uvsfe process running on some of the BroadWorks servers."
+-- @feature:222481
+    ::=  {  systemFaults 13603  }
+
+  bwPMVideoServerDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the uvsfe process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMVideoServerLaunched, bwPMVideoServerShutDown, bwPMVideoServerStarted, and bwPMVideoServerDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the uvsfe process running on some of the BroadWorks servers."
+-- @feature:222481
+    ::=  {  systemFaults 13604  }
+   
+  bwUVSNoPortsAvailable   NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This fault occurs when the Video Server cannot accept a new call because all configured ports are already in use.
+@severity:informational
+@subcomponent:unspecified"
+-- @feature:222481
+    ::=  {  systemFaults 13605  }
+
+  bwUVSCfwFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npError, npMethod }
+    STATUS      current
+    DESCRIPTION
+        "The CFW command generated an error
+@severity:high
+@subcomponent:unspecified"
+-- @feature:222481
+    ::=  {  systemFaults 13606  }
+
+  bwUVSLicenseHWViolation  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that there is an attempt to run the application on an unlicensed server.
+@severity:critical
+@subcomponent:unspecified"
+-- @feature:222481
+    ::=  {  systemFaults 13607  }
+
+  bwUVSSoftwareError  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npStackTrace }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that a software error occurred.
+@severity:low
+@subcomponent:unspecified"
+-- @feature:222481
+    ::=  {  systemFaults 13608  }
+
+  bwUVSShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time a shutdown request was received.
+@severity:informational
+@subcomponent:mcp"
+-- @feature:222481
+    ::=  {  systemFaults 13609  }
+
+  bwUVSStaleSession  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npSessionId }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that a stale IVR or conferencing session has been detected.
+@severity:informational
+@subcomponent:mcp"
+-- @feature:222481
+    ::=  {  systemFaults 13610  }
+
+  bwUVSRTPInterfaceFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity, alarmState ,component ,subcomponent ,problemText ,recommendedActionsText, correlationParameter, npRemoteAddress }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that no Video Server RTP interfaces are operational.
+@severity:critical
+@subcomponent:rtp"
+-- @feature:222481
+    ::=  {  systemFaults 13611  }
+
+  bwUVSMemAllocFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates a memory allocation failure.
+@severity:high
+@subcomponent:ivr"
+-- @feature:222481
+    ::=  {  systemFaults 13612  }
+
+  bwUVSHTTPConnectionFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity, alarmState ,component ,subcomponent ,problemText ,recommendedActionsText, correlationParameter, npError }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates HTTP connection failure errors.
+@severity:high
+@subcomponent:filesystem"
+-- @feature:222481
+    ::=  {  systemFaults 13613  }
+
+  bwUVSHTTPReceiveFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText, npError }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates HTTP reception failure errors.
+@severity:high
+@subcomponent:filesystem"
+-- @feature:222481
+    ::=  {  systemFaults 13614  }
+
+  bwUVSHTTPFileNotFound  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npError }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that an audio file could not be retrieved from an HTTP server.
+@severity:low
+@subcomponent:filesystem"
+-- @feature:222481
+    ::=  {  systemFaults 13615  }
+
+  bwUVSInvalidAudioFile  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npError }
+    STATUS      current
+    DESCRIPTION
+        "The Video Server cannot retrieve the audio file or an internal audio operation error occurs.
+@severity:high
+@subcomponent:filesystem"
+-- @feature:222481
+    ::=  {  systemFaults 13616  }
+
+  bwUVSCfwConnectionFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npRemoteAddress }
+    STATUS      current
+    DESCRIPTION
+        "A CFW endpoint has become unreachable.  This alarm is cleared once the connection is restored.
+@severity:high
+@subcomponent:mediaControlChannel"
+-- @feature:222481
+    ::=  {  systemFaults 13617  }
+
+  bwUVSVideoConferenceRtpFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npBridgeParticipantId }
+    STATUS      current
+    DESCRIPTION
+        "RTP no longer received for specified video conference participant ID.
+@severity:low
+@subcomponent:video"
+-- @feature:222481
+    ::=  {  systemFaults 13618  }
+
+  bwUVSVideoConferenceFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npBridgeName }
+    STATUS      current
+    DESCRIPTION
+        "The video is no longer available on conference due to video bridge failure.
+@severity:medium
+@subcomponent:video"
+-- @feature:222481
+    ::=  {  systemFaults 13619  }
+
+END

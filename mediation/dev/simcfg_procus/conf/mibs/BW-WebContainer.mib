@@ -1,0 +1,2327 @@
+--===============================================================
+-- File Name : BW-WebContainer.mib
+-- Date      : 07/21/2009
+-- Author    : BroadSoft Inc.
+--===============================================================
+
+BW-WebContainer  DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString, DateAndTime
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  
+  broadsoft  MODULE-IDENTITY
+    LAST-UPDATED  "201204131200Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc
+                  9737 Washingtonian Blvd, Suite 350
+                  Gaithersburg, Maryland 20878
+                  301-977-9440"
+    DESCRIPTION    
+        "The BW-WebContainer.mib is introduced to capture the performance measurements for the BroadWorks Web Container."
+    REVISION    "201204131200Z"
+      DESCRIPTION
+        "Added performance stats to help troubleshoot and analyze WebContainer performance"
+    REVISION    "200810281054Z"
+      DESCRIPTION
+        "Added new counters for XSI-Events feature"
+    REVISION    "200807181000Z"
+      DESCRIPTION
+        "MIB Compliancy."
+         
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  bwWebContainer  OBJECT IDENTIFIER
+    ::=  {  broadworks  17  }
+
+  protocols  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  1  }
+
+  security  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  2  }
+
+  cache  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  3  }
+
+  applications  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  4  }
+    
+  applicationResources  OBJECT IDENTIFIER
+    ::=  {  applications  1  }
+    
+  sessionManagement  OBJECT IDENTIFIER
+    ::=  {  applications  2  }
+    
+  connectors  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  5  }
+
+  executors  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  6  }
+    
+  processMetrics  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  7  }
+    
+  dnsModule  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  8  }
+    
+  memory  OBJECT IDENTIFIER
+    ::=  {  processMetrics  1  }
+
+  heap  OBJECT IDENTIFIER
+    ::=  {  memory  1  }
+
+  nonheap  OBJECT IDENTIFIER
+    ::=  {  memory  2  }
+
+  garbageCollection  OBJECT IDENTIFIER
+    ::=  {  memory  3  }
+
+  threads  OBJECT IDENTIFIER
+    ::=  {  processMetrics  2  }
+
+  bwWebContainerMibConformance  OBJECT IDENTIFIER
+    ::=  {  bwWebContainer  1000  }
+
+  bcct  OBJECT IDENTIFIER
+    ::=  {  protocols  1  }
+
+  auth  OBJECT IDENTIFIER
+    ::=  {  protocols  2  }
+        
+  oci  OBJECT IDENTIFIER
+    ::=  {  protocols  3  }
+
+  nsLocationAPI  OBJECT IDENTIFIER
+    ::=  {  protocols  4  }
+
+  nsPortalAPI  OBJECT IDENTIFIER
+    ::=  {  protocols  5  }
+    
+  http  OBJECT IDENTIFIER
+    ::=  {  protocols  6  }
+    
+  xmlInterface  OBJECT IDENTIFIER
+    ::=  {  protocols  7  }
+
+  xmlInterfaceResources  OBJECT IDENTIFIER
+    ::=  {  xmlInterface  1  }
+
+  serverResources  OBJECT IDENTIFIER
+    ::=  {  http  1  }
+
+  sso  OBJECT IDENTIFIER
+    ::=  {  security  1  }
+
+  workers  OBJECT IDENTIFIER
+    ::=  {  serverResources  14  }
+
+  overhead  OBJECT IDENTIFIER
+    ::=  {  serverResources  16  }
+    
+  overloadProtection  OBJECT IDENTIFIER
+    ::=  {  serverResources  18  }
+
+  dnsStats  OBJECT IDENTIFIER
+    ::=  {  dnsModule  1  }
+    
+-- WebContainer - BroadWorks Common Communication Protocol ........................
+
+  bwWebContainerCommonCommStatsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwWebContainerCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for BCCT for the Web Container process."
+    ::=  { bcct  1 }
+
+  bwWebContainerCommonCommStatsEntry  OBJECT-TYPE
+    SYNTAX    BwWebContainerCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwWebContainerCommonCommStatsTable."
+    INDEX    {  bwWebContainerCommonCommStatsIndex  }
+    ::=  { bwWebContainerCommonCommStatsTable 1 }
+
+  BwWebContainerCommonCommStatsEntry  ::=  SEQUENCE {
+    bwWebContainerCommonCommStatsIndex                  Unsigned32,
+    bwWebContainerCommonCommHost                        DisplayString,
+    bwWebContainerCommonCommInterface                   DisplayString,
+    bwWebContainerCommonCommProtocol                    DisplayString,
+    bwWebContainerCommonCommAcceptedOutboundConnections Counter32,
+    bwWebContainerCommonCommAcceptedInboundConnections  Counter32,
+    bwWebContainerCommonCommRejectedOutboundConnections Counter32,
+    bwWebContainerCommonCommRejectedInboundConnections  Counter32,
+    bwWebContainerCommonCommOutputMessagesProcessed     Counter32,
+    bwWebContainerCommonCommInputMessagesProcessed      Counter32,
+    bwWebContainerCommonCommOutputCommunicationErrors   Counter32,
+    bwWebContainerCommonCommInputCommunicationErrors    Counter32
+    }
+
+  bwWebContainerCommonCommStatsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwWebContainerCommonCommStatsTable. The index represents a connection for a specific Host-Interfacece-Protocol combination."
+    ::=  {  bwWebContainerCommonCommStatsEntry  1  }
+
+  bwWebContainerCommonCommHost  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The address of a host connected to the BroadWorks Common Communication Protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  2  }
+
+  bwWebContainerCommonCommInterface  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The IP address of a local interface that a protocol is bound to."
+    ::=  {  bwWebContainerCommonCommStatsEntry  3  }
+
+  bwWebContainerCommonCommProtocol  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The name of a BroadWorks Common Communication Protocol client protocol, e.g. OCI."
+    ::=  {  bwWebContainerCommonCommStatsEntry  4  }
+
+  bwWebContainerCommonCommAcceptedOutboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client in this process connects to the framework to a remote host, using the interface and protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  5  }
+
+  bwWebContainerCommonCommAcceptedInboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client in this process connects to the framework from a remote host, using the interface and protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  6  }
+
+  bwWebContainerCommonCommRejectedOutboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client connection request going from this process to a remote host and going through this interface has been rejected for a particular protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  7  }
+
+  bwWebContainerCommonCommRejectedInboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client connection request coming to this host and going through this interface has been rejected by the framework for a particular protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  8  }
+
+  bwWebContainerCommonCommOutputMessagesProcessed  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message has been sent and processed for this host, interface and protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  9  }
+
+  bwWebContainerCommonCommInputMessagesProcessed  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message has been received and processed for this host, interface and protocol."
+    ::=  {  bwWebContainerCommonCommStatsEntry  10  }
+
+  bwWebContainerCommonCommOutputCommunicationErrors  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message could not be written because the TCP stack returned an error."
+    ::=  {  bwWebContainerCommonCommStatsEntry  11  }
+
+  bwWebContainerCommonCommInputCommunicationErrors  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message could not be read because the TCP stack returned an error."
+    ::=  {  bwWebContainerCommonCommStatsEntry  12  }
+
+-- auth modules  ...........................................
+
+  bwWebContainerAuthenticationAttempts  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when the Web Container sends an authentication message to the Authentication Server, for example, Ldap, Radius, Was, or the BroadWorks Provisioning Server."
+-- @feature:173615
+    ::=  {  auth  1  }
+
+  bwWebContainerAuthenticationFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when the Web Container receives an authentication failure response from the Authentication Server, for example, Ldap, Radius, Was, or the BroadWorks Provisioning Server."
+-- @feature:173615
+    ::=  {  auth  2  }
+    
+-- oci modules  ...........................................
+   
+  bwWebContainerOCIRequests  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "The number of OCI request messages sent to the BroadWorks PS."
+    ::=  {  oci  1  }
+
+  bwWebContainerOCIResponses  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "The number of request response to OCI messages received from the BroadWorks PS."
+    ::=  {  oci  2  }
+
+  bwWebContainerOCIUnauthorizedMessage  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "The number of error response due to unauthorized session received from the BroadWorks PS."
+    ::=  {  oci  3  }
+
+  bwWebContainerOCICRequests  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "The number of OCI-C request messages sent to the BroadWorks XS."
+    ::=  {  oci  4  }
+
+  bwWebContainerOCICResponses  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "The number of request response to OCI-C messages received from the BroadWorks XS."
+    ::=  {  oci  5  }
+
+  bwWebContainerOCICMessagesReceived OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a message from an XS is received."
+    ::=  {  oci  6  }
+
+  bwWebContainerOCICMessagesRejected OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a message from an XS is rejected before it reaches the web application."
+    ::=  {  oci  7  }
+
+  bwWebContainerOCICMessagesDelivered OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a message from an XS is delivered to the web application."
+    ::=  {  oci  8  }
+
+  bwWebContainerOCICMessagesReplied OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a reply from an web application is delivered to the XS."
+    ::=  {  oci  9  }
+
+  bwWebContainerOCIResponsesRejected OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a reponse from an Execution Server is rejected before it reaches the web application."
+    ::=  {  oci  10  }
+
+  bwWebContainerOCICResponsesRejected OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when a reponse from an Execution Server is rejected before it reaches the web application."
+    ::=  {  oci  11  }
+
+-- nsLocationAPI modules  ...........................................
+
+  bwWebContainerNsLocAPIAttempts  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when the Web Container sends a location API request to a Network Server."
+    ::=  {  nsLocationAPI  1  }
+
+  bwWebContainerNsLocAPIResponseFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter is incremented when the Web Container receives a failed location API response from the Network Server."
+    ::=  {  nsLocationAPI  2  }
+
+-- nsPortalAPI counters ...........................................
+  bwWebContainerNsASDiscoveryAttempts OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "This counter is incremented when the Web Container sends a PortalAPI request to a Network Server."
+    ::= { nsPortalAPI  1 }
+
+  bwWebContainerNsASDiscoveryAttemptsFailed OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "This counter is incremented when the Web Container is unable to receive a successful PortalAPI request from the Network Server."
+    ::= { nsPortalAPI  2 }
+    
+-- HTTP server resources counters ...........................................
+  bwHttpAccesses OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "This counter is incremented each tim ean HTTP access is performed. It represents the number of times an HTTP access has been served."
+    ::= { serverResources  1 }
+    
+  bwHttpKBytesServed OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "This counter is incremented each tim ean HTTP access is performed. It represents the number of kilo bytes served through HTTP."
+    ::= { serverResources  2 }
+    
+  bwHttpServerUptime OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "Time the server has been running for."
+    ::= { serverResources  3 }
+    
+  bwHttpRequestsPerSecond OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "Averages giving the number of requests per seconds.  This counter is calculated by the mod_status from Apache and will be fetched upon request by the CLI or PerformanceManager."
+    ::= { serverResources  4 }
+    
+  bwHttpBytesPerSecond OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "Averages giving the number of bytes served per seconds.  This counter is calculated by the mod_status from Apache and will be fetched upon request by the CLI or PerformanceManager."
+    ::= { serverResources  5 }
+    
+  bwHttpBytesPerRequest OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "Averages giving the number of bytes served per request.  This counter is calculated by the mod_status from Apache and will be fetched upon request by the CLI or PerformanceManager."
+    ::= { serverResources  6 }
+    
+  bwHttpWorkersBusy OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of workers serving the request."
+    ::= { serverResources  7 }
+    
+  bwHttpWorkersIdle OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of idle workers."
+    ::= { serverResources  8 }  
+    
+-- bwHttpOverallRequestsTable.......................................................................    
+  bwHttpOverallRequestsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwHttpOverallRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table will hold the overall number of HTTP requests per requests (e.g. GET, PUT, POST)"
+    ::=  { serverResources 9 }
+
+  bwHttpOverallRequestsEntry  OBJECT-TYPE
+    SYNTAX    BwHttpOverallRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwHttpOverallRequestsTable."
+    INDEX    {  bwHttpOverallRequestsIndex  }
+    ::=  { bwHttpOverallRequestsTable 1 }
+
+  BwHttpOverallRequestsEntry  ::=  SEQUENCE {
+    bwHttpOverallRequestsIndex  Unsigned32,
+    bwHttpOverallRequestsMethod  DisplayString,
+    bwHttpOverallRequestsNbOfRequests  Counter32
+    }
+
+  bwHttpOverallRequestsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwHttpOverallRequestsTable. The index represents the number of requests for a specific method."
+    ::=  {  bwHttpOverallRequestsEntry  1  }
+
+  bwHttpOverallRequestsMethod  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The HTTP method, as defined by rfc2616."
+    ::=  {  bwHttpOverallRequestsEntry  2  }
+    
+  bwHttpOverallRequestsNbOfRequests  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of requests received."
+    ::=  {  bwHttpOverallRequestsEntry  3  }    
+    
+-- bwHttpOverallResponsesTable.......................................................................    
+  bwHttpOverallResponsesTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwHttpOverallResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table will hold the overall number of HTTP responses per status code (200, 401, 404, etc.)"
+    ::=  { serverResources 10 }
+
+  bwHttpOverallResponsesEntry  OBJECT-TYPE
+    SYNTAX    BwHttpOverallResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwHttpOverallResponsesTable."
+    INDEX    {  bwHttpOverallResponsesIndex  }
+    ::=  { bwHttpOverallResponsesTable 1 }
+
+  BwHttpOverallResponsesEntry  ::=  SEQUENCE {
+    bwHttpOverallResponsesIndex  Unsigned32,
+    bwHttpOverallResponsesMethod  DisplayString,
+    bwHttpOverallResponsesStatusCode  Unsigned32,
+    bwHttpOverallResponsesNbOfResponses  Counter32
+    }
+
+  bwHttpOverallResponsesIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwHttpOverallResponsesTable. The index represents the number of responses for a specific method-statusCode combination."
+    ::=  {  bwHttpOverallResponsesEntry  1  }
+
+  bwHttpOverallResponsesMethod  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The HTTP method, as defined by rfc2616."
+    ::=  {  bwHttpOverallResponsesEntry  2  }
+    
+  bwHttpOverallResponsesStatusCode  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Status code, per rfc2616."
+    ::=  {  bwHttpOverallResponsesEntry  3  }  
+    
+  bwHttpOverallResponsesNbOfResponses  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of responses received."
+    ::=  {  bwHttpOverallResponsesEntry  4  }    
+
+-- bwHttpWebAppRequestsTable.......................................................................    
+  bwHttpWebAppRequestsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwHttpWebAppRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table will hold the number of HTTP requests per web applications for each requests (e.g. GET, PUT, POST)"
+    ::=  { serverResources 11 }
+
+  bwHttpWebAppRequestsEntry  OBJECT-TYPE
+    SYNTAX    BwHttpWebAppRequestsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwHttpWebAppRequestsTable."
+    INDEX    {  bwHttpWebAppRequestsIndex  }
+    ::=  { bwHttpWebAppRequestsTable 1 }
+
+  BwHttpWebAppRequestsEntry  ::=  SEQUENCE {
+    bwHttpWebAppRequestsIndex  Unsigned32,
+    bwHttpWebAppRequestsWebApp  DisplayString,
+    bwHttpWebAppRequestsMethod  DisplayString,
+    bwHttpWebAppRequestsNbOfRequests  Counter32
+    }
+
+  bwHttpWebAppRequestsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwHttpWebAppRequestsTable. The index represents the number of requests for a specific webApp-method combination."
+    ::=  {  bwHttpWebAppRequestsEntry  1  }
+
+  bwHttpWebAppRequestsWebApp  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The HTTP method, as defined by rfc2616."
+    ::=  {  bwHttpWebAppRequestsEntry  2  }
+    
+  bwHttpWebAppRequestsMethod  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The HTTP method, as defined by rfc2616."
+    ::=  {  bwHttpWebAppRequestsEntry  3  }
+    
+  bwHttpWebAppRequestsNbOfRequests  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of requests received."
+    ::=  {  bwHttpWebAppRequestsEntry  4  }        
+    
+-- bwHttpWebAppResponsesTable.......................................................................    
+
+  bwHttpWebAppResponsesTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwHttpWebAppResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for BCCT for the Web Container process."
+    ::=  { serverResources 12 }
+
+  bwHttpWebAppResponsesEntry  OBJECT-TYPE
+    SYNTAX    BwHttpWebAppResponsesEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwHttpOverallResponsesTable."
+    INDEX    {  bwHttpWebAppResponsesIndex  }
+    ::=  { bwHttpWebAppResponsesTable 1 }
+
+  BwHttpWebAppResponsesEntry  ::=  SEQUENCE {
+    bwHttpWebAppResponsesIndex         Unsigned32,
+    bwHttpWebAppResponsesWebApp        DisplayString,
+    bwHttpWebAppResponsesMethod        DisplayString,    
+    bwHttpWebAppResponsesStatusCode    Unsigned32,
+    bwHttpWebAppResponsesNbOfResponses Counter32
+    }
+
+  bwHttpWebAppResponsesIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwHttpOverallResponsesTable. The index represents the number of responses for a specific method-statusCode combination."
+    ::=  {  bwHttpWebAppResponsesEntry  1  }
+
+  bwHttpWebAppResponsesWebApp  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The name of the web application."
+    ::=  {  bwHttpWebAppResponsesEntry  2  }
+    
+  bwHttpWebAppResponsesMethod  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The HTTP method, as defined by rfc2616."
+    ::=  {  bwHttpWebAppResponsesEntry  3  }    
+    
+  bwHttpWebAppResponsesStatusCode  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Status code, per rfc2616."
+    ::=  {  bwHttpWebAppResponsesEntry  4  }  
+    
+  bwHttpWebAppResponsesNbOfResponses  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The number of responses received."
+    ::=  {  bwHttpWebAppResponsesEntry  5  }        
+
+-- WebContainer worker.......................................................................    
+
+  bwHttpWorkersReset OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "When set to a value other than 0, all data under workers are reset to 0."
+-- @feature:147586
+    ::= { serverResources  13 }
+
+  bwHttpWorkerThreadsBusy OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The number of workers serving the request."
+-- @feature:147586
+    ::= { workers  1 }
+    
+  bwHttpWorkerThreadsIdle OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The number of idle workers."
+-- @feature:147586
+    ::= { workers  2 }  
+
+  bwHttpWorkerThreadsConsecutiveFailedRefresh OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "A counter that indicates the number of successive failed refresh. Upon a successful refresh, it auto-resets to 0."
+-- @feature:147586
+    ::= { workers  3 }
+  
+  bwHttpWorkerThreadsUsable OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Number of configured usable worker threads."
+-- @feature:147586
+    ::= { workers  4 }
+  
+  bwHttpWorkerThreadsBusyAvg OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Average number of busy worker threads since last reset. That is, every 5 seconds the result is based on the sum of all busy worker threads divided by the number of polls since the last reset."
+-- @feature:147586
+    ::= { workers  5 }
+
+  bwHttpWorkerThreadsBusyMax OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Maximum number of busy worker threads since last reset"
+-- @feature:147586
+    ::= { workers  6 }
+    
+-- WebContainer overhead.......................................................................    
+
+  bwHttpOverheadReset OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "When set to a value other than 0, all data under overhead are reset to 0."
+-- @feature:147586
+   ::= { serverResources  15 }
+   
+  bwHttpOverheadTimeSamples OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The number of sample elements that the average, minimum and maximum holding times were calculated from."
+-- @feature:147586
+    ::= { overhead  1 }
+
+  bwHttpOverheadTimeAvg OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The average apache overhead time in milliseconds."
+-- @feature:147586
+    ::= { overhead  2 }
+
+  bwHttpOverheadTimeMin OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The smallest apache overhead time in milliseconds."
+-- @feature:147586
+    ::= { overhead  3 }
+
+  bwHttpOverheadTimeMax OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The biggest apache overhead time in milliseconds."
+-- @feature:147586
+    ::= { overhead  4 }
+
+  bwHttpOverheadTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     deprecated
+    DESCRIPTION
+      "The most significant part of the timestamp (4 most significant bytes) of when bwHttpOverheadTimeMax was obtained."
+-- @feature:147586
+    ::= { overhead  5 }
+
+  bwHttpOverheadTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     deprecated
+    DESCRIPTION
+      "The least significant part of the timestamp (4 least significant bytes) of when bwHttpOverheadTimeMax was obtained."
+-- @feature:147586
+    ::= { overhead  6 }
+
+  bwHttpOverheadTimeMaxTimestamp OBJECT-TYPE
+    SYNTAX     DateAndTime
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "This is the time stamp indicating when bwHttpOverheadTimeMax was obtained."
+-- @feature:217460
+    ::= { overhead  7 }
+
+-- WebContainer overload protection.......................................................................    
+
+  bwHttpOverloadReset OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "When set to a value other than 0, all data under OverloadProtection are reset to 0."
+-- @feature:147586
+    ::= { serverResources  17 }
+
+  bwHttpOverloadProtectionRequestCountCurrent OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of requests since the beginning of the overload protection period."
+-- @feature:147586
+    ::= { overloadProtection  1 }  
+
+  bwHttpOverloadProtectionRequestCountMax OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "The maximum number of requests within a period since the last reset."
+-- @feature:147586
+    ::= { overloadProtection  2 }
+  
+  bwHttpOverloadProtectionRequestRejectedCurrent OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Upon triggering overload protection, the current number of rejected requests. This is reset at every new overload protection period."
+-- @feature:147586
+    ::= { overloadProtection  3 }
+    
+  bwHttpOverloadProtectionRequestRejectedMax OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Upon triggering overload protection, the maximum number of rejected requests since the last reset."
+-- @feature:147586
+    ::= { overloadProtection  4 }
+        
+-- BroadWorks Overload Protection WebApp table ........................
+
+  bwHttpOverloadProtectionWebAppTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwHttpOPWebAppEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains Overload Protection data per WebApp."
+-- @feature:147586
+    ::=  { overloadProtection  5 }
+
+  bwHttpOverloadProtectionWebAppEntry  OBJECT-TYPE
+    SYNTAX    BwHttpOPWebAppEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for BwHttpOPWebAppTable."
+    INDEX    {  bwHttpOverloadProtectionWebAppIndex  }
+-- @feature:147586
+    ::=  { bwHttpOverloadProtectionWebAppTable 1 }
+
+  BwHttpOPWebAppEntry  ::=  SEQUENCE {
+    bwHttpOverloadProtectionWebAppIndex                   Unsigned32,
+    bwHttpOverloadProtectionWebAppName                    DisplayString,
+    bwHttpOverloadProtectionWebAppRequestCountCurrent     Unsigned32,
+    bwHttpOverloadProtectionWebAppRequestCountMax         Gauge32,
+    bwHttpOverloadProtectionWebAppRequestRejectedCurrent  Unsigned32,
+    bwHttpOverloadProtectionWebAppRequestRejectedMax      Gauge32
+    }
+
+  bwHttpOverloadProtectionWebAppIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwHttpOverloadProtectionWebAppTable. The index represents a per web app overload protection item."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  1  }
+
+  bwHttpOverloadProtectionWebAppName  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This represent a web app per its display name."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  2  }
+       
+  bwHttpOverloadProtectionWebAppRequestCountCurrent  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "A per webapp number of requests since the beginning of the overload protection period."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  3  }
+       
+  bwHttpOverloadProtectionWebAppRequestCountMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "A per webapp maximum number of requests within a period since the last reset."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  4  }
+       
+  bwHttpOverloadProtectionWebAppRequestRejectedCurrent  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Upon triggering overload protection, the current number of rejected requests for the specified webapp. This is reset at every new overload protection period."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  5  }
+      
+  bwHttpOverloadProtectionWebAppRequestRejectedMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "Upon triggering overload protection, the maximum number of rejected requests for the specified webapp since the last reset."
+-- @feature:147586
+    ::=  {  bwHttpOverloadProtectionWebAppEntry  6  }
+      
+-- BroadWorks Xml Interface Protocol ........................
+
+  bwXmlInterfaceWorkersBusy OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "The number of workers processing an XML request."
+    ::= { xmlInterfaceResources 1 }
+    
+  bwXmlInterfaceWorkersIdle OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "The number of idle workers."
+    ::= { xmlInterfaceResources  2 }  
+
+  bwXmlInterfaceRequestsActive OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "The number of active XML requests."
+    ::= { xmlInterfaceResources  3 }  
+
+  bwXmlInterfaceStatsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwXmlInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for the Xml Interface."
+    ::=  { xmlInterface  2 }
+
+  bwXmlInterfaceStatsEntry  OBJECT-TYPE
+    SYNTAX    BwXmlInterfaceStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwXmlInterfaceStatsTable."
+    INDEX    {  bwXmlInterfaceStatsIndex  }
+    ::=  { bwXmlInterfaceStatsTable 1 }
+
+  BwXmlInterfaceStatsEntry  ::=  SEQUENCE {
+    bwXmlInterfaceStatsIndex  Unsigned32,
+    bwXmlInterfaceHost  DisplayString,
+    bwXmlInterfaceInterface  DisplayString,
+    bwXmlInterfaceAcceptedInboundConnections  Counter32,
+    bwXmlInterfaceRejectedInboundConnections  Counter32,
+    bwXmlInterfaceOutputMessagesProcessed  Counter32,
+    bwXmlInterfaceInputMessagesProcessed  Counter32,
+    bwXmlInterfaceOutputCommunicationErrors  Counter32,
+    bwXmlInterfaceInputCommunicationErrors  Counter32
+    }
+
+  bwXmlInterfaceStatsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwXmlInterfaceStatsTable. The index represents a connection for a specific Host-Interface combination."
+    ::=  {  bwXmlInterfaceStatsEntry  1  }
+
+  bwXmlInterfaceHost  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The address of a host connected to the BroadWorks Xml Interface."
+    ::=  {  bwXmlInterfaceStatsEntry  2  }
+
+  bwXmlInterfaceInterface  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The IP address of a local interface that the BroadWorks Xml Interface is bound to."
+    ::=  {  bwXmlInterfaceStatsEntry  3  }
+
+  bwXmlInterfaceAcceptedInboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client in this process connects to the framework from a remote host, using the interface."
+    ::=  {  bwXmlInterfaceStatsEntry  4  }
+
+  bwXmlInterfaceRejectedInboundConnections  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a client connection request coming to this host and going through this interface has been rejected by the framework."
+    ::=  {  bwXmlInterfaceStatsEntry  5  }
+
+  bwXmlInterfaceOutputMessagesProcessed  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message has been sent and processed for this host and interface."
+    ::=  {  bwXmlInterfaceStatsEntry  6  }
+
+  bwXmlInterfaceInputMessagesProcessed  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message has been received and processed for this host and interface."
+    ::=  {  bwXmlInterfaceStatsEntry  7  }
+
+  bwXmlInterfaceOutputCommunicationErrors  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message could not be written because the TCP stack returned an error."
+    ::=  {  bwXmlInterfaceStatsEntry  8  }
+
+  bwXmlInterfaceInputCommunicationErrors  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This counter is incremented whenever a message could not be read because the TCP stack returned an error."
+    ::=  {  bwXmlInterfaceStatsEntry  9  }
+
+-- WebContainer Security SSO ........................
+
+  bwWebContainerSSOTokenCreations OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "Number of Single Sign-On tokens generated."
+    ::= { sso 1 }
+    
+  bwWebContainerSSOTokenValidationSuccesses OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "Number of Single Sign-On tokens positively validated."
+    ::= { sso 2 }
+
+  bwWebContainerSSOTokenValidationRejections OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+        "Number of Single Sign-On tokens rejected."
+    ::= { sso 3 }
+
+-- WebContainer applications ........................
+
+  bwApplicationResourcesTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwApplicationResourcesTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the application resources."
+-- @feature:147586
+    ::= { applicationResources 1 }
+
+  bwApplicationResourcesTableEntry OBJECT-TYPE
+    SYNTAX      BwApplicationResourcesTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given application resource."
+    INDEX       { bwApplicationResourceIndex }
+-- @feature:147586
+    ::= { bwApplicationResourcesTable 1 }
+
+  BwApplicationResourcesTableEntry ::= SEQUENCE {
+    bwApplicationResourceIndex                Unsigned32,
+    bwApplicationResourceWebAppName           DisplayString,
+    bwApplicationResourceRequestCount         Counter32,
+    bwApplicationResourceTotalProcessingTime  Counter32
+  }
+
+  bwApplicationResourceIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to an application resource."
+-- @feature:147586
+    ::= { bwApplicationResourcesTableEntry 1 }
+
+  bwApplicationResourceWebAppName  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The name of a BroadWorks web application identified by its context path."
+-- @feature:147586
+    ::=  {  bwApplicationResourcesTableEntry  2  }
+
+  bwApplicationResourceRequestCount OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The total number of requests created since the application started"
+-- @feature:147586
+    ::= { bwApplicationResourcesTableEntry 3 }
+
+  bwApplicationResourceTotalProcessingTime OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The total processing time in microseconds since the application started."
+-- @feature:147586
+    ::= { bwApplicationResourcesTableEntry  4 }  
+
+-- WebContainer Session Management ........................
+
+  bwSessionManagementTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSessionManagementTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the session management."
+-- @feature:147586
+    ::= { sessionManagement 1 }
+
+  bwSessionManagementTableEntry OBJECT-TYPE
+    SYNTAX      BwSessionManagementTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given session management."
+    INDEX       { bwSessionManagementIndex }
+-- @feature:147586
+    ::= { bwSessionManagementTable 1 }
+
+  BwSessionManagementTableEntry ::= SEQUENCE {
+    bwSessionManagementIndex                           Unsigned32,
+    bwSessionManagementWebAppName                      DisplayString,
+    bwSessionManagementSessionsActive                  Gauge32,
+    bwSessionManagementSessionsActiveMax               Gauge32,
+    bwSessionManagementSessionsCreated                 Counter32,
+    bwSessionManagementSessionAverageAliveTime         Gauge32,
+    bwSessionManagementSessionCreateRate               Gauge32,
+    bwSessionManagementSessionExpireRate               Gauge32
+  }
+
+  bwSessionManagementIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to a session management."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 1 }
+
+  bwSessionManagementWebAppName  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS    read-only
+    STATUS      current
+    DESCRIPTION
+      "The name of a BroadWorks web application identified by its context path."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry  2  }
+
+  bwSessionManagementSessionsActive OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The number of currently active sessions from the web container applications."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 3 }
+
+  bwSessionManagementSessionsActiveMax OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The current maximum number of active sessions."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 4 }
+
+  bwSessionManagementSessionsCreated OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The number of existing sessions."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 5 }
+
+  bwSessionManagementSessionAverageAliveTime OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "Average time (in seconds) that expired sessions had been alive."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 6 }
+
+  bwSessionManagementSessionCreateRate OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The current rate (in sessions per minute) of session creation."
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 7 }
+
+  bwSessionManagementSessionExpireRate OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+        "The current rate (in sessions per minute) of session expiration"
+-- @feature:147586
+    ::= { bwSessionManagementTableEntry 8 }
+
+-- WebContainer connector table ........................
+
+  bwConnectorTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwConnectorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the connectors."
+-- @feature:147586
+    ::= { connectors 1 }
+
+  bwConnectorTableEntry OBJECT-TYPE
+    SYNTAX      BwConnectorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given connector."
+    INDEX       { bwConnectorIndex }
+-- @feature:147586
+    ::= { bwConnectorTable 1 }
+
+  BwConnectorTableEntry ::= SEQUENCE {
+    bwConnectorIndex                           Unsigned32,
+    bwConnectorName                            DisplayString,
+    bwConnectorExecutorName                    DisplayString,
+    bwConnectorRequestCount                    Counter32,
+    bwConnectorBytesRx                         Counter32,
+    bwConnectorBytesTx                         Counter32,
+    bwConnectorTotalProcessingTime             Counter32,
+    bwConnectorMaxProcessingTime               Gauge32
+  }
+
+  bwConnectorIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to a connector."
+-- @feature:147586
+    ::= { bwConnectorTableEntry 1 }
+
+  bwConnectorName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This string represents the name of a connector."
+-- @feature:147586
+    ::= {  bwConnectorTableEntry 2 }
+
+  bwConnectorExecutorName  OBJECT-TYPE
+  SYNTAX      DisplayString
+  MAX-ACCESS  read-only
+  STATUS      current
+  DESCRIPTION
+    "The name of the web container executor serving this connector."
+-- @feature:147586
+  ::=  {   bwConnectorTableEntry  3  }
+
+  bwConnectorRequestCount OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The total number of requests received."
+-- @feature:147586
+    ::= {  bwConnectorTableEntry 4 }
+
+  bwConnectorBytesRx  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The amount of bytes received."
+-- @feature:147586
+    ::=  {   bwConnectorTableEntry  5  }
+
+  bwConnectorBytesTx  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The amount of bytes transmitted."
+-- @feature:147586
+    ::=  {   bwConnectorTableEntry  6  }
+
+  bwConnectorTotalProcessingTime  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The total connector processing time since the last reset."
+-- @feature:147586
+    ::=  {   bwConnectorTableEntry  7  }
+
+  bwConnectorMaxProcessingTime  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "The maximum processing time for a request since the last reset."
+-- @feature:147586
+    ::=  {   bwConnectorTableEntry  8  }
+ 
+-- WebContainer executor table ........................
+
+  bwExecutorReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other than 0, all statistics stored under executorTable are reset to 0."
+-- @feature:147586
+    ::= { executors 1 }
+
+  bwExecutorTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains statistics about the executors."
+-- @feature:147586
+    ::= { executors 2 }
+
+  bwExecutorTableEntry OBJECT-TYPE
+    SYNTAX      BwExecutorTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains the statistics for a given executor."
+    INDEX       { bwExecutorIndex }
+-- @feature:147586
+    ::= { bwExecutorTable 1 }
+
+  BwExecutorTableEntry ::= SEQUENCE {
+    bwExecutorIndex                              Unsigned32,
+    bwExecutorName                               DisplayString,
+    bwExecutorQueueCapacity                      Gauge32,
+    bwExecutorQueueSize                          Gauge32,
+    bwExecutorQueueWaitingTimeAvg                Gauge32,
+    bwExecutorQueueWaitingTimeMin                Gauge32,
+    bwExecutorQueueWaitingTimeMax                Gauge32,
+    bwExecutorQueueWaitingTimeMaxTimestampMSB    Gauge32,
+    bwExecutorQueueWaitingTimeMaxTimestampLSB    Gauge32,
+    bwExecutorMinPoolSize                        Gauge32,
+    bwExecutorMaxPoolSize                        Gauge32,
+    bwExecutorThreadsBusy                        Gauge32,
+    bwExecutorCompletedTaskCount                 Counter32,
+    bwExecutorThreadsAlive                       Gauge32, 
+    bwExecutorThreadsAliveMax                    Gauge32,
+    bwExecutorTaskProcessingTimeAvg              Gauge32,
+    bwExecutorTaskProcessingTimeMin              Gauge32,
+    bwExecutorTaskProcessingTimeMax              Gauge32, 
+    bwExecutorTaskProcessingTimeMaxTimestampMSB  Gauge32, 
+    bwExecutorTaskProcessingTimeMaxTimestampLSB  Gauge32,
+    bwExecutorQueueWaitingTimeMaxTimestamp       DateAndTime,
+    bwExecutorTaskProcessingTimeMaxTimestamp     DateAndTime
+  }
+
+  bwExecutorIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index to a given executor."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 1 }
+
+  bwExecutorName  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The name of this executor."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  2  }
+
+  bwExecutorQueueCapacity  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The executor queue initial capacity."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  3  }
+
+  bwExecutorQueueSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The current size of the executor queue."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  4  }
+
+  bwExecutorQueueWaitingTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Average time spent waiting in the executor queue since the last reset."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 5 }
+
+  bwExecutorQueueWaitingTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Minimum time spent waiting in the executor queue since the last reset."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 6 }
+
+  bwExecutorQueueWaitingTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Maximum time spent waiting in the executor queue since the last reset."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 7 }
+
+  bwExecutorQueueWaitingTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION 
+        "The most significant part of the timestamp (4 most significant bytes) of when bwExecutorQueueWaitingTimeMax was obtained."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 8 }
+
+  bwExecutorQueueWaitingTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION 
+        "The least significant part of the timestamp (4 least significant bytes) of when bwExecutorQueueWaitingTimeMax was obtained."
+-- @feature:147586
+    ::= { bwExecutorTableEntry 9 }
+
+  bwExecutorMinPoolSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of threads to keep in the pool, even if they are idle."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  10  }
+
+  bwExecutorMaxPoolSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum number of threads to allow in the pool."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  11  }
+
+  bwExecutorThreadsBusy  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The approximate number of threads that are actively executing tasks."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  12  }
+
+  bwExecutorCompletedTaskCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The approximate total number of tasks that have completed execution. Because the states of tasks and threads may change dynamically during computation, the returned value is only an approximation, but one that does not ever decrease across successive calls."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  13  }
+
+  bwExecutorThreadsAlive  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The current number of threads instantiated."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  14  }
+
+  bwExecutorThreadsAliveMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum number of threads that can be allocated at the same time."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  15  }
+
+  bwExecutorTaskProcessingTimeAvg  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Average processing time spent by this executor."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  16  }
+
+  bwExecutorTaskProcessingTimeMin  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Minimum processing time spent by this executor."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  17  }
+
+  bwExecutorTaskProcessingTimeMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "Maximum processing time spent by this executor."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  18  }
+    
+  bwExecutorTaskProcessingTimeMaxTimestampMSB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+      "The most significant part of the timestamp (4 most significant bytes) of when bwExecutorTaskProcessingTimeMax was obtained."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  19  }
+
+  bwExecutorTaskProcessingTimeMaxTimestampLSB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+      "The least significant part of the timestamp (4 least significant bytes) of when bwExecutorTaskProcessingTimeMax was obtained."
+-- @feature:147586
+    ::=  {  bwExecutorTableEntry  20  }
+
+  bwExecutorQueueWaitingTimeMaxTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when executorQueueWaitingTimeMax was obtained."
+-- @feature:217460
+    ::=  {  bwExecutorTableEntry  21  }
+
+  bwExecutorTaskProcessingTimeMaxTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The time stamp indicating when taskProcessingTimeMax was obtained."
+-- @feature:
+    ::=  {  bwExecutorTableEntry  22  }
+
+-- processMetrics heap ........................
+
+  bwProcessMetricsHeapInitSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The initial size of the memory allocated upon process startup."
+-- @feature:147586
+    ::=  {  heap  1  }
+
+  bwProcessMetricsHeapMaxSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum size of the memory that can be allocated during the process life."
+-- @feature:147586
+    ::=  {  heap  2  }
+
+  bwProcessMetricsHeapUsed  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The size of the memory currently in use."
+-- @feature:147586
+    ::=  {  heap  3  }
+
+  bwProcessMetricsHeapUsedMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum amount of memory used since the process started."
+-- @feature:147586
+    ::=  {  heap  4  }
+
+  bwProcessMetricsHeapCommitted  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS   read-only
+    STATUS      current
+    DESCRIPTION
+      "The memory currently committed by the process."
+-- @feature:147586
+    ::=  {  heap  5  }
+
+  bwProcessMetricsHeapLastPostCollectionSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The amount of memory claimed during last post."
+-- @feature:147586
+    ::=  {  heap  6  }
+
+-- processMetrics nonheap ........................
+
+  bwProcessMetricsNonHeapInitSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The initial size of the memory allocated upon process startup."
+-- @feature:147586
+    ::=  {  nonheap  1  }
+
+  bwProcessMetricsNonHeapMaxSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum size of the memory that can be allocated during the process life."
+-- @feature:147586
+    ::=  {  nonheap  2  }
+
+  bwProcessMetricsNonHeapUsed  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The size of the memory currently in use."
+-- @feature:147586
+    ::=  {  nonheap  3  }
+
+  bwProcessMetricsNonHeapUsedMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum amount of memory used since the process started."
+-- @feature:147586
+    ::=  {  nonheap  4  }
+
+  bwProcessMetricsNonHeapCommitted  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The memory currently committed by the process."
+-- @feature:147586
+    ::=  {  nonheap  5  }
+
+  bwProcessMetricsNonHeapLastPostCollectionSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The amount of memory claimed during last post."
+-- @feature:147586
+    ::=  {  nonheap  6  }
+
+-- processMetrics garbageCollection ........................
+
+  bwProcessMetricsGCMinorCollectionsCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of minor collections."
+-- @feature:147586
+    ::=  {  garbageCollection  1  }
+
+  bwProcessMetricsGCMajorCollectionsCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of major collections."
+-- @feature:147586
+    ::=  {  garbageCollection  2  }
+
+  bwProcessMetricsGCMinorCollectionTimeMSB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+      "The most significant part of the timestamp (4 most significant bytes) of when the last minor collection occurred."
+-- @feature:147586
+    ::=  {  garbageCollection  3  }
+
+  bwProcessMetricsGCMinorCollectionTimeLSB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+      "The least significant part of the timestamp (4 least significant bytes) of when the last minor collection occurred."
+-- @feature:147586
+    ::=  {  garbageCollection  4  }
+
+  bwProcessMetricsGCMajorCollectionTimeMSB  OBJECT-TYPE
+  SYNTAX      Gauge32
+  MAX-ACCESS  read-only
+  STATUS      deprecated
+  DESCRIPTION
+    "The most significant part of the timestamp (4 most significant bytes) of when the last major collection occurred."
+-- @feature:147586
+  ::=  {  garbageCollection  5  }
+
+  bwProcessMetricsGCMajorCollectionTimeLSB  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      deprecated
+    DESCRIPTION
+      "The least significant part of the timestamp (4 least significant bytes) of when the last major collection occurred."
+-- @feature:147586
+    ::=  {  garbageCollection  6  }
+
+  bwProcessMetricsGCMinorCollectionAvg  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The average of memory claimed during minor collections."
+-- @feature:147586
+    ::=  {  garbageCollection  7  }
+
+  bwProcessMetricsGCMajorCollectionAvg  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The average of memory claimed during major collections."
+-- @feature:147586
+    ::=  {  garbageCollection  8  }
+
+  bwProcessMetricsGCMinorCollectionTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when the last minor collection occurred."
+-- @feature:217460
+    ::=  {  garbageCollection  9  }
+
+  bwProcessMetricsGCMajorCollectionTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "This is the time stamp indicating when the last major collection occurred."
+-- @feature:217460
+    ::=  {  garbageCollection  10  }
+
+-- processMetrics threads ........................
+
+  bwProcessMetricsThreadsAlive  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of threads currently instantiated in the process."
+-- @feature:147586
+    ::=  {  threads  1  }
+
+  bwProcessMetricsThreadsAliveMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum number of threads that were instantiated in the process."
+-- @feature:147586
+    ::=  {  threads  2  }
+
+  bwProcessMetricsThreadsStarted  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of threads that were started in the process."
+-- @feature:147586
+    ::=  {  threads  3  }
+
+-- WebContainer cache ........................
+
+  bwCacheWebAppStatsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwCacheWebAppStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for the cache stats."
+    ::=  { cache  1 }
+
+  bwCacheWebAppStatsEntry  OBJECT-TYPE
+    SYNTAX    BwCacheWebAppStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwCacheWebAppStatsEntry."
+    INDEX    {  bwCacheWebAppStatsIndex  }
+    ::=  { bwCacheWebAppStatsTable 1 }
+
+  BwCacheWebAppStatsEntry  ::=  SEQUENCE {
+    bwCacheWebAppStatsIndex      Unsigned32,
+    bwCacheWebAppStatsWebApp     DisplayString,
+    bwCacheWebAppStatsElements   Gauge32,
+    bwCacheWebAppStatsSize       Gauge32,
+    bwCacheWebAppStatsEvictions  Counter32,
+    bwCacheWebAppStatsHits       Counter32,
+    bwCacheWebAppStatsMisses     Counter32
+  }
+
+  bwCacheWebAppStatsIndex OBJECT-TYPE
+    SYNTAX     Unsigned32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "This integer represents an index in table bwCacheWebAppStatsTable. The index represents a specific web application."
+    ::= { bwCacheWebAppStatsEntry 1 }
+
+  bwCacheWebAppStatsWebApp OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "This string represents the name of the web application."
+    ::= { bwCacheWebAppStatsEntry 2 }
+
+  bwCacheWebAppStatsElements OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Number of elements in the cache for the web application."
+    ::= { bwCacheWebAppStatsEntry 3 }
+
+  bwCacheWebAppStatsSize OBJECT-TYPE
+    SYNTAX     Gauge32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+      "Size of the cache in bytes for the web application."
+    ::= { bwCacheWebAppStatsEntry 4 }
+
+  bwCacheWebAppStatsEvictions OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of cache evictions since the last restart for a given application."
+    ::= { bwCacheWebAppStatsEntry 5 }
+
+  bwCacheWebAppStatsHits OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of cache hits since the last restart for a given application."
+    ::= { bwCacheWebAppStatsEntry 6 }
+
+  bwCacheWebAppStatsMisses OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+      "The number of cache misses since the last restart for a given application."
+    ::= { bwCacheWebAppStatsEntry 7 }
+
+-- WebContainer DNS......................................................................
+    
+  bwWebContainerDnsQueryTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reports the maximum query time in milliseconds."
+-- @feature:147586
+    ::= { dnsStats 1 }
+
+  bwWebContainerDnsQueryTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The gauge reports the most significant part of the timestamp (4 most significant bytes) of when bwDnsQueryTimeMax was obtained."
+-- @feature:147586
+    ::= { dnsStats 2 }
+
+  bwWebContainerDnsQueryTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The gauge reports the least significant part of the timestamp (4 least significant bytes) of when bwDnsQueryTimeMax was obtained."
+-- @feature:147586
+    ::= { dnsStats 3 }
+
+  bwWebContainerDnsQueryTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reports the average query time in milliseconds."
+-- @feature:147586
+    ::= { dnsStats 4 }
+
+  bwWebContainerDnsStatsQueriesTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwWebContainerDnsStatsQueriesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains DNS statistics."
+-- @feature:147586
+    ::= { dnsStats 5 }
+
+  bwWebContainerDnsStatsQueriesEntry OBJECT-TYPE
+    SYNTAX      BwWebContainerDnsStatsQueriesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains information on a particular DNS query type."
+    INDEX       { bwWebContainerDnsStatsQueryIndex }
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesTable 1 }
+
+  BwWebContainerDnsStatsQueriesEntry ::= SEQUENCE {
+    bwWebContainerDnsStatsQueryIndex         Unsigned32,
+    bwWebContainerDnsStatsQueryType          DisplayString,
+    bwWebContainerDnsStatsQueries            Counter32,
+    bwWebContainerDnsStatsQueryTimeouts      Counter32,
+    bwWebContainerDnsStatsCallpQueryTimeouts Counter32
+  }
+
+  bwWebContainerDnsStatsQueryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column is the index for the table."
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesEntry 1 }
+
+  bwWebContainerDnsStatsQueryType OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the DNS query type."
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesEntry 2 }
+
+  bwWebContainerDnsStatsQueries OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of DNS queries for a given type."
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesEntry 3 }
+
+  bwWebContainerDnsStatsQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of DNS queries timeouts for a given type."
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesEntry 4 }
+
+  bwWebContainerDnsStatsCallpQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter reflects the number of DNS queries timeouts for a given type initiated from a call processing thread."
+-- @feature:147586
+    ::= { bwWebContainerDnsStatsQueriesEntry 5 }
+
+  bwWebContainerDnsQueryTimeStatsReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other than 0, the values of the gauges bwDnsQueryTimeMax, bwDnsQueryTimeAvg, bwDnsQueryTimeMaxTimestampMSB, and bwDnsQueryTimeMaxTimestampLSB are reset to 0."
+-- @feature:147586
+    ::= { dnsStats 6 }
+
+-- BroadWorks Open Client Server MIB Conformance Definition  ...........................................
+
+  bwWebContainerMibGroups    OBJECT IDENTIFIER ::= { bwWebContainerMibConformance 1 }
+  bwWebContainerMibCompliancy  OBJECT IDENTIFIER ::= { bwWebContainerMibConformance 2 }
+
+-- units of conformance
+
+  bwWebContainerBcctStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerCommonCommStatsIndex, bwWebContainerCommonCommHost, bwWebContainerCommonCommInterface, bwWebContainerCommonCommProtocol, bwWebContainerCommonCommAcceptedOutboundConnections, bwWebContainerCommonCommAcceptedInboundConnections, bwWebContainerCommonCommRejectedOutboundConnections, bwWebContainerCommonCommRejectedInboundConnections, bwWebContainerCommonCommOutputMessagesProcessed, bwWebContainerCommonCommInputMessagesProcessed, bwWebContainerCommonCommOutputCommunicationErrors, bwWebContainerCommonCommInputCommunicationErrors }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the BCCT protocol to the BroadWorks Application."
+    ::= { bwWebContainerMibGroups 1 }
+
+  bwWebContainerAuthStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerAuthenticationAttempts, bwWebContainerAuthenticationFailed }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the auth component."
+    ::= { bwWebContainerMibGroups 2 }
+
+  bwWebContainerOciStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerOCIRequests, bwWebContainerOCIResponses, 
+              bwWebContainerOCIUnauthorizedMessage, bwWebContainerOCICRequests, 
+              bwWebContainerOCICResponses, bwWebContainerOCICMessagesReceived, 
+              bwWebContainerOCICMessagesRejected, bwWebContainerOCICMessagesDelivered, 
+              bwWebContainerOCICMessagesReplied, bwWebContainerOCIResponsesRejected,
+              bwWebContainerOCICResponsesRejected }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the OCI protocol to the BroadWorks Application."
+    ::= { bwWebContainerMibGroups 3 }
+    
+  bwWebContainerNsLocAPIStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerNsLocAPIAttempts, bwWebContainerNsLocAPIResponseFailed }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the NS Location API protocol to the BroadWorks Network Server."
+    ::= { bwWebContainerMibGroups 4 }
+
+  bwWebContainerNsPortalAPIStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerNsASDiscoveryAttempts, bwWebContainerNsASDiscoveryAttemptsFailed }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the NS Portal API protocol to the BroadWorks Network Server."
+    ::= { bwWebContainerMibGroups 5 }
+
+  bwWebContainerHttpResourceStatsGroup    OBJECT-GROUP
+    OBJECTS { bwHttpAccesses, bwHttpKBytesServed, bwHttpServerUptime, 
+              bwHttpRequestsPerSecond, bwHttpBytesPerSecond, bwHttpBytesPerRequest,
+              bwHttpWorkersBusy, bwHttpWorkersIdle, bwHttpWorkerThreadsUsable,
+              bwHttpOverallRequestsIndex, bwHttpOverallRequestsMethod, 
+              bwHttpOverallRequestsNbOfRequests, bwHttpOverallResponsesIndex,
+              bwHttpOverallResponsesMethod, bwHttpOverallResponsesStatusCode,
+              bwHttpOverallResponsesNbOfResponses, bwHttpWebAppRequestsIndex,
+              bwHttpWebAppRequestsWebApp, bwHttpWebAppRequestsMethod,
+              bwHttpWebAppRequestsNbOfRequests, bwHttpWebAppResponsesIndex,
+              bwHttpWebAppResponsesWebApp, bwHttpWebAppResponsesMethod, 
+              bwHttpWebAppResponsesStatusCode, bwHttpWebAppResponsesNbOfResponses }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the Http resource."
+    ::= { bwWebContainerMibGroups 6 }
+
+  bwWebContainerWorkerStatsGroup    OBJECT-GROUP
+    OBJECTS { bwHttpWorkersReset, bwHttpWorkerThreadsBusy, 
+              bwHttpWorkerThreadsIdle, bwHttpWorkerThreadsConsecutiveFailedRefresh,
+              bwHttpWorkerThreadsUsable, bwHttpWorkerThreadsBusyAvg, bwHttpWorkerThreadsBusyMax }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the worker resources."
+    ::= { bwWebContainerMibGroups 7 }
+
+  bwWebContainerOverheadStatsGroup    OBJECT-GROUP
+    OBJECTS { bwHttpOverheadReset, bwHttpOverheadTimeSamples, 
+              bwHttpOverheadTimeAvg, bwHttpOverheadTimeMin, 
+              bwHttpOverheadTimeMax, bwHttpOverheadTimeMaxTimestampMSB,
+              bwHttpOverheadTimeMaxTimestampLSB, bwHttpOverheadTimeMaxTimestamp }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the overhead resources."
+    ::= { bwWebContainerMibGroups 8 }
+
+  bwWebContainerOverloadProtectionStatsGroup    OBJECT-GROUP
+    OBJECTS { bwHttpOverloadReset, bwHttpOverloadProtectionRequestCountCurrent,
+              bwHttpOverloadProtectionRequestCountMax, bwHttpOverloadProtectionRequestRejectedCurrent,
+              bwHttpOverloadProtectionRequestRejectedMax, bwHttpOverloadProtectionWebAppIndex,
+              bwHttpOverloadProtectionWebAppName, bwHttpOverloadProtectionWebAppRequestCountCurrent, 
+              bwHttpOverloadProtectionWebAppRequestCountMax, bwHttpOverloadProtectionWebAppRequestRejectedCurrent,
+              bwHttpOverloadProtectionWebAppRequestRejectedMax }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the overload protection resources."
+    ::= { bwWebContainerMibGroups 9 }
+
+  bwWebContainerXmlInterfaceResourceStatsGroup    OBJECT-GROUP
+    OBJECTS { bwXmlInterfaceWorkersBusy, bwXmlInterfaceWorkersIdle, bwXmlInterfaceRequestsActive,
+              bwXmlInterfaceStatsIndex, bwXmlInterfaceHost, bwXmlInterfaceInterface, 
+              bwXmlInterfaceAcceptedInboundConnections, bwXmlInterfaceRejectedInboundConnections,
+              bwXmlInterfaceOutputMessagesProcessed, bwXmlInterfaceInputMessagesProcessed,
+              bwXmlInterfaceOutputCommunicationErrors, bwXmlInterfaceInputCommunicationErrors }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the XML interface resources."
+    ::= { bwWebContainerMibGroups 10 }
+
+  bwWebContainerSecuritySSOResourceStatsGroup    OBJECT-GROUP
+    OBJECTS { bwWebContainerSSOTokenCreations, bwWebContainerSSOTokenValidationSuccesses,
+              bwWebContainerSSOTokenValidationRejections }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the Security SSO resources."
+    ::= { bwWebContainerMibGroups 11 }
+
+  bwWebContainerApplicationResourcesStatsGroup    OBJECT-GROUP
+    OBJECTS { bwApplicationResourceIndex, bwApplicationResourceWebAppName,
+              bwApplicationResourceRequestCount, bwApplicationResourceTotalProcessingTime }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the application resources."
+    ::= { bwWebContainerMibGroups 12 }
+
+  bwWebContainerSessionManagementStatsGroup    OBJECT-GROUP
+    OBJECTS { bwSessionManagementIndex, bwSessionManagementWebAppName,
+              bwSessionManagementSessionsActive, bwSessionManagementSessionsActiveMax,
+              bwSessionManagementSessionsCreated, bwSessionManagementSessionAverageAliveTime,
+              bwSessionManagementSessionCreateRate, bwSessionManagementSessionExpireRate }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the Session Management resources."
+    ::= { bwWebContainerMibGroups 13 }
+
+  bwWebContainerConnectorStatsGroup    OBJECT-GROUP
+    OBJECTS { bwConnectorIndex, bwConnectorName,
+              bwConnectorExecutorName, bwConnectorRequestCount,
+              bwConnectorBytesRx, bwConnectorBytesTx,
+              bwConnectorTotalProcessingTime, bwConnectorMaxProcessingTime }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the connector resources."
+    ::= { bwWebContainerMibGroups 14 }
+
+  bwWebContainerExecutorStatsGroup    OBJECT-GROUP
+    OBJECTS { bwExecutorReset, bwExecutorIndex, bwExecutorName,
+              bwExecutorQueueCapacity, bwExecutorQueueSize,
+              bwExecutorQueueWaitingTimeAvg,
+              bwExecutorQueueWaitingTimeMin, bwExecutorQueueWaitingTimeMax,
+              bwExecutorQueueWaitingTimeMaxTimestampMSB, bwExecutorQueueWaitingTimeMaxTimestampLSB,
+              bwExecutorMinPoolSize, bwExecutorMaxPoolSize,
+              bwExecutorThreadsBusy, bwExecutorCompletedTaskCount,
+              bwExecutorThreadsAlive, bwExecutorThreadsAliveMax,
+              bwExecutorTaskProcessingTimeAvg, bwExecutorTaskProcessingTimeMin,
+              bwExecutorTaskProcessingTimeMax, bwExecutorTaskProcessingTimeMaxTimestampMSB,
+              bwExecutorTaskProcessingTimeMaxTimestampLSB, bwExecutorQueueWaitingTimeMaxTimestamp,
+              bwExecutorTaskProcessingTimeMaxTimestamp
+ }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the executor resources."
+    ::= { bwWebContainerMibGroups 15 }
+
+  bwWebContainerHeapStatsGroup    OBJECT-GROUP
+    OBJECTS { bwProcessMetricsHeapInitSize, bwProcessMetricsHeapMaxSize, 
+              bwProcessMetricsHeapUsed, bwProcessMetricsHeapUsedMax, 
+              bwProcessMetricsHeapCommitted, bwProcessMetricsHeapLastPostCollectionSize }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the heap resources."
+    ::= { bwWebContainerMibGroups 16 }
+
+  bwWebContainerNonHeapStatsGroup    OBJECT-GROUP
+    OBJECTS { bwProcessMetricsNonHeapInitSize, bwProcessMetricsNonHeapMaxSize, 
+              bwProcessMetricsNonHeapUsed, bwProcessMetricsNonHeapUsedMax, 
+              bwProcessMetricsNonHeapCommitted, bwProcessMetricsNonHeapLastPostCollectionSize }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the non heap resources."
+    ::= { bwWebContainerMibGroups 17 }
+
+  bwWebContainerGarbageCollectionStatsGroup    OBJECT-GROUP
+    OBJECTS { bwProcessMetricsGCMinorCollectionsCount, bwProcessMetricsGCMajorCollectionsCount, 
+              bwProcessMetricsGCMinorCollectionTimeMSB, bwProcessMetricsGCMinorCollectionTimeLSB, 
+              bwProcessMetricsGCMajorCollectionTimeMSB, bwProcessMetricsGCMajorCollectionTimeLSB,
+              bwProcessMetricsGCMinorCollectionAvg, bwProcessMetricsGCMajorCollectionAvg,
+              bwProcessMetricsGCMinorCollectionTimestamp, bwProcessMetricsGCMajorCollectionTimestamp }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the garbage collection resources."
+    ::= { bwWebContainerMibGroups 18 }
+
+  bwWebContainerThreadStatsGroup    OBJECT-GROUP
+    OBJECTS { bwProcessMetricsThreadsAlive, bwProcessMetricsThreadsAliveMax,
+              bwProcessMetricsThreadsStarted }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the thread resources."
+    ::= { bwWebContainerMibGroups 19 }
+
+  bwWebContainerCacheStatsGroup    OBJECT-GROUP
+    OBJECTS { bwCacheWebAppStatsIndex, bwCacheWebAppStatsWebApp, 
+              bwCacheWebAppStatsElements, bwCacheWebAppStatsSize,
+              bwCacheWebAppStatsEvictions, bwCacheWebAppStatsHits,
+              bwCacheWebAppStatsMisses }
+    STATUS  current
+    DESCRIPTION
+       "This group defines the Web Container statistics for the cache resources."
+    ::= { bwWebContainerMibGroups 20 }
+
+  bwWebContainerDnsQueryGroup OBJECT-GROUP
+    OBJECTS     { bwWebContainerDnsQueryTimeMax, bwWebContainerDnsQueryTimeMaxTimestampMSB, 
+                  bwWebContainerDnsQueryTimeMaxTimestampLSB, bwWebContainerDnsQueryTimeAvg, 
+                  bwWebContainerDnsStatsQueryIndex, bwWebContainerDnsStatsQueryType, 
+                  bwWebContainerDnsStatsQueries, bwWebContainerDnsStatsQueryTimeouts, 
+                  bwWebContainerDnsStatsCallpQueryTimeouts, bwWebContainerDnsQueryTimeStatsReset }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the Web Container statistics for DNS query."
+    ::= { bwWebContainerMibGroups 21 }
+
+-- 
+  bwWebContainerBasicCompliance MODULE-COMPLIANCE
+    STATUS current
+    DESCRIPTION
+       "BroadWorks Web Container MIB compliance"
+    MODULE -- this module
+        MANDATORY-GROUPS { bwWebContainerBcctStatsGroup, bwWebContainerAuthStatsGroup, 
+                           bwWebContainerOciStatsGroup, bwWebContainerNsLocAPIStatsGroup, 
+                           bwWebContainerNsPortalAPIStatsGroup, bwWebContainerHttpResourceStatsGroup, 
+                           bwWebContainerWorkerStatsGroup, bwWebContainerOverheadStatsGroup, 
+                           bwWebContainerOverloadProtectionStatsGroup, bwWebContainerXmlInterfaceResourceStatsGroup, 
+                           bwWebContainerSecuritySSOResourceStatsGroup, bwWebContainerApplicationResourcesStatsGroup, 
+                           bwWebContainerSessionManagementStatsGroup, bwWebContainerConnectorStatsGroup, 
+                           bwWebContainerExecutorStatsGroup, bwWebContainerHeapStatsGroup, 
+                           bwWebContainerNonHeapStatsGroup, bwWebContainerGarbageCollectionStatsGroup, 
+                           bwWebContainerThreadStatsGroup, bwWebContainerCacheStatsGroup, 
+                           bwWebContainerDnsQueryGroup }
+    ::= { bwWebContainerMibCompliancy 1 }
+
+-- End of MIB file - Do not put anything behind this line ...........................................
+
+END

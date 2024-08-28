@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<groupmgt>
+    <group name="imsi-1" type="IMSI">
+        <group-element>
+            <key value="11" name="wrong_key"/>
+        </group-element>
+    </group>
+</groupmgt>

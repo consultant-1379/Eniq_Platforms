@@ -1,0 +1,93 @@
+<project name="ebsmanager" default="compile">
+
+  <property name="pack.name" value="ebsmanager"/>
+  <property name="pack.version" value="5-0-0"/>
+ 
+  <property name="vobs.3pp" value="/vobs/eniq/3pp"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/management/dev/ebsmanager"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+  <property name="eniq.dwhmanager.dir" value="/vobs/eniq/design/plat/management/build/dwh_manager"/>
+  <property name="eniq.engine.dir" value="/vobs/eniq/design/plat/etl_controller/build/engine"/>
+  <property name="eniq.scheduler.dir" value="/vobs/eniq/design/plat/etl_controller/build/scheduler"/>
+  <property name="eniq.techpackide.dir" value="/vobs/eniq/design/plat/tp_ide/build/tp_ide"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.servlet.dir" value="${vobs.3pp}/apache/tomcat/v5_5_17/prod"/> <!-- servlet-api.jar ? -->
+  <property name="3pp.velocity.dir" value="${vobs.3pp}/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.xerces_impl.dir" value="${vobs.3pp}/apache/xerces_impl/v2_0_2/prod"/>
+  <property name="3pp.xmlapi.dir" value="${vobs.3pp}/apache/xml_commons/v1_1/prod"/>
+	
+	<property name="bointf.keystore" value="/vobs/eniq/tools/build/DCKeystore"/>
+	<property name="bointf.jarname" value="bointf.jar"/>
+
+<!-- Installation fast fix 30.1.2009 ebsmanager zip missing jconn.jar lmflhe -->
+<!-- NOTE! This needs to be investigated if these jars is really needed in the zip -->
+ 
+<!-- Installation fix end -->
+
+  
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="off" deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+            <fileset dir="${eniq.common.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.repository.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.dwhmanager.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.engine.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.scheduler.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${eniq.techpackide.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${3pp.servlet.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${3pp.velocity.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${3pp.xerces_impl.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${3pp.xmlapi.dir}">
+            	<include name="**/*.jar"/>
+            </fileset>
+      </classpath>
+    </javac>
+	<jar destfile="${pack.dir}/webstart/lib/${bointf.jarname}">
+		<fileset dir="${pack.dir}/jar/">
+			<exclude name="*.xml"/>
+		</fileset>
+	</jar>
+	<signjar keystore="${bointf.keystore}" alias="ETLC" storepass="DCkeyStoreSalaSana" jar="${pack.dir}/webstart/lib/${bointf.jarname}">
+	</signjar>
+  </target>
+
+  <target name="postcompile">
+    <move file="${pack.dir}/classes/WebstartServlet.class" todir="${pack.dir}/dclib"/>
+
+<!-- Installation fast fix 30.1.2009 ebsmanager zip missing jconn jar lmflhe -->
+<!-- NOTE! This needs to be investigated if these jars is really needed in the zip -->
+      
+<!-- Installation fix end -->
+
+  </target>
+  
+
+
+</project>

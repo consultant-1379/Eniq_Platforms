@@ -1,0 +1,400 @@
+ERICSSON-MPE-PUSH-PROXY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpePushProxyPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events of the Push Proxy Gateway."
+::= { mpeModules 11 }
+
+pushProxyPmObjects  OBJECT IDENTIFIER ::= { mpePushProxyPmModule 1 }
+
+reception  OBJECT IDENTIFIER ::= { pushProxyPmObjects 1 }
+
+delivery  OBJECT IDENTIFIER ::= { pushProxyPmObjects 2 }
+
+sessions  OBJECT IDENTIFIER ::= { pushProxyPmObjects 3 }
+
+pushSupervision  OBJECT IDENTIFIER ::= { pushProxyPmObjects 4 }
+
+distributionList  OBJECT IDENTIFIER ::= { pushProxyPmObjects 5 }
+
+messageFile  OBJECT IDENTIFIER ::= { pushProxyPmObjects 6 }
+
+pushProxyPmConformance  OBJECT IDENTIFIER ::= { mpePushProxyPmModule 3 }
+
+pushProxyPmGroups  OBJECT IDENTIFIER ::= { pushProxyPmConformance 1 }
+
+pushProxyPmCompliances  OBJECT IDENTIFIER ::= { pushProxyPmConformance 2 }
+
+receptionPushSubmissions  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Push submissions received.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 1 }
+
+receptionResultNotifications  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of result notifications sent.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 2 }
+
+receptionPushCancel  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Push cancellations received.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 3 }
+
+receptionStatusQueries  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of status queries received.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 4 }
+
+receptionClientCapabilityQueries  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of client capability queries 
+                    received.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 5 }
+
+receptionReplacePushMessage  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Push submissions that replace 
+                    previous Push submissions.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 6 }
+
+receptionBadMessageResponse  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of PAP messages to which the PPG 
+                    responds with a 'badmessage-response'.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 7 }
+
+receptionConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Configuration data could not be initialized."
+::= { reception 8 }
+
+receptionTELInitFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Traffic Event Logger could not be initialized."
+::= { reception 11 }
+
+receptionRejectedPushSubmissions  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of 'Push Submissions' that have 
+                    been rejected.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { reception 10 }
+
+deliveryResultNotifications  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of result notifications sent.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { delivery 1 }
+
+deliveryDeliveredMessages  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of delivered messages.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { delivery 2 }
+
+deliveryExpiredMessages  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of expired messages.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { delivery 3 }
+
+deliveryAbortedMessages  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of aborted messages.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { delivery 4 }
+
+deliveryUndeliverableMessages  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of undeliverable messages.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { delivery 5 }
+
+deliverySocketError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Internal communication between the Push Delivery 
+                    process and the stack processes could not be established."
+::= { delivery 6 }
+
+deliveryPushProviderIpAddrError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The configuration parameter 'Push provider IP address 
+                    list' contains an invalid IP address."
+::= { delivery 7 }
+
+deliverySharedMemCreationError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A shared memory area could not be created."
+::= { delivery 8 }
+
+deliveryConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Configuration data could not be initialized."
+::= { delivery 9 }
+
+deliveryTELInitFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Traffic event logger could not be initialized."
+::= { delivery 11 }
+
+sessionsStarted  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of started Push-enabled WSP 
+                    sessions.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { sessions 1 }
+
+sessionsUsedPush  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Push-enabled WSP sessions that 
+                    are used to deliver a Push message.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { sessions 2 }
+
+sessionsSharedMemCreationProblem  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A shared memory area could not be created."
+::= { sessions 3 }
+
+pushSupervisionConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when reading configuration data. The cause of 
+                    the error is given in the dynamic text."
+::= { pushSupervision 1 }
+
+pushSupervisionNodeConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Possibly a mismatch in the configuration of the 
+                    Application Supervisor and the supervised process. The 
+                    cause of the error is given in the dynamic text."
+::= { pushSupervision 2 }
+
+pushSupervisionWebServDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-functioning."
+::= { pushSupervision 3 }
+
+pushSupervisionRecvServDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-functioning."
+::= { pushSupervision 4 }
+
+pushSupervisionDelivServDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-functioning."
+::= { pushSupervision 5 }
+
+distributionListTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DistributionListEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the distribution list module
+                    (6=Push Request Server, 7=Push Delivery, 9=MMS 
+                    Caching Proxy, 22=MMS Common Cache)."
+::= { distributionList 1 } 
+
+distributionListEntry OBJECT-TYPE
+   SYNTAX          DistributionListEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters and events for distribution list handling."
+   INDEX { applIndex }
+::= { distributionListTable  1 }
+
+DistributionListEntry  ::= SEQUENCE
+{
+   distributionListError ItuPerceivedSeverity
+}
+
+distributionListError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Problem with distribution list file directory."
+::= { distributionListEntry 1 }
+
+messageFileTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF MessageFileEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the message file module
+                    (6=Push Request Server, 7=Push Delivery, 9=MMS 
+                    Caching Proxy, 22=MMS Common Cache)."
+::= { messageFile 1 } 
+
+messageFileEntry OBJECT-TYPE
+   SYNTAX          MessageFileEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters and events for message file handling 
+                    functionality."
+   INDEX { applIndex }
+::= { messageFileTable  1 }
+
+MessageFileEntry  ::= SEQUENCE
+{
+   messageFileDirectoryError ItuPerceivedSeverity
+}
+
+messageFileDirectoryError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Problem with message file directory."
+::= { messageFileEntry 1 }
+
+-- Compliance Statements
+
+pushProxyCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for push proxy."
+   MODULE          -- this module
+   MANDATORY-GROUPS {pushProxyConfGroup}
+::= { pushProxyPmCompliances 1 }
+
+-- Units of Conformance
+
+pushProxyConfGroup OBJECT-GROUP
+   OBJECTS { receptionPushSubmissions,
+             receptionResultNotifications,
+             receptionPushCancel,
+             receptionStatusQueries,
+             receptionClientCapabilityQueries,
+             receptionReplacePushMessage,
+             receptionBadMessageResponse,
+             receptionConfigError,
+             receptionTELInitFailed,
+             receptionRejectedPushSubmissions,
+             deliveryResultNotifications,
+             deliveryDeliveredMessages,
+             deliveryExpiredMessages,
+             deliveryAbortedMessages,
+             deliveryUndeliverableMessages,
+             deliverySocketError,
+             deliveryPushProviderIpAddrError,
+             deliverySharedMemCreationError,
+             deliveryConfigError,
+             deliveryTELInitFailed,
+             sessionsStarted,
+             sessionsUsedPush,
+             sessionsSharedMemCreationProblem,
+             pushSupervisionConfigError,
+             pushSupervisionNodeConfigError,
+             pushSupervisionWebServDefunct,
+             pushSupervisionRecvServDefunct,
+             pushSupervisionDelivServDefunct,
+             distributionListError,
+             messageFileDirectoryError}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a push proxy."
+::= { pushProxyPmGroups 1 }
+END

@@ -1,0 +1,813 @@
+#!/bin/bash
+# ********************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ********************************************************************
+#
+#
+# (c) Ericsson Radio Systems AB 2001 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ********************************************************************
+# Name    : ENIQ_upgrade.bsh
+# Date    : 18/03/2009
+# Revision: D
+# Purpose : Main wrapper script handling the installation ENIQ. It will
+#           call all necessary scripts to complete the installation
+#
+# Usage   : ENIQ_upgrade.bsh
+#
+# ********************************************************************
+#
+# 	Command Section
+#
+# ********************************************************************
+
+AWK=/usr/bin/awk
+BASENAME=/usr/bin/basename
+BASH=/usr/bin/bash
+BC=/usr/bin/bc
+CAT=/usr/bin/cat
+CHMOD=/usr/bin/chmod
+CHOWN=/usr/bin/chown
+CLEAR=/usr/bin/clear
+CMP=/usr/bin/cmp
+CP=/usr/bin/cp
+CPIO=/usr/bin/cpio
+DATE=/usr/bin/date
+DIRNAME=/usr/bin/dirname
+DOMAINNAME=/usr/bin/domainname
+DTCONFIG=/usr/dt/bin/dtconfig
+DUMPADM=/usr/sbin/dumpadm
+ECHO=/usr/bin/echo
+EGREP=/usr/bin/egrep
+EJECT=/usr/bin/eject
+ENV=/usr/bin/env
+EXPR=/usr/bin/expr
+FIND=/usr/bin/find
+#commented as the below command is deprecated in Solaris 11
+#FLARCREATE=/usr/sbin/flarcreate
+FORMAT=/usr/sbin/format
+FUSER=/usr/sbin/fuser
+GETENT=/usr/bin/getent
+GETTEXT=/usr/bin/gettext
+GREP=/usr/bin/grep
+GTAR=/usr/sfw/bin/gtar
+GZCAT=/usr/bin/gzcat
+HEAD=/usr/bin/head
+HOSTNAME=/usr/bin/hostname
+ID=/usr/bin/id
+LS=/usr/bin/ls
+MKDIR=/usr/bin/mkdir
+MORE=/usr/bin/more
+MV=/usr/bin/mv
+NAWK=/usr/bin/nawk
+PGREP=/usr/bin/pgrep
+PWD=/usr/bin/pwd
+RM=/usr/bin/rm
+SED=/usr/bin/sed
+SLEEP=/usr/bin/sleep
+SORT=/usr/bin/sort
+SSH=/usr/bin/ssh
+SU=/usr/bin/su
+TAIL=/usr/bin/tail
+TEE=/usr/bin/tee
+TOUCH=/usr/bin/touch
+WC=/usr/bin/wc
+UNIQ=/usr/bin/uniq
+UNZIP=/usr/bin/unzip
+
+# ********************************************************************
+#
+#       Configuration Section
+#
+# ********************************************************************
+# Name of SunOS & ENIQ ini Files
+ENIQ_ENV=niq.rc
+ENIQ_INI=niq.ini
+RBAC_INI=RBAC.ini
+SUNOS_INI=SunOS.ini
+
+# Variables used in ENIQ version
+ENIQ_VERSION_DIR="version"
+ENIQ_STATUS="eniq_status"
+
+# String denoting the start of and OSS refernce name.
+OSS_REF_STR=eniq_oss_
+
+# ********************************************************************
+#
+#       Pre-execution Operations
+#
+# ********************************************************************
+
+
+# ********************************************************************
+#
+# 	functions
+#
+# ********************************************************************
+### Function: abort_script ###
+#
+#   This will is called if the script is aborted thru an error
+#   error signal sent by the kernel such as CTRL-C or if a serious
+#   error is encountered during runtime
+#
+# Arguments:
+#       $1 - Error message from part of program (Not always used)
+# Return Values:
+#       none
+abort_script()
+{
+if [ "$1" ]; then
+    _err_msg_=$1
+else
+    _err_msg_="ERROR : Script aborted.......\n"
+fi
+$ECHO "\nERROR : $_err_msg_\n" | $TEE -a ${LOGFILE}
+
+cd $SCRIPTHOME
+$RM -rf ${TEM_DIR}
+
+if [ "$2" ]; then
+    ${2}
+else
+   exit 1
+fi
+}
+
+### Function: check_id ###
+#
+# Check files that I expect to find
+#
+# Arguments:
+#       none
+# Return Values:
+#       none
+check_files()
+{
+
+$ECHO "Checking for required files" | $TEE -a ${LOGFILE}
+
+
+_err_=0
+for _file_ in ${UPGRADE_FILES}; do
+    if [ ! -s ${UPG_SW_DIR}/${_file_} ]; then
+       $ECHO "Cannot locate ${UPG_SW_DIR}/${_file_}" | $TEE -a ${LOGFILE}
+       _err_=1
+    fi
+done
+
+if [ ${_err_} -eq 1 ]; then
+    _err_msg_="Cannot locate all required upgrade files"
+    abort_script "$_err_msg_"
+fi
+
+}
+
+### Function: check_id ###
+#
+#   Check that the effective id of the user is correct
+#   If not print error msg and exit.
+#
+# Arguments:
+#       $1 : User ID name
+# Return Values:
+#       none
+check_id()
+{
+_check_id_=`$ID  | $NAWK -F\( '{print $2}' | $NAWK -F\) '{print $1}'`
+if [ "$_check_id_" != "$1" ]; then
+    _err_msg_="You must be $1 to execute this script."
+    abort_script "$_err_msg_"
+fi
+}
+
+### Function: get_absolute_path ###
+#
+# Determine absolute path to software
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+get_absolute_path()
+{
+_dir_=`$DIRNAME $0`
+SCRIPTHOME=`cd $_dir_ 2>/dev/null && pwd || $ECHO $_dir_`
+}
+
+### Function: get_installed_interfaces ###
+#
+# Get the list of ENIQ Interfaces already installed
+#
+# Arguments:
+#	$1 : Name of file containg output
+# Return Values:
+#	none
+get_installed_interfaces()
+{
+$RM -f ${1}
+$TOUCH ${1}
+$CHMOD 777 ${1}
+
+_installer_dir_=`$CAT ${CLI_CONF_DIR}/${ENIQ_ENV}|$EGREP '^[ 	]*INSTALLER_DIR=' |$NAWK -F\= '{print $2}'`
+if [ ! "${_installer_dir_}" ]; then
+    _err_msg_="Could not read param INSTALLER_DIR from\n${CLI_CONF_DIR}/${ENIQ_ENV}"
+    abort_script "$_err_msg_"
+fi
+$SU - ${SYSUSER} -c "cd ${_installer_dir_}; ./get_active_interfaces" >$1 2>&1
+
+if [  $? -ne 0 ]; then
+    _err_msg_="Failure in ${_installer_dir_}/get_active_interfaces"
+    abort_script "$_err_msg_"
+fi
+}
+
+### Function: get_installed_techpacks ###
+#
+# Get the list of ENIQ techpacks already installed
+#
+# Arguments:
+#	$1 : Name of file containg output
+# Return Values:
+#	none
+get_installed_techpacks()
+{
+$RM -f ${1}
+$TOUCH ${1}
+$CHMOD 777 ${1}
+
+_installer_dir_=`$CAT ${CLI_CONF_DIR}/${ENIQ_ENV}|$EGREP '^[ 	]*INSTALLER_DIR=' |$NAWK -F\= '{print $2}'`
+if [ ! "${_installer_dir_}" ]; then
+    _err_msg_="Could not read param INSTALLER_DIR from\n${CLI_CONF_DIR}/${ENIQ_ENV}"
+    abort_script "$_err_msg_"
+fi
+$SU - ${SYSUSER} -c "cd ${_installer_dir_}; ./installed_techpacks" >$1 2>&1
+
+if [  $? -ne 0 ]; then
+    _err_msg_="Failure in ${_installer_dir_}/installed_techpacks"
+    abort_script "$_err_msg_"
+fi
+}
+
+### Function: get_plain_techpack_names ###
+#
+# Get the plain list of ENIQ techpacks already installed
+#
+# Arguments:
+#	$1 : Name of input file
+#	$2 : Name of output file
+# Return values:
+#	none
+get_plain_techpack_names()
+{
+$CAT ${1} | $SED 's/;.*//g' > ${2} 2>/dev/null
+}
+
+### Function: setup_script_env ###
+#
+# Set up environment variables for script.
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+setup_script_env()
+{
+
+$ECHO "Setting up script environment" | $TEE -a ${LOGFILE}
+if [ ! "${ENIQ_BASE_DIR}" ]; then
+    # Directory on the root filesystem
+    ENIQ_BASE_DIR=/eniq
+fi
+
+# ENIQ Admin Directory
+ENIQ_ADMIN_DIR=${ENIQ_BASE_DIR}/admin
+
+# ENIQ Install Config Directory
+ENIQ_CONF_DIR=${ENIQ_BASE_DIR}/installation/config
+
+CURR_SERVER_TYPE=`$CAT $ENIQ_CONF_DIR/installed_server_type | $EGREP -v '^[ 	]*#' | $SED -e 's/ //g'`
+if [ ! "${CURR_SERVER_TYPE}" ]; then
+	_err_msg_="Could not determine which server type this is"
+    abort_script "$_err_msg_"
+fi
+
+if [ "${CURR_SERVER_TYPE}" == "eniq_coordinator" -o "${CURR_SERVER_TYPE}" == "eniq_events" -o "${CURR_SERVER_TYPE}" == "eniq_iqw" -o "${CURR_SERVER_TYPE}" == "son_coordinator" ]; then
+	$ECHO "Script can run on this server"
+else
+	_err_msg_="This script should not be run on this server type - $CURR_SERVER_TYPE"
+    abort_script "$_err_msg_"
+fi
+
+# ENIQ SW Config Directory
+CLI_CONF_DIR=${ENIQ_BASE_DIR}/sw/conf
+
+# File containing the type of OSS installation. Eg. oss or single
+INST_TYPE_FILE=${ENIQ_CONF_DIR}/config
+
+# File containg IP address of jumpstart server (if any)
+SERVERFILE=${ENIQ_CONF_DIR}/INSTALL_SERVER
+
+# Main Directory for the Core Installation SW
+ENIQ_INST_DIR=${ENIQ_BASE_DIR}/installation/core_install/bin
+
+# Main Directory for the ENIQ SW
+ENIQ_SW_DIR=${ENIQ_BASE_DIR}/sw
+
+# Location of ENIQ status file. This contains overall version of ENIQ
+ENIQ_STATUS_FILE=${ENIQ_ADMIN_DIR}/${ENIQ_VERSION_DIR}/${ENIQ_STATUS}
+
+HNAME=`/usr/bin/hostname`
+
+# Name of file containing List of used OSS reference names
+OSS_REF_NAME_FILE=${ENIQ_ADMIN_DIR}/managed_oss/.oss_ref_name_file
+$ECHO "Script environment set"  | $TEE -a ${LOGFILE}
+}
+
+### Function: stop_start_service_sysuser ###
+#
+# Stop/Start the required service as sysuser the required files
+#
+# Arguments:
+#	$1 : Service name
+#	$2 : Service action
+# Return Values:
+#	none
+stop_start_service_sysuser()
+{
+
+$SU - ${SYSUSER}  -c "${1} ${2}" | $TEE -a ${LOGFILE}
+
+if [  ${PIPESTATUS[0]} -ne 0 ]; then
+    _err_msg_="Could not ${2} ${1} service"
+    abort_script "$_err_msg_"
+fi
+}
+
+### Function: update_eniq_version_file ###
+#
+# Update the ENIQ version file
+#
+# Arguments:
+#	$1 : Location of new Eniq Version file
+# Return Values:
+#	none
+update_eniq_version_file()
+{
+$ECHO "Upgrading Eniq Version File" | $TEE -a ${LOGFILE}
+
+if [ ! -s ${ENIQ_ADMIN_DIR}/bin/manage_eniq_status.bsh ]; then
+    _err_msg_="Cannot update Eniq version file. \n${ENIQ_ADMIN_DIR}/bin/manage_eniq_status.bsh not found"
+    abort_script "$_err_msg_"
+fi
+
+/bin/bash ${ENIQ_ADMIN_DIR}/bin/manage_eniq_status.bsh -d ${1} | $TEE -a ${LOGFILE}
+
+if [  ${PIPESTATUS[0]} -ne 0 ]; then
+   _err_msg_="Eniq version status updation failed."
+    abort_script "$_err_msg_"
+fi
+}
+
+### Function: stop_ecs ###
+#
+# Stop all MZ Execution Contexts
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+stop_ecs()
+{
+  $ECHO "Stopping EC's due to glassfish upgrade" | $TEE -a ${LOGFILE}
+  _chosts_=`$CAT $CLI_CONF_DIR/service_names | $GREP "::ec_" | $NAWK -F:: '{print $3}' | $SORT -u`
+  _bin_dir_=`$CAT ${CLI_CONF_DIR}/${ENIQ_ENV}| $EGREP '^[ 	]*BIN_DIR=' |$NAWK -F\= '{print $2}'`
+  _cmd_="export CONF_DIR=$CLI_CONF_DIR ; ${_bin_dir_}/ec stop 2>&1"
+  for _host_ in ${_chosts_} ; do
+    $ECHO "Offlining ECs on ${_host_} ..." | $TEE -a ${LOGFILE}
+    if [ "${_host_}" == "`${HOSTNAME}`" ] ; then
+      $SU - ${SYSUSER} -c "${_cmd_}" | $TEE -a ${LOGFILE}
+      _rc_=${PIPESTATUS[0]}
+    else
+      $SU - ${SYSUSER} -c "$SSH ${SYSUSER}@${_host_} \"${_cmd_}\"" | $TEE -a ${LOGFILE}
+      _rc_=${PIPESTATUS[0]}
+    fi
+    if [ $? -ne 0 ] ; then
+        _err_msg_= "Failed to offline contexts on ${_host_}"
+        abort_script "$_err_msg_"
+    fi
+    $ECHO "Offlined EC's on ${_host_}" | $TEE -a ${LOGFILE}
+  done
+}
+
+### Function: upgrade_eniq_platform_module ###
+#
+# Upgrade Eniq platform modules
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+upgrade_eniq_platform_module()
+{
+
+$ECHO "Upgrading Eniq Platform Software" | $TEE -a ${LOGFILE}
+for _file_ in ${ENIQ_PLATFORM_MODULE_FILES}; do
+    $ECHO "Upgrading $_file_" | $TEE -a ${LOGFILE}
+    $ECHO "${_file_}" | $GREP "glassfish_" > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+      # Need to offline the execution contexts if upgrading glassfish (they import glassfish
+      # jars and coredump when glassfish gets deleted during its upgrade.....
+      stop_ecs
+      if [ $? -ne 0 ] ; then
+        _err_msg_="Failed to stop all MZ Execution Contexts for Glassfish Upgrade."
+        abort_script "$_err_msg_"
+      fi
+    fi
+    $CP ${UPG_SW_DIR}/${_file_} ${ENIQ_SW_DIR}/installer
+    if [ $? -ne 0 ]; then
+	_err_msg_="Could not copy ${UPG_SW_DIR}/${_file_} to\n ${ENIQ_SW_DIR}/installer"
+	abort_script "$_err_msg_"
+    fi
+    $CHOWN -Rh ${SYSUSER}:${SYSGRP} ${ENIQ_SW_DIR}/installer/${_file_} >> /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+	_err_msg_="Could not recursive change ownership of ${ENIQ_SW_DIR}/installer/${_file_}"
+	abort_script "$_err_msg_"
+    fi
+    $ECHO "Starting to upgrade platform component: ${_file_}" | $TEE -a ${LOGFILE}
+    $SU - ${SYSUSER} -c "cd ${ENIQ_SW_DIR}/installer; ./platform_installer ${_file_}" | $TEE -a ${LOGFILE}
+
+    if [  ${PIPESTATUS[0]} -ne 0 ]; then
+	_err_msg_="Could not upgrade platform module ${_file_}"
+	abort_script "$_err_msg_"
+    else
+    	$ECHO "Platform component ${_file_} upgraded" | $TEE -a ${LOGFILE}
+    fi
+done
+
+$ECHO "Eniq Platform upgraded" | $TEE -a ${LOGFILE}
+}
+
+### Function: upgrade_tp_interf_module ###
+#
+# Upgrade techpacks/interfaces module
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+upgrade_tp_interf_module()
+{
+$ECHO "Upgrading Eniq Techpacks/Interfaces" | $TEE -a ${LOGFILE}
+$RM -rf ${TEM_DIR}/tp_installs.txt
+for _file_det_ in ${ENIQ_TP_INTERF_FILES}; do
+    # Strip out Techpack details
+    _type_=`$ECHO ${_file_det_}|$NAWK -F"::" '{print $1}'`
+    _file_=`$ECHO ${_file_det_}|$NAWK -F"::" '{print $2}'`
+    _desig_=`$ECHO ${_file_det_}|$NAWK -F"::" '{print $3}'`
+
+    _onlyactivation_=FALSE
+    _onlyinstall_=FALSE
+
+    case ${_type_} in
+	TECHPACK)
+	    _chk_file_=${TEM_DIR}/tp_inst_list
+            ;;
+ 	INTERFACE)
+	    _chk_file_=${TEM_DIR}/interf_inst_list
+            ;;
+        INTERFACE_ACTIVATE)
+            _chk_file_=${TEM_DIR}/interf_inst_list
+             _onlyactivation_=TRUE
+            ;;
+	\?)
+	    _err_msg_="Invalid File type found"
+	    abort_script "$_err_msg_"
+	    ;;
+    esac
+# Is the TechPack/Interface installed? If not loop to the next one in list
+    $EGREP "^[ 	]*${_desig_}[;| ]" ${_chk_file_} >> /dev/null 2>&1
+    
+    if [ $? -ne 0 ]; then
+    	case ${_type_} in
+    	INTERFACE)
+    		for _plain_tp_ in `$CAT ${TEM_DIR}/plain_tp_inst_list`; do
+    			_tp_match_=`$ECHO ${_desig_}| $GREP ${_plain_tp_}`
+    			if [ -n "${_tp_match_}" ]; then
+    				$ECHO "\nNew ${_type_} ${_desig_} for techpack ${_plain_tp_}. Only installation performed. Manual activation needed.\n" | tee -a ${LOGFILE}
+    				_onlyinstall_=TRUE
+				continue	
+    			fi
+    		done
+    		if [ "${_onlyinstall_}" == "FALSE" ]; then
+    			$ECHO "\n${_type_} ${_desig_} not installed...Skipping Upgrade\n"  | $TEE -a ${LOGFILE}
+			continue
+    		fi 
+    		;;
+    	TECHPACK)
+	    	$ECHO "\n${_type_} ${_desig_} not installed...Skipping Upgrade\n" | $TEE -a ${LOGFILE}
+	    	continue
+            	;;
+       INTERFACE_ACTIVATE)
+            	$ECHO "\n${_type_} ${_desig_} not installed...Skipping activation\n" | $TEE -a ${LOGFILE}
+	    	continue
+            	;;
+    	\?)	
+		$ECHO "\n${_type_} ${_desig_} not installed...Skipping Upgrade\n" | $TEE -a ${LOGFILE}
+		continue
+		;;
+	esac
+    fi
+
+
+    if [ "${_onlyactivation_}" == "FALSE" ]; then
+
+    	# Copy the file to installer dir and change its ownership
+    	$CP ${UPG_SW_DIR}/${_file_} ${ENIQ_SW_DIR}/installer
+    	if [ $? -ne 0 ]; then
+		_err_msg_="Could not copy ${UPG_SW_DIR}/${_file_} to\n ${ENIQ_SW_DIR}/installer"
+		abort_script "$_err_msg_"
+    	fi
+    	$CHOWN -Rh ${SYSUSER}:${SYSGRP} ${ENIQ_SW_DIR}/installer/${_file_} >> /dev/null 2>&1
+    	if [ $? -ne 0 ]; then
+		_err_msg_="Could not recursive change ownership of ${ENIQ_SW_DIR}/installer/${_file_}"
+		abort_script "$_err_msg_"
+    	fi
+    	$ECHO "Adding ${_desig_} to be installed" | tee -a ${LOGFILE}
+    	$ECHO "${_desig_}" >> ${TEM_DIR}/tp_installs.txt
+    fi
+done
+
+if [ -e ${TEM_DIR}/tp_installs.txt ]; then
+    $ECHO "Installing following techpacks/interfaces\n" `cat ${TEM_DIR}/tp_installs.txt`  | $TEE -a ${LOGFILE}
+    $CHOWN -Rh ${SYSUSER}:${SYSGRP} ${TEM_DIR}/tp_installs.txt >> /dev/null 2>&1
+    $RM -rf ${TEM_DIR}/tp_script.bsh
+    $ECHO "cd ${ENIQ_SW_DIR}/installer
+    ./tp_installer -p ${ENIQ_SW_DIR}/installer -f ${TEM_DIR}/tp_installs.txt
+    if [ \$? -ne 0 ]; then
+       exit 1
+    fi" > ${TEM_DIR}/tp_script.bsh
+
+    # Run the script Verbosely or quietly
+    $SU - ${SYSUSER} -c "/bin/bash ${TEM_DIR}/tp_script.bsh"  | $TEE -a ${LOGFILE}
+
+    # Check the return code
+    if [  ${PIPESTATUS[0]} -ne 0 ]; then
+       _err_msg_="Error upgrading failed during Installing techpacks/interfaces"
+       abort_script "$_err_msg_"
+    fi
+else
+    $ECHO "No techpacks/interfaces to install or upgrade with this EU\n"  | $TEE -a ${LOGFILE}
+fi
+
+stop_start_service_sysuser scheduler start
+
+# Reactivate interfaces
+$ECHO "Activating interfaces\n" | tee -a ${LOGFILE}
+$ECHO "Activating following interfaces\n" `cat ${TEM_DIR}/interf_inst_list`  | $TEE -a ${LOGFILE}
+$CHOWN -Rh ${SYSUSER}:${SYSGRP} ${TEM_DIR}/interf_inst_list >> /dev/null 2>&1
+$RM -rf ${TEM_DIR}/tp_script.bsh
+$ECHO  "cd ${ENIQ_SW_DIR}/installer
+./activate_interface -f ${TEM_DIR}/interf_inst_list
+if [ \$? -ne 0 ]; then
+   exit 1
+fi" >> ${TEM_DIR}/tp_script.bsh
+
+$SU - ${SYSUSER} -c "/bin/bash ${TEM_DIR}/tp_script.bsh"  | $TEE -a ${LOGFILE}
+
+if [  ${PIPESTATUS[0]} -ne 0 ]; then
+   _err_msg_="Error Activating Interface ${_desig_} for ${_oss_}"
+   abort_script "$_err_msg_"
+fi
+
+# Disable AlarmInterfaces as this causes some sets to fail
+$SU - ${SYSUSER} -c "engine -e disableSet AlarmInterfaces"  | $TEE -a ${LOGFILE}
+
+$SU - ${SYSUSER} -c "engine -e changeProfile Normal"  | $TEE -a ${LOGFILE}
+
+if [  ${PIPESTATUS[0]} -ne 0 ]; then
+    _err_msg_="Could not set engine profile to Normal"
+    abort_script "$_err_msg_"
+fi
+$ECHO "Upgrading of Eniq Techpacks/Interfaces done" | $TEE -a ${LOGFILE}
+}
+
+### Function: start_eniq_services ###
+#
+# Starts all the eniq services
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+start_eniq_services()
+{
+    $ECHO "Starting all ENIQ services." | $TEE -a ${LOGFILE}
+
+    stop_start_service_sysuser licmgr start
+    stop_start_service_sysuser engine start
+    stop_start_service_sysuser scheduler start
+    stop_start_service_sysuser webserver start
+
+    $ECHO "All ENIQ services started OK." | $TEE -a ${LOGFILE}
+}
+
+### Function: upgrade_eniq_runtime ###
+#
+# Make required directories, extracts the module, installs and removes the temporary files
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+upgrade_eniq_runtime()
+{
+if [ "${ENIQ_PLATFORM_RUNTIME_FILE}" ]; then
+	$ECHO "Creating directory for runtime upgrade" | $TEE -a ${LOGFILE}
+
+	$RM -rf ${ENIQ_SW_DIR}/installer/runtime_temp
+	$MKDIR -p ${ENIQ_SW_DIR}/installer/runtime_temp
+	if [  $? -ne 0 ]; then
+    		_err_msg_="Could not create directory ${ENIQ_SW_DIR}/installer/runtime_temp"
+    		abort_script "$_err_msg_"
+	fi
+	$CHOWN ${SYSUSER}:${SYSGRP} ${ENIQ_SW_DIR}/installer/runtime_temp >> /dev/null 2>&1
+	if [  $? -ne 0 ]; then
+    		_err_msg_="Could not change ownership of directory ${ENIQ_SW_DIR}/installer/runtime_temp"
+    		abort_script "$_err_msg_"
+	fi
+
+	$ECHO "Unzipping runtime files" | $TEE -a ${LOGFILE}
+	cd ${ENIQ_SW_DIR}/installer/runtime_temp
+	$UNZIP -q ${UPG_SW_DIR}/${ENIQ_PLATFORM_RUNTIME_FILE} >> /dev/null 2>&1
+	if [  $? -ne 0 ]; then
+    		_err_msg_="Could not unzip file ${UPG_SW_DIR}/${ENIQ_PLATFORM_RUNTIME_FILE}\nto {ENIQ_SW_DIR}/installer/runtime_temp"
+    		abort_script "$_err_msg_"
+	fi
+	$CHOWN -Rh ${SYSUSER}:${SYSGRP} ${ENIQ_SW_DIR}/installer/runtime_temp >> /dev/null 2>&1
+	if [  $? -ne 0 ]; then
+    		_err_msg_="Could not recursive change ownership of directory ${ENIQ_SW_DIR}/installer/runtime_temp"
+    		abort_script "$_err_msg_"
+	fi
+	$CHMOD 777 ${ENIQ_SW_DIR}/installer/runtime_temp/*  >> /dev/null 2>&1
+	if [  $? -ne 0 ]; then
+    		_err_msg_="Could not change permissions of files in ${ENIQ_SW_DIR}/installer/runtime_temp"
+    		abort_script "$_err_msg_"
+	fi
+
+	$ECHO "Upgrading runtime module" | $TEE -a ${LOGFILE}
+
+	$SU - ${SYSUSER}  -c "cd ${ENIQ_SW_DIR}/installer/runtime_temp; ./install_environment.sh -v" | $TEE -a ${LOGFILE}
+
+	if [  ${PIPESTATUS[0]} -ne 0 ]; then
+    		_err_msg_="Could not upgrade runtime module environment"
+    		abort_script "$_err_msg_"
+	fi
+
+	$SU - ${SYSUSER}  -c "cd ${ENIQ_SW_DIR}/installer/runtime_temp; ./install_runtime.sh -v" | $TEE -a ${LOGFILE}
+
+	if [  ${PIPESTATUS[0]} -ne 0 ]; then
+    		_err_msg_="Could not upgrade runtime module"
+    		abort_script "$_err_msg_"
+	fi
+        cd ${ENIQ_SW_DIR}/installer
+	$RM -rf ${ENIQ_SW_DIR}/installer/runtime_temp
+fi
+}
+
+# ********************************************************************
+#
+# 	Main body of program
+#
+# ********************************************************************
+#
+# Determine absolute path to software
+get_absolute_path
+
+# Check that the effective id of the user is root
+check_id root
+
+while getopts ":d:l:" arg; do
+  case $arg in
+    d) UPG_SW_DIR="$OPTARG"
+       ;;
+    l) LOGFILE="$OPTARG"
+       ;;
+   \?) _err_msg_="`$BASENAME $0` -d <path_to_upg_dir> [-l <absolute_logfile>]"
+       abort_script "$_err_msg_"
+       ;;
+  esac
+done
+shift `expr $OPTIND - 1`
+
+if [ ! "${UPG_SW_DIR}" ]; then
+    _err_msg_="`$BASENAME $0` -d <path_to_upg_dir>"
+    abort_script "$_err_msg_"
+fi
+
+#Commented by TGU 2.2.2009 Uncomment this when create_upgrade_config.bsh script is fixed
+#su - dcuser -c "cd ${UPG_SW_DIR};/bin/bash ./create_upgrade_config.bsh ${UPG_SW_DIR}"
+
+# Set up environment variables for script.
+setup_script_env
+
+# Source the common functions
+if [ -s $ENIQ_INST_DIR/../lib/common_functions.lib ]; then
+    . $ENIQ_INST_DIR/../lib/common_functions.lib
+else
+    _err_msg_="File $ENIQ_INST_DIR/../lib/common_functions.lib not found"
+    abort_script "$_err_msg_"
+fi
+
+# Load the upgrade data
+if [ -s ${UPG_SW_DIR}/upgrade.configuration ]; then
+    . ${UPG_SW_DIR}/upgrade.configuration
+else
+    _err_msg_="File ${UPG_SW_DIR}/upgrade.configuration not found"
+    abort_script "$_err_msg_"
+fi
+
+if [ ! "${LOGFILE}" ]; then
+    if [ ! -e "${ENIQ_BASE_DIR}/log/EU_upgrade_logs" ]; then
+       $MKDIR -p ${ENIQ_BASE_DIR}/log/EU_upgrade_logs >> /dev/null 2>&1
+       if [  $? -ne 0 ]; then
+          _err_msg_="Could not create directory ${ENIQ_BASE_DIR}/log/EU_upgrade_logs"
+          abort_script "$_err_msg_"
+       fi
+    fi
+
+    VERSION=`$ECHO ${VERSION_PROPERTY} | $SED 's/\//\_/g'`
+
+    LOGFILE=${ENIQ_BASE_DIR}/log/EU_upgrade_logs/ENIQ_AOM_901071_${VERSION}_UPGRADE_`date '+%y%m%d-%H%M%S'`.log
+    touch $LOGFILE
+    $ECHO "Log file not defined with -l option. Using default: ${LOGFILE}" | $TEE -a ${LOGFILE}
+else
+    touch $LOGFILE
+fi
+
+
+$ECHO "Starting ENIQ upgrade to version: " `cat ${UPG_SW_DIR}/version/eniq_status | $NAWK  '{ tot="";for (i=1; i<=NF; i++) if (i > 1) tot = tot " " $i;} END {print tot}'`  | $TEE -a ${LOGFILE}
+
+# Check files that I expect to find
+check_files
+
+# Create a temporary Directory
+TEM_DIR=/tmp/eniq_core_install.$$.$$
+$RM -rf ${TEM_DIR}
+$MKDIR -p ${TEM_DIR}
+if [  $? -ne 0 ]; then
+    _err_msg_="Could not create directory ${TEM_DIR}"
+    abort_script "$_err_msg_"
+fi
+
+# Get the System User/Group. All directories are owned by this
+SYSUSER=`iniget ENIQ_INSTALL_CONFIG -f ${ENIQ_CONF_DIR}/${SUNOS_INI} -v ENIQ_SYSUSER`
+if [ ! "${SYSUSER}" ]; then
+    _err_msg_="Could not read param SYSUSER from\n${ENIQ_CONF_DIR}/${SUNOS_INI}"
+    abort_script "$_err_msg_"
+fi
+SYSGRP=`$ID ${SYSUSER}|$NAWK '{print $2}'|$NAWK -F\( '{print $2}'|$NAWK -F\) '{print $1}'`
+if [ ! "${SYSGRP}" ]; then
+    _err_msg_="Could not get group id of ${SYSUSER} from"
+    abort_script "$_err_msg_"
+fi
+
+# Upgrade Eniq runtime
+upgrade_eniq_runtime
+
+# Upgrade Eniq platform modules
+upgrade_eniq_platform_module
+
+# Start Eniq services
+start_eniq_services
+
+# Get the techpacks already installed
+$ECHO "Reading information about installed techpacks"  | $TEE -a ${LOGFILE}
+get_installed_techpacks ${TEM_DIR}/tp_inst_list
+
+# Get the plain techpack names
+$ECHO "Sorting list of installed techpacks"  | $TEE -a ${LOGFILE}
+get_plain_techpack_names ${TEM_DIR}/tp_inst_list ${TEM_DIR}/plain_tp_inst_list
+
+# Get the interfaces already installed
+$ECHO "Reading information about installed interfaces"  | $TEE -a ${LOGFILE}
+get_installed_interfaces ${TEM_DIR}/interf_inst_list
+
+# Upgrade techpacks/interfaces module
+upgrade_tp_interf_module
+
+# Update the ENIQ version file
+update_eniq_version_file ${UPG_SW_DIR}
+
+cd $SCRIPTHOME
+
+$RM -rf ${ENIQ_SW_DIR}/installer/*.tpi
+$RM -rf ${TEM_DIR}
+exit 0

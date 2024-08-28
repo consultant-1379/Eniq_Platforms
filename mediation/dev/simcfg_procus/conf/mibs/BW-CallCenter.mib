@@ -1,0 +1,622 @@
+-- File Name : BW-CallCenter.mib
+
+BW-CallCenter DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201206200000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201206200000Z"
+      DESCRIPTION "Creation of the Call Center web application MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  webapp OBJECT IDENTIFIER
+    ::= { broadworks 31 }
+
+  callcenter OBJECT IDENTIFIER
+    ::= { webapp 1 }
+
+  featureCommand OBJECT IDENTIFIER
+    ::= { callcenter 1 }
+
+  featureUpdate OBJECT IDENTIFIER
+    ::= { callcenter 2 }
+
+  userSession OBJECT IDENTIFIER
+    ::= { callcenter 3 }
+
+  subscription OBJECT IDENTIFIER
+    ::= { callcenter 4 }
+
+--  obsolete
+--  executors OBJECT IDENTIFIER
+--    ::= { callcenter 5 }
+
+  bwCallCenterMibConformance OBJECT IDENTIFIER
+    ::= { callcenter 1000 }
+
+-- CallCenter featureCommand  ...........................................
+
+  bwCallCenterFeatureCommandReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, statistics for bwCallCenterFeatureCommandInvocations stored under the bwCallCenterFeatureCommandTable is reset to 0."
+-- @feature:156551
+    ::= { featureCommand 1 }
+
+  bwCallCenterFeatureCommandTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCallCenterFeatureCommandTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table provides the overall number of Feature Command invocation per type (like Login, Monitoring etc.)."
+-- @feature:156551
+    ::= { featureCommand 2 }
+
+  bwCallCenterFeatureCommandTableEntry OBJECT-TYPE
+    SYNTAX      BwCallCenterFeatureCommandTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwCallCenterFeatureCommandTableEntry."
+    INDEX       { bwCallCenterFeatureCommandIndex }
+-- @feature:156551
+    ::= { bwCallCenterFeatureCommandTable 1 }
+
+  BwCallCenterFeatureCommandTableEntry ::= SEQUENCE {
+    bwCallCenterFeatureCommandIndex        Unsigned32,
+    bwCallCenterFeatureCommandName         DisplayString,
+    bwCallCenterFeatureCommandInvocations  Counter32
+  }
+
+  bwCallCenterFeatureCommandIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwCallCenterFeatureCommandTable.  The index represents the number of invocation for a specific feature command."
+-- @feature:156551
+    ::= { bwCallCenterFeatureCommandTableEntry 1 }
+
+  bwCallCenterFeatureCommandName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The Feature Command Name which is invoked in the CallCenter application."
+-- @feature:156551
+    ::= { bwCallCenterFeatureCommandTableEntry 2 }
+
+  bwCallCenterFeatureCommandInvocations OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of invocation for the corresponding Feature Command (represented by the bwCallCenterFeatureCommandIndex)."
+-- @feature:156551
+    ::= { bwCallCenterFeatureCommandTableEntry 3 }
+
+-- CallCenter featureUpdate  ...........................................
+
+  bwCallCenterFeatureUpdateReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, statistics for bwCallCenterFeatureUpdateInvocations stored under the bwCallCenterFeatureUpdateTable is reset to 0."
+-- @feature:156551
+    ::= { featureUpdate 1 }
+
+  bwCallCenterFeatureUpdateTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCallCenterFeatureUpdateTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table provides the overall updates per FeatureUpdate type (like CallsFeature, ConfFeature, QueueCallsFeature etc.)."
+-- @feature:156551
+    ::= { featureUpdate 2 }
+
+  bwCallCenterFeatureUpdateTableEntry OBJECT-TYPE
+    SYNTAX      BwCallCenterFeatureUpdateTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwCallCenterFeatureUpdateTableEntry."
+    INDEX       { bwCallCenterFeatureUpdateIndex }
+-- @feature:156551
+    ::= { bwCallCenterFeatureUpdateTable 1 }
+
+  BwCallCenterFeatureUpdateTableEntry ::= SEQUENCE {
+    bwCallCenterFeatureUpdateIndex        Unsigned32,
+    bwCallCenterFeatureUpdateName         DisplayString,
+    bwCallCenterFeatureUpdateInvocations  Counter32
+  }
+
+  bwCallCenterFeatureUpdateIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwCallCenterFeatureUpdateTable.  The index represents the number of updates for a specific feature."
+-- @feature:156551
+    ::= { bwCallCenterFeatureUpdateTableEntry 1 }
+
+  bwCallCenterFeatureUpdateName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The Name of the Feature which is updated to the client by the CallCenter application."
+-- @feature:156551
+    ::= { bwCallCenterFeatureUpdateTableEntry 2 }
+
+  bwCallCenterFeatureUpdateInvocations OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The number of updates for the corresponding Feature (represented by the bwCallCenterFeatureUpdateIndex)."
+-- @feature:156551
+    ::= { bwCallCenterFeatureUpdateTableEntry 3 }
+
+-- CallCenter userSession  ...........................................
+
+  bwCallCenterUserSessionReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, the statistics for bwCallCenterUserSessionMinSignInDuration, bwCallCenterUserSessionMaxSignInDuration and bwCallCenterUserSessionAvgSignInDuration stored under the bwCallCenterUserSessionTable are reset to 0."
+-- @feature:156551
+    ::= { userSession 1 }
+
+  bwCallCenterUserSessionTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCallCenterUserSessionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table provides the number of active agent, supervisor signed into the CallCenter application. It also tracks the minimum, maximum and average sign-in duration per user type (Agent or Supervisor)."
+-- @feature:156551
+    ::= { userSession 2 }
+
+  bwCallCenterUserSessionEntry OBJECT-TYPE
+    SYNTAX      BwCallCenterUserSessionEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwCallCenterUserSessionEntry."
+    INDEX       { bwCallCenterUserSessionIndex }
+-- @feature:156551
+    ::= { bwCallCenterUserSessionTable 1 }
+
+  BwCallCenterUserSessionEntry ::= SEQUENCE {
+    bwCallCenterUserSessionIndex             Unsigned32,
+    bwCallCenterUserSessionSignInType        DisplayString,
+    bwCallCenterUserSessionSignedInUsers     Gauge32,
+    bwCallCenterUserSessionMinSignInDuration Gauge32,
+    bwCallCenterUserSessionMaxSignInDuration Gauge32,
+    bwCallCenterUserSessionAvgSignInDuration Gauge32
+  }
+
+  bwCallCenterUserSessionIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwCallCenterUserSessionTable.  The index represents the number of active user per user type (Agent, Supervisor) to the CallCenter."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 1 }
+
+  bwCallCenterUserSessionSignInType OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The Type of the signed-in user into the CallCenter application. This can be an 'agent' or 'supervisor'."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 2 }
+
+  bwCallCenterUserSessionSignedInUsers OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The current number of signed-in users per sign-in type (i.e. agent, supervisor). This is incremented when a user (Agent or Supervisor) signs into the application  and decremented when the user session is stopped or deleted."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 3 }
+
+  bwCallCenterUserSessionMinSignInDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The minimum sign-in duration per sign-in type (i.e. agent, supervisor). The sign-in duration is the time between when a users signs-in and signs-out. The minimum sign-in duration is in seconds."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 4 }
+
+  bwCallCenterUserSessionMaxSignInDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The maximum sign-in duration per sign-in type (i.e. agent, supervisor). The sign-in duration is the time between when a users signs-in and signs-out. The maximum sign-in duration is in seconds."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 5 }
+
+  bwCallCenterUserSessionAvgSignInDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average duration is computed as the sum of signed-in durations (time between each sign-in and sign-out session) divided by the number of sign-outs. The average sign-in duration is in seconds."
+-- @feature:156551
+    ::= { bwCallCenterUserSessionEntry 6 }
+
+-- CallCenter subscription  ...........................................
+
+  bwCallCenterEventPkgSubscriptionReset OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other then 0, statistics for bwCallCenterEventPkgSubscriptionMinSubscriptionDuration, bwCallCenterEventPkgSubscriptionMaxSubscriptionDuration, bwCallCenterEventPkgSubscriptionAvgSubscriptionDuration stored under the bwCallCenterEventPkgSubscriptionTable are reset to 0."
+-- @feature:156551
+    ::= { subscription 1 }
+
+  bwCallCenterEventPkgSubscriptionTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwCallCenterEventPkgSubscriptionTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table provides the number of active subscription per event package type (like Basic Call, Call Center Agent Monitoring etc). It also tracks the minimum, maximum and average duration of subscription per event package type."
+-- @feature:156551
+    ::= { subscription 2 }
+
+  bwCallCenterEventPkgSubscriptionTableEntry OBJECT-TYPE
+    SYNTAX      BwCallCenterEventPkgSubscriptionTableEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwCallCenterEventPkgSubscriptionTableEntry."
+    INDEX       { bwCallCenterEventPkgSubscriptionIndex }
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTable 1 }
+
+  BwCallCenterEventPkgSubscriptionTableEntry ::= SEQUENCE {
+    bwCallCenterEventPkgSubscriptionIndex                   Unsigned32,
+    bwCallCenterEventPkgSubscriptionName                    DisplayString,
+    bwCallCenterEventPkgSubscriptionActiveSubscriptions     Gauge32,
+    bwCallCenterEventPkgSubscriptionMinSubscriptionDuration Gauge32,
+    bwCallCenterEventPkgSubscriptionMaxSubscriptionDuration Gauge32,
+    bwCallCenterEventPkgSubscriptionAvgSubscriptionDuration Gauge32
+  }
+
+  bwCallCenterEventPkgSubscriptionIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in the bwCallCenterEventPkgSubscriptionTable.  The index represents an event package, number of active subscription, minimum, maximum and average duration of subscription for the corresponding event package."
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 1 }
+
+  bwCallCenterEventPkgSubscriptionName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The represents the Event package name for which subscriptions are made by the CallCenter application."
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 2 }
+
+  bwCallCenterEventPkgSubscriptionActiveSubscriptions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The total number of active subscription per event package type. This is incremented when a new subscription is created for a particular event package and decremented when the same is terminated (due to expiration or forceful termination)."
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 3 }
+
+  bwCallCenterEventPkgSubscriptionMinSubscriptionDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The minimum duration of subscription per event package type. The duration of subscription is the time till the subscription is alive or active. The minimum duration of subscription is in seconds."
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 4 }
+
+  bwCallCenterEventPkgSubscriptionMaxSubscriptionDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The maximum duration of subscription per event package type. The duration of subscription is the time till the subscription is alive or active. The maximum duration of subscription is in seconds."
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 5 }
+
+  bwCallCenterEventPkgSubscriptionAvgSubscriptionDuration OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average duration of a subscription is computed as the sum of duration of subscriptions (time until the subscription is active or alive) divided by the number of terminated subscription. The average duration of subscription is in seconds"
+-- @feature:156551
+    ::= { bwCallCenterEventPkgSubscriptionTableEntry 6 }
+
+-- CallCenter executors  ...........................................
+
+--  bwCallCenterExecutorQueueReset OBJECT-TYPE
+--    SYNTAX      Counter32
+--    MAX-ACCESS  read-write
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "When set to a value other then 0, statistics for bwCallCenterExecutorQueueWaitingTimeMin, bwCallCenterExecutorQueueWaitingTimeMax,  bwCallCenterExecutorQueueWaitingTimeAvg , bwCallCenterExecutorQueueWaitingTimeMaxTimestampMSB,  bwCallCenterExecutorQueueWaitingTimeMaxTimestampLSB, bwCallCenterExecutorQueueTaskCompletedTaskCount, bwCallCenterExecutorQueueTaskProcessingTimeAvg, bwCallCenterExecutorQueueTaskProcessingTimeMin, bwCallCenterExecutorQueueTaskProcessingTimeMax , bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampMSB and bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampLSB stored under the bwCallCenterExecutorQueueTable are reset to 0."
+-- @feature:156551
+--    ::= { executors 1 }
+
+--  bwCallCenterExecutorQueueTable OBJECT-TYPE
+--    SYNTAX      SEQUENCE OF BwCallCenterExecutorQueueTableEntry
+--    MAX-ACCESS  not-accessible
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "This table provides the queuing delays caused by the application."
+-- @feature:156551
+--    ::= { executors 2 }
+
+--  bwCallCenterExecutorQueueTableEntry OBJECT-TYPE
+--    SYNTAX      BwCallCenterExecutorQueueTableEntry
+--    MAX-ACCESS  not-accessible
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Definition of the entries for bwCallCenterExecutorQueueTableEntry."
+--    INDEX       { bwCallCenterExecutorQueueIndex }
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTable 1 }
+
+--  BwCallCenterExecutorQueueTableEntry ::= SEQUENCE {
+--    bwCallCenterExecutorQueueIndex                             Unsigned32,
+--    bwCallCenterExecutorQueueName                              DisplayString,
+--    bwCallCenterExecutorQueueCapacity                          Gauge32,
+--    bwCallCenterExecutorQueueSize                              Gauge32,
+--    bwCallCenterExecutorQueueWaitingTimeMin                    Gauge32,
+--    bwCallCenterExecutorQueueWaitingTimeMax                    Gauge32,
+--    bwCallCenterExecutorQueueWaitingTimeAvg                    Gauge32,
+--    bwCallCenterExecutorQueueWaitingTimeMaxTimestampMSB        Gauge32,
+--    bwCallCenterExecutorQueueWaitingTimeMaxTimestampLSB        Gauge32,
+--    bwCallCenterExecutorQueueTaskCompletedTaskCount            Gauge32,
+--    bwCallCenterExecutorQueueTaskProcessingTimeAvg             Gauge32,
+--    bwCallCenterExecutorQueueTaskProcessingTimeMin             Gauge32,
+--    bwCallCenterExecutorQueueTaskProcessingTimeMax             Gauge32,
+--    bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampMSB Gauge32,
+--    bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampLSB Gauge32
+--  }
+
+--  bwCallCenterExecutorQueueIndex OBJECT-TYPE
+--    SYNTAX      Unsigned32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "This integer represents an index to a given executor queue. The index represents a queue name, minimum, maximum and average duration of queuing and the minimum, maximum and average size of queue for the corresponding queue name."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 1 }
+
+--  bwCallCenterExecutorQueueName OBJECT-TYPE
+--    SYNTAX      DisplayString
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The represents the internal queue name implemented by the CallCenter application."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 2 }
+
+--  bwCallCenterExecutorQueueCapacity OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--   STATUS      obsolete
+--    DESCRIPTION 
+--        "The executor queue initial capacity."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 3 }
+
+--  bwCallCenterExecutorQueueSize OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The current size of the executor queue."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 4 }
+
+--  bwCallCenterExecutorQueueWaitingTimeMin OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Minimum time spent waiting in the executor queue since the last reset. This can be calculated when an item is removed from the queue."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 5 }
+
+--  bwCallCenterExecutorQueueWaitingTimeMax OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Maximum time spent waiting in the executor queue since the last reset. This can be calculated when an item is removed from the queue."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 6 }
+
+--  bwCallCenterExecutorQueueWaitingTimeAvg OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Average time spent waiting in the executor queue since the last reset. This is computed as the sum of duration an item is in the queue divided by the number of item removed from the queue."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 7 }
+
+--  bwCallCenterExecutorQueueWaitingTimeMaxTimestampMSB OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The most significant part of the timestamp (4 most significant bytes) of when bwCallCenterExecutorQueueWaitingTimeMax was obtained."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 8 }
+
+--  bwCallCenterExecutorQueueWaitingTimeMaxTimestampLSB OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The least significant part of the timestamp (4 least significant bytes) of when bwCallCenterExecutorQueueWaitingTimeMax was obtained."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 9 }
+
+--  bwCallCenterExecutorQueueTaskCompletedTaskCount OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The approximate total number of tasks that have completed execution. Because the states of tasks and threads may change dynamically during computation, the returned value is only an approximation, but one that does not ever decrease across successive calls."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 10 }
+
+--  bwCallCenterExecutorQueueTaskProcessingTimeAvg OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Average processing time spent by this executor."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 11 }
+
+--  bwCallCenterExecutorQueueTaskProcessingTimeMin OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Minimum processing time spent by this executor."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 12 }
+
+--  bwCallCenterExecutorQueueTaskProcessingTimeMax OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "Maximum processing time spent by this executor."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 13 }
+
+--  bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampMSB OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The most significant part of the timestamp (4 most significant bytes) of when bwCallCenterExecutorQueueTaskProcessingTimeMax was obtained."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 14 }
+
+--  bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampLSB OBJECT-TYPE
+--    SYNTAX      Gauge32
+--    MAX-ACCESS  read-only
+--    STATUS      obsolete
+--    DESCRIPTION 
+--        "The least significant part of the timestamp (4 least significant bytes) of when bwCallCenterExecutorQueueTaskProcessingTimeMax was obtained."
+-- @feature:156551
+--    ::= { bwCallCenterExecutorQueueTableEntry 15 }
+
+-- BroadWorks CallCenter MIB Conformance Definition  ......................................
+
+  bwCallCenterMibGroups OBJECT IDENTIFIER 
+    ::= { bwCallCenterMibConformance 1 }
+
+  bwCallCenterMibCompliancy OBJECT IDENTIFIER
+    ::= { bwCallCenterMibConformance 2 }
+
+  bwFeatureCommandGroup OBJECT-GROUP
+    OBJECTS { bwCallCenterFeatureCommandReset, bwCallCenterFeatureCommandIndex,
+              bwCallCenterFeatureCommandName, bwCallCenterFeatureCommandInvocations } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Feature Command statistics."
+    ::= { bwCallCenterMibGroups 1 }
+
+  bwFeatureUpdateGroup OBJECT-GROUP
+    OBJECTS { bwCallCenterFeatureUpdateReset, bwCallCenterFeatureUpdateIndex,
+              bwCallCenterFeatureUpdateName, bwCallCenterFeatureUpdateInvocations } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Feature Command statistics."
+    ::= { bwCallCenterMibGroups 2 }
+
+  bwUserSessionGroup OBJECT-GROUP
+    OBJECTS { bwCallCenterUserSessionReset, bwCallCenterUserSessionIndex,
+              bwCallCenterUserSessionSignInType, bwCallCenterUserSessionSignedInUsers,
+              bwCallCenterUserSessionMinSignInDuration, bwCallCenterUserSessionMaxSignInDuration,
+              bwCallCenterUserSessionAvgSignInDuration } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Feature Command statistics."
+    ::= { bwCallCenterMibGroups 3 }
+
+  bwSubscriptionGroup OBJECT-GROUP
+    OBJECTS { bwCallCenterEventPkgSubscriptionReset, bwCallCenterEventPkgSubscriptionIndex,
+              bwCallCenterEventPkgSubscriptionName, bwCallCenterEventPkgSubscriptionActiveSubscriptions,
+              bwCallCenterEventPkgSubscriptionMinSubscriptionDuration, bwCallCenterEventPkgSubscriptionMaxSubscriptionDuration,
+              bwCallCenterEventPkgSubscriptionAvgSubscriptionDuration } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Feature Command statistics."
+    ::= { bwCallCenterMibGroups 4 }
+
+--  bwExecutorsGroup OBJECT-GROUP
+--    OBJECTS { bwCallCenterExecutorQueueReset, bwCallCenterExecutorQueueIndex,
+--              bwCallCenterExecutorQueueName, bwCallCenterExecutorQueueCapacity,
+--              bwCallCenterExecutorQueueSize, bwCallCenterExecutorQueueWaitingTimeMin,
+--              bwCallCenterExecutorQueueWaitingTimeMax, bwCallCenterExecutorQueueWaitingTimeAvg,
+--              bwCallCenterExecutorQueueWaitingTimeMaxTimestampMSB, bwCallCenterExecutorQueueWaitingTimeMaxTimestampLSB,
+--              bwCallCenterExecutorQueueTaskCompletedTaskCount, bwCallCenterExecutorQueueTaskProcessingTimeAvg,
+--              bwCallCenterExecutorQueueTaskProcessingTimeMin, bwCallCenterExecutorQueueTaskProcessingTimeMax,
+--              bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampMSB, bwCallCenterExecutorQueueTaskProcessingTimeMaxTimestampLSB } 
+--    STATUS obsolete
+--    DESCRIPTION 
+--        "This group defines the Feature Command statistics."
+--    ::= { bwCallCenterMibGroups 5 }
+
+
+  bwCallCenterBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks Call Center MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwFeatureCommandGroup, bwFeatureUpdateGroup,
+          bwUserSessionGroup, bwSubscriptionGroup
+        }
+
+    ::= { bwCallCenterMibCompliancy 1 }
+END

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp2 (http://www.altova.com) by Casey (Ericsson) -->
+<xs:schema xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">
+               	 Copyright notice: (c) Ericsson AB 2010
+               	 Warning text "All rights reserved. No parts of this program may be reproduced in any form without the written permission of the copyright holder."
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="PM">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description" type="xs:string" default='""'/>
+				<xs:element name="Capabilities" type="CapabilitiesType"/>
+				<xs:element name="data" type="dataType"/>
+				<xs:element name="pmMimMetadata" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="nodeType" type="xs:string"/>
+							<xs:element name="node_major_version" type="xs:string" minOccurs="0"/>
+							<xs:element name="node_minor_version" type="xs:string" minOccurs="0"/>
+							<xs:element name="timestamp" type="xs:dateTime" minOccurs="0"/>
+							<xs:element name="pmMimVersion" type="xs:string"/>
+							<xs:element name="common_baseline_doc_id" type="xs:string" minOccurs="0"/>
+							<xs:element name="common_baseline_major_version" type="xs:string" minOccurs="0"/>
+							<xs:element name="common_baseline_minor_version" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="CapabilitiesType">
+		<xs:sequence>
+			<xs:element name="alignedReportingPeriod" default="true" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="true"/>
+						<xs:enumeration value="false"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="JobPersistence" default="RESTART" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="NONE"/>
+						<xs:enumeration value="RESTART"/>
+						<xs:enumeration value="UPGRADE"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="FileRetention" type="xs:unsignedShort" default="24" minOccurs="0"/>
+			<xs:element name="FileCompression" type="xs:boolean" default="true" minOccurs="0"/>
+			<xs:element name="CounterCapabilities">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OutputFormat" default="3GPP_XML" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="3GPP_XML"/>
+									<xs:enumeration value="3GPP_ASN.1"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="OutputVersion" default="32.104 V3.5.0" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="32.104 V3.5.0"/>
+									<xs:enumeration value="32.435 V7.2.0 "/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FileDeliveryProtocol" default="SFTP" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="SFTP"/>
+									<xs:enumeration value="FTP"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FileDeliveryMethod" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="PUSH"/>
+									<xs:enumeration value="PULL"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DeliveryTarget" type="xs:string" default='""'/>
+						<xs:element name="GranularityPeriod" default="15" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:unsignedInt">
+									<xs:enumeration value="5"/>
+									<xs:enumeration value="15"/>
+									<xs:enumeration value="30"/>
+									<xs:enumeration value="60"/>
+									<xs:enumeration value="720"/>
+									<xs:enumeration value="1440"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ReportingPeriod" default="15" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:unsignedInt">
+									<xs:enumeration value="5"/>
+									<xs:enumeration value="15"/>
+									<xs:enumeration value="30"/>
+									<xs:enumeration value="60"/>
+									<xs:enumeration value="720"/>
+									<xs:enumeration value="1440"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:anyAttribute/>
+	</xs:complexType>
+	<xs:complexType name="mocType">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" default='""'/>
+			<xs:element name="moc_level" default="0" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:enumeration value="0"/>
+						<xs:enumeration value="1"/>
+						<xs:enumeration value="2"/>
+						<xs:enumeration value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="switchingTechnology" default="Packet Switched" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+						<xs:enumeration value="Packet Switched"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="group" type="groupType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="groupType">
+		<xs:sequence>
+			<xs:element name="description" minOccurs="0"/>
+			<xs:element name="counter" type="counterType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="dataType">
+		<xs:sequence>
+			<xs:element name="moc" type="mocType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="counterType">
+		<xs:sequence>
+			<xs:element name="measurementName" type="xs:string"/>
+			<xs:element name="description" type="xs:string" default='""'/>
+			<xs:element name="collectionMethod">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="type">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="CC"/>
+									<xs:enumeration value="SI"/>
+									<xs:enumeration value="GAUGE"/>
+									<xs:enumeration value="DER"/>
+									<xs:enumeration value="IDENTITY"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="subtype">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="MIN"/>
+									<xs:enumeration value="MAX"/>
+									<xs:enumeration value="LAST_UPDATE"/>
+									<xs:enumeration value="RAW"/>
+									<xs:enumeration value="MEAN"/>
+									<xs:enumeration value="SUM"/>
+									<xs:enumeration value=""/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="measurementResult">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="outputUnit" type="xs:string"/>
+						<xs:element name="resultType">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="decimal"/>
+									<xs:enumeration value="integer"/>
+									<xs:enumeration value="float"/>
+									<xs:enumeration value="byte"/>
+									<xs:enumeration value="int"/>
+									<xs:enumeration value="smallInt"/>
+									<xs:enumeration value="unsignedInt"/>
+									<xs:enumeration value="long"/>
+									<xs:enumeration value="double"/>
+									<xs:enumeration value="dateTime"/>
+									<xs:enumeration value="date"/>
+									<xs:enumeration value="time"/>
+									<xs:enumeration value="boolean"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="resultType_freeText" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="status" default="current">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="current"/>
+						<xs:enumeration value="obsolete"/>
+						<xs:enumeration value="deprecated"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="measurementType" type="xs:string" use="required"/>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,25 @@
+#!/bin/bash 
+
+NAWK=/usr/bin/nawk
+CRONCOMMFILE="/tmp/eniq_heap.txt"
+
+SCRIPT="/eniq/sw/bin/monitor_heap.bsh"
+CRONLINE="* * * * * /bin/bash $SCRIPT > /eniq/log/sw_log/engine/cronjob_heap.log 2>&1"
+if [ -f $CRONCOMMFILE ]; then
+  rm -f $CRONCOMMFILE
+fi
+
+SERVER_TYPE=`cat ${CONF_DIR}/niq.ini | grep -i server_type | $NAWK -F"=" '{print $2}'`
+if [ "$SERVER_TYPE" == "stats" ]; then
+
+echo "Installing  crontab jobs for dcuser user..."
+crontab -l | /usr/bin/fgrep -v $SCRIPT >>$CRONCOMMFILE
+
+echo "$CRONLINE" >>$CRONCOMMFILE
+
+#set the new crontab
+crontab < $CRONCOMMFILE
+#/usr/bin/rm -f $CRONCOMMFILE
+
+echo "Crontab Entry Inserted Successfully"
+fi

@@ -1,0 +1,56 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ DWH database backup script
+#
+# Usage: backup_dwhdb TARGET_DIR SIZE {full|incr}
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+IQ_USER=`${BIN_DIR}/iniget DB -v IQUserName -f ${CONF_DIR}/niq.ini`
+
+if [ ${LOGNAME} != ${IQ_USER} ] ; then
+  echo "This script has to be installed by ${IQ_USER}"
+  return 32
+fi
+
+TGT=$1
+SIZE=$2
+TYPE=$3
+
+if [ -z "${TGT}" -o -z "${SIZE}" ] ; then
+  echo "Usage: backup_dwhdb TARGET_DIR SIZE {full|incr}"
+  exit 2
+fi
+
+if [ ${SIZE} -lt 1 ] ; then
+  echo "Backup size must be defined greater than 0"
+  exit 1
+fi
+
+if [ "${TYPE}" != "full" -a "${TYPE}" != "incr" ] ; then
+  echo "Backup type not defined or invalid. Using full."
+  TYPE="full"
+fi
+
+DWH_PORT=`${BIN_DIR}/iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_ENG=`${BIN_DIR}/iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+DWH_CONN_STR_USER_DBA="con=localhost;eng=${DWH_ENG};links=tcpip{host=dwhdb;port=${DWH_PORT};dobroadcast=none;verify=no};uid=dba;pwd=${DBA_PASSWORD}"
+
+TIMESTAMP=`date +%d.%m.%y_%H:%M:%S`
+
+if [ "${TYPE}" = "incr" ] ; then
+  ${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q BACKUP DATABASE CRC OFF BLOCK FACTOR 50 INCREMENTAL SINCE FULL TO \'${TGT}_1\' SIZE ${SIZE} TO \'${TGT}_2\' SIZE ${SIZE} TO \'${TGT}_3\' SIZE ${SIZE} TO \'${TGT}_4\' SIZE ${SIZE} WITH COMMENT \'DWH incremental backup ${TIMESTAMP}\'
+else
+  ${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q BACKUP DATABASE CRC OFF BLOCK FACTOR 50 FULL TO \'${TGT}_1\' SIZE ${SIZE} TO \'${TGT}_2\' SIZE ${SIZE} TO \'${TGT}_3\' SIZE ${SIZE} TO \'${TGT}_4\' SIZE ${SIZE} WITH COMMENT \'DWH full backup ${TIMESTAMP}\'
+fi

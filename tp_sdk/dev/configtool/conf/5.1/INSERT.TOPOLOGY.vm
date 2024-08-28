@@ -1,0 +1,60 @@
+## 
+## INSERT.TOPOLOGY.vm
+## 
+## 
+Insert into $TABLE
+(
+#foreach ($ref in $referencecolumn)
+#if ( $velocityCount == 1 ) $ref.getDataname()
+#else 
+,$ref.getDataname()
+#end
+#end
+)
+Select
+#foreach ($ref in $referencecolumn)
+#if ( $velocityCount == 1 ) $ref.getDataname()
+#else 
+,$ref.getDataname()
+#end
+#end
+#set($first = true)
+FROM
+ ${TABLE}_CURRENT curr
+WHERE
+##
+## Checking number of unique keys
+## when one then NOT IN used in insert
+## when more then NOT EXISTS used in insert
+##
+#set($one = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if ($first)  
+#set($first = false)
+#else 
+#set($one = false) 
+#end
+#end
+#end
+#set($first = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if ($first)  
+#if ($one)
+curr.$ref.getDataname() NOT IN (SELECT distinct $ref.getDataname() FROM ${TABLE}
+#else
+NOT EXISTS (SELECT tbl.$ref.getDataname() FROM ${TABLE} tbl
+WHERE curr.$ref.getDataname() = tbl.$ref.getDataname()
+#end
+#set($first = false)
+#else
+#if ($one == false)
+AND curr.$ref.getDataname() = tbl.$ref.getDataname()
+#end
+#end
+#end
+#end
+)
+;
+commit;

@@ -1,0 +1,84 @@
+## 
+## TOTAL.COUNT.vm
+## 
+## 
+delete $TargetTable.get("COUNT")_IN
+WHERE DATE_ID=$dateid
+;
+Insert into $TargetTable.get("COUNT")_IN
+(
+##
+## unique keys
+##
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("COUNT"))
+#if($first) $col.getDataname() 
+#set($first = false)
+#else,$col.getDataname()
+#end
+#end
+,DATE_ID
+,YEAR_ID
+,MONTH_ID
+,DAY_ID
+,HOUR_ID
+,DATETIME_ID
+,MIN_ID
+,TIMELEVEL
+,SESSION_ID
+,BATCH_ID
+,PERIOD_DURATION
+##
+## Aggregated Columns
+##
+#foreach($col in $TargetMeasurementCounterMap.get("COUNT"))
+,$col.getDataname()
+#end
+)
+##
+## unique keys
+##
+SELECT
+#set($first = true)
+#foreach($col in $TargetMeasurementKeyMap.get("COUNT"))
+#if($first) curr.$col.getDataname()
+#set($first = false)
+#else 
+,curr.$col.getDataname()
+#end
+#end
+,curr.DATE_ID
+,curr.YEAR_ID
+,curr.MONTH_ID
+,curr.DAY_ID
+,curr.HOUR_ID
+,curr.DATETIME_ID
+,curr.MIN_ID
+,curr.TIMELEVEL
+,curr.SESSION_ID
+,curr.BATCH_ID
+,curr.PERIOD_DURATION
+##
+## Aggregated Columns
+##
+#foreach($col in $TargetMeasurementCounterMap.get("COUNT"))
+#if("$col.getCountaggregation()" == "PEG" )
+,if prev.$col.getDataname() > curr.$col.getDataname() then null
+  else curr.$col.getDataname() - prev.$col.getDataname()
+endif
+#elseif("$col.getCountaggregation()" == "DIFF" )
+,curr.$col.getDataname() - prev.$col.getDataname()
+#else
+,curr.$col.getDataname()
+#end 
+#end
+FROM $SourceTable.get("COUNT")_ACT curr, $SourceTable.get("COUNT")_ACT prev  
+WHERE curr.DATE_ID=$dateid
+#foreach($col in $TargetMeasurementKeyMap.get("COUNT"))
+#if ($col.getUniquekey() == 1)
+AND prev.$col.getDataname() = curr.$col.getDataname()
+#end
+#end
+AND
+prev.DATETIME_ID = DATEADD(Minute, - curr.PERIOD_DURATION, curr.DATETIME_ID)
+;

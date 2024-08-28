@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>IPTNMS_CS_Plugin</comment>
+<entry key="fileNamePattern">.*.*.xml.gz</entry>
+<entry key="mainClass">com.ericsson.navigator.esm.manager.pm.file.remote.plugin.unzipper.PmFileUnzipper</entry>
+<entry key="comparator">com.ericsson.navigator.esm.model.pm.file.remote.comparator.TopCsComparator</entry>
+<entry key="port">22</entry>
+<entry key="user">USERNAME</entry>
+<entry key="enableSOEMLookup">false</entry>
+<entry key="directDownload">1</entry>
+<entry key="remoteDirectory">/opt/mv38/MV38v15.1.1/PSBNI/TAB/XML</entry>
+<entry key="remoteSubDirectory"></entry>
+<entry key="northBoundDirectory">/eniq/mediator/data/soem/dim_e_iptnms_cs</entry>
+<entry key="northBoundSubDirectory">false</entry>
+<entry key="filePerDay">false</entry>
+<entry key="filePerDayExt"></entry>
+<entry key="enableHashCode">false</entry>
+<entry key="nameComponents"></entry>
+<entry key="filePrefix"></entry>
+<entry key="maxFileTransfersPerRop">24</entry>
+</properties>

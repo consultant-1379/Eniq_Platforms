@@ -1,0 +1,152 @@
+--
+-- defines VERITAS-BULB-MIB MIB 
+--
+-- Copyright (C) 2000, 2001, by VERITAS SOFTWARE Corporation.
+-- All rights reserved.
+--
+--
+
+VERITAS-BULB-MIB DEFINITIONS ::= BEGIN
+ 
+	IMPORTS                           
+      	enterprises
+           	FROM RFC1155-SMI
+        DisplayString
+            FROM RFC1213-MIB 
+    	TRAP-TYPE
+            FROM RFC-1215;
+                
+    veritas 	OBJECT IDENTIFIER ::= { enterprises 1302 }
+    products 	OBJECT IDENTIFIER ::= { veritas 3 }
+    devices 	OBJECT IDENTIFIER ::= { products 2 }
+    veritasbulb OBJECT IDENTIFIER ::= { devices 6 }
+    -- veritasbulb MODULE-IDENTITY
+	--        LAST-UPDATED 	"0103291100Z"
+	--        ORGANIZATION 	"VERITAS Software Corp."
+	--        CONTACT-INFO 	"VERITAS Software Corp.
+	--                       1600 Plymouth Street.
+	--                       Mountain View, CA 94043 US
+	--                       Tel: +1 650 318 4464
+	--                       Email: support@veritas.com"
+	--        REVISION    	"0103291100Z"
+	--        DESCRIPTION 	"A private MIB module for VERITAS VIP Bulb sample."
+	--		  REVISION		"0106112239Z"
+	--		  DESCRIPTION	"Added varbinds for RuleName, Notification Summary and Notification Detail."
+	-- ::= { devices 6 }
+
+
+--
+--   Trap Definitions Section
+--
+
+     bulbtraps   		OBJECT IDENTIFIER ::= { veritasbulb 10 }
+      
+--   Trap Variables 
+
+     bulbtrapvars 	OBJECT IDENTIFIER ::= { bulbtraps 1 }
+ 
+     alertSeverity OBJECT-TYPE
+     		SYNTAX INTEGER {
+     			info(1),
+     			warning(2),
+     			error(3),
+     			critical(4)
+     		}
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     " 1=info,2=warning,3=error,4=critical or string"
+     ::= { bulbtrapvars 1 }
+ 
+     alertMessage OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Describes the reason for the alert."
+     ::= { bulbtrapvars 2 }
+ 
+     recommendedAction OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Describes the action(s) recommended to resolve the alert."
+     ::= { bulbtrapvars 3 }
+ 
+     friendlyAlertName OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Human Friendly version of the alert name."
+     ::= { bulbtrapvars 4 }
+ 
+      classificationName OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     ""
+     ::= { bulbtrapvars 5 }
+
+     alertDescription OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Description of the alert."
+     ::= { bulbtrapvars 6 }
+ 
+     alertTime OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (0..80))
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Events time since 00:00 Universal Coordinated Time,
+                        	 January 1, 1970"
+     ::= { bulbtrapvars 7 }
+     
+	 alertSource OBJECT-TYPE
+            SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Name of the machine where the alert originated."
+     ::= { bulbtrapvars 8 }
+
+	 dummy OBJECT-TYPE
+     		SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Dummy user-defined variable for bulb."
+     ::= { bulbtrapvars 9 }
+
+	 ruleName OBJECT-TYPE
+     		SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Name of the user defined rule that triggered this notification."
+     ::= { bulbtrapvars 10 }
+
+	 notificationSummary OBJECT-TYPE
+     		SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Short description of this notification."
+     ::= { bulbtrapvars 11 }
+
+	 notificationDetail OBJECT-TYPE
+     		SYNTAX DisplayString
+            ACCESS read-only
+            STATUS mandatory
+            DESCRIPTION     "Detailed description of this notification."
+     ::= { bulbtrapvars 12 }
+
+-- 	 Trap Definitions                
+
+     bulbtrapdefs		OBJECT IDENTIFIER ::= { bulbtraps 2 }
+
+     itsDarkNow    TRAP-TYPE
+          ENTERPRISE     bulbtrapdefs
+          VARIABLES { dummy, alertSeverity, alertMessage, recommendedAction, friendlyAlertName, classificationName,
+          			  alertDescription, alertTime, alertSource, ruleName, notificationSummary, notificationDetail }
+          DESCRIPTION       "The sample bulb provider that comes with the VERITAS Integration Platform
+          					or VIP, has posted an alert because a bulb has been turned off."
+         -- SEVERITY Critical
+         -- TOPIC event.alert.bulb.itsdarknow
+     ::= 100
+
+END

@@ -1,0 +1,9 @@
+# Install script file for universe updater application
+#
+# The install directives are defined in the following form: 
+#
+# [resource], [destination file], EXECUTE (optional), [argument 1] (optional), [argument 2] (optional) ...
+#
+# Comma (',') is used as the delimiter, and white space between tokens is ignored.
+#
+executable.bat, H:\temp\updateLauncherTest_executable.bat, EXECUTE, scriptArgument

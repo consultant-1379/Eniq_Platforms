@@ -1,0 +1,145 @@
+<project name="install" basedir="." default="all">
+
+	<!-- Tools Location -->
+	<property name="CAT" value="/usr/bin/cat"/>
+	<property name="AWK" value="/usr/bin/awk"/>
+	
+	<target name="install">
+
+		<if>
+			<available file="${dc.runtime.dir}/tomcat/webapps/techpackide" />
+			<then>
+				<delete>
+					<fileset dir="${dc.runtime.dir}/tomcat/webapps/techpackide">
+						<include name="**" />
+					</fileset>
+				</delete>
+			</then>
+		</if>
+		
+		<trycatch property="msg1">
+			<try>	
+				<forcedelete file="${dc.installer.dir}//sqlfiles/${module.name}_dwhrep_sybase_events_1.sql"/>
+			</try>
+			<catch/>
+		</trycatch>
+
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/techpackide" />
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib" />
+		<mkdir dir="${dc.runtime.dir}/tomcat/webapps/techpackide/WEB-INF" />
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib">
+			<fileset dir="${dc.installer.dir}/tmp/lib" />
+		</copy>
+		<copy todir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib">
+			<fileset dir="${dc.installer.dir}/tmp/dclib" />
+		</copy>
+
+		<exec executable="/usr/bin/bash" outputproperty="webserverHost">
+			<arg value = "-c"/>
+			<arg value = "${CAT} /etc/hosts | grep webserver"/>
+		</exec>
+		
+		<propertyregex property="webserverHostname" input="${webserverHost}" regexp="\S+[ ]+(\S+)[ ]+\S+" select="\1" casesensitive="false" />
+		<propertyregex property="webserverIp" input="${webserverHost}" regexp="(\S+)[ ]+\S+[ ]+\S+" select="\1" casesensitive="false" />
+		
+		<exec executable="/usr/bin/bash" outputproperty="dwhHost">
+			<arg value = "-c"/>
+			<arg value = "${CAT} /etc/hosts | grep dwh | ${AWK} '{print $1&quot;=&quot;$3}' | ${AWK} '{ printf &quot;%s,&quot;, $0 }'"/>
+		</exec>
+
+		<exec executable="/usr/bin/bash" outputproperty="isEventsProperty">
+			<arg value = "-c"/>
+			<arg value = "${CAT} /eniq/admin/version/eniq_status | grep -i events"/>
+		</exec>
+		
+		<!-- Copying dependency jars -->
+
+		<antcall target="copydep"><param name="jarname" value="3GPP32435"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="MDC"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="alarm"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="ascii"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="asn1"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="common"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="csexport"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="dwhmanager"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="ebs"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="engine"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="licensing"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="export"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="nascii"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="nossdb"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="omes"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="omes2"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="parser"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="repository"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="sasn"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="scheduler"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="stfiop"/></antcall>
+		<antcall target="copydep"><param name="jarname" value="xml"/></antcall>
+		
+ 		<!-- Dependencies copied -->
+		<replace file="${dc.installer.dir}/tmp/webstart/techpackide.jnlp" token="@@IP@@" value="${webserverIp}" />
+		<replace file="${dc.installer.dir}/tmp/webstart/techpackide.jnlp" token="@@VER@@" value="${module.version}" />
+		<replace file="${dc.installer.dir}/tmp/webstart/techpackide.jnlp" token="@@BLD@@" value="${module.build}" />
+		<replace file="${dc.installer.dir}/tmp/webstart/techpackide.jnlp" token="@@DWHCON@@" value="${dwhHost}" />
+		<replace file="${dc.installer.dir}/tmp/webstart/index.html" token="@@IP@@" value="${webserverIp}" />
+		<replace file="${dc.installer.dir}/tmp/webstart/index.html" token="@@SERVER@@" value="${webserverHostname}" />
+		<copy file="${dc.installer.dir}/tmp/webstart/techpackide.jnlp" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/techpackide.jnlp" />
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_blue_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/eniq_blue_banner.gif" />
+		<copy file="${dc.installer.dir}/tmp/webstart/eniq_white_banner.gif" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/eniq_white_banner.gif" />
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo.gif" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/ericsson_logo.gif" />
+		<copy file="${dc.installer.dir}/tmp/webstart/ericsson_logo_without_text.gif" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/ericsson_logo_without_text.gif" />
+		<copy file="${dc.installer.dir}/tmp/webstart/index.html" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/index.html" />
+		<copy file="${dc.installer.dir}/tmp/webstart/WEB-INF/web.xml" tofile="${dc.runtime.dir}/tomcat/webapps/techpackide/WEB-INF/web.xml" />
+		<copy file="${dc.installer.dir}/tmp/uninstall/techpackide_uninstaller" tofile="${dc.installer.dir}/techpackide_uninstaller" />
+		<chmod file="${dc.installer.dir}/techpackide_uninstaller" perm="540"/> 
+		<antcall target="run_one_sql">
+		    <param name="dbname" value="dwhrep"/>
+		    <param name="sqlfile" value="dwhrep_sybase_1.sql"/>
+		</antcall>
+		
+        <if>
+			<equals arg1="${isEventsProperty}" arg2=""/>
+		    <then>
+		    	<!-- If it is not EVENTS machine, do nothing -->
+			</then>
+			<else>
+				<antcall target="run_one_sql">
+					<param name="dbname" value="dwhrep"/>
+					<param name="sqlfile" value="dwhrep_sybase_events_1.sql"/>
+				</antcall>
+		    </else>
+		</if>
+		
+		<!-- Restart the webserver (if we have a running webserver) to get techpackide directory visible -->
+	    <if>
+	      <available file="${dc.bin.dir}/webserver"/>
+	      <then>
+            <exec dir="${dc.bin.dir}" executable="webserver">
+		      <arg line="restart"/>
+		    </exec>
+	      </then>
+	    </if>
+	</target>
+
+	<target name="update" depends="install">
+	</target>
+
+	<!-- Parameter jarname -->
+    <target name="copydep">
+    	<if>
+           <available file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/${jarname}.jar"/>
+           <then>
+              <delete file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/${jarname}.jar"/>
+           </then>
+           <else/>
+        </if>
+        
+        <copy todir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib" flatten="true">
+           <fileset dir="${dc.platform.dir}">
+              <include name="**/dclib/${jarname}.jar"/>
+           </fileset>
+        </copy>
+    </target>
+
+</project>

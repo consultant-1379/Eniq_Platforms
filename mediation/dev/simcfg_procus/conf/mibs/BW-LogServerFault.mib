@@ -1,0 +1,85 @@
+-- File Name : BW-LogServerFault.mib
+BW-LogServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201206010000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks LogServer Application."
+    REVISION    "201206010000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+    
+-- ##########################################################################################################
+-- The following LogServer fault mibs have been moved to from BroadworksFault.mib. 
+-- ##########################################################################################################    
+
+  bwPMLogServerLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the LogServer has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMLogServerLaunched, bwPMLogServerShutDown, bwPMLogServerRestarted, bwPMLogServerDeath and bwPMLogServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LogServer process"
+-- @feature:165352
+    ::=  {  systemFaults 55  }
+
+  bwPMLogServerShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the LogServer has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMLogServerLaunched, bwPMLogServerShutDown, bwPMLogServerRestarted, bwPMLogServerDeath and bwPMLogServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LogServer process"
+-- @feature:165352
+    ::=  {  systemFaults 56  }
+
+  bwPMLogServerRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the LogServer restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMLogServerLaunched, bwPMLogServerShutDown, bwPMLogServerRestarted, bwPMLogServerDeath and bwPMLogServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LogServer process"
+-- @feature:165352
+    ::=  {  systemFaults 57  }
+
+  bwPMLogServerDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the LogServer death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMLogServerLaunched, bwPMLogServerShutDown, bwPMLogServerRestarted, bwPMLogServerDeath and bwPMLogServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LogServer process"
+-- @feature:165352
+    ::=  {  systemFaults 58  }
+    
+-- ##########################################################################################################    
+    
+bwPMLogServerOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the LogServer ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMLogServerLaunched, bwPMLogServerShutDown, bwPMLogServerRestarted, bwPMLogServerDeath, and bwPMLogServerOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LogServer process"
+-- @feature:165352
+    ::=  {  systemFaults 11301  }    
+    
+
+END

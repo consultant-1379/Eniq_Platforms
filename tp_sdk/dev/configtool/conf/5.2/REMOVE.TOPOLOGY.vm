@@ -1,0 +1,61 @@
+## 
+## REMOVE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+trg.STATUS = 'DEACTIVE'
+WHERE 
+##
+## Checking number of unique keys
+## when one then NOT IN used in update
+## when more then NOT IN + concat used in update
+##
+#set($first = true)
+#set($one = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if ($first)  
+#set($first = false)
+#else 
+#set($one = false) 
+#end
+#end
+#end
+#set($first = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if($first)  
+#if($one)  
+trg.$ref.getDataname() NOT IN (SELECT distinct $ref.getDataname() FROM ${TABLE}_CURRENT)
+#else
+trg.$ref.getDataname() 
+#end
+#set($first = false)
+#else
+#if($one == false)
+||':'||trg.$ref.getDataname()
+#end
+#end
+#end
+#end
+#set($first = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if($first)  
+#if($one == false)  
+NOT IN (SELECT src.$ref.getDataname() 
+#end
+#set($first = false)
+#else
+#if($one == false)
+||':'||src.$ref.getDataname()
+#end
+#end
+#end
+#end
+#if ($one == false)
+FROM ${TABLE}_CURRENT src)
+#end
+;
+commit;

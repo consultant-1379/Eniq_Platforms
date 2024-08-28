@@ -1,0 +1,53 @@
+## $DEST --> The storage table name e.g GROUP_TYPE_E_MCC_MNC
+## $TMP -- > The temp table name e.g TMP_GROUP_TYPE_E_MCC_MNC
+## $GPN_COL --> The Group Name e.g HOME
+## $GP_KEY --> List of Keys e.g MCC, MNC
+## $SCH --> dc.
+
+insert into $SCH$DEST ( 
+    #set ($first_col = 1)
+    
+    #foreach ($colName in $ALL_GP_COLS)
+	#if( $first_col == 1 )
+	    $colName
+	    #set( $first_col = 0 )
+	#else
+	    ,$colName 
+	#end
+    #end
+)
+
+(
+    select distinct 
+    
+    #set ($first_col = 1)
+    
+    #foreach ($colName in $ALL_GP_COLS)
+	#if( $first_col == 1 )
+	    tmp.$colName
+	    #set( $first_col = 0 )
+	#else
+	    ,tmp.$colName 
+	#end
+    #end
+    
+    from $SCH$TMP tmp
+    where 
+    tmp.$GPN_COL
+	
+    #foreach ($keyName in $GP_KEY)
+	||tmp.$keyName 
+    #end
+
+    not in
+    (
+	select dest.$GPN_COL
+	#foreach ($keyName in $GP_KEY)
+	    ||dest.$keyName 
+	#end
+	
+	from 
+	$SCH$DEST dest
+    )
+)
+-- end insert

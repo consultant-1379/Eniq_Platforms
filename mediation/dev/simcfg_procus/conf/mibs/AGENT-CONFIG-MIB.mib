@@ -1,0 +1,137 @@
+
+-- File Name : AGENT-CONFIG-MIB
+-- Date      : Sat Sep 21 18:08:36 IST 2002
+-- Author    : AdventNet Agent Toolkit Java/JMX Edition - MIBEditor 5.0
+
+
+
+AGENT-CONFIG-MIB	DEFINITIONS ::= BEGIN
+	IMPORTS
+		DisplayString, RowStatus, TEXTUAL-CONVENTION
+			FROM SNMPv2-TC
+		enterprises, DisplayString
+			FROM RFC1213-MIB
+		enterprises, MODULE-IDENTITY, OBJECT-TYPE, TimeTicks, TEXTUAL-CONVENTION, Integer32
+			FROM SNMPv2-SMI;
+
+	adventnet	MODULE-IDENTITY
+		LAST-UPDATED	"9912180051Z"
+		ORGANIZATION	"AdventNet Inc"
+		CONTACT-INFO	"
+						AdventNet, Inc.
+						5645 Gibraltar Drive 
+						Pleasanton, CA 94588 USA 
+
+						Phone: +1-925-924-9500 
+						Fax: +1-925-924-9600
+
+						AdventNet Development Center (I) Pvt. Ltd.,
+						Office-A II Floor,
+						Kashyap Enclave
+						Velachery,
+						Chennai - 600 042
+						Tamil Nadu
+						INDIA
+
+						Phone: +91 44 243 2414
+
+						Email: cagent-support@adventnet.com"
+		DESCRIPTION		"This MIB contains management information of AdventNet
+				Agent Toolkit (C Edition) runtime agent. This MIB is
+				used to monitor and manage the C run time agent which
+				supports SNMP, HTTP and TL1 protocols."
+		REVISION		"9912180051Z"
+		DESCRIPTION		""
+		::=  {  enterprises  2162  }
+
+-- TEXTUAL-CONVENTIONS --
+	ProtocolOperStatus ::= TEXTUAL-CONVENTION 
+		DISPLAY-HINT	""
+		STATUS			current
+		DESCRIPTION
+			"An identifier that uniquely identifies the operational
+		status of each protocol (SNMP,TL1 and HTTP).
+		The values of Operation status are:
+
+		- Value 0 denotes that a
+		particular protocol
+		adapter is not running or is
+		not active.
+
+		- Value 1 denotes a particualr
+		prtocol
+		is functionaly active and it
+		will accept the
+		requests from the manager and
+		process them."
+		SYNTAX 			INTEGER  { notrunning ( 0 ) , running ( 1 ) } 
+
+	org	OBJECT IDENTIFIER
+		::=  {  iso  3  }
+
+	dod	OBJECT IDENTIFIER
+		::=  {  org  6  }
+
+	internet	OBJECT IDENTIFIER
+		::=  {  dod  1  }
+
+	private	OBJECT IDENTIFIER
+		::=  {  internet  4  }
+
+	enterprises	OBJECT IDENTIFIER
+		::=  {  private  1  }
+
+	products	OBJECT IDENTIFIER
+		::=  {  adventnet  10  }
+
+	agentInfo	OBJECT IDENTIFIER
+		::=  {  products  1  }
+
+	agentId	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Identification of the agent. Recomended convention is
+				agent IP address + numeric value (optional)"
+		::=  {  agentInfo  1  }
+
+	agentVersion	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Version of the agent."
+		::=  {  agentInfo  2  }
+
+	agentVendorName	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Agent vendor name."
+		::=  {  agentInfo  3  }
+
+	agentUpTime	OBJECT-TYPE	
+		SYNTAX			TimeTicks
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The time (in hundredths of a second) since the
+				network management portion of the agent was last
+				re-initialized."
+		::=  {  agentInfo  4  }
+
+	agentPlatform	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Platform (Operating System) on which the agent is running."
+		::=  {  agentInfo  5  }
+
+	agentContact	OBJECT-TYPE	
+		SYNTAX			DisplayString
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The textual identification of the contact person
+				for this managed node(agent), together with information
+				on how to contact this person."
+		::=  {  agentInfo  6  }
+
+END

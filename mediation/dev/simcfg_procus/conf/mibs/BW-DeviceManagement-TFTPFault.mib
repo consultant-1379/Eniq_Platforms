@@ -1,0 +1,78 @@
+-- File Name : BW-DeviceManagement-TFTPFault.mib
+BW-DeviceManagement-TFTPFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201206010000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks DeviceManagement-TFTP Application."
+    REVISION    "201206010000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMDMTftpLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DeviceManagement-TFTP has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMDMTftpLaunched, bwPMDMTftpShutDown, bwPMDMTftpRestarted, and bwPMDMTftpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DMTftp process"
+-- @feature:165352
+    ::=  {  systemFaults 11501  }
+
+  bwPMDMTftpShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the DeviceManagement-TFTP has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMDMTftpLaunched, bwPMDMTftpShutDown, bwPMDMTftpRestarted, and bwPMDMTftpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DMTftp process"
+-- @feature:165352
+    ::=  {  systemFaults 11502  }
+
+  bwPMDMTftpRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DeviceManagement-TFTP restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMDMTftpLaunched, bwPMDMTftpShutDown, bwPMDMTftpRestarted, and bwPMDMTftpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DMTftp process"
+-- @feature:165352
+    ::=  {  systemFaults 11503  }
+
+  bwPMDMTftpDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the DeviceManagement-TFTP death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMDMTftpLaunched, bwPMDMTftpShutDown, bwPMDMTftpRestarted, and bwPMDMTftpDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the DMTftp process"
+-- @feature:165352
+    ::=  {  systemFaults 11504  }
+    
+  bwDMTFTPMaxActiveTransfers  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "The number of active transfers exceeded the threshold level.
+@severity:high
+@subcomponent:deviceManagementTFTP"
+-- @feature:106946
+    ::=  {  systemFaults 11505  }
+    
+
+END

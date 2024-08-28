@@ -1,0 +1,11 @@
+parserType=$parserType
+baseDir=/dc/dcdata/$interfaceType/$directoryName/
+loaderDir=/dc/dcdata/etldata/
+maxFilesPerRun=0
+minFileAge=1
+afterParseAction=move
+ProcessedFiles.processedDir=/dc/dcdata/$interfaceType/$directoryName/processed/
+ProcessedFiles.fileNameFormat=
+interfaceName=$interfaceName
+outDir=/dc/dcdata/etldata/adapter_tmp/$interfaceName/
+dublicateCheck=false

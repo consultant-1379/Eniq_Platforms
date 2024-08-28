@@ -1,0 +1,1901 @@
+<html>
+<head>
+<title></title>
+<script type="text/javascript" language="JavaScript">
+<!--
+
+var PARTS    = new Array(
+"PART1",
+"PART2",
+"PART3",
+"PART4",
+"PART5",
+"PART6",
+"PART7",
+"PART8",
+"PART9",
+"PART10",
+"PART11",
+"PART12",
+"PART13",
+"PART14",
+"PART15",
+"PART16",
+"PART17",
+"PART18",
+"PART19",
+"PART20",
+"PART21",
+"PART22",
+"PART23",
+"PART24",
+"PART25",
+"PART26",
+"PART27",
+"PART28",
+"PART29",
+"PART30",
+"PART31"
+);
+
+var CHAPTERS = new Array(
+"C1",
+"C1_1",
+"C1_2",
+"C1_3",
+"C2",
+"C2_1",
+"C2_1_1",
+"C2_1_2",
+"C2_2",
+"C2_3",
+"C3",
+"C3_1",
+"C3_2",
+"C4",
+"C4_1",
+"C4_1_1",
+"C4_1_2",
+"C4_1_3",
+"C4_1_4",
+"C4_1_5",
+"C4_1_6",
+"C4_1_7",
+"C4_2",
+"C5",
+"C5_1",
+"C5_1_1",
+"C5_1_2",
+"C5_1_3",
+"C5_1_4",
+"C5_1_5",
+"C5_2",
+"C5_2_1",
+"C5_2_2",
+"C5_2_3",
+"C5_2_4",
+"C5_2_5",
+"C5_2_6",
+"C5_2_7",
+"C5_3",
+"C5_3_1",
+"C5_3_2",
+"C5_3_3",
+"C5_3_4",
+"C5_3_5",
+"C5_3_6",
+"C5_3_7",
+"C5_4",
+"C5_5",
+"C5_6",
+"C5_6_1",
+"C5_6_2",
+"C5_6_3",
+"C5_6_4",
+"C5_6_5",
+"C5_7",
+"C5_8",
+"C5_9",
+"C5_10",
+"C5_11",
+"C5_11_1",
+"C5_11_2",
+"C5_11_3",
+"C5_11_4",
+"C5_12",
+"C5_12_1",
+"C5_12_2",
+"C5_12_3",
+"C5_12_4",
+"C5_12_5",
+"C5_12_6",
+"C5_12_7",
+"C5_12_8",
+"C5_12_9",
+"C5_12_10",
+"C5_12_11",
+"C5_13",
+"C6",
+"C7",
+"C7_1",
+"C8",
+"C8_1",
+"C8_2",
+"C8_3",
+"C8_4",
+"C8_5",
+"C8_6",
+"C8_7",
+"C8_8",
+"C8_9",
+"C8_10",
+"C8_11",
+"C8_12",
+"C8_13",
+"C8_14",
+"C8_15",
+"C8_16",
+"C8_17",
+"C9",
+"C10",
+"C10_1",
+"C10_2",
+"C11",
+"C11_1",
+"C11_2",
+"C11_2_1",
+"C11_2_2",
+"C11_2_3",
+"C12",
+"C12_1",
+"C12_2",
+"C12_3",
+"C12_4",
+"C12_5",
+"C12_6",
+"C12_7",
+"C13",
+"C14",
+"C14_1",
+"C14_1_1",
+"C14_1_2",
+"C14_1_2_1",
+"C14_1_2_2",
+"C14_1_2_3",
+"C14_1_3",
+"C14_1_3_1",
+"C14_1_3_2",
+"C14_1_3_3",
+"C14_1_4",
+"C14_1_5",
+"C14_1_5_1",
+"C14_1_5_2",
+"C14_2",
+"C14_2_1",
+"C14_2_1_1",
+"C14_2_1_2",
+"C14_2_1_3",
+"C14_2_1_4",
+"C14_2_1_5",
+"C14_2_1_6",
+"C14_2_1_7",
+"C14_2_1_8",
+"C14_2_1_9",
+"C14_2_1_10",
+"C14_2_1_11",
+"C14_2_1_12",
+"C14_2_1_13",
+"C15",
+"C16",
+"C16_1",
+"C17",
+"C17_1",
+"C17_2",
+"C17_3",
+"C17_4",
+"C17_5",
+"C17_6",
+"C17_7",
+"C17_8",
+"C18",
+"C19",
+"C20",
+"C20_1",
+"C20_2",
+"C21",
+"C22",
+"C23",
+"C23_1",
+"C24",
+"C25",
+"C26",
+"C26_1",
+"C26_1_1",
+"C26_1_2",
+"C26_1_3",
+"C26_2",
+"C26_3",
+"C26_3_1",
+"C26_4",
+"C26_4_1",
+"C26_4_2",
+"C26_4_3",
+"C26_5",
+"C26_6",
+"C26_7",
+"C26_8",
+"C26_9",
+"C26_10",
+"C27",
+"C28",
+"C29",
+"C30",
+"C31"
+);
+// TR 3319 Problem with THS Back button when scaled Image is clicked
+var isScalled = 0;
+function ScaledImage() {
+	isScalled = 1;
+}
+
+var ANCH_ARRAY = new Array();
+function saveAnchor(name, location) {
+ var saveAnch = new Array(
+  name,
+  location
+ );
+ ANCH_ARRAY[ANCH_ARRAY.length] = saveAnch;
+}
+
+saveAnchor("CHAPTER1", "C1");
+saveAnchor("id_sg27", "C1");
+saveAnchor("CHAPTER1.1", "C1_1");
+saveAnchor("id_pdiq", "C1_1");
+saveAnchor("CHAPTER1.2", "C1_2");
+saveAnchor("id_8gvq", "C1_2");
+saveAnchor("CHAPTER1.3", "C1_3");
+saveAnchor("id_zhmt", "C1_3");
+saveAnchor("CHAPTER2", "C2");
+saveAnchor("id_8z9p", "C2");
+saveAnchor("RefArchitecture", "C2");
+saveAnchor("FIGURE1", "C2");
+saveAnchor("CHAPTER2.1", "C2_1");
+saveAnchor("id_lxc7", "C2_1");
+saveAnchor("CHAPTER2.1.1", "C2_1_1");
+saveAnchor("id_ilxa", "C2_1_1");
+saveAnchor("CHAPTER2.1.2", "C2_1_2");
+saveAnchor("id_rfnv", "C2_1_2");
+saveAnchor("CHAPTER2.2", "C2_2");
+saveAnchor("id_g0tu", "C2_2");
+saveAnchor("DataFlow", "C2_2");
+saveAnchor("FIGURE2", "C2_2");
+saveAnchor("CHAPTER2.3", "C2_3");
+saveAnchor("id_7kzh", "C2_3");
+saveAnchor("TableforDirectoryStructure", "C2_3");
+saveAnchor("TABLE1", "C2_3");
+saveAnchor("tnote1-1", "C2_3");
+saveAnchor("CHAPTER3", "C3");
+saveAnchor("id_mmoh", "C3");
+saveAnchor("CHAPTER3.1", "C3_1");
+saveAnchor("id_di3m", "C3_1");
+saveAnchor("CHAPTER3.2", "C3_2");
+saveAnchor("id_uki6", "C3_2");
+saveAnchor("NetAnServer", "C3_2");
+saveAnchor("CHAPTER4", "C4");
+saveAnchor("id_xpkn", "C4");
+saveAnchor("CHAPTER4.1", "C4_1");
+saveAnchor("id_oik7", "C4_1");
+saveAnchor("CHAPTER4.1.1", "C4_1_1");
+saveAnchor("id_125l", "C4_1_1");
+saveAnchor("CHAPTER4.1.2", "C4_1_2");
+saveAnchor("smf.manage", "C4_1_2");
+saveAnchor("id_figd", "C4_1_2");
+saveAnchor("CHAPTER4.1.3", "C4_1_3");
+saveAnchor("id_rhzo", "C4_1_3");
+saveAnchor("CHAPTER4.1.4", "C4_1_4");
+saveAnchor("id_bwdb", "C4_1_4");
+saveAnchor("CHAPTER4.1.5", "C4_1_5");
+saveAnchor("id_g5m3", "C4_1_5");
+saveAnchor("CHAPTER4.1.6", "C4_1_6");
+saveAnchor("id_4q8t", "C4_1_6");
+saveAnchor("CHAPTER4.1.7", "C4_1_7");
+saveAnchor("id_5ozx", "C4_1_7");
+saveAnchor("CHAPTER4.2", "C4_2");
+saveAnchor("id_qmux", "C4_2");
+saveAnchor("CHAPTER5", "C5");
+saveAnchor("AdminUI", "C5");
+saveAnchor("id_lpyi", "C5");
+saveAnchor("AdminuiGUIlinks", "C5");
+saveAnchor("TABLE2", "C5");
+saveAnchor("CHAPTER5.1", "C5_1");
+saveAnchor("id_2w0f", "C5_1");
+saveAnchor("CHAPTER5.1.1", "C5_1_1");
+saveAnchor("SystemStatus", "C5_1_1");
+saveAnchor("id_9h75", "C5_1_1");
+saveAnchor("SystemStatusView", "C5_1_1");
+saveAnchor("TABLE3", "C5_1_1");
+saveAnchor("ViewSystemStatus", "C5_1_1");
+saveAnchor("FIGURE3", "C5_1_1");
+saveAnchor("TABLE4", "C5_1_1");
+saveAnchor("ServiceStatusColourCodes", "C5_1_1");
+saveAnchor("TABLE5", "C5_1_1");
+saveAnchor("CHAPTER5.1.2", "C5_1_2");
+saveAnchor("MonitoringCommands", "C5_1_2");
+saveAnchor("id_0q5g", "C5_1_2");
+saveAnchor("ViewInstalledTechPacks", "C5_1_2");
+saveAnchor("FIGURE4", "C5_1_2");
+saveAnchor("CHAPTER5.1.3", "C5_1_3");
+saveAnchor("id_bfl3", "C5_1_3");
+saveAnchor("ViewDiskSpace", "C5_1_3");
+saveAnchor("FIGURE5", "C5_1_3");
+saveAnchor("CHAPTER5.1.4", "C5_1_4");
+saveAnchor("id_akqs", "C5_1_4");
+saveAnchor("ViewInstalledModulesUpd", "C5_1_4");
+saveAnchor("FIGURE6", "C5_1_4");
+saveAnchor("CHAPTER5.1.5", "C5_1_5");
+saveAnchor("id_x8pa", "C5_1_5");
+saveAnchor("ViewActiveProcesses", "C5_1_5");
+saveAnchor("FIGURE7", "C5_1_5");
+saveAnchor("CHAPTER5.2", "C5_2");
+saveAnchor("ShowLoadings", "C5_2");
+saveAnchor("id_uodf", "C5_2");
+saveAnchor("CHAPTER5.2.1", "C5_2_1");
+saveAnchor("CheckDataLoadStatus", "C5_2_1");
+saveAnchor("id_3lnx", "C5_2_1");
+saveAnchor("ViewLoadingStatus", "C5_2_1");
+saveAnchor("FIGURE8", "C5_2_1");
+saveAnchor("DataLoadingStatuses", "C5_2_1");
+saveAnchor("TABLE6", "C5_2_1");
+saveAnchor("CHAPTER5.2.2", "C5_2_2");
+saveAnchor("id_yu3g", "C5_2_2");
+saveAnchor("DetailedLoadingsForHour", "C5_2_2");
+saveAnchor("FIGURE9", "C5_2_2");
+saveAnchor("MainShowLoadingsForHour", "C5_2_2");
+saveAnchor("FIGURE10", "C5_2_2");
+saveAnchor("ShowLoadingsTable", "C5_2_2");
+saveAnchor("TABLE7", "C5_2_2");
+saveAnchor("CHAPTER5.2.3", "C5_2_3");
+saveAnchor("id_1gbk", "C5_2_3");
+saveAnchor("CHAPTER5.2.4", "C5_2_4");
+saveAnchor("ShowAggregations", "C5_2_4");
+saveAnchor("id_5shk", "C5_2_4");
+saveAnchor("ViewAggregations", "C5_2_4");
+saveAnchor("FIGURE11", "C5_2_4");
+saveAnchor("AggregationStatuses", "C5_2_4");
+saveAnchor("TABLE8", "C5_2_4");
+saveAnchor("StatusDiagramSuccessAggreg", "C5_2_4");
+saveAnchor("FIGURE12", "C5_2_4");
+saveAnchor("CHAPTER5.2.5", "C5_2_5");
+saveAnchor("id_0sw3", "C5_2_5");
+saveAnchor("CHAPTER5.2.6", "C5_2_6");
+saveAnchor("Reaggregation", "C5_2_6");
+saveAnchor("id_9hld", "C5_2_6");
+saveAnchor("SelectForReAggeration", "C5_2_6");
+saveAnchor("FIGURE13", "C5_2_6");
+saveAnchor("ManualAggregations", "C5_2_6");
+saveAnchor("FIGURE14", "C5_2_6");
+saveAnchor("CHAPTER5.2.7", "C5_2_7");
+saveAnchor("MonitoredTypes", "C5_2_7");
+saveAnchor("id_64xy", "C5_2_7");
+saveAnchor("CHAPTER5.3", "C5_3");
+saveAnchor("id_bldi", "C5_3");
+saveAnchor("CHAPTER5.3.1", "C5_3_1");
+saveAnchor("id_9pb4", "C5_3_1");
+saveAnchor("CHAPTER5.3.2", "C5_3_2");
+saveAnchor("id_ybz2", "C5_3_2");
+saveAnchor("DailyDatabaseMaintenence", "C5_3_2");
+saveAnchor("FIGURE15", "C5_3_2");
+saveAnchor("ViewExecutionDWHMPartitionSets", "C5_3_2");
+saveAnchor("FIGURE16", "C5_3_2");
+saveAnchor("CHAPTER5.3.3", "C5_3_3");
+saveAnchor("id_c6ba", "C5_3_3");
+saveAnchor("StartManualPartitioning", "C5_3_3");
+saveAnchor("FIGURE17", "C5_3_3");
+saveAnchor("CHAPTER5.3.4", "C5_3_4");
+saveAnchor("TypeConfiguration", "C5_3_4");
+saveAnchor("id_ollv", "C5_3_4");
+saveAnchor("PartitionStatus", "C5_3_4");
+saveAnchor("TABLE9", "C5_3_4");
+saveAnchor("CHAPTER5.3.5", "C5_3_5");
+saveAnchor("ActivateInactivateMeasTypes", "C5_3_5");
+saveAnchor("id_ryor", "C5_3_5");
+saveAnchor("ActivateInactivateTypes", "C5_3_5");
+saveAnchor("FIGURE18", "C5_3_5");
+saveAnchor("CHAPTER5.3.6", "C5_3_6");
+saveAnchor("id_797w", "C5_3_6");
+saveAnchor("AdjustStorageTimes", "C5_3_6");
+saveAnchor("FIGURE19", "C5_3_6");
+saveAnchor("CHAPTER5.3.7", "C5_3_7");
+saveAnchor("DWHConfiguration", "C5_3_7");
+saveAnchor("id_da7g", "C5_3_7");
+saveAnchor("ChangeStorageTimes", "C5_3_7");
+saveAnchor("FIGURE20", "C5_3_7");
+saveAnchor("CHAPTER5.4", "C5_4");
+saveAnchor("LoggingConfiguration", "C5_4");
+saveAnchor("id_ixjx", "C5_4");
+saveAnchor("EngineRootLogging", "C5_4");
+saveAnchor("TABLE10", "C5_4");
+saveAnchor("InterfaceLogExample", "C5_4");
+saveAnchor("TABLE11", "C5_4");
+saveAnchor("LoggingConfigurationGUI", "C5_4");
+saveAnchor("FIGURE21", "C5_4");
+saveAnchor("CHAPTER5.5", "C5_5");
+saveAnchor("SessionLogs", "C5_5");
+saveAnchor("id_4q5h", "C5_5");
+saveAnchor("SelectSessionLogSearchPars", "C5_5");
+saveAnchor("FIGURE22", "C5_5");
+saveAnchor("ViewDetailedRowInfo", "C5_5");
+saveAnchor("FIGURE23", "C5_5");
+saveAnchor("CHAPTER5.6", "C5_6");
+saveAnchor("id_5ejw", "C5_6");
+saveAnchor("CHAPTER5.6.1", "C5_6_1");
+saveAnchor("DataRowInfo", "C5_6_1");
+saveAnchor("id_tw0y", "C5_6_1");
+saveAnchor("ViewDataRowInfo", "C5_6_1");
+saveAnchor("FIGURE24", "C5_6_1");
+saveAnchor("ViewDataRowRawInfo", "C5_6_1");
+saveAnchor("FIGURE25", "C5_6_1");
+saveAnchor("CHAPTER5.6.2", "C5_6_2");
+saveAnchor("id_iw01", "C5_6_2");
+saveAnchor("DataRowSummary", "C5_6_2");
+saveAnchor("FIGURE26", "C5_6_2");
+saveAnchor("DataRowSummaryDrillDown", "C5_6_2");
+saveAnchor("FIGURE27", "C5_6_2");
+saveAnchor("CHAPTER5.6.3", "C5_6_3");
+saveAnchor("ShowReferenceTables", "C5_6_3");
+saveAnchor("id_vnhl", "C5_6_3");
+saveAnchor("ViewReferenceTables", "C5_6_3");
+saveAnchor("FIGURE28", "C5_6_3");
+saveAnchor("CHAPTER5.6.4", "C5_6_4");
+saveAnchor("BusyhourInformation", "C5_6_4");
+saveAnchor("id_fxsc", "C5_6_4");
+saveAnchor("ViewBusyHourInfo", "C5_6_4");
+saveAnchor("FIGURE29", "C5_6_4");
+saveAnchor("CHAPTER5.6.5", "C5_6_5");
+saveAnchor("RANKBHInformation", "C5_6_5");
+saveAnchor("id_djy8", "C5_6_5");
+saveAnchor("ViewRANKBHInfo", "C5_6_5");
+saveAnchor("FIGURE30", "C5_6_5");
+saveAnchor("CHAPTER5.7", "C5_7");
+saveAnchor("EBSUpgrader", "C5_7");
+saveAnchor("id_anlo", "C5_7");
+saveAnchor("ViewEBSUpgradeStatus", "C5_7");
+saveAnchor("FIGURE31", "C5_7");
+saveAnchor("InitiateUniverseUpdate", "C5_7");
+saveAnchor("FIGURE32", "C5_7");
+saveAnchor("CHAPTER5.8", "C5_8");
+saveAnchor("id_oh5k", "C5_8");
+saveAnchor("CHAPTER5.9", "C5_9");
+saveAnchor("id_n9u7", "C5_9");
+saveAnchor("CHAPTER5.10", "C5_10");
+saveAnchor("id_dmi7", "C5_10");
+saveAnchor("CHAPTER5.11", "C5_11");
+saveAnchor("BusyHourConfig", "C5_11");
+saveAnchor("id_gwg4", "C5_11");
+saveAnchor("CHAPTER5.11.1", "C5_11_1");
+saveAnchor("id_bx1x", "C5_11_1");
+saveAnchor("CHAPTER5.11.2", "C5_11_2");
+saveAnchor("SelectPlaceholder", "C5_11_2");
+saveAnchor("id_s8ur", "C5_11_2");
+saveAnchor("ProductCustomPlaceholder", "C5_11_2");
+saveAnchor("FIGURE33", "C5_11_2");
+saveAnchor("PlaceholderParameters", "C5_11_2");
+saveAnchor("TABLE12", "C5_11_2");
+saveAnchor("CHAPTER5.11.3", "C5_11_3");
+saveAnchor("UseBusyHourConfigUI", "C5_11_3");
+saveAnchor("id_6wjj", "C5_11_3");
+saveAnchor("BHCplaceholderMainUI", "C5_11_3");
+saveAnchor("FIGURE34", "C5_11_3");
+saveAnchor("BusyHourParameters", "C5_11_3");
+saveAnchor("TABLE13", "C5_11_3");
+saveAnchor("tnote13-1", "C5_11_3");
+saveAnchor("tnote13-2", "C5_11_3");
+saveAnchor("PlaceholderKeyGui", "C5_11_3");
+saveAnchor("FIGURE35", "C5_11_3");
+saveAnchor("BusyHourTypeGUI", "C5_11_3");
+saveAnchor("FIGURE36", "C5_11_3");
+saveAnchor("BusyHourTypes", "C5_11_3");
+saveAnchor("TABLE14", "C5_11_3");
+saveAnchor("BysyHourTypeParameterMatrix", "C5_11_3");
+saveAnchor("TABLE15", "C5_11_3");
+saveAnchor("CHAPTER5.11.4", "C5_11_4");
+saveAnchor("id_8u7b", "C5_11_4");
+saveAnchor("CHAPTER5.12", "C5_12");
+saveAnchor("NodeVersionUpdate", "C5_12");
+saveAnchor("id_dicm", "C5_12");
+saveAnchor("CHAPTER5.12.1", "C5_12_1");
+saveAnchor("id_nyd4", "C5_12_1");
+saveAnchor("CHAPTER5.12.2", "C5_12_2");
+saveAnchor("id_ijyv", "C5_12_2");
+saveAnchor("CHAPTER5.12.3", "C5_12_3");
+saveAnchor("id_quju", "C5_12_3");
+saveAnchor("TABLE16", "C5_12_3");
+saveAnchor("CHAPTER5.12.4", "C5_12_4");
+saveAnchor("PlaceMIMfileonENIQserv", "C5_12_4");
+saveAnchor("id_em1o", "C5_12_4");
+saveAnchor("CHAPTER5.12.5", "C5_12_5");
+saveAnchor("RunNodeVersionDelta", "C5_12_5");
+saveAnchor("id_urr6", "C5_12_5");
+saveAnchor("NodeVerUpdate", "C5_12_5");
+saveAnchor("FIGURE37", "C5_12_5");
+saveAnchor("CHAPTER5.12.6", "C5_12_6");
+saveAnchor("CreateSnapshot", "C5_12_6");
+saveAnchor("id_0iwi", "C5_12_6");
+saveAnchor("CHAPTER5.12.7", "C5_12_7");
+saveAnchor("id_a09m", "C5_12_7");
+saveAnchor("DeltaGeneration", "C5_12_7");
+saveAnchor("FIGURE38", "C5_12_7");
+saveAnchor("NodeVerUpdateUpd", "C5_12_7");
+saveAnchor("FIGURE39", "C5_12_7");
+saveAnchor("CHAPTER5.12.8", "C5_12_8");
+saveAnchor("id_84xt", "C5_12_8");
+saveAnchor("CHAPTER5.12.9", "C5_12_9");
+saveAnchor("id_bgub", "C5_12_9");
+saveAnchor("CHAPTER5.12.10", "C5_12_10");
+saveAnchor("id_lcdc", "C5_12_10");
+saveAnchor("CHAPTER5.12.11", "C5_12_11");
+saveAnchor("id_oqpn", "C5_12_11");
+saveAnchor("CHAPTER5.13", "C5_13");
+saveAnchor("INTFPollingDelayConf", "C5_13");
+saveAnchor("id_cif9", "C5_13");
+saveAnchor("Figure38", "C5_13");
+saveAnchor("PollingStartTimeConfiguration", "C5_13");
+saveAnchor("FIGURE40", "C5_13");
+saveAnchor("CHAPTER6", "C6");
+saveAnchor("id_q298", "C6");
+saveAnchor("CHAPTER7", "C7");
+saveAnchor("BusinessIntellServer", "C7");
+saveAnchor("id_uk7p", "C7");
+saveAnchor("CHAPTER7.1", "C7_1");
+saveAnchor("id_cbbd", "C7_1");
+saveAnchor("CHAPTER8", "C8");
+saveAnchor("EniqServiceCommands", "C8");
+saveAnchor("id_vzh9", "C8");
+saveAnchor("CHAPTER8.1", "C8_1");
+saveAnchor("id_4p7l", "C8_1");
+saveAnchor("CHAPTER8.2", "C8_2");
+saveAnchor("id_vpx8", "C8_2");
+saveAnchor("CHAPTER8.3", "C8_3");
+saveAnchor("id_i5p8", "C8_3");
+saveAnchor("CHAPTER8.4", "C8_4");
+saveAnchor("id_96vv", "C8_4");
+saveAnchor("CHAPTER8.5", "C8_5");
+saveAnchor("id_zl8y", "C8_5");
+saveAnchor("CHAPTER8.6", "C8_6");
+saveAnchor("shutdown", "C8_6");
+saveAnchor("id_nci4", "C8_6");
+saveAnchor("CHAPTER8.7", "C8_7");
+saveAnchor("startup", "C8_7");
+saveAnchor("id_drcr", "C8_7");
+saveAnchor("CHAPTER8.8", "C8_8");
+saveAnchor("id_4s2e", "C8_8");
+saveAnchor("CHAPTER8.9", "C8_9");
+saveAnchor("id_rq0h", "C8_9");
+saveAnchor("CHAPTER8.10", "C8_10");
+saveAnchor("id_irq4", "C8_10");
+saveAnchor("CHAPTER8.11", "C8_11");
+saveAnchor("id_863r", "C8_11");
+saveAnchor("CHAPTER8.12", "C8_12");
+saveAnchor("maintenance", "C8_12");
+saveAnchor("id_sut8", "C8_12");
+saveAnchor("CHAPTER8.13", "C8_13");
+saveAnchor("normal", "C8_13");
+saveAnchor("id_j97v", "C8_13");
+saveAnchor("CHAPTER8.14", "C8_14");
+saveAnchor("lock", "C8_14");
+saveAnchor("id_0dqc", "C8_14");
+saveAnchor("CHAPTER8.15", "C8_15");
+saveAnchor("unlock", "C8_15");
+saveAnchor("id_rs4z", "C8_15");
+saveAnchor("CHAPTER8.16", "C8_16");
+saveAnchor("id_54ps", "C8_16");
+saveAnchor("CHAPTER8.17", "C8_17");
+saveAnchor("id_ov7v", "C8_17");
+saveAnchor("CHAPTER9", "C9");
+saveAnchor("id_ruhd", "C9");
+saveAnchor("CHAPTER10", "C10");
+saveAnchor("id_4fxr", "C10");
+saveAnchor("CHAPTER10.1", "C10_1");
+saveAnchor("id_og34", "C10_1");
+saveAnchor("CHAPTER10.2", "C10_2");
+saveAnchor("id_foq0", "C10_2");
+saveAnchor("CHAPTER11", "C11");
+saveAnchor("id_rt18", "C11");
+saveAnchor("CHAPTER11.1", "C11_1");
+saveAnchor("id_t70x", "C11_1");
+saveAnchor("CHAPTER11.2", "C11_2");
+saveAnchor("id_eekv", "C11_2");
+saveAnchor("CHAPTER11.2.1", "C11_2_1");
+saveAnchor("id_lje3", "C11_2_1");
+saveAnchor("CHAPTER11.2.2", "C11_2_2");
+saveAnchor("NasdRestart", "C11_2_2");
+saveAnchor("id_xec3", "C11_2_2");
+saveAnchor("CHAPTER11.2.3", "C11_2_3");
+saveAnchor("id_codr", "C11_2_3");
+saveAnchor("CHAPTER12", "C12");
+saveAnchor("id_gssy", "C12");
+saveAnchor("CHAPTER12.1", "C12_1");
+saveAnchor("id_idf9", "C12_1");
+saveAnchor("CHAPTER12.2", "C12_2");
+saveAnchor("id_rhx9", "C12_2");
+saveAnchor("CHAPTER12.3", "C12_3");
+saveAnchor("id_74mx", "C12_3");
+saveAnchor("CHAPTER12.4", "C12_4");
+saveAnchor("id_s4y9", "C12_4");
+saveAnchor("CHAPTER12.5", "C12_5");
+saveAnchor("id_dpmi", "C12_5");
+saveAnchor("CHAPTER12.6", "C12_6");
+saveAnchor("id_0v29", "C12_6");
+saveAnchor("CHAPTER12.7", "C12_7");
+saveAnchor("restartEniqServices", "C12_7");
+saveAnchor("id_c6wx", "C12_7");
+saveAnchor("CHAPTER13", "C13");
+saveAnchor("id_rp88", "C13");
+saveAnchor("CHAPTER14", "C14");
+saveAnchor("id_tah4", "C14");
+saveAnchor("CHAPTER14.1", "C14_1");
+saveAnchor("id_gutr", "C14_1");
+saveAnchor("CHAPTER14.1.1", "C14_1_1");
+saveAnchor("id_t6at", "C14_1_1");
+saveAnchor("CHAPTER14.1.2", "C14_1_2");
+saveAnchor("id_8mmv", "C14_1_2");
+saveAnchor("CHAPTER14.1.2.1", "C14_1_2_1");
+saveAnchor("id_tezv", "C14_1_2_1");
+saveAnchor("CHAPTER14.1.2.2", "C14_1_2_2");
+saveAnchor("id_mqr2", "C14_1_2_2");
+saveAnchor("CHAPTER14.1.2.3", "C14_1_2_3");
+saveAnchor("id_mcbz", "C14_1_2_3");
+saveAnchor("CHAPTER14.1.3", "C14_1_3");
+saveAnchor("RollingSnapshotCreation", "C14_1_3");
+saveAnchor("id_pzau", "C14_1_3");
+saveAnchor("CHAPTER14.1.3.1", "C14_1_3_1");
+saveAnchor("id_7g1u", "C14_1_3_1");
+saveAnchor("CHAPTER14.1.3.2", "C14_1_3_2");
+saveAnchor("id_x1rn", "C14_1_3_2");
+saveAnchor("CHAPTER14.1.3.3", "C14_1_3_3");
+saveAnchor("id_olha", "C14_1_3_3");
+saveAnchor("CHAPTER14.1.4", "C14_1_4");
+saveAnchor("id_r6su", "C14_1_4");
+saveAnchor("CHAPTER14.1.5", "C14_1_5");
+saveAnchor("id_gmw8", "C14_1_5");
+saveAnchor("CHAPTER14.1.5.1", "C14_1_5_1");
+saveAnchor("id_65oy", "C14_1_5_1");
+saveAnchor("CHAPTER14.1.5.2", "C14_1_5_2");
+saveAnchor("id_djca", "C14_1_5_2");
+saveAnchor("CHAPTER14.2", "C14_2");
+saveAnchor("RollingSnapshotRecovery", "C14_2");
+saveAnchor("id_trfl", "C14_2");
+saveAnchor("CHAPTER14.2.1", "C14_2_1");
+saveAnchor("id_0pom", "C14_2_1");
+saveAnchor("CHAPTER14.2.1.1", "C14_2_1_1");
+saveAnchor("id_18a2", "C14_2_1_1");
+saveAnchor("CHAPTER14.2.1.2", "C14_2_1_2");
+saveAnchor("id_yc7u", "C14_2_1_2");
+saveAnchor("CHAPTER14.2.1.3", "C14_2_1_3");
+saveAnchor("id_em69", "C14_2_1_3");
+saveAnchor("CHAPTER14.2.1.4", "C14_2_1_4");
+saveAnchor("id_56dw", "C14_2_1_4");
+saveAnchor("CHAPTER14.2.1.5", "C14_2_1_5");
+saveAnchor("id_e8r7", "C14_2_1_5");
+saveAnchor("CHAPTER14.2.1.6", "C14_2_1_6");
+saveAnchor("id_aex5", "C14_2_1_6");
+saveAnchor("CHAPTER14.2.1.7", "C14_2_1_7");
+saveAnchor("id_j3f5", "C14_2_1_7");
+saveAnchor("CHAPTER14.2.1.8", "C14_2_1_8");
+saveAnchor("id_02v3", "C14_2_1_8");
+saveAnchor("CHAPTER14.2.1.9", "C14_2_1_9");
+saveAnchor("section-on-multi-blade-only", "C14_2_1_9");
+saveAnchor("id_1y0z", "C14_2_1_9");
+saveAnchor("CHAPTER14.2.1.10", "C14_2_1_10");
+saveAnchor("id_fj17", "C14_2_1_10");
+saveAnchor("CHAPTER14.2.1.11", "C14_2_1_11");
+saveAnchor("id_4x0j", "C14_2_1_11");
+saveAnchor("CHAPTER14.2.1.12", "C14_2_1_12");
+saveAnchor("id_pa8j", "C14_2_1_12");
+saveAnchor("CHAPTER14.2.1.13", "C14_2_1_13");
+saveAnchor("id_tqnz", "C14_2_1_13");
+saveAnchor("CHAPTER15", "C15");
+saveAnchor("id_mvfu", "C15");
+saveAnchor("CHAPTER16", "C16");
+saveAnchor("id_r1ng", "C16");
+saveAnchor("CHAPTER16.1", "C16_1");
+saveAnchor("id_uab8", "C16_1");
+saveAnchor("CHAPTER17", "C17");
+saveAnchor("id_habh", "C17");
+saveAnchor("licensingoverviewfigure", "C17");
+saveAnchor("fig-licoverview", "C17");
+saveAnchor("FIGURE41", "C17");
+saveAnchor("CHAPTER17.1", "C17_1");
+saveAnchor("id_0djv", "C17_1");
+saveAnchor("CHAPTER17.2", "C17_2");
+saveAnchor("id_2iot", "C17_2");
+saveAnchor("InstalledLicenseList", "C17_2");
+saveAnchor("fig-licenses", "C17_2");
+saveAnchor("FIGURE42", "C17_2");
+saveAnchor("CHAPTER17.3", "C17_3");
+saveAnchor("id_199v", "C17_3");
+saveAnchor("CHAPTER17.4", "C17_4");
+saveAnchor("id_3ygs", "C17_4");
+saveAnchor("FIGURE43", "C17_4");
+saveAnchor("CHAPTER17.5", "C17_5");
+saveAnchor("id_1jpv", "C17_5");
+saveAnchor("FIGURE44", "C17_5");
+saveAnchor("CHAPTER17.6", "C17_6");
+saveAnchor("id_o2oc", "C17_6");
+saveAnchor("CHAPTER17.7", "C17_7");
+saveAnchor("id_7ym6", "C17_7");
+saveAnchor("CHAPTER17.8", "C17_8");
+saveAnchor("id_ise9", "C17_8");
+saveAnchor("tbl-operations", "C17_8");
+saveAnchor("TABLE17", "C17_8");
+saveAnchor("CHAPTER18", "C18");
+saveAnchor("id_bioq", "C18");
+saveAnchor("CHAPTER19", "C19");
+saveAnchor("id_rot7", "C19");
+saveAnchor("CHAPTER20", "C20");
+saveAnchor("id_a0b4", "C20");
+saveAnchor("CHAPTER20.1", "C20_1");
+saveAnchor("id_rqwc", "C20_1");
+saveAnchor("ReportDevelopersGuide", "C20_1");
+saveAnchor("CHAPTER20.2", "C20_2");
+saveAnchor("id_0wg0", "C20_2");
+saveAnchor("CHAPTER21", "C21");
+saveAnchor("id_3jed", "C21");
+saveAnchor("tbl-DatabaseUsers", "C21");
+saveAnchor("TABLE18", "C21");
+saveAnchor("CHAPTER22", "C22");
+saveAnchor("ConnectdMonitor", "C22");
+saveAnchor("id_hmev", "C22");
+saveAnchor("CHAPTER23", "C23");
+saveAnchor("id_vm1u", "C23");
+saveAnchor("CHAPTER23.1", "C23_1");
+saveAnchor("id_j42k", "C23_1");
+saveAnchor("CHAPTER24", "C24");
+saveAnchor("id_ig8r", "C24");
+saveAnchor("tbl-house", "C24");
+saveAnchor("TABLE19", "C24");
+saveAnchor("CHAPTER25", "C25");
+saveAnchor("id_9m4i", "C25");
+saveAnchor("tbl-error", "C25");
+saveAnchor("TABLE20", "C25");
+saveAnchor("CHAPTER26", "C26");
+saveAnchor("id_pavy", "C26");
+saveAnchor("trblshooting", "C26");
+saveAnchor("CHAPTER26.1", "C26_1");
+saveAnchor("troublechapter", "C26_1");
+saveAnchor("troubleshooting", "C26_1");
+saveAnchor("DailyAggregation", "C26_1");
+saveAnchor("TABLE21", "C26_1");
+saveAnchor("CHAPTER26.1.1", "C26_1_1");
+saveAnchor("DailyAggregationNot", "C26_1_1");
+saveAnchor("id_tm1d", "C26_1_1");
+saveAnchor("CHAPTER26.1.2", "C26_1_2");
+saveAnchor("ConnectionLost", "C26_1_2");
+saveAnchor("id_7gwy", "C26_1_2");
+saveAnchor("CHAPTER26.1.3", "C26_1_3");
+saveAnchor("EniqServices", "C26_1_3");
+saveAnchor("id_9kz6", "C26_1_3");
+saveAnchor("CHAPTER26.2", "C26_2");
+saveAnchor("id_akax", "C26_2");
+saveAnchor("tbl-licerrors", "C26_2");
+saveAnchor("errorcodetable", "C26_2");
+saveAnchor("TABLE22", "C26_2");
+saveAnchor("CHAPTER26.3", "C26_3");
+saveAnchor("troublepartition", "C26_3");
+saveAnchor("id_dhed", "C26_3");
+saveAnchor("CHAPTER26.3.1", "C26_3_1");
+saveAnchor("id_d3qb", "C26_3_1");
+saveAnchor("CHAPTER26.4", "C26_4");
+saveAnchor("id_24am", "C26_4");
+saveAnchor("CHAPTER26.4.1", "C26_4_1");
+saveAnchor("Stopall", "C26_4_1");
+saveAnchor("stopall", "C26_4_1");
+saveAnchor("CHAPTER26.4.2", "C26_4_2");
+saveAnchor("startall", "C26_4_2");
+saveAnchor("id_hzlo", "C26_4_2");
+saveAnchor("CHAPTER26.4.3", "C26_4_3");
+saveAnchor("restartall", "C26_4_3");
+saveAnchor("id_j3el", "C26_4_3");
+saveAnchor("CHAPTER26.5", "C26_5");
+saveAnchor("dwhdbclear", "C26_5");
+saveAnchor("id_gnm0", "C26_5");
+saveAnchor("CHAPTER26.6", "C26_6");
+saveAnchor("id_25rx", "C26_6");
+saveAnchor("CHAPTER26.7", "C26_7");
+saveAnchor("id_taow", "C26_7");
+saveAnchor("CHAPTER26.8", "C26_8");
+saveAnchor("id_wv90", "C26_8");
+saveAnchor("CHAPTER26.9", "C26_9");
+saveAnchor("id_n369", "C26_9");
+saveAnchor("CHAPTER26.10", "C26_10");
+saveAnchor("id_tgof", "C26_10");
+saveAnchor("CHAPTER27", "C27");
+saveAnchor("id_ubpc", "C27");
+saveAnchor("tbl-EniqServices", "C27");
+saveAnchor("TABLE23", "C27");
+saveAnchor("CHAPTER28", "C28");
+saveAnchor("id_7ye0", "C28");
+saveAnchor("tbl-tpdir", "C28");
+saveAnchor("TABLE24", "C28");
+saveAnchor("CHAPTER29", "C29");
+saveAnchor("id_ceo3", "C29");
+saveAnchor("TABLE25", "C29");
+saveAnchor("TABLE26", "C29");
+saveAnchor("TABLE27", "C29");
+saveAnchor("CHAPTER30", "C30");
+saveAnchor("CHAPTER31", "C31");
+saveAnchor("rf-OSSGlossary", "C31");
+saveAnchor("rf-TypographicConventions", "C31");
+saveAnchor("NetworkAnalyticserver", "C31");
+saveAnchor("NetAnServerSAG", "C31");
+saveAnchor("rf-BO", "C31");
+saveAnchor("rf-ENIQUG", "C31");
+saveAnchor("EBRDocument", "C31");
+saveAnchor("EniqUpgradeProc", "C31");
+saveAnchor("ossrcsag", "C31");
+saveAnchor("OssRCNEcommissioning", "C31");
+saveAnchor("MSwebsite", "C31");
+saveAnchor("Javawebsite", "C31");
+saveAnchor("Sybasewebsite", "C31");
+saveAnchor("rf-IMSNodeCom", "C31");
+saveAnchor("BCGUserGuide", "C31");
+saveAnchor("ReportDevelopersGuideRef", "C31");
+saveAnchor("emmaSAG", "C31");
+saveAnchor("solarzfssag", "C31");
+saveAnchor("blade-ii-overview", "C31");
+saveAnchor("bladeinstall", "C31");
+saveAnchor("eniq-rack-ii", "C31");
+saveAnchor("OSSRCConfigForEniq", "C31");
+saveAnchor("LTERANLoadExpert", "C31");
+saveAnchor("RackUpgradeProcedure", "C31");
+
+
+var parallelPDF = "41543-CSA113631_UEN_PX5.html";
+
+var TOP=
+"<a name=\"TOP\"></a><!--@@noprnt-->\n" +
+"<div id=\"header\">\n" +
+"<table class=\"docinfo\">\n" +
+"<tr>\n" +
+"<td> &nbsp; &nbsp; <span class=\"fcaption\"><span class=\"caption\">SYSTEM ADMINISTRATOR GUIDE</span> &nbsp; &nbsp; &nbsp; &nbsp; 4/1543-CSA 113 63/1 Uen&nbsp;X5</span> &nbsp; &nbsp;</td>\n" +
+"</tr>\n" +
+"</table>\n" +
+"</div>\n" +
+"<!--@@/noprnt-->\n" +
+"<div id=\"content\" class=\"body-content\">\n" +
+"\n" +
+"\n" +
+"<h1 class=\"TITLE\"><a name=\"TITLE\"></a></h1><div class=\"DOCTITLE\">Ericsson Network IQ Statistics</div>\n" +
+"\n" +
+" \n" +
+"<!--@contents level=2-->\n" +
+"<p class=\"HDR\"><a name=\"CONTENTS\" onclick=\"javascript:if(!document.tocf0){document.toc0=1;document.tocf0=1;}document.toc0=show_hide_cont('toc0', 'ce_i1_0', 'ce_i2_0', document.toc0);\" title=\"Expand/collapse table of contents\"><img id=\"ce_i1_0\" class=\"ce\" src=\"CP.png\" /><img id=\"ce_i2_0\" class=\"ce\" src=\"EP.png\" style=\"display:none\" />Contents\n" +
+"</a></p><div id=\"toc0\"><table cellpadding=\"0\" class=\"TOCTBL\"><tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><b><span class=\"TOCNUM\">1</span></b></td><td><b><a href='javascript:parent.parent.sC2(\"C1\")' class=\"TOCLINK\">About This Document</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.1</span></td><td><a href='javascript:parent.parent.sC2(\"C1_1\")' class=\"TOCLINK\">Purpose</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.2</span></td><td><a href='javascript:parent.parent.sC2(\"C1_2\")' class=\"TOCLINK\">Prerequisites</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">1.3</span></td><td><a href='javascript:parent.parent.sC2(\"C1_3\")' class=\"TOCLINK\">Typographic Conventions</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">2</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C2\")' class=\"TOCLINK\">System Overview</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">2.1</span></td><td><a href='javascript:parent.parent.sC2(\"C2_1\")' class=\"TOCLINK\">ENIQ Statistics Deployments</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">2.2</span></td><td><a href='javascript:parent.parent.sC2(\"C2_2\")' class=\"TOCLINK\">Data flow on Ericsson Network IQ</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">2.3</span></td><td><a href='javascript:parent.parent.sC2(\"C2_3\")' class=\"TOCLINK\">Ericsson Network IQ directory structure</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">3</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C3\")' class=\"TOCLINK\">ENIQ System</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.1</span></td><td><a href='javascript:parent.parent.sC2(\"C3_1\")' class=\"TOCLINK\">License Agreement</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">3.2</span></td><td><a href='javascript:parent.parent.sC2(\"C3_2\")' class=\"TOCLINK\">ENIQ System</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">4</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C4\")' class=\"TOCLINK\">Administering ENIQ System</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">4.1</span></td><td><a href='javascript:parent.parent.sC2(\"C4_1\")' class=\"TOCLINK\">Monitoring ENIQ</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">4.2</span></td><td><a href='javascript:parent.parent.sC2(\"C4_2\")' class=\"TOCLINK\">Managing ENIQ System</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">5</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C5\")' class=\"TOCLINK\">AdminUI</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.1</span></td><td><a href='javascript:parent.parent.sC2(\"C5_1\")' class=\"TOCLINK\">System monitoring</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.2</span></td><td><a href='javascript:parent.parent.sC2(\"C5_2\")' class=\"TOCLINK\">Data flow monitoring</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.3</span></td><td><a href='javascript:parent.parent.sC2(\"C5_3\")' class=\"TOCLINK\">Maintenance operations</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.4</span></td><td><a href='javascript:parent.parent.sC2(\"C5_4\")' class=\"TOCLINK\">ETLC logging</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.5</span></td><td><a href='javascript:parent.parent.sC2(\"C5_5\")' class=\"TOCLINK\">Session logging</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.6</span></td><td><a href='javascript:parent.parent.sC2(\"C5_6\")' class=\"TOCLINK\">Data verification</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.7</span></td><td><a href='javascript:parent.parent.sC2(\"C5_7\")' class=\"TOCLINK\">Using EBS upgrader</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.8</span></td><td><a href='javascript:parent.parent.sC2(\"C5_8\")' class=\"TOCLINK\">EBS Configuration</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.9</span></td><td><a href='javascript:parent.parent.sC2(\"C5_9\")' class=\"TOCLINK\">Changing AdminUI default password</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.10</span></td><td><a href='javascript:parent.parent.sC2(\"C5_10\")' class=\"TOCLINK\">Adding new AdminUI users</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.11</span></td><td><a href='javascript:parent.parent.sC2(\"C5_11\")' class=\"TOCLINK\">Busy Hour Configuration</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.12</span></td><td><a href='javascript:parent.parent.sC2(\"C5_12\")' class=\"TOCLINK\">ENIQ Node Version Update</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">5.13</span></td><td><a href='javascript:parent.parent.sC2(\"C5_13\")' class=\"TOCLINK\">Polling Start Time</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">6</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C6\")' class=\"TOCLINK\">Start Day of the Week Configuration</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">7</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C7\")' class=\"TOCLINK\">Business Intelligence Server</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">7.1</span></td><td><a href='javascript:parent.parent.sC2(\"C7_1\")' class=\"TOCLINK\">Setting date prompt rules</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">8</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C8\")' class=\"TOCLINK\">ENIQ Service Commands</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.1</span></td><td><a href='javascript:parent.parent.sC2(\"C8_1\")' class=\"TOCLINK\">Changing dcuser Unix password</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.2</span></td><td><a href='javascript:parent.parent.sC2(\"C8_2\")' class=\"TOCLINK\">Shutting down DWH database</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.3</span></td><td><a href='javascript:parent.parent.sC2(\"C8_3\")' class=\"TOCLINK\">Starting up DWH database</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.4</span></td><td><a href='javascript:parent.parent.sC2(\"C8_4\")' class=\"TOCLINK\">Shutting down REP database</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.5</span></td><td><a href='javascript:parent.parent.sC2(\"C8_5\")' class=\"TOCLINK\">Starting up REP database</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.6</span></td><td><a href='javascript:parent.parent.sC2(\"C8_6\")' class=\"TOCLINK\">Shutting down AdminUI</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.7</span></td><td><a href='javascript:parent.parent.sC2(\"C8_7\")' class=\"TOCLINK\">Starting up AdminUI</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.8</span></td><td><a href='javascript:parent.parent.sC2(\"C8_8\")' class=\"TOCLINK\">Shutting down ENIQ engine</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.9</span></td><td><a href='javascript:parent.parent.sC2(\"C8_9\")' class=\"TOCLINK\">Starting up ENIQ engine</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.10</span></td><td><a href='javascript:parent.parent.sC2(\"C8_10\")' class=\"TOCLINK\">Shutting down ENIQ scheduler</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.11</span></td><td><a href='javascript:parent.parent.sC2(\"C8_11\")' class=\"TOCLINK\">Starting ENIQ scheduler</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.12</span></td><td><a href='javascript:parent.parent.sC2(\"C8_12\")' class=\"TOCLINK\">Setting ENIQ to maintenance mode</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.13</span></td><td><a href='javascript:parent.parent.sC2(\"C8_13\")' class=\"TOCLINK\">Setting ENIQ to normal mode</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.14</span></td><td><a href='javascript:parent.parent.sC2(\"C8_14\")' class=\"TOCLINK\">Locking IQ users</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.15</span></td><td><a href='javascript:parent.parent.sC2(\"C8_15\")' class=\"TOCLINK\">Unlocking IQ users</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.16</span></td><td><a href='javascript:parent.parent.sC2(\"C8_16\")' class=\"TOCLINK\">Changing Alarm Properties</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">8.17</span></td><td><a href='javascript:parent.parent.sC2(\"C8_17\")' class=\"TOCLINK\">Deactivation of Interface</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">9</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C9\")' class=\"TOCLINK\">Update OSS IP address</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">10</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C10\")' class=\"TOCLINK\">Manage ENIQ Mounts</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">10.1</span></td><td><a href='javascript:parent.parent.sC2(\"C10_1\")' class=\"TOCLINK\">Update the current mounted filesystems</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">10.2</span></td><td><a href='javascript:parent.parent.sC2(\"C10_2\")' class=\"TOCLINK\">Manage mount system</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">11</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C11\")' class=\"TOCLINK\">Change the NAS VIPs</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">11.1</span></td><td><a href='javascript:parent.parent.sC2(\"C11_1\")' class=\"TOCLINK\">Run Change NAS VIPs</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">11.2</span></td><td><a href='javascript:parent.parent.sC2(\"C11_2\")' class=\"TOCLINK\">Restart ENIQ services and NASd</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">12</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C12\")' class=\"TOCLINK\">Re-sizing NAS File System</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.1</span></td><td><a href='javascript:parent.parent.sC2(\"C12_1\")' class=\"TOCLINK\">Disable ENIQ Statistics Services</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.2</span></td><td><a href='javascript:parent.parent.sC2(\"C12_2\")' class=\"TOCLINK\">Stop ENIQ Statistics Rolling Snapshot Service</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.3</span></td><td><a href='javascript:parent.parent.sC2(\"C12_3\")' class=\"TOCLINK\">List Snapshots</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.4</span></td><td><a href='javascript:parent.parent.sC2(\"C12_4\")' class=\"TOCLINK\">Delete Snapshots</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.5</span></td><td><a href='javascript:parent.parent.sC2(\"C12_5\")' class=\"TOCLINK\">Re-sizing the NAS File System</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.6</span></td><td><a href='javascript:parent.parent.sC2(\"C12_6\")' class=\"TOCLINK\">Start ENIQ Statistics Rolling Snapshot Service</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">12.7</span></td><td><a href='javascript:parent.parent.sC2(\"C12_7\")' class=\"TOCLINK\">Restart ENIQ services</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">13</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C13\")' class=\"TOCLINK\">Migrating ENIQ to IPv6 and Probe Based IPMP</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">14</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C14\")' class=\"TOCLINK\">ENIQ Rolling Snapshots</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">14.1</span></td><td><a href='javascript:parent.parent.sC2(\"C14_1\")' class=\"TOCLINK\">Rolling Snapshot Mechanism</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">14.2</span></td><td><a href='javascript:parent.parent.sC2(\"C14_2\")' class=\"TOCLINK\">Recover Using Rolling Snapshots</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">15</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C15\")' class=\"TOCLINK\">ENIQ Backup and Restore</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">16</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C16\")' class=\"TOCLINK\">Manage DDC</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">16.1</span></td><td><a href='javascript:parent.parent.sC2(\"C16_1\")' class=\"TOCLINK\">Managing the DDC service</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">17</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C17\")' class=\"TOCLINK\">Licensing</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.1</span></td><td><a href='javascript:parent.parent.sC2(\"C17_1\")' class=\"TOCLINK\">Changing licence server</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.2</span></td><td><a href='javascript:parent.parent.sC2(\"C17_2\")' class=\"TOCLINK\">Checking installed licenses</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.3</span></td><td><a href='javascript:parent.parent.sC2(\"C17_3\")' class=\"TOCLINK\">Installing licenses from a file</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.4</span></td><td><a href='javascript:parent.parent.sC2(\"C17_4\")' class=\"TOCLINK\">Checking statuses</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.5</span></td><td><a href='javascript:parent.parent.sC2(\"C17_5\")' class=\"TOCLINK\">Viewing licensing logs</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.6</span></td><td><a href='javascript:parent.parent.sC2(\"C17_6\")' class=\"TOCLINK\">Updating the license manager</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.7</span></td><td><a href='javascript:parent.parent.sC2(\"C17_7\")' class=\"TOCLINK\">Mapping feature names</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">17.8</span></td><td><a href='javascript:parent.parent.sC2(\"C17_8\")' class=\"TOCLINK\">Overview of command line commands</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">18</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C18\")' class=\"TOCLINK\">External SQL Interface</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">19</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C19\")' class=\"TOCLINK\">ENIQ Counter Volume</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">20</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C20\")' class=\"TOCLINK\">Customization of Historical CM for ENIQ Statistics</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">20.1</span></td><td><a href='javascript:parent.parent.sC2(\"C20_1\")' class=\"TOCLINK\">OSS-RC</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">20.2</span></td><td><a href='javascript:parent.parent.sC2(\"C20_2\")' class=\"TOCLINK\">ENM</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">21</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C21\")' class=\"TOCLINK\">ENIQ Database Users</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">22</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C22\")' class=\"TOCLINK\">Connectd Monitor Daemon</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">23</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C23\")' class=\"TOCLINK\">Post Installation Activities</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">23.1</span></td><td><a href='javascript:parent.parent.sC2(\"C23_1\")' class=\"TOCLINK\">System Monitoring Agent</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">24</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C24\")' class=\"TOCLINK\">Automatic Housekeeping</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">25</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C25\")' class=\"TOCLINK\">Corrective Maintenance</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">26</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C26\")' class=\"TOCLINK\">Troubleshooting</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.1</span></td><td><a href='javascript:parent.parent.sC2(\"C26_1\")' class=\"TOCLINK\">Troubleshooting Ericsson Network IQ</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.2</span></td><td><a href='javascript:parent.parent.sC2(\"C26_2\")' class=\"TOCLINK\">Troubleshooting licensing</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.3</span></td><td><a href='javascript:parent.parent.sC2(\"C26_3\")' class=\"TOCLINK\">Troubleshooting partition issues</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.4</span></td><td><a href='javascript:parent.parent.sC2(\"C26_4\")' class=\"TOCLINK\">General Multi Blade info</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.5</span></td><td><a href='javascript:parent.parent.sC2(\"C26_5\")' class=\"TOCLINK\">Clearing dwhdb reader Services in Maintenance</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.6</span></td><td><a href='javascript:parent.parent.sC2(\"C26_6\")' class=\"TOCLINK\">Monitoring ENIQ Statistics Services using SMF</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.7</span></td><td><a href='javascript:parent.parent.sC2(\"C26_7\")' class=\"TOCLINK\">Engine Start up Hanging</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.8</span></td><td><a href='javascript:parent.parent.sC2(\"C26_8\")' class=\"TOCLINK\">Rolling Snapshot Logs</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.9</span></td><td><a href='javascript:parent.parent.sC2(\"C26_9\")' class=\"TOCLINK\">Hostsync Logs</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc2\"><td width=\"80\" align=\"left\" valign=\"top\"><span class=\"TOCNUM\">26.10</span></td><td><a href='javascript:parent.parent.sC2(\"C26_10\")' class=\"TOCLINK\">Troubleshooting Guide for Snapshot Failure</a>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">27</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C27\")' class=\"TOCLINK\">ENIQ Services</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">28</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C28\")' class=\"TOCLINK\">Appendix - Tech Pack Interface Base Directories</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td width=\"80\" align=\"left\" valign=\"top\"><br /><b><span class=\"TOCNUM\">29</span></b></td><td><br /><b><a href='javascript:parent.parent.sC2(\"C29\")' class=\"TOCLINK\">Appendix - Logging Level Information</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td valign=\"bottom\" colspan=\"2\"><br /><b><a href='javascript:parent.parent.sC2(\"C30\")' class=\"TOCLINK\">Glossary</a></b>\n" +
+"</td></tr>\n" +
+"<tr class=\"toc1\"><td valign=\"bottom\" colspan=\"2\"><br /><b><a href='javascript:parent.parent.sC2(\"C31\")' class=\"TOCLINK\">Reference List</a></b>\n" +
+"</td></tr>\n" +
+"</table>\n" +
+"</div>\n" +
+"<!--@/contents-->\n" +
+"<table width=\"100%\" class=\"copytbl\">\n" +
+"<tr><td class=\"copyhead\">Copyright</td><td class=\"copyinfo\">\n" +
+"<p>\n" +
+"&copy; LM Ericsson (LMI) 2015. All rights reserved.\n" +
+"No part of this document may be reproduced in any form without the\n" +
+"written permission of the copyright owner.</p>\n" +
+"</td></tr>\n" +
+"<tr><td class=\"copyhead\">Disclaimer</td><td class=\"copyinfo\">\n" +
+"<p>\n" +
+"The contents of this document are subject to revision\n" +
+"without notice due to continued progress in methodology, design and\n" +
+"manufacturing. Ericsson shall have no liability for any error or damage\n" +
+"of any kind resulting from the use of this document.</p>\n" +
+"<p>\n" +
+"Microsoft and Windows are either registered trademarks or trademarks\n" +
+"of Microsoft Corporation in the United States and/or other countries.</p>\n" +
+"<p>\n" +
+"BusinessObjects is a trademark of Business Objects SA in the United\n" +
+"States and other countries.</p>\n" +
+"</td></tr></table>\n" +
+"\n" +
+"<br />\n" +
+"<div class=\"hd0\"></div><div class=\"hd1\"></div>\n";
+
+TOP = TOP+"</div>\n";
+var PAGE_START=
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n" +
+"<head><meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\" /><meta name=\"HTMLPACKLINKS\" content=\"2\" />\n" +
+"\n" +
+"<title>Ericsson Network IQ Statistics</title>\n" +
+"<meta name=\"TITLE\" content=\"Ericsson Network IQ Statistics\" />\n" +
+"<meta name=\"GENERATOR\" content=\"omnifilter CAA 139 1216/11 R11X\" />\n" +
+"<meta name=\"FILTERTIME\" content=\"2015-09-18 09:01:38\" />\n" +
+"<meta name=\"SRCDOCTYPE\" content=\"XSEIF\" />\n" +
+"<meta name=\"SRCDTD\" content=\"-//ERICSSON//DTD XSEIF 1/FAD 110 05 R6//EN\" />\n" +
+"<meta name=\"APPR\" content=\"XWO (Anirudh Pundarikaksha Bhat)\" />\n" +
+"<meta name=\"BUSINESSUNIT\" content=\"&mdash;\" />\n" +
+"<meta name=\"CHECKED\" content=\"XWOAADA\" />\n" +
+"<meta name=\"CONFIDENTIALITY\" content=\"Ericsson Internal\" />\n" +
+"<meta name=\"CRIGHT\" content=\"&copy; LM Ericsson (LMI) 2015. All rights reserved. No part of this document may be reproduced in any form without the written permission of the copyright owner.\" />\n" +
+"<meta name=\"DATE\" content=\"2015-09-18\" />\n" +
+"<meta name=\"DOCNAME\" content=\"SYSTEM ADMINISTRATOR GUIDE\" />\n" +
+"<meta name=\"DOCNO\" content=\"4/1543-CSA 113 63/1 Uen\" />\n" +
+"<meta name=\"LANG\" content=\"en\" />\n" +
+"<meta name=\"PREP\" content=\"XANIRBH Anirudh Pundarikaksha Bhat\" />\n" +
+"<meta name=\"REV\" content=\"X5\" />\n" +
+"<meta name=\"SEIFDOCTYPE\" content=\"REGISTRATION\" />\n" +
+"<meta name=\"SEIFVERSION\" content=\"XSEIF R6\" />\n" +
+"<meta name=\"SUBRESP\" content=\"XNIVEDH \" />\n" +
+"<meta name=\"format-detection\" content=\"telephone=no\" />\n" +
+"<script type=\"text/javascript\" language=\"JavaScript\">window.history.forward(+1);\n" +
+"function show_hide_cont(d_id, i_id1, i_id2, fl){\n" +
+"var TOC=document.getElementById(d_id)\;\n" +
+"if (fl) {\n" +
+"TOC.style.display=\"none\"\;\n" +
+"document.getElementById(i_id1).style.display = \"none\"\;\n" +
+"document.getElementById(i_id2).style.display = \"inline\"\;\n" +
+"fl = false\;\n" +
+"} else {\n" +
+"TOC.style.display=\"inline\"\;\n" +
+"document.getElementById(i_id1).style.display = \"inline\"\;\n" +
+"document.getElementById(i_id2).style.display = \"none\"\;\n" +
+"fl = true\;\n" +
+"}\n" +
+"return fl\;\n" +
+"}\n" +
+"<\/script>\n" +
+"<link href=\"CVL.css\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+"\n";
+
+var BODY_START= "</head><bo"+"dy>";
+
+var PAGE_END="</body></html>";
+
+var bodyForIndex = "";
+if(document.layers)
+  bodyForIndex = "<bo"+"dy onresize='parent.parent.showIndex_Forced()'>\n";
+else
+  bodyForIndex = "<bo"+"dy>\n";
+
+var INDEX=
+"<html>\n" +
+"<head>\n" +
+"<title>Index</title>\n" +
+"<style type='text/css'>\n" +
+"<!--\n" +
+"a:link,a:visited{color:#004499;text-decoration:none}\n" +
+"a:hover{color:#6699CC;text-decoration:none}\n" +
+"p{font-family:helvetica,arial,sans-serif}\n" +
+"body{background-color:#FFFFFF}\n" +
+"//-->\n" +
+"</style>\n" +
+"</head>\n" +
+bodyForIndex +
+"<pre>" +
+"<font size=2>" +
+"<p>" +
+"<b>A</b><br />" +
+"<a href='javascript:parent.sC2(\"C1\")'>About This Document</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_5\")'>Activating and inactivating types</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_10\")'>Adding new AdminUI users</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_7\")'>Adjusting partition plans</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_6\")'>Adjusting storage times</a><br />" +
+"<a href='javascript:parent.sC2(\"C4\")'>Administering ENIQ System</a><br />" +
+"<a href='javascript:parent.sC2(\"C5\")'>AdminUI</a><br />" +
+"<a href='javascript:parent.sC2(\"C29\")'>Appendix - Logging Level Information</a><br />" +
+"<a href='javascript:parent.sC2(\"C28\")'>Appendix - Tech Pack Interface Base Directories</a><br />" +
+"<a href='javascript:parent.sC2(\"C24\")'>Automatic Housekeeping</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>B</b><br />" +
+"<a href='javascript:parent.sC2(\"C7\")'>Business Intelligence Server</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_11\")'>Busy Hour Configuration</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>C</b><br />" +
+"<a href='javascript:parent.sC2(\"C11\")'>Change the NAS VIPs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_9\")'>Changing AdminUI default password</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_16\")'>Changing Alarm Properties</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_1\")'>Changing dcuser Unix password</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_1\")'>Changing licence server</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1_2\")'>Check installed tech packs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1_5\")'>Checking active processes</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_4\")'>Checking aggregation statuses</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6_4\")'>Checking Busy Hour information</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_1\")'>Checking data loading statuses</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6_1\")'>Checking data row information</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6_2\")'>Checking Data Row Summary</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1_3\")'>Checking disk space</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_2\")'>Checking installed licenses</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1_4\")'>Checking installed modules</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_4\")'>Checking partition status</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6_5\")'>Checking RANKBH information</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6_3\")'>Checking reference data tables</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_4\")'>Checking statuses</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1_1\")'>Checking system status</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_2_3\")'>cleanup_eniq_backup.bsh</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_5\")'>Clearing dwhdb reader Services in Maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C22\")'>Connectd Monitor Daemon</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_1_2\")'>Connection lost to repdb database</a><br />" +
+"<a href='javascript:parent.sC2(\"C25\")'>Corrective Maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_6\")'>Create Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_3_3\")'>Creating the Rolling Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C20\")'>Customization of Historical CM for ENIQ Statistics</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>D</b><br />" +
+"<a href='javascript:parent.sC2(\"C26_1_1\")'>Daily aggregation is happening very late</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_2\")'>Daily database maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2\")'>Data flow monitoring</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_2\")'>Data flow on Ericsson Network IQ</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_6\")'>Data verification</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_17\")'>Deactivation of Interface</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_4\")'>Delete Snapshots</a><br />" +
+"<a href='javascript:parent.sC2(\"C11_2_1\")'>Disable Eniq Services</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_1\")'>Disable ENIQ Statistics Services</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_5_2\")'>Disable rolling snapshot SMF service</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_1\")'>Disable rolling snapshot SMF service</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>E</b><br />" +
+"<a href='javascript:parent.sC2(\"C5_8\")'>EBS Configuration</a><br />" +
+"<a href='javascript:parent.sC2(\"C11_2_3\")'>Enable Eniq Services</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_5_1\")'>Enable rolling snapshot SMF service</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_13\")'>Enable rolling snapshot SMF service</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_5\")'>Enabling/Disabling Rolling Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_7\")'>Engine Start up Hanging</a><br />" +
+"<a href='javascript:parent.sC2(\"C15\")'>ENIQ Backup and Restore</a><br />" +
+"<a href='javascript:parent.sC2(\"C19\")'>ENIQ Counter Volume</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_1\")'>ENIQ database maintenance</a><br />" +
+"<a href='javascript:parent.sC2(\"C21\")'>ENIQ Database Users</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12\")'>ENIQ Node Version Update</a><br />" +
+"<a href='javascript:parent.sC2(\"C14\")'>ENIQ Rolling Snapshots</a><br />" +
+"<a href='javascript:parent.sC2(\"C8\")'>ENIQ Service Commands</a><br />" +
+"<a href='javascript:parent.sC2(\"C27\")'>ENIQ Services</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_1_1\")'>ENIQ Statistics blade Deployment</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_1\")'>ENIQ Statistics Deployments</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_1_2\")'>ENIQ Statistics multi blade deployment</a><br />" +
+"<a href='javascript:parent.sC2(\"C3\")'>ENIQ System</a><br />" +
+"<a href='javascript:parent.sC2(\"C3_2\")'>ENIQ System</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_2_1\")'>eniq_rollsnapd.bsh</a><br />" +
+"<a href='javascript:parent.sC2(\"C20_2\")'>ENM</a><br />" +
+"<a href='javascript:parent.sC2(\"C2_3\")'>Ericsson Network IQ directory structure</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_4\")'>ETLC logging</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_3_3\")'>Executing partitioning manually</a><br />" +
+"<a href='javascript:parent.sC2(\"C18\")'>External SQL Interface</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>G</b><br />" +
+"<a href='javascript:parent.sC2(\"C26_4\")'>General Multi Blade info</a><br />" +
+"<a href='javascript:parent.sC2(\"C30\")'>Glossary</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>H</b><br />" +
+"<a href='javascript:parent.sC2(\"C26_9\")'>Hostsync Logs</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>I</b><br />" +
+"<a href='javascript:parent.sC2(\"C26_1_3\")'>In normal cases, during NAS fail over or SFS Reboot, the ENIQ services will be restarted automatically and do not need manual intervention. In rare cases the ENIQ services could be in a continuous maintenance state</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_3\")'>Installing licenses from a file</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>L</b><br />" +
+"<a href='javascript:parent.sC2(\"C3_1\")'>License Agreement</a><br />" +
+"<a href='javascript:parent.sC2(\"C17\")'>Licensing</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_3\")'>List Snapshots</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_14\")'>Locking IQ users</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>M</b><br />" +
+"<a href='javascript:parent.sC2(\"C5_3\")'>Maintenance operations</a><br />" +
+"<a href='javascript:parent.sC2(\"C16\")'>Manage DDC</a><br />" +
+"<a href='javascript:parent.sC2(\"C10\")'>Manage ENIQ Mounts</a><br />" +
+"<a href='javascript:parent.sC2(\"C10_2\")'>Manage mount system</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_2\")'>Managing ENIQ System</a><br />" +
+"<a href='javascript:parent.sC2(\"C16_1\")'>Managing the DDC service</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_7\")'>Mapping feature names</a><br />" +
+"<a href='javascript:parent.sC2(\"C13\")'>Migrating ENIQ to IPv6 and Probe Based IPMP</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_7\")'>Monitored Types</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1\")'>Monitoring ENIQ</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_6\")'>Monitoring ENIQ Statistics Services using SMF</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_4\")'>Monitoring file system usage</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_3\")'>Monitoring SAP IQ and ASA</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_7\")'>Monitoring the NAS filesystems (Blade only)</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_6\")'>Monitoring the NAS pool (Blade only)</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_1\")'>Monitoring the services using SMF</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_5\")'>Monitoring the ZFS pool</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>O</b><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_9\")'>On a Multi Blade Deployment Only</a><br />" +
+"<a href='javascript:parent.sC2(\"C20_1\")'>OSS-RC</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_11_1\")'>Overview</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_1\")'>Overview</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_8\")'>Overview of command line commands</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>P</b><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_4\")'>Placing MIM file on the ENIQ server</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_13\")'>Polling Start Time</a><br />" +
+"<a href='javascript:parent.sC2(\"C23\")'>Post Installation Activities</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_10\")'>Post rollback steps for ENIQ</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_2_2\")'>prepare_eniq_bkup.bsh</a><br />" +
+"<a href='javascript:parent.sC2(\"C1_2\")'>Prerequisites</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_2\")'>Prerequisites</a><br />" +
+"<a href='javascript:parent.sC2(\"C1_1\")'>Purpose</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>R</b><br />" +
+"<a href='javascript:parent.sC2(\"C12\")'>Re-sizing NAS File System</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_5\")'>Re-sizing the NAS File System</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_6\")'>Reaggregating data</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2\")'>Recover Using Rolling Snapshots</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_7\")'>Recovering SQL Anywhere (repdb) database</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_8\")'>Recovering Sybase IQ database</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1\")'>Recovering the whole system</a><br />" +
+"<a href='javascript:parent.sC2(\"C31\")'>Reference List</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_3\")'>Reloading data</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_7\")'>Restart ENIQ services</a><br />" +
+"<a href='javascript:parent.sC2(\"C11_2\")'>Restart ENIQ services and NASd</a><br />" +
+"<a href='javascript:parent.sC2(\"C11_2_2\")'>Restart NASd</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_9\")'>Restoring NVU Tech Pack</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_5\")'>Rollback NAS Rolling Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_6\")'>Rollback SAN Rolling Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_11\")'>Rollback Using Snapshot</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_4\")'>Rollback ZFS Rolling Snapshot(s)</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_3\")'>Rolling Snapshot Creation</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_3_2\")'>Rolling Snapshot daemon</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_4\")'>Rolling Snapshot Deletion</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_2\")'>Rolling Snapshot Logging</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_8\")'>Rolling Snapshot Logs</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1\")'>Rolling Snapshot Mechanism</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_3_1\")'>Root crontab entry</a><br />" +
+"<a href='javascript:parent.sC2(\"C11_1\")'>Run Change NAS VIPs</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_11\")'>Running  post rollback sets from command line</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_5\")'>Running Node Version Delta</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_7\")'>Running Node Version Update</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>S</b><br />" +
+"<a href='javascript:parent.sC2(\"C14_1_1\")'>Script Locations</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_11_2\")'>Selecting Placeholder</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_5\")'>Session logging</a><br />" +
+"<a href='javascript:parent.sC2(\"C7_1\")'>Setting date prompt rules</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_12\")'>Setting ENIQ to maintenance mode</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_13\")'>Setting ENIQ to normal mode</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_5\")'>Setting the threshold limit value</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_6\")'>Shutting down AdminUI</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_2\")'>Shutting down DWH database</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_8\")'>Shutting down ENIQ engine</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_10\")'>Shutting down ENIQ scheduler</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_4\")'>Shutting down REP database</a><br />" +
+"<a href='javascript:parent.sC2(\"C4_1_2\")'>SMF Service Management</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_3_1\")'>Solving insane partition issues</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_12\")'>Start all ENIQ services</a><br />" +
+"<a href='javascript:parent.sC2(\"C6\")'>Start Day of the Week Configuration</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_6\")'>Start ENIQ Statistics Rolling Snapshot Service</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_11\")'>Starting ENIQ scheduler</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_7\")'>Starting up AdminUI</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_3\")'>Starting up DWH database</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_9\")'>Starting up ENIQ engine</a><br />" +
+"<a href='javascript:parent.sC2(\"C8_5\")'>Starting up REP database</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_2\")'>Stop all ENIQ services</a><br />" +
+"<a href='javascript:parent.sC2(\"C14_2_1_3\")'>Stop all ENIQ System User process(s)</a><br />" +
+"<a href='javascript:parent.sC2(\"C12_2\")'>Stop ENIQ Statistics Rolling Snapshot Service</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_3\")'>Supported Tech Packs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_1\")'>System monitoring</a><br />" +
+"<a href='javascript:parent.sC2(\"C23_1\")'>System Monitoring Agent</a><br />" +
+"<a href='javascript:parent.sC2(\"C2\")'>System Overview</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>T</b><br />" +
+"<a href='javascript:parent.sC2(\"C26_4_3\")'>To restart all the services on all blades</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_4_2\")'>To start all the services on all blades</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_4_1\")'>To stop all the services on all blades</a><br />" +
+"<a href='javascript:parent.sC2(\"C26\")'>Troubleshooting</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_1\")'>Troubleshooting Ericsson Network IQ</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_10\")'>Troubleshooting Guide for Snapshot Failure</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_2\")'>Troubleshooting licensing</a><br />" +
+"<a href='javascript:parent.sC2(\"C26_3\")'>Troubleshooting partition issues</a><br />" +
+"<a href='javascript:parent.sC2(\"C1_3\")'>Typographic Conventions</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>U</b><br />" +
+"<a href='javascript:parent.sC2(\"C8_15\")'>Unlocking IQ users</a><br />" +
+"<a href='javascript:parent.sC2(\"C9\")'>Update OSS IP address</a><br />" +
+"<a href='javascript:parent.sC2(\"C10_1\")'>Update the current mounted filesystems</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_6\")'>Updating the license manager</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_11_3\")'>Using Busy Hour Configuration UI</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_7\")'>Using EBS upgrader</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"<p>" +
+"<b>V</b><br />" +
+"<a href='javascript:parent.sC2(\"C5_11_4\")'>Viewing Busy Hour GUI logs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_2_2\")'>Viewing detailed loadings</a><br />" +
+"<a href='javascript:parent.sC2(\"C17_5\")'>Viewing licensing logs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_8\")'>Viewing Node Version Update logs</a><br />" +
+"<a href='javascript:parent.sC2(\"C5_12_10\")'>Viewing Restored Node Version Update Logs</a>" +
+"</p> " ;
+
+INDEX = INDEX +
+"</font>" +
+"</pre>\n" +
+"<script type='text\/javascript' language='JavaScript'>\n" +
+"var isTreeView=false;\n" +
+"window.history.forward(+1);\n" + 
+"<\/script>\n" +
+"</body>\n" +
+"</html>";
+
+
+var chl;
+chl = new Array;
+var chlCount;
+chlCount = new Array;
+var activeFolder = "C_";
+
+var fT = 0;
+var nextNodeId = 0;
+var scrollPx = 0;
+var treeStatus = 0;
+
+function generateTree() {
+fT=cN("&nbsp;Ericsson Network IQ Statistics","C0");
+h1=aN(fT,cN("About This Document","C1"));
+h2=aN(h1,cN("Purpose","C1_1"));
+h3=aN(h1,cN("Prerequisites","C1_2"));
+h4=aN(h1,cN("Typographic Conventions","C1_3"));
+h5=aN(fT,cN("System Overview","C2"));
+h6=aN(h5,cN("ENIQ Statistics Deployments","C2_1"));
+h7=aN(h6,cN("ENIQ Statistics blade Deployment","C2_1_1"));
+h8=aN(h6,cN("ENIQ Statistics multi blade deployment","C2_1_2"));
+h9=aN(h5,cN("Data flow on Ericsson Network IQ","C2_2"));
+h10=aN(h5,cN("Ericsson Network IQ directory structure","C2_3"));
+h11=aN(fT,cN("ENIQ System","C3"));
+h12=aN(h11,cN("License Agreement","C3_1"));
+h13=aN(h11,cN("ENIQ System","C3_2"));
+h14=aN(fT,cN("Administering ENIQ System","C4"));
+h15=aN(h14,cN("Monitoring ENIQ","C4_1"));
+h16=aN(h15,cN("Monitoring the services using SMF","C4_1_1"));
+h17=aN(h15,cN("SMF Service Management","C4_1_2"));
+h18=aN(h15,cN("Monitoring SAP IQ and ASA","C4_1_3"));
+h19=aN(h15,cN("Monitoring file system usage","C4_1_4"));
+h20=aN(h15,cN("Monitoring the ZFS pool","C4_1_5"));
+h21=aN(h15,cN("Monitoring the NAS pool (Blade only)","C4_1_6"));
+h22=aN(h15,cN("Monitoring the NAS filesystems (Blade only)","C4_1_7"));
+h23=aN(h14,cN("Managing ENIQ System","C4_2"));
+h24=aN(fT,cN("AdminUI","C5"));
+h25=aN(h24,cN("System monitoring","C5_1"));
+h26=aN(h25,cN("Checking system status","C5_1_1"));
+h27=aN(h25,cN("Check installed tech packs","C5_1_2"));
+h28=aN(h25,cN("Checking disk space","C5_1_3"));
+h29=aN(h25,cN("Checking installed modules","C5_1_4"));
+h30=aN(h25,cN("Checking active processes","C5_1_5"));
+h31=aN(h24,cN("Data flow monitoring","C5_2"));
+h32=aN(h31,cN("Checking data loading statuses","C5_2_1"));
+h33=aN(h31,cN("Viewing detailed loadings","C5_2_2"));
+h34=aN(h31,cN("Reloading data","C5_2_3"));
+h35=aN(h31,cN("Checking aggregation statuses","C5_2_4"));
+h36=aN(h31,cN("Setting the threshold limit value","C5_2_5"));
+h37=aN(h31,cN("Reaggregating data","C5_2_6"));
+h38=aN(h31,cN("Monitored Types","C5_2_7"));
+h39=aN(h24,cN("Maintenance operations","C5_3"));
+h40=aN(h39,cN("ENIQ database maintenance","C5_3_1"));
+h41=aN(h39,cN("Daily database maintenance","C5_3_2"));
+h42=aN(h39,cN("Executing partitioning manually","C5_3_3"));
+h43=aN(h39,cN("Checking partition status","C5_3_4"));
+h44=aN(h39,cN("Activating and inactivating types","C5_3_5"));
+h45=aN(h39,cN("Adjusting storage times","C5_3_6"));
+h46=aN(h39,cN("Adjusting partition plans","C5_3_7"));
+h47=aN(h24,cN("ETLC logging","C5_4"));
+h48=aN(h24,cN("Session logging","C5_5"));
+h49=aN(h24,cN("Data verification","C5_6"));
+h50=aN(h49,cN("Checking data row information","C5_6_1"));
+h51=aN(h49,cN("Checking Data Row Summary","C5_6_2"));
+h52=aN(h49,cN("Checking reference data tables","C5_6_3"));
+h53=aN(h49,cN("Checking Busy Hour information","C5_6_4"));
+h54=aN(h49,cN("Checking RANKBH information","C5_6_5"));
+h55=aN(h24,cN("Using EBS upgrader","C5_7"));
+h56=aN(h24,cN("EBS Configuration","C5_8"));
+h57=aN(h24,cN("Changing AdminUI default password","C5_9"));
+h58=aN(h24,cN("Adding new AdminUI users","C5_10"));
+h59=aN(h24,cN("Busy Hour Configuration","C5_11"));
+h60=aN(h59,cN("Overview","C5_11_1"));
+h61=aN(h59,cN("Selecting Placeholder","C5_11_2"));
+h62=aN(h59,cN("Using Busy Hour Configuration UI","C5_11_3"));
+h63=aN(h59,cN("Viewing Busy Hour GUI logs","C5_11_4"));
+h64=aN(h24,cN("ENIQ Node Version Update","C5_12"));
+h65=aN(h64,cN("Overview","C5_12_1"));
+h66=aN(h64,cN("Prerequisites","C5_12_2"));
+h67=aN(h64,cN("Supported Tech Packs","C5_12_3"));
+h68=aN(h64,cN("Placing MIM file on the ENIQ server","C5_12_4"));
+h69=aN(h64,cN("Running Node Version Delta","C5_12_5"));
+h70=aN(h64,cN("Create Snapshot","C5_12_6"));
+h71=aN(h64,cN("Running Node Version Update","C5_12_7"));
+h72=aN(h64,cN("Viewing Node Version Update logs","C5_12_8"));
+h73=aN(h64,cN("Restoring NVU Tech Pack","C5_12_9"));
+h74=aN(h64,cN("Viewing Restored Node Version Update Logs","C5_12_10"));
+h75=aN(h64,cN("Rollback Using Snapshot","C5_12_11"));
+h76=aN(h24,cN("Polling Start Time","C5_13"));
+h77=aN(fT,cN("Start Day of the Week Configuration","C6"));
+h78=aN(fT,cN("Business Intelligence Server","C7"));
+h79=aN(h78,cN("Setting date prompt rules","C7_1"));
+h80=aN(fT,cN("ENIQ Service Commands","C8"));
+h81=aN(h80,cN("Changing dcuser Unix password","C8_1"));
+h82=aN(h80,cN("Shutting down DWH database","C8_2"));
+h83=aN(h80,cN("Starting up DWH database","C8_3"));
+h84=aN(h80,cN("Shutting down REP database","C8_4"));
+h85=aN(h80,cN("Starting up REP database","C8_5"));
+h86=aN(h80,cN("Shutting down AdminUI","C8_6"));
+h87=aN(h80,cN("Starting up AdminUI","C8_7"));
+h88=aN(h80,cN("Shutting down ENIQ engine","C8_8"));
+h89=aN(h80,cN("Starting up ENIQ engine","C8_9"));
+h90=aN(h80,cN("Shutting down ENIQ scheduler","C8_10"));
+h91=aN(h80,cN("Starting ENIQ scheduler","C8_11"));
+h92=aN(h80,cN("Setting ENIQ to maintenance mode","C8_12"));
+h93=aN(h80,cN("Setting ENIQ to normal mode","C8_13"));
+h94=aN(h80,cN("Locking IQ users","C8_14"));
+h95=aN(h80,cN("Unlocking IQ users","C8_15"));
+h96=aN(h80,cN("Changing Alarm Properties","C8_16"));
+h97=aN(h80,cN("Deactivation of Interface","C8_17"));
+h98=aN(fT,cN("Update OSS IP address","C9"));
+h99=aN(fT,cN("Manage ENIQ Mounts","C10"));
+h100=aN(h99,cN("Update the current mounted filesystems","C10_1"));
+h101=aN(h99,cN("Manage mount system","C10_2"));
+h102=aN(fT,cN("Change the NAS VIPs","C11"));
+h103=aN(h102,cN("Run Change NAS VIPs","C11_1"));
+h104=aN(h102,cN("Restart ENIQ services and NASd","C11_2"));
+h105=aN(h104,cN("Disable Eniq Services","C11_2_1"));
+h106=aN(h104,cN("Restart NASd","C11_2_2"));
+h107=aN(h104,cN("Enable Eniq Services","C11_2_3"));
+h108=aN(fT,cN("Re-sizing NAS File System","C12"));
+h109=aN(h108,cN("Disable ENIQ Statistics Services","C12_1"));
+h110=aN(h108,cN("Stop ENIQ Statistics Rolling Snapshot Service","C12_2"));
+h111=aN(h108,cN("List Snapshots","C12_3"));
+h112=aN(h108,cN("Delete Snapshots","C12_4"));
+h113=aN(h108,cN("Re-sizing the NAS File System","C12_5"));
+h114=aN(h108,cN("Start ENIQ Statistics Rolling Snapshot Service","C12_6"));
+h115=aN(h108,cN("Restart ENIQ services","C12_7"));
+h116=aN(fT,cN("Migrating ENIQ to IPv6 and Probe Based IPMP","C13"));
+h117=aN(fT,cN("ENIQ Rolling Snapshots","C14"));
+h118=aN(h117,cN("Rolling Snapshot Mechanism","C14_1"));
+h119=aN(h118,cN("Script Locations","C14_1_1"));
+h120=aN(h118,cN("Rolling Snapshot Logging","C14_1_2"));
+h121=aN(h120,cN("eniq_rollsnapd.bsh","C14_1_2_1"));
+h122=aN(h120,cN("prepare_eniq_bkup.bsh","C14_1_2_2"));
+h123=aN(h120,cN("cleanup_eniq_backup.bsh","C14_1_2_3"));
+h124=aN(h118,cN("Rolling Snapshot Creation","C14_1_3"));
+h125=aN(h124,cN("Root crontab entry","C14_1_3_1"));
+h126=aN(h124,cN("Rolling Snapshot daemon","C14_1_3_2"));
+h127=aN(h124,cN("Creating the Rolling Snapshot","C14_1_3_3"));
+h128=aN(h118,cN("Rolling Snapshot Deletion","C14_1_4"));
+h129=aN(h118,cN("Enabling/Disabling Rolling Snapshot","C14_1_5"));
+h130=aN(h129,cN("Enable rolling snapshot SMF service","C14_1_5_1"));
+h131=aN(h129,cN("Disable rolling snapshot SMF service","C14_1_5_2"));
+h132=aN(h117,cN("Recover Using Rolling Snapshots","C14_2"));
+h133=aN(h132,cN("Recovering the whole system","C14_2_1"));
+h134=aN(h133,cN("Disable rolling snapshot SMF service","C14_2_1_1"));
+h135=aN(h133,cN("Stop all ENIQ services","C14_2_1_2"));
+h136=aN(h133,cN("Stop all ENIQ System User process(s)","C14_2_1_3"));
+h137=aN(h133,cN("Rollback ZFS Rolling Snapshot(s)","C14_2_1_4"));
+h138=aN(h133,cN("Rollback NAS Rolling Snapshot","C14_2_1_5"));
+h139=aN(h133,cN("Rollback SAN Rolling Snapshot","C14_2_1_6"));
+h140=aN(h133,cN("Recovering SQL Anywhere (repdb) database","C14_2_1_7"));
+h141=aN(h133,cN("Recovering Sybase IQ database","C14_2_1_8"));
+h142=aN(h133,cN("On a Multi Blade Deployment Only","C14_2_1_9"));
+h143=aN(h133,cN("Post rollback steps for ENIQ","C14_2_1_10"));
+h144=aN(h133,cN("Running  post rollback sets from command line","C14_2_1_11"));
+h145=aN(h133,cN("Start all ENIQ services","C14_2_1_12"));
+h146=aN(h133,cN("Enable rolling snapshot SMF service","C14_2_1_13"));
+h147=aN(fT,cN("ENIQ Backup and Restore","C15"));
+h148=aN(fT,cN("Manage DDC","C16"));
+h149=aN(h148,cN("Managing the DDC service","C16_1"));
+h150=aN(fT,cN("Licensing","C17"));
+h151=aN(h150,cN("Changing licence server","C17_1"));
+h152=aN(h150,cN("Checking installed licenses","C17_2"));
+h153=aN(h150,cN("Installing licenses from a file","C17_3"));
+h154=aN(h150,cN("Checking statuses","C17_4"));
+h155=aN(h150,cN("Viewing licensing logs","C17_5"));
+h156=aN(h150,cN("Updating the license manager","C17_6"));
+h157=aN(h150,cN("Mapping feature names","C17_7"));
+h158=aN(h150,cN("Overview of command line commands","C17_8"));
+h159=aN(fT,cN("External SQL Interface","C18"));
+h160=aN(fT,cN("ENIQ Counter Volume","C19"));
+h161=aN(fT,cN("Customization of Historical CM for ENIQ Statistics","C20"));
+h162=aN(h161,cN("OSS-RC","C20_1"));
+h163=aN(h161,cN("ENM","C20_2"));
+h164=aN(fT,cN("ENIQ Database Users","C21"));
+h165=aN(fT,cN("Connectd Monitor Daemon","C22"));
+h166=aN(fT,cN("Post Installation Activities","C23"));
+h167=aN(h166,cN("System Monitoring Agent","C23_1"));
+h168=aN(fT,cN("Automatic Housekeeping","C24"));
+h169=aN(fT,cN("Corrective Maintenance","C25"));
+h170=aN(fT,cN("Troubleshooting","C26"));
+h171=aN(h170,cN("Troubleshooting Ericsson Network IQ","C26_1"));
+h172=aN(h171,cN("Daily aggregation is happening very late","C26_1_1"));
+h173=aN(h171,cN("Connection lost to repdb database","C26_1_2"));
+h174=aN(h171,cN("In normal cases, during NAS fail over or SFS Reboot, the ENIQ services will be restarted automatically and do not need manual intervention. In rare cases the ENIQ services could be in a continuous maintenance state","C26_1_3"));
+h175=aN(h170,cN("Troubleshooting licensing","C26_2"));
+h176=aN(h170,cN("Troubleshooting partition issues","C26_3"));
+h177=aN(h176,cN("Solving insane partition issues","C26_3_1"));
+h178=aN(h170,cN("General Multi Blade info","C26_4"));
+h179=aN(h178,cN("To stop all the services on all blades","C26_4_1"));
+h180=aN(h178,cN("To start all the services on all blades","C26_4_2"));
+h181=aN(h178,cN("To restart all the services on all blades","C26_4_3"));
+h182=aN(h170,cN("Clearing dwhdb reader Services in Maintenance","C26_5"));
+h183=aN(h170,cN("Monitoring ENIQ Statistics Services using SMF","C26_6"));
+h184=aN(h170,cN("Engine Start up Hanging","C26_7"));
+h185=aN(h170,cN("Rolling Snapshot Logs","C26_8"));
+h186=aN(h170,cN("Hostsync Logs","C26_9"));
+h187=aN(h170,cN("Troubleshooting Guide for Snapshot Failure","C26_10"));
+h188=aN(fT,cN("ENIQ Services","C27"));
+h189=aN(fT,cN("Appendix - Tech Pack Interface Base Directories","C28"));
+h190=aN(fT,cN("Appendix - Logging Level Information","C29"));
+h191=aN(fT,cN("Glossary","C30"));
+h192=aN(fT,cN("Reference List","C31"));
+}
+
+function aN(parent, child) {
+    parent[parent.length] = child;
+    return child;
+}
+
+function cN(chapterTitle, chapterLevel) {
+    var newNode;
+    newNode = new Array;
+    newNode[0] = 0;
+    newNode[1] = nextNodeId++;
+    newNode[2] = chapterTitle;
+    newNode[3] = chapterLevel;
+    return newNode;
+}
+
+function renderTree() {
+    var doc = hlextree.document;
+    doc.open();
+    doc.write("<html>\n<head>\n");
+    doc.write("<title>Tree</title>\n");
+    doc.write("<script type='text\/javascript' language='JavaScript'>\n");
+    doc.write("var isTreeView=true;\n");
+    doc.write("window.history.forward(+1);\n"); 
+    doc.write("<\/script>\n");
+    doc.write("<style type='text/css'>\n<!--\na:link,a:visited{color:#004499;text-decoration:none}\nbody{background-color:#FFFFFF}\n");
+    doc.write("a:hover{color:#6699CC;text-decoration:none}\ntd{font-family:helvetica,arial,sans-serif}\n--\>\n</style>\n");
+    doc.write("</head>\n<bo" + "dy onload='scrollTo(0," + scrollPx + ");parent.checkTree()' onresize='parent.checkTree()'>\n");
+    doc.write("<table border='0' cellspacing='0' cellpadding='0'>\n");
+    chlCount[1] = 0;
+    renderNode(fT, doc, 0, 1, "");
+    doc.write("</table>\n");
+    doc.write("\n</body>\n</html>");
+    doc.close();
+}
+
+function renderNode(foldersNode, doc, level, lastNode, leftSide) {
+    var html;
+    var image = "CF.gif";
+    treeStatus = 1;
+    var hasChildren = (foldersNode.length > 4);
+    doc.write("<tr><td nowrap>" + leftSide);
+    if (level>0) {
+      chlCount[level]++;
+      if (chl[level] == chlCount[level])
+        foldersNode[0] = 1;
+      if (lastNode) {
+        if (hasChildren) {
+          if (foldersNode[0])
+            html="<img src='CLM.gif' border=0 align=top>";
+          else
+            html="<img src='CLP.gif' border=0 align=top>";
+        }
+        else
+          html="<img src='CL.gif' border=0 align=top>";
+      }
+      else {
+        if (hasChildren) {
+          if (foldersNode[0])
+            html="<img src='CTM.gif' border=0 align=top>";
+          else
+            html="<img src='CTP.gif' border=0 align=top>";
+        }
+        else
+          html="<img src='CT.gif' border=0 align=top>";
+      }
+      if (hasChildren) {
+        html = "<a href='javascript:parent.tN(" + foldersNode[1] + ")'>" + html + "</a>";
+      }
+      doc.write(html);
+      if (lastNode)
+        leftSide = leftSide + "<img src='BL.gif' align=top>";
+      else
+        leftSide = leftSide + "<img src='LI.gif' align=top>";
+    }
+    else
+      image = "DF.gif";
+
+    html = "<a href='javascript:parent.sC(\"" + foldersNode[3] + "\")'><img src='" + image + "' name='" + foldersNode[3] + "' border=0 align=top>";
+    doc.write(html + "<font size=2> " + foldersNode[2] + "</font></a></td></tr>\n");
+
+    if (hasChildren && foldersNode[0]) {
+      var i=0;
+      level++;
+      chlCount[level] = 0;
+
+      for (i=4; i<foldersNode.length;i++) {
+        if (i==foldersNode.length-1)
+          renderNode(foldersNode[i], doc, level, 1, leftSide);
+        else
+          renderNode(foldersNode[i], doc, level, 0, leftSide);
+      }
+    }
+}
+
+function clickOnFolderRec(foldersNode, nodeId) {
+    if (foldersNode[1] == nodeId) {
+      if (foldersNode[0])
+        foldersNode[0] = 0;
+      else
+        foldersNode[0] = 1;
+    }
+    else {
+      var i=0;
+      if (foldersNode.length) {
+        for (i=4; i<foldersNode.length; i++)
+          clickOnFolderRec(foldersNode[i], nodeId);
+      }
+    }
+}
+
+function tN(nodeId) {
+    clickOnFolderRec(fT, nodeId);
+    if (navigator.appVersion.indexOf('MSIE') == -1)
+      scrollPx = hlextree.pageYOffset;
+    else
+      scrollPx = hlextree.document.body.scrollTop;
+
+    parseChapterLevels("");
+    setTimeout("renderTree()", 1);
+    folderAct(activeFolder);
+}
+
+function parseChapterLevels(chapterLevel) {
+    chl[1] = "";
+    chl[2] = "";
+    chl[3] = "";
+    chl[4] = "";
+    chl[5] = "";
+
+    if ((chapterLevel) && (chapterLevel.length)) {
+      var i=1;
+      var j=1;
+      for (i=1; i<chapterLevel.length; i++)
+        if (chapterLevel.substr(i,1) == "_")
+          j++;
+        else
+          chl[j] = chl[j] + chapterLevel.substr(i,1);
+    }
+}
+
+function folderAct(imageName) {
+    if (imageName != activeFolder) {
+      if (hlextree.document [activeFolder])
+        if (activeFolder == "C0")
+          hlextree.document [activeFolder].src = parent.DF.src;
+        else
+          hlextree.document [activeFolder].src = parent.CF.src;
+
+      activeFolder = imageName;
+    }
+    if (hlextree.document [activeFolder])
+      if (activeFolder == "C0")
+        hlextree.document [activeFolder].src = parent.BF.src;
+      else
+        hlextree.document [activeFolder].src = parent.AF.src;
+}
+
+function checkTree() {
+    if (treeStatus == 0) {
+      initializeTree();
+      setTimeout("renderTree()", 1);
+    }
+    else
+      folderAct(activeFolder);
+}
+
+function initializeTree() {
+    nextNodeId = 0;
+    generateTree();
+    fT[0] = 1;
+}
+
+function showTree(chapterLevel) {
+    if (treeStatus == 0)
+      initializeTree();
+    if (navigator.appVersion.indexOf('MSIE') == -1)
+      scrollPx = hlextree.pageYOffset;
+    else
+      scrollPx = hlextree.document.body.scrollTop;
+    parseChapterLevels(chapterLevel);
+    setTimeout("renderTree()", 1);
+    folderAct(chapterLevel);
+}
+
+function sC(chapterLevel) {
+    folderAct(chapterLevel);
+    parent.showChapter(chapterLevel, false);
+}
+
+function sC2(chapterLevel) {
+    folderAct(chapterLevel);
+    parent.showChapter(chapterLevel, true);
+}
+
+var histArray = new Array();
+var currentChapter = "";
+
+if(document.layers) {
+  window.onresize=updateOldNetscape;
+  function updateOldNetscape() {
+    if(parent.hlexmain.hlexdoc && parent.hlexmain.hlexdoc.isHelp)
+      setTimeout("parent.showHelp()", 1);
+    else
+      setTimeout("parent.writeChap(currentChapter, false, false)", 1);
+    if(parent.canEnableTree())
+      setTimeout("parent.showIndex_Forced()", 1);
+    setTimeout("refreshToolbar()", 200);
+  }
+}
+
+function refreshToolbar() {
+  parent.hlextbar.location.href = parent.hlextbar.location.href;
+}
+
+//-->
+</script>
+</head>
+<frameset cols="309, *" frameborder="1" framespacing="3" border="6" bordercolor="#eeeeee">
+<frame src="hlex_tree.html" name="hlextree" marginwidth="5" marginheight="5">
+<frame src="hlex_dummy.html" name="hlexdummy" marginwidth="5" marginheight="5">
+</frameset>
+</html>

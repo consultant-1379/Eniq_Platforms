@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/dbunit/dbunit/v2_2/prod/dbunit-2.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_management/build/disk_manager/diskmanager.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_adapters/build/csexport/csexport.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_mediation/build/mediation/mediation.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_mediation/build/uncompress/uncompress.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_alarm_module/build/alarm_module/alarm.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_management/build/dwh_manager/dwhmanager.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_etl_controller/build/scheduler/scheduler.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_adapters/build/asn1/asn1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/jakarta_velocity/v1_4/prod/velocity-dep-1.4.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/log4j/v1_2_11/prod/log4j-1.2.11.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/junit/v4_5/prod/junit-4.5.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/sybase/sybase_iq/v12_7/client/prod/jconn3.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_licensing/build/licensing/licensing.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_management/build/ebsmanager/ebsmanager.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_mediation/build/export/export.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_monitoring_aggregation/build/monitoring/monitoring.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/hsqldb/prod/hsqldb.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_common_utilities/build/common_utilities/common.jar" sourcepath="/VIEW_PATH"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_adapters/build/parser/parser.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/bsh-core-2.0b4.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/cglib-2.1_3-src.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/hamcrest-library-1.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-junit3-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-junit4-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-legacy-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-script-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/objenesis-1.0.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_installer/build/repository/repository.jar" sourcepath="VIEW_PATH/installer/dev/repository"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

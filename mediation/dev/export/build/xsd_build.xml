@@ -1,0 +1,15 @@
+<project name="private_gpmgt" default="compile_schema">
+  <property name="classes" value="cls"/>
+  <property name="gen.src" value="src"/>
+  <property name="schema.file" value="jar/xsd/group_management.xsd"/>
+  <property name="schema.package" value="com.distocraft.dc5000.etl.importexport.gpmgt"/>
+  <target name="compile_schema">
+		<exec executable="xjc">
+			<arg value="-d"/>
+			<arg value="${gen.src}"/>
+			<arg value="-p"/>
+			<arg value="${schema.package}"/>
+			<arg value="${schema.file}"/>
+		</exec>
+	</target>
+</project>

@@ -1,0 +1,657 @@
+ERICSSON-MPE-WAP-STACK-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeWapStackPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201312111700Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and states of the WAP Stack 
+                    functionality."
+::= { mpeModules 15 }
+
+wapStackPmObjects  OBJECT IDENTIFIER ::= { mpeWapStackPmModule 1 }
+
+wapCommon  OBJECT IDENTIFIER ::= { wapStackPmObjects 1 }
+
+transaction  OBJECT IDENTIFIER ::= { wapStackPmObjects 2 }
+
+session  OBJECT IDENTIFIER ::= { wapStackPmObjects 3 }
+
+secureTrans  OBJECT IDENTIFIER ::= { wapStackPmObjects 4 }
+
+pushProvider  OBJECT IDENTIFIER ::= { wapStackPmObjects 5 }
+
+wapStackPmConformance  OBJECT IDENTIFIER ::= { mpeWapStackPmModule 3 }
+
+wapStackPmGroups  OBJECT IDENTIFIER ::= { wapStackPmConformance 1 }
+
+wapStackPmCompliances  OBJECT IDENTIFIER ::= { wapStackPmConformance 2 }
+
+wapCommonTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF WapCommonEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the WAP stack module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless)."
+::= { wapCommon 1 } 
+
+wapCommonEntry OBJECT-TYPE
+   SYNTAX          WapCommonEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The counters and events that are common for all 
+                    instances of the WAP Stack."
+   INDEX { applIndex }
+::= { wapCommonTable  1 }
+
+WapCommonEntry  ::= SEQUENCE
+{
+   wapCommonConfigError           ItuPerceivedSeverity,
+   wapCommonEventQueueFull        ItuPerceivedSeverity,
+   wapCommonUdpRecvBufSizeProblem ItuPerceivedSeverity,
+   wapCommonEventQueueLength      Gauge32,
+   wapCommonUdpReceivedDatagrams  Counter32,
+   wapCommonUdpSentDatagrams      Counter32,
+   wapCommonSmsReceivedDatagrams  Counter32,
+   wapCommonSmsSentDatagrams      Counter32,
+   wapCommonIgnoredDatagrams      Counter32,
+   wapCommonPortBindFailed        ItuPerceivedSeverity
+}
+
+wapCommonConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "An error occured when accessing a configuration 
+                    parameter or its value."
+::= { wapCommonEntry 1 }
+
+wapCommonEventQueueFull  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The maximum number of elements in the WAP Stack event 
+                    queue is very close to or has reached the allowed 
+                    limit."
+::= { wapCommonEntry 2 }
+
+wapCommonUdpRecvBufSizeProblem  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The UDP receive buffer size could not be increased."
+::= { wapCommonEntry 3 }
+
+wapCommonEventQueueLength  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the current length of the WAP stack 
+                    event queue."
+::= { wapCommonEntry 4 }
+
+wapCommonUdpReceivedDatagrams  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of UDP received 
+                    datagrams.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { wapCommonEntry 5 }
+
+wapCommonUdpSentDatagrams  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of UDP sent datagrams.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { wapCommonEntry 6 }
+
+wapCommonSmsReceivedDatagrams  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of SMS received 
+                    datagrams.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { wapCommonEntry 7 }
+
+wapCommonSmsSentDatagrams  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of SMS sent datagrams.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { wapCommonEntry 8 }
+
+wapCommonIgnoredDatagrams  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of ignored datagrams.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { wapCommonEntry 9 }
+
+wapCommonPortBindFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The bind of the listening port for all WAP stacks 
+                    failed."
+::= { wapCommonEntry 10 }
+
+transactionTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TransactionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the WTP layer of the WAP stack module 
+                    (1=Secure Connection Oriented, 
+                    3=Connection-Oriented)."
+::= { transaction 1 } 
+
+transactionEntry OBJECT-TYPE
+   SYNTAX          TransactionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The counters and events of the WAP Stack's 
+                    Transaction layer (WTP)."
+   INDEX { applIndex }
+::= { transactionTable  1 }
+
+TransactionEntry  ::= SEQUENCE
+{
+   transactionActive               Gauge32,
+   transactionSuccessful           Counter32,
+   transactionUdpRetransmissions   Counter32,
+   transactionUdpDuplicateRemovals Counter32,
+   transactionSmsRetransmissions   Counter32,
+   transactionSmsDuplicateRemovals Counter32,
+   transactionClientAborted        Counter32,
+   transactionServerAborted        Counter32,
+   transactionMaxNoOfTransReached  ItuPerceivedSeverity
+}
+
+transactionActive  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of active transactions."
+::= { transactionEntry 1 }
+
+transactionSuccessful  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of successful 
+                    transactions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 2 }
+
+transactionUdpRetransmissions  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of UDP retransmissions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 3 }
+
+transactionUdpDuplicateRemovals  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of UDP duplicate 
+                    removals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 4 }
+
+transactionSmsRetransmissions  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of SMS retransmissions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 5 }
+
+transactionSmsDuplicateRemovals  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of SMS duplicate 
+                    removals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 6 }
+
+transactionClientAborted  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of client aborted 
+                    transactions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 7 }
+
+transactionServerAborted  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of server aborted 
+                    transactions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { transactionEntry 8 }
+
+transactionMaxNoOfTransReached  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The maximum number of WTP transaction objects is 
+                    close to or has reached the allowed limit, i.e. there are 
+                    no more transaction objects left in the WTP pool."
+::= { transactionEntry 9 }
+
+sessionTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SessionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the WAP stack module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless)."
+::= { session 1 } 
+
+sessionEntry OBJECT-TYPE
+   SYNTAX          SessionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The counters and events of the WAP Stack's Session 
+                    layer (WSP)."
+   INDEX { applIndex }
+::= { sessionTable  1 }
+
+SessionEntry  ::= SEQUENCE
+{
+   sessionActive             Gauge32,
+   sessionGetUnitMethods     Counter32,
+   sessionPostUnitMethods    Counter32,
+   sessionOtherUnitMethods   Counter32,
+   sessionConnects           Counter32,
+   sessionDisconnects        Counter32,
+   sessionGetMethods         Counter32,
+   sessionPostMethods        Counter32,
+   sessionOtherMethods       Counter32,
+   sessionRemoved            Counter32,
+   sessionMaxNoOfSessReached ItuPerceivedSeverity
+}
+
+sessionActive  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of active sessions."
+::= { sessionEntry 1 }
+
+sessionGetUnitMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of GET unit methods, 
+                    i.e. the frequency of GET operations in connectionless 
+                    mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 2 }
+
+sessionPostUnitMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of POST unit methods, 
+                    i.e. the frequency of POST operations in connectionless 
+                    mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 3 }
+
+sessionOtherUnitMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of other unit methods, 
+                    i.e. the frequency of PUT, OPTIONS, HEAD, DELETE, and 
+                    TRACE operations in connectionless mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 4 }
+
+sessionConnects  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of connects.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 5 }
+
+sessionDisconnects  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of disconnects.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 6 }
+
+sessionGetMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of GET methods, i.e. 
+                    the frequency of GET operations in connection-oriented 
+                    mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 7 }
+
+sessionPostMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of POST methods, i.e. 
+                    the frequency of POST operations in connection-oriented 
+                    mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 8 }
+
+sessionOtherMethods  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of other methods, i.e. 
+                    the frequency of PUT, OPTIONS, HEAD, DELETE, and TRACE 
+                    operations in connection-oriented mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 9 }
+
+sessionRemoved  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of removed sessions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { sessionEntry 10 }
+
+sessionMaxNoOfSessReached  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of used WSP session objects is very close 
+                    to or has reached the allowed limit, i.e. all session 
+                    objects are already in use."
+::= { sessionEntry 11 }
+
+secureTransTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SecureTransEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the WTLS layer of the WAP stack module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless)."
+::= { secureTrans 1 } 
+
+secureTransEntry OBJECT-TYPE
+   SYNTAX          SecureTransEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The counters and events of the WAP Stack's Secure 
+                    Transaction layer (WTLS)."
+   INDEX { applIndex }
+::= { secureTransTable  1 }
+
+SecureTransEntry  ::= SEQUENCE
+{
+   secureTransConnections          Gauge32,
+   secureTransSessions             Gauge32,
+   secureTransUdpDuplicateRemovals Counter32,
+   secureTransSmsDuplicateRemovals Counter32,
+   secureTransServerAlerts         Counter32,
+   secureTransClientAlerts         Counter32,
+   secureTransWtlsCertKeyProblem   ItuPerceivedSeverity,
+   secureTransWtlsCertFileProblem  ItuPerceivedSeverity,
+   secureTransMaxNoOfConnReached   ItuPerceivedSeverity,
+   secureTransMaxNoOfSessReached   ItuPerceivedSeverity,
+   secureTransWtlsEncryptProblem   ItuPerceivedSeverity
+}
+
+secureTransConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of active connections."
+::= { secureTransEntry 1 }
+
+secureTransSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the number of active sessions."
+::= { secureTransEntry 2 }
+
+secureTransUdpDuplicateRemovals  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of UPD duplicate 
+                    removals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { secureTransEntry 3 }
+
+secureTransSmsDuplicateRemovals  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of SMS duplicate 
+                    removals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { secureTransEntry 4 }
+
+secureTransServerAlerts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of server alerts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { secureTransEntry 5 }
+
+secureTransClientAlerts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter holding the frequency of client alerts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { secureTransEntry 6 }
+
+secureTransWtlsCertKeyProblem  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "An error was found in a WTLS certificate key file."
+::= { secureTransEntry 7 }
+
+secureTransWtlsCertFileProblem  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "An error was found in a WTLS certificate file."
+::= { secureTransEntry 8 }
+
+secureTransMaxNoOfConnReached  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The maximum number of WTLS connection objects is very 
+                    close to or has reached the allowed limit, i.e. all 
+                    connection objects are already in use."
+::= { secureTransEntry 9 }
+
+secureTransMaxNoOfSessReached  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The maximum number of WTLS session objects is very 
+                    close to or has reached the allowed limit, i.e. all 
+                    session objects are already in use."
+::= { secureTransEntry 10 }
+
+secureTransWtlsEncryptProblem  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "WTLS could not encrypt the data correctly."
+::= { secureTransEntry 11 }
+
+pushProviderTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PushProviderEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the WAP stack module 
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless, 3=Connection-Oriented, 4=Connectionless)."
+::= { pushProvider 1 } 
+
+pushProviderEntry OBJECT-TYPE
+   SYNTAX          PushProviderEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The counters and events of the WAP Stack's Push 
+                    Provider."
+   INDEX { applIndex }
+::= { pushProviderTable  1 }
+
+PushProviderEntry  ::= SEQUENCE
+{
+   pushProviderConfigError ItuPerceivedSeverity,
+   pushProviderSocketError ItuPerceivedSeverity
+}
+
+pushProviderConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A configuration error has occurred."
+::= { pushProviderEntry 1 }
+
+pushProviderSocketError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A socket communication error has occurred."
+::= { pushProviderEntry 2 }
+
+-- Compliance Statements
+
+wapStackCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for wap stack."
+   MODULE          -- this module
+   MANDATORY-GROUPS {wapStackConfGroup}
+::= { wapStackPmCompliances 1 }
+
+-- Units of Conformance
+
+wapStackConfGroup OBJECT-GROUP
+   OBJECTS { wapCommonConfigError,
+             wapCommonEventQueueFull,
+             wapCommonUdpRecvBufSizeProblem,
+             wapCommonEventQueueLength,
+             wapCommonUdpReceivedDatagrams,
+             wapCommonUdpSentDatagrams,
+             wapCommonSmsReceivedDatagrams,
+             wapCommonSmsSentDatagrams,
+             wapCommonIgnoredDatagrams,
+             wapCommonPortBindFailed,
+             transactionActive,
+             transactionSuccessful,
+             transactionUdpRetransmissions,
+             transactionUdpDuplicateRemovals,
+             transactionSmsRetransmissions,
+             transactionSmsDuplicateRemovals,
+             transactionClientAborted,
+             transactionServerAborted,
+             transactionMaxNoOfTransReached,
+             sessionActive,
+             sessionGetUnitMethods,
+             sessionPostUnitMethods,
+             sessionOtherUnitMethods,
+             sessionConnects,
+             sessionDisconnects,
+             sessionGetMethods,
+             sessionPostMethods,
+             sessionOtherMethods,
+             sessionRemoved,
+             sessionMaxNoOfSessReached,
+             secureTransConnections,
+             secureTransSessions,
+             secureTransUdpDuplicateRemovals,
+             secureTransSmsDuplicateRemovals,
+             secureTransServerAlerts,
+             secureTransClientAlerts,
+             secureTransWtlsCertKeyProblem,
+             secureTransWtlsCertFileProblem,
+             secureTransMaxNoOfConnReached,
+             secureTransMaxNoOfSessReached,
+             secureTransWtlsEncryptProblem,
+             pushProviderConfigError,
+             pushProviderSocketError}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a wap stack."
+::= { wapStackPmGroups 1 }
+END

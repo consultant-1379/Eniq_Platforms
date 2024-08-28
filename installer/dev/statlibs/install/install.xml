@@ -1,0 +1,6 @@
+<project name="statlibs" basedir="." default="all">
+
+        <target name="install" depends="copyTmpToDeploy"/>
+        <target name="update" depends="moveToObsolete,install"/>
+
+</project>

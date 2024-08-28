@@ -1,0 +1,43 @@
+-- File Name : BW-ECLReposFault.mib
+BW-ECLReposFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npProfileServer, npWebAppContextPath
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201404270000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks ECL Reporting Repository Application."
+    REVISION    "201404270000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwECLReposReplicationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npProfileServer, npWebAppContextPath }
+    STATUS      current
+    DESCRIPTION
+        "A replication failure occurred.
+@severity:high
+@subcomponent:filerepos"
+-- @feature:206184
+    ::=  {  systemFaults 13501  }
+
+  bwECLReposReplicationOffline  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppContextPath, npProfileServer }
+    STATUS      current
+    DESCRIPTION
+        "The replication stopped for one of the Profile Server peers.  This was caused by exceeding the replication queue capacity.
+@severity:critical
+@subcomponent:filerepos"
+-- @feature:206184
+    ::=  {  systemFaults 13502  }
+
+END

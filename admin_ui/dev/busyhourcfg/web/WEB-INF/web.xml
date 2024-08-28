@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		This web.xml is used only in development environment. Some parts of this is copied into AdminUI web.xml during
+		installation.
+	-->
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>busyhourcfg</display-name>
+	<servlet>
+		<description>Main servlet of the Busyhour Configuration Tool.</description>
+		<display-name>CommonServlet</display-name>
+		<servlet-name>CommonServlet</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.CommonServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Show all techpacks.</description>
+		<display-name>TechpackView</display-name>
+		<servlet-name>TechpackView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.TechpackView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current techpack.</description>
+		<display-name>BusyhourView</display-name>
+		<servlet-name>BusyhourView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.BusyhourView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current placeholders.</description>
+		<display-name>PlaceholdersView</display-name>
+		<servlet-name>PlaceholdersView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholdersView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current placeholder.</description>
+		<display-name>PlaceholderView</display-name>
+		<servlet-name>PlaceholderView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current placeholder.</description>
+		<display-name>PlaceholderEdit</display-name>
+		<servlet-name>PlaceholderEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderEdit</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Enables or disables current placeholder.</description>
+		<display-name>PlaceholderEnable</display-name>
+		<servlet-name>PlaceholderEnable</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderEnable</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current placeholder source.</description>
+		<display-name>PlaceholderSourceView</display-name>
+		<servlet-name>PlaceholderSourceView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderSourceView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current placeholder source.</description>
+		<display-name>PlaceholderSourceEdit</display-name>
+		<servlet-name>PlaceholderSourceEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderSourceEdit</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows placeholder source selection view.</description>
+		<display-name>PlaceholderSourceBrowseView</display-name>
+		<servlet-name>PlaceholderSourceBrowseView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderSourceBrowseView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits placeholder source selection.</description>
+		<display-name>PlaceholderSourceBrowseEdit</display-name>
+		<servlet-name>PlaceholderSourceBrowseEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderSourceBrowseEdit</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current placeholder type.</description>
+		<display-name>PlaceholderTypeView</display-name>
+		<servlet-name>PlaceholderTypeView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderTypeView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current placeholder type.</description>
+		<display-name>PlaceholderTypeEdit</display-name>
+		<servlet-name>PlaceholderTypeEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderTypeEdit</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Shows current placeholder mapped types.</description>
+		<display-name>PlaceholderMappedTypesView</display-name>
+		<servlet-name>PlaceholderMappedTypesView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderMappedTypesView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current placeholder mapped types.</description>
+		<display-name>PlaceholderMappedTypesEdit</display-name>
+		<servlet-name>PlaceholderMappedTypesEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderMappedTypesEdit</servlet-class>
+	</servlet>	
+	<servlet>
+		<description>Shows current placeholder keys.</description>
+		<display-name>PlaceholderRankKeysView</display-name>
+		<servlet-name>PlaceholderRankKeysView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderRankKeysView</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current placeholder keys.</description>
+		<display-name>PlaceholderRankKeysEdit</display-name>
+		<servlet-name>PlaceholderRankKeysEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderRankKeysEdit</servlet-class>
+	</servlet>	
+	<servlet>
+		<description>Edits current keys source table.</description>
+		<display-name>PlaceholderRankKeySourceEdit</display-name>
+		<servlet-name>PlaceholderRankKeySourceEdit</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderRankKeySourceEdit</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Edits current keys source table.</description>
+		<display-name>PlaceholderRankKeySourceView</display-name>
+		<servlet-name>PlaceholderRankKeySourceView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.PlaceholderRankKeySourceView</servlet-class>
+	</servlet>	
+	<servlet>
+		<description>Starts busyhour activation.</description>
+		<display-name>ActivationStart</display-name>
+		<servlet-name>ActivationStart</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.ActivationStartServlet</servlet-class>
+	</servlet>	
+	<servlet>
+		<description>Show busyhour activation status.</description>
+		<display-name>ActivationStatusView</display-name>
+		<servlet-name>ActivationStatusView</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.ActivationStatusView</servlet-class>
+	</servlet>	
+	<servlet>
+		<description>Ajax service for client.</description>
+		<display-name>BusyhourSourceList</display-name>
+		<servlet-name>BusyhourSourceList</servlet-name>
+		<servlet-class>com.ericsson.eniq.busyhourcfg.servlets.BusyhourSourceList</servlet-class>
+	</servlet>	
+		
+	<listener>
+		<description>Listens initialisation of the application.</description>
+		<display-name>BusyhourConfigurationListener</display-name>
+		<listener-class>com.ericsson.eniq.busyhourcfg.servlets.BusyhourConfigurationListener</listener-class>
+	</listener>
+	<listener>
+		<description>Listens initialisation of the session.</description>
+		<display-name>BusyhourConfigurationSessionListener</display-name>
+		<listener-class>com.ericsson.eniq.busyhourcfg.servlets.BusyhourConfigurationSessionListener</listener-class>
+	</listener>
+	
+	<servlet-mapping>
+		<servlet-name>TechpackView</servlet-name>
+		<url-pattern>/servlet/TechpackView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BusyhourView</servlet-name>
+		<url-pattern>/servlet/BusyhourView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholdersView</servlet-name>
+		<url-pattern>/servlet/PlaceholdersView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderView</servlet-name>
+		<url-pattern>/servlet/PlaceholderView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderEnable</servlet-name>
+		<url-pattern>/servlet/PlaceholderEnable</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderSourceView</servlet-name>
+		<url-pattern>/servlet/PlaceholderSourceView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderSourceEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderSourceEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderTypeView</servlet-name>
+		<url-pattern>/servlet/PlaceholderTypeView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderTypeEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderTypeEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderMappedTypesView</servlet-name>
+		<url-pattern>/servlet/PlaceholderMappedTypesView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderMappedTypesEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderMappedTypesEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderRankKeysView</servlet-name>
+		<url-pattern>/servlet/PlaceholderRankKeysView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderRankKeysEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderRankKeysEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderRankKeySourceEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderRankKeySourceEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderRankKeySourceView</servlet-name>
+		<url-pattern>/servlet/PlaceholderRankKeySourceView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderSourceBrowseView</servlet-name>
+		<url-pattern>/servlet/PlaceholderSourceBrowseView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlaceholderSourceBrowseEdit</servlet-name>
+		<url-pattern>/servlet/PlaceholderSourceBrowseEdit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ActivationStart</servlet-name>
+		<url-pattern>/servlet/ActivationStart</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ActivationStatusView</servlet-name>
+		<url-pattern>/servlet/ActivationStatusView</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BusyhourSourceList</servlet-name>
+		<url-pattern>/ajaxservlet/BusyhourSourceList</url-pattern>
+	</servlet-mapping>
+	<env-entry>
+		<env-entry-name>conffilefolder</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>busyhourcfg/conf</env-entry-value>
+	</env-entry>
+	<env-entry>
+		<env-entry-name>conffile</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>busyhourcfg.properties</env-entry-value>
+	</env-entry>
+	<security-constraint>
+    <web-resource-collection>
+              <web-resource-name>Automatic SSL Forward</web-resource-name>
+              <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <user-data-constraint>
+              <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+    </security-constraint>
+</web-app>

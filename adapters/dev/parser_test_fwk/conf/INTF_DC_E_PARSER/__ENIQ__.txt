@@ -1,0 +1,5 @@
+[SESSION_ID]
+dataType=integer
+
+[BATCH_ID]
+dataType=smallint

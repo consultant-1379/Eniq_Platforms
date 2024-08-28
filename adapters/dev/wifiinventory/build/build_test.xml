@@ -1,0 +1,23 @@
+<project name="wifiinventory" default="test_all">
+    <property name="module.name" value="wifiinventory"/>
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.build" value="${module.wifiinventory.build}"/>
+    <property name="module.base" value="${module.wifiinventory.base}"/>
+    <property name="module.dependants" value="${module.wifiinventory.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+
+    <path id="wifiinventory.lib.classpath">
+        <path refid="plaform.lib.classpath"/>
+        <path location="${module.common_utilities.pkg}"/>
+        <path location="${module.parser.pkg}"/>
+        <path location="${module.repository.pkg}"/>
+    </path>
+    <path id="wifiinventory.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="wifiinventory.lib.classpath"/>
+        <path location="${eniq.plat.base}/adapters/dev/wifiinventory/"/>
+    </path>
+</project>

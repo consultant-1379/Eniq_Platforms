@@ -1,0 +1,53 @@
+-- File Name : BW-DeviceManagement-TFTPFault.mib
+BW-FileReposFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npProfileServer, npWebAppContextPath, npWebAppName, npErrorMessage
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201305080000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks FileRepos Application."
+    REVISION    "201305080000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwFileReposReplicationFailure  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npProfileServer, npWebAppContextPath }
+    STATUS      current
+    DESCRIPTION
+        "A replication failure occurred.
+@severity:high
+@subcomponent:filerepos"
+-- @feature:154396
+    ::=  {  systemFaults 12501  }
+    
+  bwFileReposReplicationOffline  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppContextPath, npProfileServer }
+    STATUS      current
+    DESCRIPTION
+        "The replication stopped for one of the Profile Server peer. This was caused by exceeding the replication queue capacity.
+@severity:high
+@subcomponent:filerepos"
+-- @feature:154396
+    ::=  {  systemFaults 12502  }
+    
+  bwBroadworksFileReposDiskCipherError  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppName, npErrorMessage }
+    STATUS      current
+    DESCRIPTION
+        "An error occurred in the disk cipher functionality that prevents encryption and decryption functionality.
+@severity:critical
+@subcomponent:security"
+-- @feature:175154
+    ::=  {  systemFaults 12503  }
+    
+END

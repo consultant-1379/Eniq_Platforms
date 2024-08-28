@@ -1,0 +1,901 @@
+Symantec-Scan-Engine-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+        enterprises
+              FROM RFC1155-SMI
+	OBJECT-TYPE
+	      FROM RFC-1212
+	TRAP-TYPE
+              FROM RFC-1215
+        DisplayString
+              FROM RFC1213-MIB;
+
+
+symantec        OBJECT IDENTIFIER ::= { enterprises 393 }
+products	OBJECT IDENTIFIER ::= { symantec 200 }
+gateway		OBJECT IDENTIFIER ::= { products 50 }
+SYMCScan	OBJECT IDENTIFIER ::= { gateway	66 }	-- trap numbers can be under here
+trapInfo	OBJECT IDENTIFIER ::= { SYMCScan 1 }		-- typical root for the trap variables
+
+
+-- Symantec Scan Engine Object
+
+alertMessage  OBJECT-TYPE
+              SYNTAX    DisplayString (SIZE (0..256))
+              ACCESS    read-only
+              STATUS    deprecated
+              DESCRIPTION
+                        "The text of the alert message."
+              ::= { trapInfo 1 }
+
+listeningIP   OBJECT-TYPE
+              SYNTAX    NetworkAddress
+              ACCESS    read-only
+              STATUS    deprecated
+              DESCRIPTION
+                        "Contains the IP address that is being listened on
+                         for the alerting Symantec Scan Engine."
+              ::= { trapInfo 2 }
+
+listeningPort OBJECT-TYPE
+              SYNTAX    INTEGER (1..65535)
+              ACCESS    read-only
+              STATUS    deprecated
+              DESCRIPTION
+                        "Contains the port number of the alerting
+                         Symantec Scan Engine."
+              ::= { trapInfo 3 }
+
+definitionDate OBJECT-TYPE
+               SYNTAX    DisplayString
+               ACCESS    read-only
+               STATUS    deprecated
+               DESCRIPTION
+                         "Contains the date/version number of the virus
+                          definitions."
+               ::= { trapInfo 4 }
+
+queueSizeLimit OBJECT-TYPE
+               SYNTAX    INTEGER (1..65535)
+               ACCESS    read-only
+               STATUS    deprecated
+               DESCRIPTION
+                         "Contains the specified limit of items in the queue."
+               ::= { trapInfo 5 }
+
+queueSizeActual OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the actual number of items in the queue."
+                ::= { trapInfo 6 }
+
+infectedFileName OBJECT-TYPE
+               SYNTAX    DisplayString (SIZE (0..256))
+               ACCESS    read-only
+               STATUS    deprecated
+               DESCRIPTION
+                         "Contains the name of the infected file."
+               ::= { trapInfo 7 }
+
+virusName OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the name of the virus."
+                ::= { trapInfo 8 }
+
+disposition OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the disposition of the infected file."
+                ::= { trapInfo 9 }
+
+licenseFeature OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the name of a licensed feature."
+                ::= { trapInfo 10 }
+
+licenseExpiration OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the string expiration date for a licensed feature."
+                ::= { trapInfo 11 }
+
+eventSeverity OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the integer representing the serverity of this event."
+                ::= { trapInfo 12 }
+
+url OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the URL of the scan."
+                ::= { trapInfo 13 }
+
+componentName OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the component name."
+                ::= { trapInfo 14 }
+
+componentDisposition OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the component disposition."
+                ::= { trapInfo 15 }
+
+scanRule OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the scan rule."
+                ::= { trapInfo 16 }
+
+virusID OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the virus id."
+                ::= { trapInfo 17 }
+
+mailpolicyViolationID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the mail policy violation."
+                ::= { trapInfo 18 }
+
+containerViolationID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the container limit violation."
+                ::= { trapInfo 19 }
+
+fileAttributeViolationID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the file attribute violation."
+                ::= { trapInfo 20 }
+
+matchingURL OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the matching url from the url scanner."
+                ::= { trapInfo 21 }
+
+categories OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the matching content categories."
+                ::= { trapInfo 22 }
+
+ddrScores OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the DDR scores."
+                ::= { trapInfo 23 }
+
+scanDuration OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the string representing duration of the scan in seconds."
+                ::= { trapInfo 24 }
+
+connectDuration OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the string representing the duration of the connection in seconds."
+                ::= { trapInfo 25 }
+
+scanEngineVersion OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version number of the Scan Engine."
+                ::= { trapInfo 26 }
+
+decomposerVersion OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version number of the decomposer component."
+                ::= { trapInfo 27 }
+
+urlDefs OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version of the URL filtering definitions."
+                ::= { trapInfo 28 }
+
+ddrDefs OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version of the DDR definitions."
+                ::= { trapInfo 29 }
+
+previousVirusDefs OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version of the previous virus definitions."
+                ::= { trapInfo 30 }
+
+previousURLDefs OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version of the previous URL filtering definitions."
+                ::= { trapInfo 31 }
+
+previousDDRDefs OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the version of the previous DDR definitions."
+                ::= { trapInfo 32 }
+
+definitions OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the type of definitions."
+                ::= { trapInfo 33 }
+
+outbreakEvents OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the number of events that triggered an outbreak alert."
+                ::= { trapInfo 34 }
+
+outbreakInterval OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the interval in seconds over which the events took place."
+                ::= { trapInfo 35 }
+
+criticalMessage OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the critical error message."
+                ::= { trapInfo 36 }
+
+scannerName OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the name of the scanner."
+                ::= { trapInfo 37 }
+
+resultID OBJECT-TYPE
+                SYNTAX    INTEGER (1..65535)
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the result ID returned by the scanner."
+                ::= { trapInfo 38 }
+
+clientSID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the client SID provided to the Scan Engine."
+                ::= { trapInfo 39 }
+
+clientComputer OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the client computer name provided to the Scan Engine."
+                ::= { trapInfo 40 }
+
+clientIP OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the client IP address provided to the Scan Engine."
+                ::= { trapInfo 41 }
+
+serverIP OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the server IP address provided to the Scan Engine."
+                ::= { trapInfo 42 }
+
+subscriberID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the subscriber ID provided to the Scan Engine."
+                ::= { trapInfo 43 }
+
+uptime OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the number of seconds that the Scan Engine has been running."
+                ::= { trapInfo 44 }
+
+filerIP OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the filer IP address."
+                ::= { trapInfo 45 }
+
+rpcRequestID OBJECT-TYPE
+                SYNTAX    DisplayString (SIZE (0..256))
+                ACCESS    read-only
+                STATUS    deprecated
+                DESCRIPTION
+                          "Contains the RPC request ID."
+                ::= { trapInfo 46 }
+
+-- Symantec Scan Engine Traps
+
+systemCrash      TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                 DESCRIPTION "Symantec Scan Engine system crash/reset alert"
+                 ::= 1
+
+systemStartUp    TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                DESCRIPTION  "Symantec Scan Engine startup notification"
+               ::= 2
+         
+systemShutDown   TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                DESCRIPTION  "Symantec Scan Engine shutdown notification"
+               ::= 3
+
+systemDefUpdate  TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitionDate,
+                             previousVirusDefs,
+                             urlDefs,
+                             previousURLDefs,
+                             ddrDefs,
+                             previousDDRDefs
+                             }
+                DESCRIPTION  "Symantec Scan Engine has just updated one of its
+                              definitions to the specified version."
+               ::= 4
+
+systemLoadExceeded TRAP-TYPE
+                   ENTERPRISE  SYMCScan
+                   VARIABLES   {
+                               alertMessage,
+                               listeningIP,
+                               listeningPort,
+                               queueSizeLimit,
+                               queueSizeActual
+                               }
+                DESCRIPTION  "The Symantec Scan Engine queue has exceeded the
+                              specified maximum size."
+               ::= 5
+
+systemDefError   TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitionDate,
+                             previousVirusDefs,
+                             urlDefs,
+                             previousURLDefs,
+                             ddrDefs,
+                             previousDDRDefs
+                             }
+                DESCRIPTION  "Symantec Scan Engine cannot reload one of its definitions.
+                              There may be an error with the definitions."
+               ::= 6
+
+systemInfectedFile TRAP-TYPE
+                   ENTERPRISE  SYMCScan
+                   VARIABLES   {
+                               alertMessage,
+                               listeningIP,
+                               listeningPort,
+                               definitionDate,
+                               infectedFileName,
+                               virusName,
+                               disposition,
+                               url,
+                               componentName,
+                               componentDisposition,
+                               scanRule,
+                               virusID,
+                               scanDuration,
+                               connectDuration,
+                               clientSID,
+                               clientComputer,
+                               clientIP,
+                               serverIP,
+                               subscriberID
+                               }
+                DESCRIPTION  "The Symantec Scan Engine has found an infected file."
+               ::= 7
+
+systemNonRepairableInfectedFile   TRAP-TYPE
+                ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitionDate,
+                             infectedFileName,
+                             virusName
+                             }
+                DESCRIPTION  "The Symantec Scan Engine has found a non-repairable infected file."
+               ::= 8
+
+systemCriticalError   TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             criticalMessage
+                             }
+                DESCRIPTION  "Symantec Scan Engine encountered a critical error."
+               ::= 9
+
+systemLicenseEvent TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             licenseFeature,
+                             licenseExpiration
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a problem with a licensed feature."
+               ::= 10
+
+systemMailPolicyViolation TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             mailpolicyViolationID,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has found a mail policy violation."
+               ::= 11
+
+systemContaierViolation TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             containerViolationID,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has found a container limit violation."
+               ::= 12
+
+systemFileAttributeViolation TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             fileAttributeViolationID,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has found a file attribute violation."
+               ::= 13
+
+systemURLAudit TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             matchingURL,
+                             categories,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has found a URL audit detection."
+               ::= 14
+
+systemURLBlock TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             matchingURL,
+                             categories,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has blocked a URL."
+               ::= 15
+
+systemDDRAudit TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             categories,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has found a DDR audit detection."
+               ::= 16
+
+systemDDRBlock TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             infectedFileName,
+                             disposition,
+                             url,
+                             componentName,
+                             componentDisposition,
+                             scanRule,
+                             categories,
+                             scanDuration,
+                             connectDuration,
+                             clientSID,
+                             clientComputer,
+                             clientIP,
+                             serverIP,
+                             subscriberID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has blocked a URL based on content (DDR)."
+               ::= 17
+
+systemScanError TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             scannerName,
+                             resultID
+                             }
+                DESCRIPTION  "Symantec Scan Engine encountered a scan error."
+               ::= 18
+
+systemRPCRetry TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             filerIP,
+                             rpcRequestID
+                             }
+                DESCRIPTION  "Symantec Scan Engine has hit the RPC retry limit."
+               ::= 19
+
+systemInfectionOutbreak  TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected an infection outbreak."
+               ::= 20
+
+systemVirusOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a virus outbreak."
+               ::= 21
+
+systemMailPolicyOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a mail policy violation outbreak."
+               ::= 22
+
+systemContainerLimitOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a container limit violation outbreak."
+               ::= 23
+
+systemFileAttributeOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             aalertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a file attribute violation outbreak."
+               ::= 24
+
+systemMalformedContainerOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a malformed container outbreak."
+               ::= 25
+
+systemURLBlockOutbreak TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             outbreakEvents,
+                             outbreakInterval
+                             }
+                DESCRIPTION  "Symantec Scan Engine has detected a URL block outbreak."
+               ::= 26
+
+systemVersionInfo TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitionDate,
+                             previousVirusDefs,
+                             urlDefs,
+                             previousURLDefs,
+                             ddrDefs,
+                             previousDDRDefs
+                             }
+                DESCRIPTION  "Symantec Scan Engine is providing version information."
+               ::= 27
+
+systemDefRollback TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             scanEngineVersion,
+                             decomposerVersion,
+                             definitionDate,
+                             urlDefs,
+                             ddrDefs
+                            }
+                DESCRIPTION  "Symantec Scan Engine has rolled back one of it's
+                              definitions."
+               ::= 28
+
+systemDefRollbackFailed TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitions,
+                             criticalMessage
+                             }
+                DESCRIPTION  "Symantec Scan Engine has attempted to roll back one of
+                              it's definitions, but failed."
+               ::= 29
+
+systemDefLUFailed TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             definitions,
+                             criticalMessage
+                             }
+                DESCRIPTION  "Symantec Scan Engine has attempted to update one of it's
+                              definitions, but LiveUpdate failed."
+               ::= 30
+
+systemProductLUUpToDate TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                DESCRIPTION  "Symantec Scan Engine attempted a LiveUpdate of the Scan Engine,
+                              but there was no update available."
+               ::= 31
+
+systemProductLUSuccess TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort
+                             }
+                DESCRIPTION  "Symantec Scan Engine has updated to a new version of the Scan Engine."
+               ::= 32
+
+systemProductLUFailed TRAP-TYPE
+                 ENTERPRISE  SYMCScan
+                 VARIABLES   {
+                             alertMessage,
+                             listeningIP,
+                             listeningPort,
+                             criticalMessage
+                             }
+                DESCRIPTION  "Symantec Scan Engine attempted a LiveUpdate of the Scan Engine,
+                              but LiveUpdate failed."
+               ::= 33
+END               

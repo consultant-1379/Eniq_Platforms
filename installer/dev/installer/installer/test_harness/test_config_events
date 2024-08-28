@@ -1,0 +1,5 @@
+#NAME::FEATURE_LIST_FILENAME::EXPECTED_ERROR_CODE::MOCK_RECORD_FILENAME::MOCK_FUNCTION_TO_FAIL
+1::cxc_num_ltecfa::0::dep_expect_ltecfa::nofail
+2::cxc_num_ltecfa::38::dep_expect_ltecfa_fail::call_tech_pack_installation
+real::cxc_num_ltecfa::0::nomock::nofail
+

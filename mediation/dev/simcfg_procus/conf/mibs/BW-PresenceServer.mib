@@ -1,0 +1,267 @@
+--===============================================================
+-- File Name : BW-PresenceServer.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2014, BroadSoft, Inc. All rights reserved. 
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+
+BW-PresenceServer DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString, DateAndTime, TimeStamp
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201411040000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+      "This is the MIB for the BroadWorks PresenceServer application."
+      
+    REVISION    "201411040000Z"
+      DESCRIPTION     "Creation."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  presenceServer OBJECT IDENTIFIER
+    ::= { broadworks 54 }  
+    
+  processMetrics OBJECT IDENTIFIER
+    ::= { presenceServer 1 }
+  
+  memory OBJECT IDENTIFIER
+    ::= { processMetrics 1 }
+    
+  heap OBJECT IDENTIFIER
+    ::= { memory 1 }
+  
+  nonheap OBJECT IDENTIFIER
+    ::= { memory 2 }
+    
+  garbageCollection OBJECT IDENTIFIER
+    ::= { memory 3 }
+    
+  bwPresenceServerMibConformance OBJECT IDENTIFIER
+    ::= { presenceServer 1000 }
+    
+-- PresenceServer processMetrics heap ...........................................
+
+  bwPresenceServerProcessMetricsHeapInitSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The initial size of the memory allocated upon process startup."
+-- @feature:147586
+    ::=  {  heap  1  }
+
+  bwPresenceServerProcessMetricsHeapMaxSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum size of the memory that can be allocated during the process life."
+-- @feature:147586
+    ::=  {  heap  2  }
+
+  bwPresenceServerProcessMetricsHeapUsed  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The size of the memory currently in used."
+-- @feature:147586
+    ::=  {  heap  3  }
+
+  bwPresenceServerProcessMetricsHeapUsedMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum amount of memory used since the process started."
+-- @feature:147586
+    ::=  {  heap  4  }
+
+  bwPresenceServerProcessMetricsHeapCommitted  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS   read-only
+    STATUS      current
+    DESCRIPTION
+      "The memory currently committed by the process."
+-- @feature:147586
+    ::=  {  heap  5  }
+
+  bwPresenceServerProcessMetricsHeapLastPostCollectionSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The amount of memory claimed during last post."
+-- @feature:147586
+    ::=  {  heap  6  }
+
+-- PresenceServer processMetrics nonheap ........................
+
+  bwPresenceServerProcessMetricsNonHeapInitSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The initial size of the memory allocated upon process startup."
+-- @feature:147586
+    ::=  {  nonheap  1  }
+
+  bwPresenceServerProcessMetricsNonHeapMaxSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum size of the memory that can be allocated during the process life."
+-- @feature:147586
+    ::=  {  nonheap  2  }
+
+  bwPresenceServerProcessMetricsNonHeapUsed  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The size of the memory currently in used."
+-- @feature:147586
+    ::=  {  nonheap  3  }
+
+  bwPresenceServerProcessMetricsNonHeapUsedMax  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The maximum amount of memory used since the process started."
+-- @feature:147586
+    ::=  {  nonheap  4  }
+
+  bwPresenceServerProcessMetricsNonHeapCommitted  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The memory currently committed by the process."
+-- @feature:147586
+    ::=  {  nonheap  5  }
+
+  bwPresenceServerProcessMetricsNonHeapLastPostCollectionSize  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The amount of memory claimed during last post."
+-- @feature:147586
+    ::=  {  nonheap  6  }
+
+-- PresenceServer processMetrics garbageCollection ........................
+
+  bwPresenceServerProcessMetricsGCMinorCollectionsCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of minor collections."
+-- @feature:147586
+    ::=  {  garbageCollection  1  }
+
+  bwPresenceServerProcessMetricsGCMajorCollectionsCount  OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The number of major collections."
+-- @feature:147586
+    ::=  {  garbageCollection  2  }
+
+  bwPresenceServerProcessMetricsGCMinorCollectionTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The timestamp of when the last minor collection occured."
+-- @feature:147586
+    ::=  {  garbageCollection  3  }
+
+  bwPresenceServerProcessMetricsGCMajorCollectionTimestamp  OBJECT-TYPE
+    SYNTAX      DateAndTime
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The timestamp of when the last major collection occured."
+-- @feature:147586
+    ::=  {  garbageCollection  4  }
+
+  bwPresenceServerProcessMetricsGCMinorCollectionAvg  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The average of memory claimed during minor collections."
+-- @feature:147586
+    ::=  {  garbageCollection  5  }
+
+  bwPresenceServerProcessMetricsGCMajorCollectionAvg  OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+      "The average of memory claimed during major collections."
+-- @feature:147586
+    ::=  {  garbageCollection  6  }
+
+-- BroadWorks PresenceServer MIB Conformance Definition  ...........................................
+
+  bwPresenceServerMibGroups OBJECT IDENTIFIER
+    ::= { bwPresenceServerMibConformance 1 }
+    
+  bwPresenceServerMibCompliancy OBJECT IDENTIFIER
+    ::= { bwPresenceServerMibConformance 2 }
+    
+  bwPresenceServerHeapStatsGroup OBJECT-GROUP
+    OBJECTS { bwPresenceServerProcessMetricsHeapInitSize, bwPresenceServerProcessMetricsHeapMaxSize,
+              bwPresenceServerProcessMetricsHeapUsed, bwPresenceServerProcessMetricsHeapUsedMax,
+              bwPresenceServerProcessMetricsHeapCommitted, bwPresenceServerProcessMetricsHeapLastPostCollectionSize }      
+    STATUS current
+    DESCRIPTION
+        "This group defines the PresenceServer statistics for heap resources."
+    ::= { bwPresenceServerMibGroups 1 }
+  
+  bwPresenceServerNonHeapStatsGroup  OBJECT-GROUP
+    OBJECTS { bwPresenceServerProcessMetricsNonHeapInitSize, bwPresenceServerProcessMetricsNonHeapMaxSize,
+              bwPresenceServerProcessMetricsNonHeapUsed, bwPresenceServerProcessMetricsNonHeapUsedMax,
+              bwPresenceServerProcessMetricsNonHeapCommitted, bwPresenceServerProcessMetricsNonHeapLastPostCollectionSize }
+    STATUS current
+    DESCRIPTION
+        "This group defines the PresenceServer statistics for non-heap resources."
+    ::= { bwPresenceServerMibGroups 2 }
+              
+  bwPresenceServerGarbageCollectionStatsGroup OBJECT-GROUP
+    OBJECTS { bwPresenceServerProcessMetricsGCMinorCollectionsCount, bwPresenceServerProcessMetricsGCMajorCollectionsCount,
+              bwPresenceServerProcessMetricsGCMinorCollectionTimestamp, bwPresenceServerProcessMetricsGCMajorCollectionTimestamp,
+              bwPresenceServerProcessMetricsGCMinorCollectionAvg, bwPresenceServerProcessMetricsGCMajorCollectionAvg }
+    STATUS current
+    DESCRIPTION
+        "This group defines the PresenceServer statistics for garbage collection resources."
+    ::= { bwPresenceServerMibGroups 3 }
+
+  bwPresenceServerBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+      "BroadWorks Provisioning MIB compliance"
+    MODULE
+      MANDATORY-GROUPS { bwPresenceServerHeapStatsGroup, 
+                         bwPresenceServerNonHeapStatsGroup, 
+                         bwPresenceServerGarbageCollectionStatsGroup }
+      ::= { bwPresenceServerMibCompliancy 1 }
+      
+END

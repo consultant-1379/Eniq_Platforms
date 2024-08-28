@@ -1,0 +1,89 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ DWH Database option setting script
+#
+# Usage: dboptions_dwhdb [-v]
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+
+
+VERBOSE=0
+
+if [ "$1" = "-v" ] ; then
+  VERBOSE=1
+fi
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Setting DWH Database DB options..."
+fi
+
+DBA_PASSWORD=`${BIN_DIR}/iniget DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+DWH_PORT=`${BIN_DIR}/iniget DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_NAME=`${BIN_DIR}/iniget DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+
+DWH_CONN_STR_USER_DBA="uid=dba;pwd=${DBA_PASSWORD};eng=${DWH_NAME};links=tcpip{host=localhost;port=${DWH_PORT};dobroadcast=no;verify=no}"
+
+DC_PASSWD=`${BIN_DIR}/iniget DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+DCBO_PASSWD=`${BIN_DIR}/iniget DWH -v DCBOPassword -f ${CONF_DIR}/niq.ini`
+DCPUBLIC_PASSWD=`${BIN_DIR}/iniget DWH -v DCPUBLICPassword -f ${CONF_DIR}/niq.ini`
+
+sed -e "/@@dc_passwd@@/s//${DC_PASSWD}/g" dbinit/sql/create_users_dwhdb.sql > dbinit/sql/create_users_dwhdb.1.sql
+sed -e "/@@dcbo_passwd@@/s//${DCBO_PASSWD}/g" dbinit/sql/create_users_dwhdb.1.sql > dbinit/sql/create_users_dwhdb.2.sql
+sed -e "/@@dcpublic_passwd@@/s//${DCPUBLIC_PASSWD}/g" dbinit/sql/create_users_dwhdb.2.sql > dbinit/sql/create_users_dwhdb.3.sql
+
+${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q dbinit/sql/create_users_dwhdb.3.sql
+
+if [ $? != 0 ] ; then
+  echo "DWH Database user creation failed"
+  exit 10
+fi
+
+_total_mem_=`/usr/sbin/prtconf |egrep '^Memory size'|nawk '{print $3}'`
+let LOADMEMORY=500+_total_mem_/500                    #LOADMEMORY = 500 + total_memory/500
+echo "LOADMEMORY calculated to ${LOADMEMORY}"
+echo "total memory was ${_total_mem_}"
+
+MAXHASHROWS=`${BIN_DIR}/iniget DWH -v TempCache -f ${CONF_DIR}/niq.ini`
+let MAXHASHROWS=MAXHASHROWS*1000                   #MAXHASHROWS = TempCache * 1000
+
+SORTPHASE1HELPERS=`${BIN_DIR}/iniget ENIQ_HW_INFO -v Eniq_Proc_Core -f ${CONF_DIR}/niq.ini`
+let SORTPHASE1HELPERS=3+SORTPHASE1HELPERS/16       # SORTPHASE1HELPERS = 3 + (number of processor cores /16)
+
+
+sed -e "/@@loadmemory@@/s//${LOADMEMORY}/g" dbinit/sql/dboptions_dwhdb.sql > dbinit/sql/dboptions_dwhdb.1.sql
+sed -e "/@@sortphase1helpers@@/s//${SORTPHASE1HELPERS}/g" dbinit/sql/dboptions_dwhdb.1.sql > dbinit/sql/dboptions_dwhdb.2.sql
+sed -e "/@@maxhashrows@@/s//${MAXHASHROWS}/g" dbinit/sql/dboptions_dwhdb.2.sql > dbinit/sql/dboptions_dwhdb.1.sql
+
+#${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q dbinit/sql/dboptions_dwhdb.1.sql
+
+${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q dbinit/sql/kill_idle.sql
+
+${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q dbinit/sql/create_show_dwhdb_usage.sql
+
+${ASDIR}/bin/dbisqlc -c ${DWH_CONN_STR_USER_DBA} -q dbinit/sql/create_dbuser_procedures.sql
+
+if [ $? != 0 ] ; then
+  echo "DWH Database DB options setting failed"
+  exit 11
+else
+  if [ ! -d ${INSTALLER_DIR}/sqlfiles ] ; then
+    mkdir -p ${INSTALLER_DIR}/sqlfiles
+  fi
+#  cp dbinit/sql/dboptions_dwhdb.1.sql ${INSTALLER_DIR}/sqlfiles/dbbaseline_dwh_options.sql
+fi
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "DWH Database DB options successfully set"
+fi
+
+exit 0

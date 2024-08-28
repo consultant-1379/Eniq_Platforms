@@ -1,0 +1,103 @@
+package com.distocraft.dc5000.etl.fls;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ListIterator;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
+
+import javax.ws.rs.client.Client;
+
+import javax.ws.rs.core.Response;
+
+
+
+public class FlsQueryPm {
+	
+	public static FlsQueryPm instance=null;
+				
+	static String HOST;
+	ENMServerDetails cache;
+	static Client client;
+	RestClientInstance restClientInstance;
+	Logger log;
+	final String PATH = "file/v1/files";
+	
+	//queue for storing JSON Objects
+	public LinkedBlockingQueue<Runnable> pmQueue;
+	
+	public FlsQueryPm() {
+		
+	}
+	public FlsQueryPm(ENMServerDetails cache, Logger log, LinkedBlockingQueue<Runnable> pmQueue) {
+		this.cache=cache;
+		this.log=log;
+		this.pmQueue=pmQueue;
+	}
+	
+	
+	public static FlsQueryPm getInstance(ENMServerDetails cache, Logger log, LinkedBlockingQueue<Runnable> pmQueue){
+		if(instance == null){
+			instance=new FlsQueryPm(cache,log,pmQueue);
+		}
+		return instance;
+	}
+	
+
+	 /** Send FLS Query REQUEST to ENM in REST GET request and get the response in the form of JSON
+	 * object.
+	 * @param nodeName,nodeList, isNewNode,id
+	 */
+	
+	public long queryPM(String nodeType, boolean isNewNode,long id) {
+		long resultId=id;
+		try{
+			HOST = "https://" + cache.getHost();
+			restClientInstance = RestClientInstance.getInstance();
+			client = restClientInstance.getClient(cache, log);
+			PmJson pmJson;
+			
+			Date date = new Date(System.currentTimeMillis()-12*60*60*1000);
+		    SimpleDateFormat ft =new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		    String dateToken=ft.format(date).toString();
+
+		    Response response1=null ;
+		
+				if(!isNewNode){
+					 response1 =client.target(HOST).path(PATH).queryParam("filter","dataType==PM_*;nodeType=="+nodeType+";id=gt="+id)
+							.queryParam("select", "fileLocation,id,nodeName,nodeType,fileCreationTimeInOss,dataType")
+							.request("application/hal+json").get();
+					}else{
+						 response1 =client.target(HOST).path(PATH).queryParam("filter","dataType==PM_*;nodeType=="+nodeType+";fileCreationTimeInOss=ge="+dateToken)
+								.queryParam("select", "fileLocation,id,nodeName,nodeType,fileCreationTimeInOss,dataType")
+								.request("application/hal+json").get();
+						
+					}
+			
+				PmJsonArray pmJsonArray =response1.readEntity(PmJsonArray.class);
+				
+				log.info( " response array size   :::   "   + pmJsonArray.files.size());
+				
+				System.out.println("response       ********************\t"+response1);
+				
+				if(pmJsonArray.files!=null){
+					for(ListIterator<PmJson> iterator=pmJsonArray.files.listIterator();iterator.hasNext();){
+						pmJson=iterator.next();
+						log.info("adding to the pmqueue of node type\t:"+nodeType);
+						pmQueue.add(new PmQueueHandler(pmJson,log));
+				     }
+				}
+					//storing last id value
+				if(pmJsonArray.files.size()>0){
+					resultId=pmJsonArray.files.get(pmJsonArray.files.size()-1).getId();
+				}
+				
+				log.info("NodeType:\t"+nodeType+"\tlast id value\t"+resultId);
+		}
+		catch(Exception e){
+			log.warning("Exception "+e);
+		}
+		return resultId;
+	}
+}

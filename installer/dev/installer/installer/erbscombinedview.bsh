@@ -1,0 +1,305 @@
+#!/bin/bash
+# ********************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ********************************************************************
+#
+# (c) Ericsson Radio Systems AB 2015 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ********************************************************************
+# Name    : erbscombinedview.bsh
+# Date    : 06/12/2016
+# Purpose : Script to drop the existing G1 ERBS view and recreate them 
+#           as a combined view on G1 and G2 partitions.
+# Usage   : erbscombinedview.bsh
+#
+# ********************************************************************
+#
+# Command Section
+#
+# ********************************************************************
+
+AWK=/usr/bin/awk
+CAT=/usr/bin/cat
+CHMOD=/usr/bin/chmod
+CHOWN=/usr/bin/chown
+CP=/usr/bin/cp
+DATE=/usr/bin/date
+ECHO=/usr/bin/echo
+EGREP=/usr/bin/egrep
+FIND=/usr/bin/find
+GEGREP=/usr/sfw/bin/gegrep
+GREP=/usr/bin/grep
+MKDIR=/usr/bin/mkdir
+NAWK=/usr/bin/nawk
+RM=/usr/bin/rm
+SED=/usr/bin/sed
+SU=/usr/bin/su
+TOUCH=/usr/bin/touch
+UNZIP=/usr/bin/unzip
+
+STARTTIMESTAMP=`$DATE '+%y%m%d_%H%M%S'`
+LOGPATH=/eniq/log/sw_log/tp_installer
+INSTALLER_DIR=/eniq/sw/installer
+LOGFILE=${LOGPATH}/erbs_combined_view_create_${STARTTIMESTAMP}.log
+ERBSVIEWSQL=${INSTALLER_DIR}/erbs_view_sql
+ERBSDCPUBLICVIEWSQL=${INSTALLER_DIR}/erbs_dcpublic_view_sql
+TMP=${INSTALLER_DIR}/temp_erbs_view
+
+DBISQL="$(ls /eniq/sybase_iq/IQ-*/bin64/dbisql)"
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+DWHDB_PORT=`inigetpassword DWH -v PortNumber -f ${CONF_DIR}/niq.ini`
+DWH_SERVER_NAME=`inigetpassword DWH -v ServerName -f ${CONF_DIR}/niq.ini`
+
+
+DWHREPUSER=`inigetpassword REP -v DWHREPUsername -f ${CONF_DIR}/niq.ini`
+DWHREPPASSWORD=`inigetpassword REP -v DWHREPPassword -f ${CONF_DIR}/niq.ini`
+REP_PORT=`inigetpassword REP -v PortNumber -f ${CONF_DIR}/niq.ini`
+REP_SERVER_NAME=`inigetpassword REP -v ServerName -f ${CONF_DIR}/niq.ini`
+DBAPASSWORD=`inigetpassword DB -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+
+if [ ! -x "$DBISQL" ]; then
+    _err_msg_="$DBISQL commands not found or not executable."
+    abort_script "$_err_msg_"
+fi
+
+$ECHO "Execution started at " $STARTTIMESTAMP >> ${LOGFILE}
+
+if [ ! -d ${LOGPATH} ] ; then
+  $MKDIR -p ${LOGPATH}
+  $CHMOD 777 ${LOGPATH}
+fi
+
+if [ ! -d ${ERBSVIEWSQL} ] ; then
+  $MKDIR -p ${ERBSVIEWSQL}
+else
+  $RM -rf ${ERBSVIEWSQL}
+  $MKDIR -p ${ERBSVIEWSQL}
+  $CHMOD 777 ${ERBSVIEWSQL}
+
+fi 
+
+if [ ! -d ${ERBSDCPUBLICVIEWSQL} ] ; then
+  $MKDIR -p ${ERBSDCPUBLICVIEWSQL}
+else
+  $RM -rf ${ERBSDCPUBLICVIEWSQL}
+  $MKDIR -p ${ERBSDCPUBLICVIEWSQL}
+  $CHMOD 777 ${ERBSDCPUBLICVIEWSQL}
+
+fi 
+
+if [ ! -d ${TMP} ] ; then
+  $MKDIR -p ${TMP}
+  $CHMOD 777 ${TMP}
+else
+  $RM -rf ${TMP}
+  $MKDIR -p ${TMP}
+  $CHMOD 777 ${TMP}
+fi 
+	
+dropRecreate()
+{
+log=$2
+while IFS= read var
+do
+	sql='/eniq/sw/installer/erbs_view_sql/'$var
+	view_tmp=`echo "$sql" | cut -d. -f1`
+	view=`echo "$view_tmp" | cut -d/ -f6`
+	$ECHO "----------------------------- $view ------------------------------------" |$TEE -a ${log}
+
+	######## Check if the view is existing and drop the view
+	$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "if (object_id('dc.$view') is not null)
+	BEGIN
+		drop view dc.$view
+	END"
+	if [[ $? -eq 0 ]]; then
+		$ECHO "Dropped existing view dc.$view" |$TEE -a ${log}
+		######## Create the view
+		$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dc;pwd=${DWHDBPASSWORD}" $sql
+		if [[ $? -eq 0 ]]; then
+			$ECHO "View  dc.$view created" |$TEE -a ${log}
+			$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "grant select on dc.$view to dcbo"
+			$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "grant select on dc.$view to dc"
+			$ECHO "SELECT permission granted for dc user on view dc.$view" |$TEE -a ${log}
+			$ECHO "SELECT permission granted for dcbo user on view dc.$view" |$TEE -a ${log}
+		else
+			$ECHO "View dc.$view creation failed " |$TEE -a ${log}
+		fi
+	else
+		$ECHO "Failed to drop the view dc.$view" |$TEE -a ${log}
+	fi
+						
+	##Creation of dcpublic views
+	##Hence restricting
+			
+		
+	if [[ $view != "DIM_E_LTE_LLE_EUCELL" ]] && [[ $view != "DIM_E_LTE_LLE_ERBS" ]]; then	
+		$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "execute dc.generate_combined_view_dcpublic $view;OUTPUT TO ${TMP}/temp_erbs_view_def_dcpublic_$view.txt" HEXADECIMAL ASIS FORMAT TEXT ;
+		$SED 's/.//;s/.$//' ${TMP}/temp_erbs_view_def_dcpublic_$view.txt > ${ERBSDCPUBLICVIEWSQL}/${view}_dcpublic.sql
+		$ECHO "where ROWSTATUS <> 'DUPLICATE' and ROWSTATUS <> 'SUSPECTED'" >> ${ERBSDCPUBLICVIEWSQL}/${view}_dcpublic.sql
+			
+		######## Check if the view is existing and drop the view
+		$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "if (object_id('dcpublic.$view') is not null)
+		BEGIN
+			drop view dcpublic.$view
+		END"
+		if [[ $? -eq 0 ]]; then
+			$ECHO "Dropped existing view dcpublic.$view" |$TEE -a ${log}
+			######## Create the view
+			$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" ${ERBSDCPUBLICVIEWSQL}/${view}_dcpublic.sql
+			if [[ $? -eq 0 ]]; then
+				$ECHO "View  dcpublic.$view created" |$TEE -a ${log}
+				$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "grant select on dcpublic.$view to dcpublic"
+				$ECHO "SELECT permission granted for dcpublic user on view dcpublic.$view" |$TEE -a ${log}
+			else
+				$ECHO "View  dcpublic.$view creation failed" |$TEE -a ${log}
+			fi
+		else
+			$ECHO "Failed to drop the view $view" |$TEE -a ${log}
+		fi
+	fi
+		
+		$ECHO "------------------------------------" 
+done < $1
+}
+
+
+######################Execution begins here#######################
+
+#Checking if both the techpacks are installed
+$ECHO "Checking if both the techpacks are installed..." >> ${LOGFILE}
+$DBISQL -nogui -c "eng=${REP_SERVER_NAME};links=tcpip{host=${REP_SERVER_NAME};port=${REP_PORT}};uid=$DWHREPUSER;pwd=$DWHREPPASSWORD" "select DISTINCT TECHPACK_NAME from Versioning WHERE TECHPACK_NAME like 'DC_E_ERBS%';OUTPUT TO $TMP/tmp.txt"
+
+
+x=$($EGREP -c 'DC_E_ERBS' $TMP/tmp.txt)
+
+if [[ $x -eq 2 ]]
+then
+   flag=1
+else 
+   flag=0
+fi
+
+if [[ $flag -eq 1 ]]
+then
+
+	#Create stored procedure by connecting to dwhrep
+	$ECHO "Connecting to dwhrep database to create the stored procedure" >> ${LOGFILE}
+
+	# #Drop and create the stored procedure
+	$DBISQL -nogui -c "eng=${REP_SERVER_NAME};links=tcpip{host=${REP_SERVER_NAME};port=${REP_PORT}};uid=$DWHREPUSER;pwd=$DWHREPPASSWORD" ${INSTALLER_DIR}/generate_erbs_combined_view.sql
+
+	##Execute the generic stored procedure for dcpublic view creation
+	$DBISQL -nogui -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dc;pwd=${DWHDBPASSWORD}" ${INSTALLER_DIR}/dcpublic_erbs.sql
+	
+	#Get the list of table names
+	$ECHO "Fetching the view names for DC_E_ERBSG2 Techpack" >> ${LOGFILE}
+	$DBISQL -nogui -c "eng=${REP_SERVER_NAME};links=tcpip{host=${REP_SERVER_NAME};port=${REP_PORT}};uid=$DWHREPUSER;pwd=$DWHREPPASSWORD" "select DISTINCT STORAGEID from DWHColumn WHERE STORAGEID like '%DC_E_ERBSG2%';OUTPUT TO $TMP/input.txt"
+	$ECHO "-------------------------------------------------------------" >> ${LOGFILE}
+
+	#########Read the .txt file
+	while IFS= read var
+	do
+		f1=$var
+		f2="${var/G2_/_}"
+
+		########hardcoding for the REP and REPORT views 
+		if [[ $f2 == *"DC_E_ERBS_PMULINTERFERENCEREPORT:"* ]]
+		then
+			f2="${f2/REPORT:/REP:}"
+			$ECHO "Modifing the DC_E_ERBS_PMULINTERFERENCEREPORT name to $f2" >> ${LOGFILE}
+		fi
+
+		viewname="${f2/:/_}"
+		filename_tmp="$ERBSVIEWSQL/$viewname.sql"
+		filename="${filename_tmp//\'}"
+		view=${viewname//\'}
+
+		$ECHO "------------ $view ------------------ "
+		$ECHO "Creating combined view for $f1 and $f2" >> ${LOGFILE}
+
+		$DBISQL -nogui -c "eng=${REP_SERVER_NAME};links=tcpip{host=${REP_SERVER_NAME};port=${REP_PORT}};uid=$DWHREPUSER;pwd=$DWHREPPASSWORD" "execute generate_erbs_combined_view $f2, $f1, $viewname;OUTPUT TO $TMP/temp_erbs_view_def.txt" HEXADECIMAL ASIS FORMAT TEXT ;
+		$SED 's/.//;s/.$//' $TMP/temp_erbs_view_def.txt > $filename
+		$ECHO "View definition at $filename" >> ${LOGFILE}
+		$ECHO "------------------------------------" >> ${LOGFILE}
+	done < $TMP/input.txt
+
+	ls ${ERBSVIEWSQL} > ${TMP}/CheckCount.txt
+	
+	count=`cat ${TMP}/CheckCount.txt | wc -l`
+	count=${count// /}
+	count_half=$((count/2))
+	count_half=${count_half// /}
+
+	sed -n 1,${count_half}p ${TMP}/CheckCount.txt >> ${TMP}/thread1.txt
+	sed -n `expr $((count_half+1))`,${count}p ${TMP}/CheckCount.txt >> ${TMP}/thread2.txt
+
+	dropRecreate ${TMP}/thread1.txt  ${TMP}/Thread1Log.txt &
+	dropRecreate ${TMP}/thread2.txt  ${TMP}/Thread2Log.txt &
+
+	## wait for all the threads to complete its execution
+	wait
+	
+	cat  ${TMP}/Thread1Log.txt  ${TMP}/Thread2Log.txt >> ${LOGFILE}
+	
+	## Check the invalid views.. Recompile and enable them	
+	$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}" "select U.user_name + '.' + T.table_name from sysobject O, systab T, sysuser U where T.object_id = O.object_id and T.table_name like '%[_]PP%' and U.user_id = T.creatoR and O.status = 2 and O.object_type = 2;OUTPUT TO ${TMP}/invalidViews_tmp.txt"
+	$SED s/\'//g ${TMP}/invalidViews_tmp.txt > ${TMP}/invalidViews.txt	
+	while IFS= read var
+	do
+		echo $var
+		$ECHO "Recompiling and Enabling the view $var" |$TEE -a ${LOGFILE}
+		$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}"  "alter view $var recompile"
+		$DBISQL -nogui -onerror exit -c "eng=${DWH_SERVER_NAME};links=tcpip{host=${DWH_SERVER_NAME};port=${DWHDB_PORT}};uid=dba;pwd=${DBAPASSWORD}"  "alter view $var enable"
+	done < ${TMP}/invalidViews.txt
+
+else
+$ECHO "Either DC_E_ERBS or DC_E_ERBSG2 or both Techpack(s) is/are not installed. So skipping creation of combined views..." >> ${LOGFILE}
+fi
+	
+ENDTIMESTAMP=`$DATE '+%y%m%d_%H%M%S'`
+$ECHO "Execution ended at " $ENDTIMESTAMP >> ${LOGFILE}
+
+### Delete all the temporary files created so far
+$RM -rf ${TMP}  
+	
+### Function: abort_script ###
+#
+#   This will is called if the script is aborted thru an error
+#   error signal sent by the kernel such as CTRL-C or if a serious
+#   error is encountered during runtime
+#
+# Arguments:
+#       $1 - Error message from part of program (Not always used)
+# Return Values:
+#       none
+
+abort_script()
+{
+if [ "$1" ]; then
+    _err_msg_=$1
+else
+    _err_msg_="Script aborted.......\n"
+fi
+if [ "${LOGFILE}" ]; then
+    $ECHO "\n$_err_msg_\n"|$TEE -a ${LOGFILE}
+else
+    $ECHO "\n$_err_msg_\n"
+fi
+}

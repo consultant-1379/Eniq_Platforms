@@ -1,0 +1,151 @@
+-- File Name : BW-WebContainerFault.mib  
+BW-WebContainerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npWebAppName, npExecutorType, npReceivedRequestsDuringLastPeriod, npProtectionPeriod, npPeriodUnit, npWebAppContextPath, npWebAppUser, npAuthenticationServer, npProtocol, npAddress, npPort, npName
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "200807181000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the Web Container application."
+    REVISION    "200807181000Z"
+    DESCRIPTION
+        "MIB Compliancy."
+    ::=  {  common  1  }
+
+  bwWebContainerTransactionGlobalRateLimitExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "Transaction denial due to high transaction rate for a given webapp.
+@severity:high
+@subcomponent:webcontainer"
+    ::=  {  systemFaults 6001  }
+
+  bwWebContainerTransactionUserRateLimitExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier ,timeStamp ,alarmName ,systemName ,severity ,component ,subcomponent ,problemText ,recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "Transaction denial due to high transaction rate for a given userid.
+@severity:high
+@subcomponent:webcontainer"
+    ::=  {  systemFaults 6002  }
+
+  bwWebApplicationCacheDiskFull  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppName }
+    STATUS      current
+    DESCRIPTION
+        "A cache update has failed because the disk is full.
+@severity:low
+@subcomponent:webcontainer"
+    ::=  {  systemFaults 6003  }
+
+  bwHttpWorkersBusyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter }
+    STATUS      current
+    DESCRIPTION
+        "The ratio of http workerBusy exceeded the threshold level.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6004  }
+    
+bwExecutorQueueUsageExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "The usage ratio of the executor queue (in %) exceeded the threshold level.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6005  }    
+
+bwExecutorQueueLatencyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType  }
+    STATUS      current
+    DESCRIPTION
+        "The executor queue latency exceeded the threshold level.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6006  }    
+    
+bwExecutorThreadPoolProcessingTimeExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "The executor thread pool processing time exceeded the threshold level.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6007  }
+
+bwExecutorThreadPoolBusyExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExecutorType }
+    STATUS      current
+    DESCRIPTION
+        "The executor thread pool busy ratio exceeded the threshold level.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6008  }
+    
+bwWebContainerServerTransactionLimitExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npReceivedRequestsDuringLastPeriod, npProtectionPeriod, npPeriodUnit }
+    STATUS      current
+    DESCRIPTION
+        "The number of incoming requests exceeded the prescribed limit during the last overload protection period.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6009  }
+    
+bwWebContainerWebAppTransactionLimitExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppContextPath, npReceivedRequestsDuringLastPeriod, npProtectionPeriod, npPeriodUnit }
+    STATUS      current
+    DESCRIPTION
+        "The number of incoming requests exceeded the prescribed limit during the last overload protection period.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6010  }
+
+bwWebContainerUserTransactionLimitExceeded  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npWebAppUser, npWebAppContextPath, npReceivedRequestsDuringLastPeriod, npProtectionPeriod, npPeriodUnit }
+    STATUS      current
+    DESCRIPTION
+        "The number of incoming requests exceeded the prescribed limit during the last overload protection period.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:147586
+    ::=  {  systemFaults 6011  }
+    
+bwWebContainerAuthenticationServerUnreachable  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npAuthenticationServer }
+    STATUS      current
+    DESCRIPTION
+        "The Web Container was unable to connect to the Authentication Server.
+@severity:critical
+@subcomponent:webcontainer"
+-- @feature:173615
+    ::=  {  systemFaults 6012  }
+    
+bwSslClientAuthWithoutTrust  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npProtocol, npName }
+    STATUS      current
+    DESCRIPTION
+        "There is no trust configured on the system but a client authentication is required on a secure interface.
+@severity:high
+@subcomponent:webcontainer"
+-- @feature:173615
+    ::=  {  systemFaults 6013  }
+    
+END

@@ -1,0 +1,8 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartArguments>updateEbsUnv "Administrator" "Skibb02" "atrcx886vm1.athtem.eei.ericsson.se:6400" "atrcx894-zone4_dwhrep" "PM_E_EBSS:((1))" "TP_BASE:BASE_TP_20100506"  "C:\Users\eciacah\Desktop" "XI" "ENTERPRISE"</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartArguments>updateEbsUnv "Administrator" "Skibb02" "atrcx886vm1.athtem.eei.ericsson.se:6400" "atrcx894-zone4_dwhrep" "PM_E_EBSS:((1))" "TP_BASE:BASE_TP_20100506"  "C:\Users\eciacah\Desktop" "XI" "ENTERPRISE"</StartArguments>
+  </PropertyGroup>
+</Project>

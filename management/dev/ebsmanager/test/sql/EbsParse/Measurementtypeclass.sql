@@ -1,0 +1,18 @@
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSG:((3)):PM_E_EBSG_TRX', 'PM_E_EBSG:((3))', 'TRX');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSG:((3)):PM_E_EBSG_DEFAULT', 'PM_E_EBSG:((3))', 'DEFAULT');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSG:((3)):PM_E_EBSG_CELL', 'PM_E_EBSG:((3))', 'CELL');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_Area', 'PM_E_EBSS:((2))', 'Area');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_RA', 'PM_E_EBSS:((2))', 'RA');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_TAC', 'PM_E_EBSS:((2))', 'TAC');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_GGSN ', 'PM_E_EBSS:((2))', 'GGSN ');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_HNI', 'PM_E_EBSS:((2))', 'HNI');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_CELL', 'PM_E_EBSS:((2))', 'CELL');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_HZI', 'PM_E_EBSS:((2))', 'HZI');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_SGSN', 'PM_E_EBSS:((2))', 'SGSN');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_DEFAULT', 'PM_E_EBSS:((2))', 'DEFAULT');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_HLR', 'PM_E_EBSS:((2))', 'HLR');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_SA', 'PM_E_EBSS:((2))', 'SA');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_APN', 'PM_E_EBSS:((2))', 'APN');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSS:((2)):PM_E_EBSS_TACSVN', 'PM_E_EBSS:((2))', 'TACSVN');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSW:((2)):PM_E_EBSW_CELL', 'PM_E_EBSW:((2))', 'CELL');
+insert into Measurementtypeclass (TYPECLASSID, VERSIONID, DESCRIPTION) values ('PM_E_EBSW:((2)):PM_E_EBSW_DEFAULT', 'PM_E_EBSW:((2))', 'DEFAULT');

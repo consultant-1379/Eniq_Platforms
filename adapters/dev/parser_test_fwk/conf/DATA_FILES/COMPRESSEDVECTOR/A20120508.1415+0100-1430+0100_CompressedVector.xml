@@ -1,0 +1,36 @@
+<!--<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mdc>
+  <mfh>
+    <ffv>1</ffv>
+    <sn></sn>
+    <st></st>
+    <vn></vn>
+    <cbt>20120510141500Z</cbt>
+  </mfh>
+  <md>
+    <neid>
+      <neun></neun>
+      <nedn></nedn>
+    </neid>
+    <mi>
+      <mts>20120510143000Z</mts>
+      <gp>900</gp>
+      <mt>pega_counter</mt>
+      <mt>compressedvector_counter</mt>
+      <mv>
+        <moid>ManagedElement=1,CompressedVector=1</moid>
+        <r>1</r>
+        <r>
+          2820,4556,4242,3452,128,2158,2914,3317,7554,4038,8913,2746,6509,3742,1785,9982,4002,6551,9427,5357,9458,2604
+        </r>
+      </mv>
+      <mv>
+        <moid>ManagedElement=1,CompressedVector=2</moid>
+        <r>2</r>
+        <r>
+          2820,5986,2517,5626,4131,2162,7457,6461,854,3497,8953,7385,2796,8910,9606,4124,2357,7682,3700,7626,6044,3245
+        </r>
+      </mv>
+    </mi>
+  </md>
+</mdc>-->

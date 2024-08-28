@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/xerces_impl/v2_0_2/prod/xercesImpl-2.0.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_etl_controller/build/engine/engine.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_installer/build/repository/repository.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_adapters/build/parser/parser.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_common_utilities/build/common_utilities/common.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/hk2-api-2.4.0-b31.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/hk2-locator-2.4.0-b31.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/hk2-utils-2.4.0-b31.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/javax.annotation-api-1.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/javax.inject-2.4.0-b31.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/javax.ws.rs-api-2.0.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-apache-connector-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-client-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-common-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-entity-filtering-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-guava-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/jersey-media-moxy-2.21.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/org.eclipse.persistence.moxy-2.6.0.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jersey/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_codec/v1_9/prod/commons-codec-1.9.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_logging/v1_0_2/prod/commons-logging-1.0.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_httpclient/v4_4_1/prod/httpclient-4.4.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_httpclient/v4_4_1/prod/httpcore-4.4.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_httpclient/v4_2_2/prod/httpclient-4.2.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_httpclient/v4_2_2/prod/httpcore-4.2.2.jar"/>
+
+	
+	<classpathentry kind="output" path="classes"/>
+</classpath>

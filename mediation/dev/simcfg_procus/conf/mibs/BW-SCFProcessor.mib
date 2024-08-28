@@ -1,0 +1,1948 @@
+-- File Name : BW-SCFProcessor.mib
+
+BW-SCFProcessor DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32 
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201202230000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft enterprise."
+
+    REVISION "201202230000Z"
+      DESCRIPTION "Creation of the SCF Processor MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  scfProcessor OBJECT IDENTIFIER
+    ::= { broadworks 29 }
+
+  interfaces OBJECT IDENTIFIER
+    ::= { scfProcessor 1 }
+
+  services OBJECT IDENTIFIER
+    ::= { scfProcessor 2 }
+
+  overload OBJECT IDENTIFIER
+    ::= { scfProcessor 3 }
+
+  queue OBJECT IDENTIFIER
+    ::= { scfProcessor 4 }
+
+  bwSCFProcessorMibConformance OBJECT IDENTIFIER
+    ::= { scfProcessor 1000 }
+
+  tcp OBJECT IDENTIFIER
+    ::= { interfaces 1 }
+
+  commonComm OBJECT IDENTIFIER
+    ::= { interfaces 2 }
+
+  ss7 OBJECT IDENTIFIER
+    ::= { interfaces 3 }
+
+  sip OBJECT IDENTIFIER
+    ::= { interfaces 4 }
+
+  smpp OBJECT IDENTIFIER
+    ::= { interfaces 5 }
+
+  cap OBJECT IDENTIFIER
+    ::= { ss7 1 }
+
+  map OBJECT IDENTIFIER
+    ::= { ss7 2 }
+
+  is41 OBJECT IDENTIFIER
+    ::= { ss7 3 }
+
+  dnsModule OBJECT IDENTIFIER
+    ::= { scfProcessor 5 }
+
+  dnsStats OBJECT IDENTIFIER
+    ::= { dnsModule 1 }
+
+-- SCF Processor modules  ...........................................
+
+-- SCF Processor - TCP Framework ........................
+
+  bwSCFProcessorTcpServersStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSCFProcessorTcpServersStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for TCP underlying framework for the SCP process."
+-- @feature:158606
+    ::= { tcp 1 }
+
+  bwSCFProcessorTcpServersStatsEntry OBJECT-TYPE
+    SYNTAX      BwSCFProcessorTcpServersStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwSCFProcessorTcpServersStatsTable."
+    INDEX       { bwSCFProcessorTcpServersStatsIndex }
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsTable 1 }
+
+  BwSCFProcessorTcpServersStatsEntry ::= SEQUENCE {
+    bwSCFProcessorTcpServersStatsIndex                Unsigned32,
+    bwSCFProcessorTcpServersName                      DisplayString,
+    bwSCFProcessorTcpServersNbConnectionsAccepted     Counter32,
+    bwSCFProcessorTcpServersNbConnectionsRefused      Counter32,
+    bwSCFProcessorTcpServersNbConnectionsInitiated    Counter32,
+    bwSCFProcessorTcpServersNbConnectionsClosed       Counter32,
+    bwSCFProcessorTcpServersNbBytesSent               Gauge32,
+    bwSCFProcessorTcpServersNbBytesReceived           Gauge32,
+    bwSCFProcessorTcpServersOutgoingQueueSize         Gauge32,
+    bwSCFProcessorTcpServersIncomingQueueSize         Gauge32,
+    bwSCFProcessorTcpServersNbBytesSentSecure         Gauge32,
+    bwSCFProcessorTcpServersNbBytesReceivedSecure     Gauge32
+  }
+
+  bwSCFProcessorTcpServersStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwSCFProcessorTcpServersStatsTable. This is the index to a specific TCP server name."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 1 }
+
+  bwSCFProcessorTcpServersName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of TCP server - Names are internally defined at at the application level."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 2 }
+
+  bwSCFProcessorTcpServersNbConnectionsAccepted OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections accepted by the TCP server."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 3 }
+
+  bwSCFProcessorTcpServersNbConnectionsRefused OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections refused by the TCP server."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 4 }
+
+  bwSCFProcessorTcpServersNbConnectionsInitiated OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections initiated by the TCP server."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 5 }
+
+  bwSCFProcessorTcpServersNbConnectionsClosed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of connections closed by the TCP server or remote hosts."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 6 }
+
+  bwSCFProcessorTcpServersNbBytesSent OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes sent by the TCP server."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 7 }
+
+  bwSCFProcessorTcpServersNbBytesReceived OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes received by the TCP server."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 8 }
+
+  bwSCFProcessorTcpServersOutgoingQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes in the outgoing queue."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 9 }
+
+  bwSCFProcessorTcpServersIncomingQueueSize OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes in the incoming queue."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 10 }
+
+  bwSCFProcessorTcpServersNbBytesSentSecure OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes sent by the TCP server over secure connections."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 11 }
+
+  bwSCFProcessorTcpServersNbBytesReceivedSecure OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of bytes received by the TCP server over secure connections."
+-- @feature:158606
+    ::= { bwSCFProcessorTcpServersStatsEntry 12 }
+
+-- SCF Processor - Common Communication Protocol ........................
+
+  bwSCFProcessorCommonCommStatsTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSCFProcessorCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains counters for BCCT for the SCF Processor process."
+-- @feature:158606
+    ::= { commonComm 1 }
+
+  bwSCFProcessorCommonCommStatsEntry OBJECT-TYPE
+    SYNTAX      BwSCFProcessorCommonCommStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Definition of the entries for bwSCFProcessorCommonCommStatsTable."
+    INDEX       { bwSCFProcessorCommonCommStatsIndex }
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsTable 1 }
+
+  BwSCFProcessorCommonCommStatsEntry ::= SEQUENCE {
+    bwSCFProcessorCommonCommStatsIndex                    Unsigned32,
+    bwSCFProcessorCommonCommHost                          DisplayString,
+    bwSCFProcessorCommonCommInterface                     DisplayString,
+    bwSCFProcessorCommonCommProtocol                      DisplayString,
+    bwSCFProcessorCommonCommAcceptedOutboundConnections   Counter32,
+    bwSCFProcessorCommonCommAcceptedInboundConnections    Counter32,
+    bwSCFProcessorCommonCommRejectedOutboundConnections   Counter32,
+    bwSCFProcessorCommonCommRejectedInboundConnections    Counter32,
+    bwSCFProcessorCommonCommOutputMessagesProcessed       Counter32,
+    bwSCFProcessorCommonCommInputMessagesProcessed        Counter32,
+    bwSCFProcessorCommonCommOutputCommunicationErrors     Counter32,
+    bwSCFProcessorCommonCommInputCommunicationErrors      Counter32
+  }
+
+  bwSCFProcessorCommonCommStatsIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents an index in table bwSCFProcessorCommonCommStatsTable. The index represents a connection for a specific Host-Interfacece-Protocol combination."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 1 }
+
+  bwSCFProcessorCommonCommHost OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The address of a host connected to the BroadWorks Common Communication Protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 2 }
+
+  bwSCFProcessorCommonCommInterface OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The IP address of a local interface that a protocol is bound to."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 3 }
+
+  bwSCFProcessorCommonCommProtocol OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The name of a BroadWorks Common Communication Protocol client protocol, e.g. OCI or SyncApi."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 4 }
+
+  bwSCFProcessorCommonCommAcceptedOutboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client in this process connects to the framework to a remote host, using the interface and protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 5 }
+
+  bwSCFProcessorCommonCommAcceptedInboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client in this process connects to the framework from a remote host, using the interface and protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 6 }
+
+  bwSCFProcessorCommonCommRejectedOutboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client connection request going from this process to a remote host and going through this interface has been rejected for a particular protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 7 }
+
+  bwSCFProcessorCommonCommRejectedInboundConnections OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a client connection request coming to this host and going through this interface has been rejected by the framework for a particular protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 8 }
+
+  bwSCFProcessorCommonCommOutputMessagesProcessed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been sent and processed for this host, interface and protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 9 }
+
+  bwSCFProcessorCommonCommInputMessagesProcessed OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been received and processed for this host, interface and protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 10 }
+
+  bwSCFProcessorCommonCommOutputCommunicationErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message could not be read because the TCP stack returned an error."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 11 }
+
+  bwSCFProcessorCommonCommInputCommunicationErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter is incremented whenever a message has been sent and processed for this host, interface and protocol."
+-- @feature:158606
+    ::= { bwSCFProcessorCommonCommStatsEntry 12 }
+
+-- SCF Processor - SS7 Cap  ........................
+
+  bwSS7CapStatus OBJECT-TYPE
+    SYNTAX      INTEGER { up(1), down(2) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This scalar reflects the current state of the cap interface."
+-- @feature:158606
+    ::= { cap 1 }
+
+  bwSS7CapResetStats OBJECT-TYPE
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other than '0', all CAP related counters and gauges are reset."
+-- @feature:158606
+    ::= { cap 2 }
+
+  bwSS7CapGSMRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of CAP messages received from a GSM peer, including responses."
+-- @feature:158606
+    ::= { cap 3 }
+
+  bwSS7CapGSMTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of CAP messages transmitted to a GSM peer, including responses."
+-- @feature:158606
+    ::= { cap 4 }
+
+   bwSS7CapMessagesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSS7CapMessagesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "Each row contains statistics on the number of messages sent and received."
+ -- @feature:158606
+    ::= { cap 5 }
+
+   bwSS7CapMessagesEntry OBJECT-TYPE
+     SYNTAX      BwSS7CapMessagesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "Each row contains statistics on the number of messages sent and received."
+     INDEX { bwSS7CapMessageOpcode }
+ -- @feature:158606
+    ::= { bwSS7CapMessagesTable 1 }
+
+   BwSS7CapMessagesEntry ::= SEQUENCE {
+     bwSS7CapMessageOpcode  INTEGER,
+     bwSS7CapMessageRx      Counter32,
+     bwSS7CapMessageTx      Counter32,
+     bwSS7CapMessageResults Counter32,
+     bwSS7CapMessageErrors  Counter32,
+     bwSS7CapMessageRejects Counter32 }
+
+  bwSS7CapMessageOpcode OBJECT-TYPE
+    SYNTAX      INTEGER { initialDP(1), connect(21), continue(32), furnishChargingInformation(35), continueWithArgument(57) }
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Opcode index in the message table."
+-- @feature:158606,182329
+    ::= { bwSS7CapMessagesEntry 1 }
+
+  bwSS7CapMessageRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages received indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7CapMessagesEntry 2 }
+
+  bwSS7CapMessageTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages transmitted indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7CapMessagesEntry 3 }
+
+  bwSS7CapMessageResults OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of positive responses transmitted or received indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7CapMessagesEntry 4 }
+
+  bwSS7CapMessageErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of errors responses indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7CapMessagesEntry 5 }
+
+  bwSS7CapMessageRejects OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of rejection errors transmitted indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7CapMessagesEntry 6 }
+
+-- SCF Processor - SS7 Map  ........................
+
+  bwSS7MapStatus OBJECT-TYPE
+    SYNTAX      INTEGER { up(1), down(2) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This scalar reflects the current state of the map interface."
+-- @feature:158606
+    ::= { map 1 }
+
+  bwSS7MapResetStats OBJECT-TYPE
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other than '0', all MAP related counters and gauges are reset."
+-- @feature:158606
+    ::= { map 2 }
+
+  bwSS7MapTotalRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of MAP messages received from a peer, including responses."
+-- @feature:158606
+    ::= { map 3 }
+
+  bwSS7MapTotalTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of MAP messages transmitted to a peer, including responses."
+-- @feature:158606
+    ::= { map 4 }
+
+   bwSS7MapDialogsTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSS7MapDialogsEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "Each row contains statistics on the number of dialog primitive sent and received."
+ -- @feature:158606
+    ::= { map 5 }
+
+   bwSS7MapDialogsEntry OBJECT-TYPE
+     SYNTAX      BwSS7MapDialogsEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "Each row contains statistics on the number of dialog primitive sent and received."
+     INDEX { bwSS7MapDialogOpcode }
+ -- @feature:158606
+    ::= { bwSS7MapDialogsTable 1 }
+
+   BwSS7MapDialogsEntry ::= SEQUENCE {
+     bwSS7MapDialogOpcode     INTEGER,
+     bwSS7MapDialogRx         Counter32,
+     bwSS7MapDialogTx         Counter32 }
+
+  bwSS7MapDialogOpcode OBJECT-TYPE
+    SYNTAX      INTEGER { open(1), accept(2), close(3), refuse(4), userAbort(5), provAbort(6) }
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Opcode index in the message table."
+-- @feature:158606
+    ::= { bwSS7MapDialogsEntry 1 }
+
+  bwSS7MapDialogRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of dialog primitive received indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapDialogsEntry 2 }
+
+  bwSS7MapDialogTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of dialog primitive transmitted indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapDialogsEntry 3 }
+
+   bwSS7MapMessagesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSS7MapMessagesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "Each row contains statistics on the number of messages sent and received."
+ -- @feature:158606
+    ::= { map 6 }
+
+   bwSS7MapMessagesEntry OBJECT-TYPE
+     SYNTAX      BwSS7MapMessagesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "Each row contains statistics on the number of messages sent and received."
+     INDEX { bwSS7MapMessageOpcode }
+ -- @feature:158606
+    ::= { bwSS7MapMessagesTable 1 }
+
+   BwSS7MapMessagesEntry ::= SEQUENCE {
+     bwSS7MapMessageOpcode     INTEGER,
+     bwSS7MapMessageRx         Counter32,
+     bwSS7MapMessageTx         Counter32,
+     bwSS7MapMessageResults    Counter32,
+     bwSS7MapMessageUserErrors Counter32,
+     bwSS7MapMessageProvErrors Counter32 }
+
+  bwSS7MapMessageOpcode OBJECT-TYPE
+    SYNTAX      INTEGER { sendRoutingInfo(22), anyTimeInterrogation(71) }
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "Opcode index in the message table."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 1 }
+
+  bwSS7MapMessageRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages received indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 2 }
+
+  bwSS7MapMessageTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages transmitted indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 3 }
+
+  bwSS7MapMessageResults OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of positive responses transmitted or received indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 4 }
+
+  bwSS7MapMessageUserErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of user errors responses indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 5 }
+
+  bwSS7MapMessageProvErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of provider errors responses indexed by opcode."
+-- @feature:158606
+    ::= { bwSS7MapMessagesEntry 6 }
+
+-- SCF Processor - SS7 IS41  ........................
+
+  bwSS7Is41Status OBJECT-TYPE
+    SYNTAX      INTEGER { up(1), down(2) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This scalar reflects the current state of the IS41 interface."
+-- @feature:177227
+    ::= { is41 1 }
+
+  bwSS7Is41ResetStats OBJECT-TYPE
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "Writing any value other than 0 into this element resets all IS41-related counters and gauges."
+-- @feature:177227
+    ::= { is41 2 }
+
+  bwSS7Is41Rx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of IS41 messages received from an ANSI peer.  It includes responses."
+-- @feature:177227
+    ::= { is41 3 }
+
+  bwSS7Is41Tx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of IS41 messages transmitted to a ANSI peer.  It includes responses."
+-- @feature:177227
+    ::= { is41 4 }
+
+   bwSS7IS41MessagesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSS7Is41MessagesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "Each row contains statistics on the number of messages sent and received."
+ -- @feature:177227
+    ::= { is41 5 }
+
+   bwSS7Is41MessagesEntry OBJECT-TYPE
+     SYNTAX      BwSS7Is41MessagesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "Each row contains statistics on the number of messages sent and received."
+     INDEX { bwSS7Is41MessageOpcode }
+ -- @feature:177227
+    ::= { bwSS7IS41MessagesTable 1 }
+
+   BwSS7Is41MessagesEntry ::= SEQUENCE {
+     bwSS7Is41MessageOpcode   INTEGER,
+     bwSS7IS41MessageRx       Counter32,
+     bwSS7Is41MessageTx       Counter32,
+     bwSS7Is41MessageResults  Counter32,
+     bwSS7Is41MessageErrors   Counter32,
+     bwSS7Is41MessageRejects  Counter32 }
+
+  bwSS7Is41MessageOpcode OBJECT-TYPE
+    SYNTAX      INTEGER { locreq(15), orreq(47), smdpp(53), anlyzd(64), msgdir(79) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Opcode index in the message table."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 1 }
+
+  bwSS7IS41MessageRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages received indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 2 }
+
+  bwSS7Is41MessageTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages transmitted indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 3 }
+
+  bwSS7Is41MessageResults OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of positive responses transmitted or received indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 4 }
+
+  bwSS7Is41MessageErrors OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of error responses indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 5 }
+
+  bwSS7Is41MessageRejects OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of rejection errors transmitted indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41MessagesEntry 6 }
+
+   bwSS7Is41DialogsTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSS7Is41DialogsEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "Each row contains statistics on the number of messages sent and received."
+ -- @feature:177227
+    ::= { is41 6 }
+
+   bwSS7Is41DialogsEntry OBJECT-TYPE
+     SYNTAX      BwSS7Is41DialogsEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "Each row contains statistics on the number of messages sent and received."
+     INDEX { bwSS7Is41DialogOpcode }
+ -- @feature:177227
+    ::= { bwSS7Is41DialogsTable 1 }
+
+   BwSS7Is41DialogsEntry ::= SEQUENCE {
+     bwSS7Is41DialogOpcode   INTEGER,
+     bwSS7Is41DialogRx       Counter32,
+     bwSS7Is41DialogTx       Counter32 }
+
+  bwSS7Is41DialogOpcode OBJECT-TYPE
+    SYNTAX      INTEGER { open(1), accept(2), close(3), refuse(4), userAbort(5) }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Identifies the dialog primitive opcode.  The enumeration value is defined at standardOpcode + 1."
+-- @feature:177227
+    ::= { bwSS7Is41DialogsEntry 1 }
+
+  bwSS7Is41DialogRx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages received indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41DialogsEntry 2 }
+
+  bwSS7Is41DialogTx OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of messages transmitted indexed by the opcode."
+-- @feature:177227
+    ::= { bwSS7Is41DialogsEntry 3 }
+
+-- SCF Processor - Interface SIP ........................
+
+  bwSCFProcessorSipStatsInviteIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of INVITE requests received by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 1 }
+
+  bwSCFProcessorSipStatsInviteOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of INVITE requests sent by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 2 }
+
+  bwSCFProcessorSipStatsAckIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of ACK requests received by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 3 }
+
+  bwSCFProcessorSipStatsAckOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of ACK requests sent by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 4 }
+
+  bwSCFProcessorSipStatsCancelIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of CANCEL requests received by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 5 }
+
+  bwSCFProcessorSipStatsCancelOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of CANCEL requests sent by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 6 }
+
+  bwSCFProcessorSipStatsNotifyIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of NOTIFY requests received by the BroadWorks SCF server."
+-- @feature:158606
+    ::= { sip 7 }
+
+    bwSCFProcessorSipStatsInviteResponsesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSCFProcessorSipStatsInviteResponsesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "This table contains the counter for all SIP responses to the Invite requests sent/received by the BroadWorks SCF server. Each counter is a 32-bit counter. The response code is used to index into the table. Here are all the response codes: 100, 180, 181, 182, 183, 200, 300, 301, 302, 305, 380, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 413, 414, 415, 420, 480, 481, 482, 483, 484, 485, 486, 487, 500, 501, 503, 504, 505, 513, 600, 603, 604, 606"
+ -- @feature:158606
+    ::= { sip 8 }
+
+   bwSCFProcessorSipStatsInviteResponsesEntry OBJECT-TYPE
+     SYNTAX      BwSCFProcessorSipStatsInviteResponsesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This row contains information on a particular SIP status code received or sent in response to an Invite."
+     INDEX { bwSCFProcessorSipStatsInviteResponseCodeValue }
+ -- @feature:158606
+    ::= { bwSCFProcessorSipStatsInviteResponsesTable 1 }
+
+  BwSCFProcessorSipStatsInviteResponsesEntry ::= SEQUENCE {
+    bwSCFProcessorSipStatsInviteResponseCodeValue   Integer32,
+    bwSCFProcessorSipStatsInviteResponseIns         Counter32,
+    bwSCFProcessorSipStatsInviteResponseOuts        Counter32
+  }
+
+  bwSCFProcessorSipStatsInviteResponseCodeValue OBJECT-TYPE
+    SYNTAX      Integer32 (100..999)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a SIP status code.  The rest of the information in this row is related to this value."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsInviteResponsesEntry 1 }
+
+  bwSCFProcessorSipStatsInviteResponseIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of SIP responses received in response to an Invite."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsInviteResponsesEntry 2 }
+
+  bwSCFProcessorSipStatsInviteResponseOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of SIP responses sent in response to an Invite."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsInviteResponsesEntry 3 }
+
+    bwSCFProcessorSipStatsCancelResponsesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSCFProcessorSipStatsCancelResponsesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "This table contains the counter for all SIP responses to the Cancel requests sent/received by the BroadWorks SCF server. Each counter is a 32-bit counter. The response code is used to index into the table. Here are all the response codes: 100, 180, 181, 182, 183, 200, 300, 301, 302, 305, 380, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 413, 414, 415, 420, 480, 481, 482, 483, 484, 485, 486, 487, 500, 501, 503, 504, 505, 513, 600, 603, 604, 606"
+ -- @feature:158606
+    ::= { sip 9 }
+
+   bwSCFProcessorSipStatsCancelResponsesEntry OBJECT-TYPE
+     SYNTAX      BwSCFProcessorSipStatsCancelResponsesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This row contains information on a particular SIP status code received or sent in response to an Cancel."
+     INDEX { bwSCFProcessorSipStatsCancelResponseCodeValue }
+ -- @feature:158606
+    ::= { bwSCFProcessorSipStatsCancelResponsesTable 1 }
+
+  BwSCFProcessorSipStatsCancelResponsesEntry ::= SEQUENCE {
+    bwSCFProcessorSipStatsCancelResponseCodeValue   Integer32,
+    bwSCFProcessorSipStatsCancelResponseIns         Counter32,
+    bwSCFProcessorSipStatsCancelResponseOuts        Counter32
+  }
+
+  bwSCFProcessorSipStatsCancelResponseCodeValue OBJECT-TYPE
+    SYNTAX      Integer32 (100..999)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a SIP status code.  The rest of the information in this row is related to this value."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsCancelResponsesEntry 1 }
+
+  bwSCFProcessorSipStatsCancelResponseIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of SIP responses received in response to an Cancel."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsCancelResponsesEntry 2 }
+
+  bwSCFProcessorSipStatsCancelResponseOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of SIP responses sent in response to an Cancel."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsCancelResponsesEntry 3 }
+
+    bwSCFProcessorSipStatsNotifyResponsesTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSCFProcessorSipStatsNotifyResponsesEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "This table contains the counter for all SIP responses to the Notify requests received by the BroadWorks SCF server. Each counter is a 32-bit counter. The response code is used to index into the table. Here are all the response codes: 100, 180, 181, 182, 183, 200, 300, 301, 302, 305, 380, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 413, 414, 415, 420, 480, 481, 482, 483, 484, 485, 486, 487, 500, 501, 503, 504, 505, 513, 600, 603, 604, 606"
+ -- @feature:158606
+    ::= { sip 10 }
+
+   bwSCFProcessorSipStatsNotifyResponsesEntry OBJECT-TYPE
+     SYNTAX      BwSCFProcessorSipStatsNotifyResponsesEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This row contains information on a particular SIP status code sent in response to an notify."
+     INDEX { bwSCFProcessorSipStatsNotifyResponseCodeValue }
+ -- @feature:158606
+    ::= { bwSCFProcessorSipStatsNotifyResponsesTable 1 }
+
+  BwSCFProcessorSipStatsNotifyResponsesEntry ::= SEQUENCE {
+    bwSCFProcessorSipStatsNotifyResponseCodeValue   Integer32,
+    bwSCFProcessorSipStatsNotifyResponseOuts        Counter32
+  }
+
+  bwSCFProcessorSipStatsNotifyResponseCodeValue OBJECT-TYPE
+    SYNTAX      Integer32 (100..999)
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents a SIP status code.  The rest of the information in this row is related to this value."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsNotifyResponsesEntry 1 }
+
+  bwSCFProcessorSipStatsNotifyResponseOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter represents the number of SIP responses sent in response to an Notify."
+-- @feature:158606
+    ::= { bwSCFProcessorSipStatsNotifyResponsesEntry 3 }
+
+  bwSCFProcessorSipStatsActiveTcpConnections OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge is reflects the number of active SIP TCP connections."
+-- @feature:158606
+    ::= { sip 11 }
+
+  bwSCFProcessorSipStatsActiveTcpIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SIP messages received via TCP."
+-- @feature:158606
+    ::= { sip 12 }
+
+  bwSCFProcessorSipStatsActiveTcpOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SIP messages sent via TCP."
+-- @feature:158606
+    ::= { sip 13 }
+
+  bwSCFProcessorSipStatsActiveTcpFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SIP messages attempted to be sent via TCP but failed."
+-- @feature:158606
+    ::= { sip 14 }
+
+  bwSCFProcessorSipStatsActiveUdpIns OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SIP messages received via UDP."
+-- @feature:158606
+    ::= { sip 15 }
+
+  bwSCFProcessorSipStatsActiveUdpOuts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SIP messages sent via UDP."
+-- @feature:158606
+    ::= { sip 16 }
+
+-- SCF Processor - SMPP Interface ........................
+
+  bwTotalSmppSubmitSMRequestsSent OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Total number of outgoing SMPP submit_sm requests sent."
+-- @feature:158606
+    ::= { smpp 1 }
+
+  bwTotalSmppInvalidSubmitSMResponsesReceived OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Total number of invalid received submit_sm_resp."
+-- @feature:158606
+    ::= { smpp 2 }
+
+  bwTotalSmppSubmitSMResponseTimeout OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "Total number of submit_sm request timeouts detected."
+-- @feature:158606
+    ::= { smpp 3 }
+
+-- SCF Processor - Services ........................
+
+  bwSCFProcessorTotalCAPSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing incoming CAP requests."
+-- @feature:158606
+    ::= { services 1 }
+
+  bwSCFProcessorTotalMAPSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      obsolete
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing outgoing MAP queries."
+-- @feature:158606
+    ::= { services 2 }
+
+  bwSCFProcessorTotalSMPPSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing outgoing MWI notification to the SMSC."
+-- @feature:158606
+    ::= { services 3 }
+
+  bwSCFProcessorTotalInitDPIndRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Initial DP requests that are rejected due to application processing."
+-- @feature:158606
+    ::= { services 4 }
+
+  bwSCFProcessorTotalMobileOriginations OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of IMRN requests that are for mobile originations."
+-- @feature:158606,177227
+    ::= { services 5 }
+
+  bwSCFProcessorTotalMobileTerminations OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of IMRN requests that are for mobile terminations."
+-- @feature:158606,177227
+    ::= { services 6 }
+
+  bwSCFProcessorTotalSessionTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of request time-outs on the BroadWork SCF server."
+-- @feature:158606
+    ::= { services 7 }
+
+  bwSCFProcessorTotalNSQueryFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks SCF server queries the NS for application server location of the mobile user."
+-- @feature:158606
+    ::= { services 8 }
+
+  bwSCFProcessorTotalNSQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF server failed to receive any response from an NS for application server location of the mobile user."
+-- @feature:158606
+    ::= { services 9 }
+
+  bwSCFProcessorTotalNSQueryRouteAdvances OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF route advances for NS query."
+-- @feature:158606
+    ::= { services 10 }
+
+  bwSCFProcessorTotalIMRNQueryFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks SCF server queries the AS for the IMRN."
+-- @feature:158606
+    ::= { services 11 }
+
+  bwSCFProcessorTotalIMRNQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF server failed to receive any response from an AS for the IMRN query."
+-- @feature:158606
+    ::= { services 12 }
+
+  bwSCFProcessorTotalIMRNQueryRouteAdvances OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF route advances for secondary AS."
+-- @feature:158606
+    ::= { services 13 }
+
+  bwSCFProcessorTotalLocationRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF is requested to obtain the GSM mobile location information."
+-- @feature:158606
+    ::= { services 14 }
+
+  bwSCFProcessorTotalPowerStateRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF is requested to obtain the mobiles power state information."
+-- @feature:158606
+    ::= { services 15 }
+
+  bwSCFProcessorTotalMsrnRequests OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF is requested to obtain the Mobile Station Routing Number."
+-- @feature:158606
+    ::= { services 16 }
+
+  bwSCFProcessorTotalInviteRequestRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of INVITE requests that are rejected due to application processing."
+-- @feature:158606
+    ::= { services 17 }
+
+  bwSCFProcessorTotalAtiQueryFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks SCF server queries the HLR with Any Time Interrogation requests."
+-- @feature:158606
+    ::= { services 18 }
+
+  bwSCFProcessorTotalAtiQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF server failed to receive any response from an HLR for the Any Time Interrogation request."
+-- @feature:158606
+    ::= { services 19 }
+
+  bwSCFProcessorTotalSriQueryFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks SCF server queries the HLR with Send Routing Information requests."
+-- @feature:158606
+    ::= { services 20 }
+
+  bwSCFProcessorTotalSriQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks SCF server failed to receive any response from an HLR for the Send Routing Information request."
+-- @feature:158606
+    ::= { services 21 }
+
+  bwSCFProcessorCAPActiveSessions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reflects the total number of CAP active sessions."
+-- @feature:158606
+    ::= { services 22 }
+
+  bwSCFProcessorMAPActiveSessions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reflects the total number of MAP active sessions."
+-- @feature:158606
+    ::= { services 23 }
+
+  bwSCFProcessorSMPPActiveSessions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reflects the total number of SMPP active sessions."
+-- @feature:158606
+    ::= { services 24 }
+
+  bwSCFProcessorTotalIs41IncomingSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing incoming Is41 requests."
+-- @feature:177227
+    ::= { services 25 }
+
+  bwSCFProcessorTotalIs41OutgoingSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing outgoing IS41 queries."
+-- @feature:177227
+    ::= { services 26 }
+
+  bwSCFProcessorTotalAnlyzdRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Analyzed Information requests that are rejected due to application processing."
+-- @feature:177227
+    ::= { services 27 }
+
+  bwSCFProcessorTotalOrreqRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Origination Requests requests that are rejected due to application processing."
+-- @feature:177227
+    ::= { services 28 }
+
+  bwSCFProcessorTotalSmdppRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of SMS Delivery Point to Point requests that are rejected due to application processing."
+-- @feature:177227
+    ::= { services 29 }
+
+  bwSCFProcessorTotalDomainStatusUpdateFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks Service Control Function Server updates the  Application Server of the domain status."
+-- @feature:177227
+    ::= { services 30 }
+
+  bwSCFProcessorTotalDomainStatusUpdateTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks Service Control Function Server failed to receive any response from an Application Server for domain status updates."
+-- @feature:177227
+    ::= { services 31 }
+
+  bwSCFProcessorTotalDomainStatusUpdateRouteAdvances OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks Service Control Function Server route advances to the secondary Application Server."
+-- @feature:177227
+    ::= { services 32 }
+
+  bwSCFProcessorTotalLocreqQueryFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks Service Control Function Server queries the MSC with Location Request requests."
+-- @feature:177227
+    ::= { services 33 }
+
+  bwSCFProcessorTotalLocreqQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks Service Control Function Server failed to receive any response from an MSC for the Location Request request."
+-- @feature:177227
+    ::= { services 34 }
+
+  bwSCFProcessorTotalMsgdirFailures OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of failures while the BroadWorks Service Control Function Server sends Message Directive requests to HLR."
+-- @feature:177227
+    ::= { services 35 }
+
+  bwSCFProcessorTotalMsgdirTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of times the BroadWorks Service Control Function Server failed to receive any response from an HLR for the Message Directive request."
+-- @feature:177227
+    ::= { services 36 }
+
+  bwSCFProcessorIs41IncomingActiveSessions OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reflects the total number of Incoming IS41 active sessions."
+-- @feature:177227
+    ::= { services 37 }
+
+  bwSCFProcessorOutgoingIS41ActiveSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reflects the total number of outgoing IS41 active sessions."
+-- @feature:177227
+    ::= { services 38 }
+
+  bwSCFProcessorTotalECTSupplementaryServiceNotifications OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Explicit Call Transfer supplementary service notification requests received."
+-- @feature:194283
+    ::= { services 39 }
+
+  bwSCFProcessorTotalCDSupplementaryServiceNotifications OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Call Deflection supplementary service notification requests received."
+-- @feature:194283
+    ::= { services 40 }
+
+  bwSCFProcessorTotalMPTYSupplementaryServiceNotifications OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of Multi Party supplementary service notification requests received."
+-- @feature:194283
+    ::= { services 41 }
+
+  bwSCFProcessorTotalSupplementaryServiceNotificationsRejected OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of supplementary service notification requests rejected."
+-- @feature:194283
+    ::= { services 42 }
+
+  bwSCFProcessorTotalMAPIncomingSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing incoming MAP requests."
+-- @feature:194283
+    ::= { services 43 }
+
+  bwSCFProcessorTotalMAPOutgoingSessions OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the total number of sessions created for processing outgoing MAP queries."
+-- @feature:194283
+    ::= { services 44 }
+
+-- SCF Processor - Overload ........................
+
+  bwSCFProcessorCurrentOverloadZone OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This current call related overload zone. Value is a string indicating Green, Yellow, or Red."
+-- @feature:158606
+    ::= { overload 1 }
+
+  bwSCFProcessorNumYellowZoneOverloadTrans OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of times that the SCF application has transitioned to the call related yellow overload zone."
+-- @feature:158606
+    ::= { overload 2 }
+
+  bwSCFProcessorNumRedZoneOverloadTrans OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of times that the SCF application has transitioned to the call related red overload zone."
+-- @feature:158606
+    ::= { overload 3 }
+
+  bwSCFProcessorNumDiscardedMessages OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of messages that were dropped from SIP or Camel queue."
+-- @feature:158606
+    ::= { overload 4 }
+
+  bwSCFProcessorTimeLastDiscardedMessage OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The last time a message was dropped from the SIP or Camel queue."
+-- @feature:158606
+    ::= { overload 5 }
+
+-- SCF Processor - Queue ........................
+
+    bwSCFProcessorInternalQueueTable OBJECT-TYPE
+     SYNTAX      SEQUENCE  OF  BwSCFProcessorInternalQueueEntry 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION "This table contains the statistics about the BroadWorks internal queues for the SCF server."
+ -- @feature:158606
+    ::= { queue 1 }
+
+   bwSCFProcessorInternalQueueEntry OBJECT-TYPE
+     SYNTAX      BwSCFProcessorInternalQueueEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+         "This table contains the statistics about the BroadWorks internal queues for the SCF server."
+     INDEX { bwSCFProcessorInternalQueueIndex }
+ -- @feature:158606
+    ::= { bwSCFProcessorInternalQueueTable 1 }
+
+   BwSCFProcessorInternalQueueEntry ::= SEQUENCE {
+     bwSCFProcessorInternalQueueIndex         Unsigned32,
+     bwSCFProcessorInternalQueueName          DisplayString,
+     bwSCFProcessorInternalQueueSize          Unsigned32,
+     bwSCFProcessorInternalQueueTimeAvg       Gauge32,
+     bwSCFProcessorInternalQueueTimeMin       Gauge32,
+     bwSCFProcessorInternalQueueTimeMax       Gauge32,
+     bwSCFProcessorInternalQueueLengthCurrent Gauge32,
+     bwSCFProcessorInternalQueueLengthAvg     Gauge32,
+     bwSCFProcessorInternalQueueLengthMax     Gauge32 }
+
+  bwSCFProcessorInternalQueueIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This integer represents the index of an internal queue on the SCF server."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 1 }
+
+  bwSCFProcessorInternalQueueName OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This represents the name of an internal queue on the SCF server."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 2 }
+
+  bwSCFProcessorInternalQueueSize OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of sample elements that the average, minimum and maximum holding times are calculated from."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 3 }
+
+  bwSCFProcessorInternalQueueTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This average queue holding time in milliseconds."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 4 }
+
+  bwSCFProcessorInternalQueueTimeMin OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The smallest queue sample holding time."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 5 }
+
+  bwSCFProcessorInternalQueueTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The biggest queue sample holding time."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 6 }
+
+  bwSCFProcessorInternalQueueLengthCurrent OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The number of elements currently held in the queue."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 7 }
+
+  bwSCFProcessorInternalQueueLengthAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The average number of elements simultaneously held in the queue."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 8 }
+
+  bwSCFProcessorInternalQueueLengthMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "The maximum number of elements simultaneously held in the queue."
+-- @feature:158606
+    ::= { bwSCFProcessorInternalQueueEntry 9 }
+
+-- SCF Processor - DNS  ........................
+
+  bwSCFProcessorDnsQueryTimeMax OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reports the maximum DNS query time in milliseconds."
+-- @feature:158606
+    ::= { dnsStats 1 }
+
+  bwSCFProcessorDnsQueryTimeMaxTimestampMSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The gauge reports the most significant part of the timestamp (4 most significant bytes) of when bwDnsQueryTimeMax was obtained."
+-- @feature:158606
+    ::= { dnsStats 2 }
+
+  bwSCFProcessorDnsQueryTimeMaxTimestampLSB OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "The gauge reports the least significant part of the timestamp (4 least significant bytes) of when bwDnsQueryTimeMax was obtained."
+-- @feature:158606
+    ::= { dnsStats 3 }
+
+  bwSCFProcessorDnsQueryTimeAvg OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This gauge reports the average DNS query time in milliseconds."
+-- @feature:158606
+    ::= { dnsStats 4 }
+
+  bwSCFProcessorDnsStatsQueriesTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF BwSCFProcessorDnsStatsQueriesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This table contains DNS statistics."
+-- @feature:158606
+    ::= { dnsStats 5 }
+
+  bwSCFProcessorDnsStatsQueriesEntry OBJECT-TYPE
+    SYNTAX      BwSCFProcessorDnsStatsQueriesEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION 
+        "This row contains information on a particular DNS query type."
+    INDEX       { bwSCFProcessorDnsStatsQueryIndex }
+-- @feature:158606
+    ::= { bwSCFProcessorDnsStatsQueriesTable 1 }
+
+  BwSCFProcessorDnsStatsQueriesEntry ::= SEQUENCE {
+    bwSCFProcessorDnsStatsQueryIndex         Unsigned32,
+    bwSCFProcessorDnsStatsQueryType          DisplayString,
+    bwSCFProcessorDnsStatsQueries            Counter32,
+    bwSCFProcessorDnsStatsQueryTimeouts      Counter32
+  }
+
+  bwSCFProcessorDnsStatsQueryIndex OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column is the index for the table."
+-- @feature:158606
+    ::= { bwSCFProcessorDnsStatsQueriesEntry 1 }
+
+  bwSCFProcessorDnsStatsQueryType OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION 
+        "This column represents the DNS query type."
+-- @feature:158606
+    ::= { bwSCFProcessorDnsStatsQueriesEntry 2 }
+
+  bwSCFProcessorDnsStatsQueries OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of DNS queries for a given type."
+-- @feature:158606
+    ::= { bwSCFProcessorDnsStatsQueriesEntry 3 }
+
+  bwSCFProcessorDnsStatsQueryTimeouts OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "This counter reflects the number of DNS queries timeouts for a given type."
+-- @feature:158606
+    ::= { bwSCFProcessorDnsStatsQueriesEntry 4 }
+
+  bwSCFProcessorDnsQueryTimeStatsReset OBJECT-TYPE
+    SYNTAX      INTEGER { reset(1) }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION 
+        "When set to a value other than 0, the values of the gauges bwSCFProcessorDnsQueryTimeMax, bwSCFProcessorDnsQueryTimeAvg, bwSCFProcessorDnsQueryTimeMaxTimestampMSB, and bwSCFProcessorDnsQueryTimeMaxTimestampLSB are reset to 0."
+-- @feature:158606
+    ::= { dnsStats 6 }
+
+-- BroadWorks SCF Processor MIB Conformance Definition  ......................................
+
+  bwSCFProcessorMibGroups OBJECT IDENTIFIER 
+    ::= { bwSCFProcessorMibConformance 1 }
+
+  bwSCFProcessorMibCompliancy OBJECT IDENTIFIER
+    ::= { bwSCFProcessorMibConformance 2 }
+
+  bwSCFProcessorTcpServerGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorTcpServersStatsIndex, bwSCFProcessorTcpServersName,
+              bwSCFProcessorTcpServersNbConnectionsAccepted, bwSCFProcessorTcpServersNbConnectionsRefused,
+              bwSCFProcessorTcpServersNbConnectionsInitiated, bwSCFProcessorTcpServersNbConnectionsClosed,
+              bwSCFProcessorTcpServersNbBytesSent, bwSCFProcessorTcpServersNbBytesReceived,
+              bwSCFProcessorTcpServersOutgoingQueueSize, bwSCFProcessorTcpServersIncomingQueueSize,
+              bwSCFProcessorTcpServersNbBytesSentSecure, bwSCFProcessorTcpServersNbBytesReceivedSecure } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the TCP Server statistics."
+    ::= { bwSCFProcessorMibGroups 1 }
+
+  bwSCFProcessorCommonCommGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorCommonCommStatsIndex, bwSCFProcessorCommonCommHost,
+              bwSCFProcessorCommonCommInterface, bwSCFProcessorCommonCommProtocol,
+              bwSCFProcessorCommonCommAcceptedOutboundConnections, bwSCFProcessorCommonCommAcceptedInboundConnections,
+              bwSCFProcessorCommonCommRejectedOutboundConnections, bwSCFProcessorCommonCommRejectedInboundConnections,
+              bwSCFProcessorCommonCommOutputMessagesProcessed, bwSCFProcessorCommonCommInputMessagesProcessed,
+              bwSCFProcessorCommonCommOutputCommunicationErrors, bwSCFProcessorCommonCommInputCommunicationErrors } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the TCP Server statistics."
+    ::= { bwSCFProcessorMibGroups 2 }
+
+  bwSCFProcessorSS7CapGroup OBJECT-GROUP
+    OBJECTS { bwSS7CapStatus, bwSS7CapResetStats,
+              bwSS7CapGSMRx, bwSS7CapGSMTx,
+              bwSS7CapMessageRx, bwSS7CapMessageTx, 
+              bwSS7CapMessageResults, bwSS7CapMessageErrors, 
+              bwSS7CapMessageRejects } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 Cap statistics."
+    ::= { bwSCFProcessorMibGroups 3 }
+
+  bwSCFProcessorSIPStatsGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorSipStatsInviteIns, bwSCFProcessorSipStatsInviteOuts,
+              bwSCFProcessorSipStatsAckIns, bwSCFProcessorSipStatsAckOuts,
+              bwSCFProcessorSipStatsCancelIns, bwSCFProcessorSipStatsCancelOuts,
+              bwSCFProcessorSipStatsNotifyIns,
+              bwSCFProcessorSipStatsInviteResponseIns, bwSCFProcessorSipStatsInviteResponseOuts,
+              bwSCFProcessorSipStatsCancelResponseIns, bwSCFProcessorSipStatsCancelResponseOuts,
+              bwSCFProcessorSipStatsNotifyResponseOuts, 
+              bwSCFProcessorSipStatsActiveTcpConnections, bwSCFProcessorSipStatsActiveTcpIns, 
+              bwSCFProcessorSipStatsActiveTcpOuts, bwSCFProcessorSipStatsActiveTcpFailures, 
+              bwSCFProcessorSipStatsActiveUdpIns, bwSCFProcessorSipStatsActiveUdpOuts } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SIP statistics."
+    ::= { bwSCFProcessorMibGroups 4 }
+
+  bwSCFProcessorSmppGroup OBJECT-GROUP
+    OBJECTS { bwTotalSmppSubmitSMRequestsSent, bwTotalSmppInvalidSubmitSMResponsesReceived,
+              bwTotalSmppSubmitSMResponseTimeout } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SMPP statistics."
+    ::= { bwSCFProcessorMibGroups 5 }
+
+  bwSCFProcessorServicesGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorTotalCAPSessions,
+              bwSCFProcessorTotalSMPPSessions, bwSCFProcessorTotalInitDPIndRejected,
+              bwSCFProcessorTotalMobileOriginations, bwSCFProcessorTotalMobileTerminations,
+              bwSCFProcessorTotalSessionTimeouts, bwSCFProcessorTotalNSQueryFailures,
+              bwSCFProcessorTotalNSQueryTimeouts, bwSCFProcessorTotalNSQueryRouteAdvances,
+              bwSCFProcessorTotalIMRNQueryFailures, bwSCFProcessorTotalIMRNQueryTimeouts,
+              bwSCFProcessorTotalIMRNQueryRouteAdvances, bwSCFProcessorCAPActiveSessions,
+              bwSCFProcessorTotalLocationRequests, bwSCFProcessorTotalPowerStateRequests,
+              bwSCFProcessorTotalMsrnRequests, bwSCFProcessorTotalInviteRequestRejected,
+              bwSCFProcessorTotalAtiQueryFailures, bwSCFProcessorTotalAtiQueryTimeouts,
+              bwSCFProcessorTotalSriQueryFailures, bwSCFProcessorTotalSriQueryTimeouts,
+              bwSCFProcessorMAPActiveSessions, bwSCFProcessorSMPPActiveSessions,
+              bwSCFProcessorTotalIs41IncomingSessions, bwSCFProcessorTotalIs41OutgoingSessions,
+              bwSCFProcessorTotalAnlyzdRejected, bwSCFProcessorTotalOrreqRejected,
+              bwSCFProcessorTotalSmdppRejected, bwSCFProcessorTotalSessionTimeouts,
+              bwSCFProcessorTotalNSQueryFailures, bwSCFProcessorTotalNSQueryTimeouts,
+              bwSCFProcessorTotalNSQueryRouteAdvances, bwSCFProcessorTotalDomainStatusUpdateFailures,
+              bwSCFProcessorTotalDomainStatusUpdateTimeouts, bwSCFProcessorTotalDomainStatusUpdateRouteAdvances,
+              bwSCFProcessorTotalLocreqQueryFailures, bwSCFProcessorTotalLocreqQueryTimeouts,
+              bwSCFProcessorTotalMsgdirFailures, bwSCFProcessorTotalMsgdirTimeouts,
+              bwSCFProcessorIs41IncomingActiveSessions, bwSCFProcessorOutgoingIS41ActiveSessions,
+              bwSCFProcessorTotalECTSupplementaryServiceNotifications,
+              bwSCFProcessorTotalCDSupplementaryServiceNotifications,
+              bwSCFProcessorTotalMPTYSupplementaryServiceNotifications,
+              bwSCFProcessorTotalSupplementaryServiceNotificationsRejected,
+              bwSCFProcessorTotalMAPIncomingSessions, bwSCFProcessorTotalMAPOutgoingSessions } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Services statistics."
+    ::= { bwSCFProcessorMibGroups 6 }
+
+  bwSCFProcessorOverloadGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorCurrentOverloadZone, bwSCFProcessorNumYellowZoneOverloadTrans,
+              bwSCFProcessorNumRedZoneOverloadTrans, bwSCFProcessorNumDiscardedMessages,
+              bwSCFProcessorTimeLastDiscardedMessage } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Overload statistics."
+    ::= { bwSCFProcessorMibGroups 7 }
+
+  bwSCFProcessorQueueGroup OBJECT-GROUP
+    OBJECTS { bwSCFProcessorInternalQueueIndex, bwSCFProcessorInternalQueueName,
+              bwSCFProcessorInternalQueueSize, bwSCFProcessorInternalQueueTimeAvg,
+              bwSCFProcessorInternalQueueTimeMin, bwSCFProcessorInternalQueueTimeMax,
+              bwSCFProcessorInternalQueueLengthCurrent, bwSCFProcessorInternalQueueLengthAvg,
+              bwSCFProcessorInternalQueueLengthMax } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Queue statistics."
+    ::= { bwSCFProcessorMibGroups 8 }
+
+  bwSCFProcessorSS7MapGroup OBJECT-GROUP
+    OBJECTS { bwSS7MapStatus, bwSS7MapResetStats,
+              bwSS7MapTotalRx, bwSS7MapTotalTx,
+              bwSS7MapDialogRx, bwSS7MapDialogTx,
+              bwSS7MapMessageRx, bwSS7MapMessageTx, 
+              bwSS7MapMessageResults, bwSS7MapMessageUserErrors, 
+              bwSS7MapMessageProvErrors } 
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SS7 Map statistics."
+    ::= { bwSCFProcessorMibGroups 9 }
+
+  bwSCFProcessorDnsQueryGroup OBJECT-GROUP
+    OBJECTS     { bwSCFProcessorDnsQueryTimeMax, bwSCFProcessorDnsQueryTimeMaxTimestampMSB, 
+                  bwSCFProcessorDnsQueryTimeMaxTimestampLSB, bwSCFProcessorDnsQueryTimeAvg, 
+                  bwSCFProcessorDnsStatsQueryIndex, bwSCFProcessorDnsStatsQueryType, 
+                  bwSCFProcessorDnsStatsQueries, bwSCFProcessorDnsStatsQueryTimeouts, 
+                  bwSCFProcessorDnsQueryTimeStatsReset }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the Web Container statistics for DNS query."
+    ::= { bwSCFProcessorMibGroups 10 }
+
+  bwSCFProcessorIS41Group OBJECT-GROUP
+    OBJECTS     { bwSS7Is41Status, bwSS7Is41ResetStats, bwSS7Is41Rx, bwSS7Is41Tx,
+                  bwSS7Is41MessageOpcode, bwSS7IS41MessageRx, bwSS7Is41MessageTx,
+                  bwSS7Is41MessageResults, bwSS7Is41MessageErrors, 
+                  bwSS7Is41MessageRejects, bwSS7Is41DialogOpcode,
+                  bwSS7Is41DialogRx, bwSS7Is41DialogTx  }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the Web Container statistics for DNS query."
+    ::= { bwSCFProcessorMibGroups 11 }
+
+  bwSCFProcessorBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks SCF Processor MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwSCFProcessorTcpServerGroup, bwSCFProcessorCommonCommGroup,
+          bwSCFProcessorSS7CapGroup, bwSCFProcessorSS7MapGroup, 
+          bwSCFProcessorSIPStatsGroup,
+          bwSCFProcessorSmppGroup, bwSCFProcessorServicesGroup,
+          bwSCFProcessorOverloadGroup, bwSCFProcessorQueueGroup,
+          bwSCFProcessorDnsQueryGroup, bwSCFProcessorIS41Group }
+
+    ::= { bwSCFProcessorMibCompliancy 1 }
+END

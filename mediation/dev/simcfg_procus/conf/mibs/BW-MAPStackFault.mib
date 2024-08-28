@@ -1,0 +1,248 @@
+-- File Name : BW-MAPStackFault.mib
+
+BW-MAPStackFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, sccpObjId, sccpState, sccpAffectedSsn, sccpAffectedSsnSp, sccpAffectedSsnSsn, sccpConnectionId, sccpResetReason,  sccpOriginator, sccpModuleId,sccpSubModuleId, sccpMtpSap, sccpErrorCode, sccpBitMask, sccpDroppedApiId,  sccpErrorLevel, sccpErrorFlag, sccpPointCode, m3uaAsId, m3uaLocalSpId, m3uaRemSpId, m3uaState, m3uaNwSpId, m3uaAspId, m3uaOptIndParams, m3uaOptIndParamsBitmap, m3uaOptIndParamsDownCause, m3uaSgId, m3uaAssocId, m3uaNumInStreams, m3uaNumOutStreams, m3uaErrSrc, m3uaEcode, m3uaInfoLength, m3uaPInfoStr, m3uaRegStatus, m3uaDeregStatus, m3uaNewAs, m3uaDelAs, ss7pInstanceId, ss7pStackType, ss7pEcode, ss7pEntityStatus, ss7pFailureEcode, ss7pTierId, ss7pPc, ss7pPcType, ss7pSpId, ss7pNi, ss7pVariant, ss7pSapId, ss7pSsn, ss7pSsId, ss7pNumBitsInstanceId, ss7pFlag, ss7pEmStatus, ss7pEmInfoAddr, ss7pEmInfoServerPort, ss7pEmInfoMinClientPort, ss7pEmInfoMaxClientPort, ss7pInstanceType, ss7pIp, ss7pPort, ss7pIpStr, mapInstId, mapTierLevel, mapErrorCode, mapInfoLen, mapInfoStr, mapStatus, mapInstanceType, mapVariant, mapIp, mapPort, mapEmStatus, mapEmInfoAddr, mapEmInfoServerPort, mapEmInfoMinClientPort, mapEmInfoMaxClientPort, npSS7SubsystemNumber
+      FROM BroadworksFault;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED  "201103240000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+220 Perry Parkway
+Gaithersburg, MD  20877
+301-977-9440"
+    DESCRIPTION
+        "This MIB defines management information that is common to all elements in a Broadworks system."
+    REVISION    "201103240000Z"
+                DESCRIPTION     "Creating the mib."
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  common  OBJECT IDENTIFIER
+    ::=  {  broadworks  1  }
+
+  systemFaults  OBJECT IDENTIFIER
+    ::=  {  common  1  }
+
+  bwPMemSS7MAPLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the emSS7MAP process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMemSS7MAPLaunched, bwPMemSS7MAPShutDown, bwPMemSS7MAPStarted, and bwPMemSS7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the emSS7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10517  }
+
+  bwPMemSS7MAPShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the emSS7MAP process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMemSS7MAPLaunched, bwPMemSS7MAPShutDown, bwPMemSS7MAPStarted, and bwPMemSS7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the emSS7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10518  }
+
+  bwPMemSS7MAPRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the emSS7MAP process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMemSS7MAPLaunched, bwPMemSS7MAPShutDown, bwPMemSS7MAPStarted, and bwPMemSS7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the emSS7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10519  }
+
+  bwPMemSS7MAPDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the emSS7MAP process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMemSS7MAPLaunched, bwPMemSS7MAPShutDown, bwPMemSS7MAPStarted, and bwPMemSS7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the emSS7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10520  }
+
+  bwPMss7MAPLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAP process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPLaunched, bwPMss7MAPShutDown, bwPMss7MAPStarted, and bwPMss7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10521  }
+
+  bwPMss7MAPShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAP process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPLaunched, bwPMss7MAPShutDown, bwPMss7MAPStarted, and bwPMss7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10522  }
+
+  bwPMss7MAPRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAP process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPLaunched, bwPMss7MAPShutDown, bwPMss7MAPStarted, and bwPMss7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10523  }
+
+  bwPMss7MAPDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAP process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPLaunched, bwPMss7MAPShutDown, bwPMss7MAPStarted, and bwPMss7MAPDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAP process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10524  }
+
+  bwPMss7MAPBridgeLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAPBridge process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPBridgeLaunched, bwPMss7MAPBridgeShutDown, bwPMss7MAPBridgeStarted, and bwPMss7MAPBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPBridge process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10529  }
+
+  bwPMss7MAPBridgeShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAPBridge process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPBridgeLaunched, bwPMss7MAPBridgeShutDown, bwPMss7MAPBridgeStarted, and bwPMss7MAPBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPBridge process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10530  }
+
+  bwPMss7MAPBridgeRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAPBridge process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPBridgeLaunched, bwPMss7MAPBridgeShutDown, bwPMss7MAPBridgeStarted, and bwPMss7MAPBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPBridge process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10531  }
+
+  bwPMss7MAPBridgeDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAPBridge process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPBridgeLaunched, bwPMss7MAPBridgeShutDown, bwPMss7MAPBridgeStarted, and bwPMss7MAPBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPBridge process running on some of the BroadWorks servers."
+-- @feature:158606
+    ::=  {  systemFaults 10532  }
+
+  bwSS7StackMapNotifyError  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, mapTierLevel, mapInstId, mapErrorCode, mapInfoLen, mapInfoStr }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides information about map error.
+@severity:high
+@subcomponent:map"
+-- @feature:158606
+    ::=  {  systemFaults 10555  }
+
+  bwSS7StackMapInstanceStatusInd  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, mapStatus,  mapTierLevel, mapInstanceType, mapInstId, mapVariant, mapIp, mapPort }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides information about map instance status indication.
+@severity:low
+@subcomponent:map"
+-- @feature:158606
+    ::=  {  systemFaults 10556  }
+
+  bwSS7StackMapClibEmStatus  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, mapEmStatus, mapEmInfoAddr, mapEmInfoServerPort, mapEmInfoMinClientPort, mapEmInfoMaxClientPort }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides information about status of the map EM.
+@severity:low
+@subcomponent:map"
+-- @feature:158606
+    ::=  {  systemFaults 10557  }
+   
+  bwSS7MapSubsystemDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npSS7SubsystemNumber }
+    STATUS      current
+    DESCRIPTION
+        "A required MAP subsystem is not available for use.
+@severity:high
+@subcomponent:ss7Map"
+-- @feature:158606
+    ::=  {  systemFaults 10559  }
+    
+  bwPMss7MAPOAMBridgeLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAPOAMBridge process has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPOAMBridgeLaunched, bwPMss7MAPOAMBridgeShutDown, bwPMss7MAPOAMBridgeStarted, and bwPMss7MAPOAMBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPOAMBridge process running on some of the BroadWorks servers."
+-- @feature:177228
+    ::=  {  systemFaults 12201  }
+
+  bwPMss7MAPOAMBridgeShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the ss7MAPOAMBridge process has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPOAMBridgeLaunched, bwPMss7MAPOAMBridgeShutDown, bwPMss7MAPOAMBridgeStarted, and bwPMss7MAPOAMBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPOAMBridge process running on some of the BroadWorks servers."
+-- @feature:177228
+    ::=  {  systemFaults 12202  }
+
+  bwPMss7MAPOAMBridgeRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAPOAMBridge process restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPOAMBridgeLaunched, bwPMss7MAPOAMBridgeShutDown, bwPMss7MAPOAMBridgeStarted, and bwPMss7MAPOAMBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPOAMBridge process running on some of the BroadWorks servers."
+-- @feature:177228
+    ::=  {  systemFaults 12203  }
+
+  bwPMss7MAPOAMBridgeDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the ss7MAPOAMBridge process death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMss7MAPOAMBridgeLaunched, bwPMss7MAPOAMBridgeShutDown, bwPMss7MAPOAMBridgeStarted, and bwPMss7MAPOAMBridgeDeath can be correlated into a single notification.  These events have to be considered as a transition of the state machine for the management of the ss7MAPOAMBridge process running on some of the BroadWorks servers."
+-- @feature:177228
+    ::=  {  systemFaults 12204  }
+    
+END

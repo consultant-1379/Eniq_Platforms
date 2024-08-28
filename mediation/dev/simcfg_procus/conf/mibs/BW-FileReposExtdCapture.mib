@@ -1,0 +1,224 @@
+--===============================================================
+-- File Name : BW-FileReposExtdCapture.mib
+-- Date      : 05/08/2013
+-- Author    : BroadSoft Inc.
+--===============================================================
+
+BW-FileReposExtdCapture  DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  
+  broadsoft  MODULE-IDENTITY
+    LAST-UPDATED  "201307080000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION    
+        "This MIB contains the performance measurements related to the BroadWorks
+         FileReposExtdCapture application."
+    REVISION    "201307080000Z"
+      DESCRIPTION "Creation of the MIB"
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  filereposextdcapture  OBJECT IDENTIFIER
+    ::=  {  broadworks  36  }
+
+  repository  OBJECT IDENTIFIER
+    ::=  {  filereposextdcapture  1  }
+
+  replication  OBJECT IDENTIFIER
+    ::=  {  filereposextdcapture  2  }
+
+  bwFileReposExtdCaptureMibConformance  OBJECT IDENTIFIER
+    ::=  {  filereposextdcapture  1000  }
+
+-- repository modules  ...........................................
+
+  bwFileReposExtdCaptureCacheIndexedDirectories  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of indexed cached directories."
+-- @feature:178321
+    ::=  {  repository  1  }
+
+  bwFileReposExtdCaptureCacheSize  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the size of the look up table."
+-- @feature:178321
+    ::=  {  repository  2  }
+
+  bwFileReposExtdCaptureCacheCapacity  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the look up table capacity."
+-- @feature:178321
+    ::=  {  repository  3  }
+
+  bwFileReposExtdCaptureCacheLookUpCount  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of look up performed."
+-- @feature:178321
+    ::=  {  repository  4  }
+
+  bwFileReposExtdCaptureCacheLookUpHits  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of look up which returned a match."
+-- @feature:178321
+    ::=  {  repository  5  }
+
+  bwFileReposExtdCaptureCacheEvictions  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of entries that were evicted from the cache."
+-- @feature:178321
+    ::=  {  repository  6  }
+
+-- Replication modules  ...........................................
+
+  bwFileReposExtdCaptureReplicationStatsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwFileReposExtdCaptureReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for FileReposExtdCapture replication."
+    ::=  { replication  1 }
+
+  bwFileReposExtdCaptureReplicationStatsEntry  OBJECT-TYPE
+    SYNTAX    BwFileReposExtdCaptureReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwFileReposExtdCaptureReplicationStatsTable."
+    INDEX    {  bwFileReposExtdCaptureReplicationStatsIndex  }
+    ::=  { bwFileReposExtdCaptureReplicationStatsTable 1 }
+
+  BwFileReposExtdCaptureReplicationStatsEntry  ::=  SEQUENCE {
+    bwFileReposExtdCaptureReplicationStatsIndex    Unsigned32,
+    bwFileReposExtdCaptureReplicationPeer          DisplayString,
+    bwFileReposExtdCaptureReplicationRxSuccessful  Counter32,
+    bwFileReposExtdCaptureReplicationRxFailed      Counter32,
+    bwFileReposExtdCaptureReplicationTxSuccessful  Counter32,
+    bwFileReposExtdCaptureReplicationTxFailed      Counter32
+    }
+
+  bwFileReposExtdCaptureReplicationStatsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwFileReposExtdCaptureReplicationStatsTable. The index represents a peer entry in the table."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  1  }
+
+  bwFileReposExtdCaptureReplicationPeer  OBJECT-TYPE  
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the peer IP."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  2  }
+
+  bwFileReposExtdCaptureReplicationRxSuccessful  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of successful replication request."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  3  }
+
+  bwFileReposExtdCaptureReplicationRxFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of failed replication request."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  4  }
+
+  bwFileReposExtdCaptureReplicationTxSuccessful  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of successful replication attempts."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  5  }
+
+  bwFileReposExtdCaptureReplicationTxFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of failed replication attempts."
+-- @feature:178321
+    ::=  {  bwFileReposExtdCaptureReplicationStatsEntry  6  }
+
+-- BroadWorks File Repos MIB Conformance Definition  
+
+  bwFileReposExtdCaptureMibGroups OBJECT IDENTIFIER 
+    ::= { bwFileReposExtdCaptureMibConformance 1 }
+
+  bwFileReposExtdCaptureMibCompliancy OBJECT IDENTIFIER
+    ::= { bwFileReposExtdCaptureMibConformance 2 }
+
+  bwFileReposExtdCaptureRepositoryGroup OBJECT-GROUP
+    OBJECTS     { bwFileReposExtdCaptureCacheIndexedDirectories, bwFileReposExtdCaptureCacheSize,
+                  bwFileReposExtdCaptureCacheCapacity, bwFileReposExtdCaptureCacheLookUpCount,
+                  bwFileReposExtdCaptureCacheLookUpHits, bwFileReposExtdCaptureCacheEvictions
+                }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the FileReposExtdCapture Repository."
+    ::= { bwFileReposExtdCaptureMibGroups 1 }
+
+  bwFileReposExtdCaptureReplicationGroup OBJECT-GROUP
+    OBJECTS     { bwFileReposExtdCaptureReplicationStatsIndex, bwFileReposExtdCaptureReplicationPeer,   
+                  bwFileReposExtdCaptureReplicationRxSuccessful, bwFileReposExtdCaptureReplicationRxFailed,
+                  bwFileReposExtdCaptureReplicationTxSuccessful, bwFileReposExtdCaptureReplicationTxFailed
+                }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the FileReposExtdCapture Replication."
+    ::= { bwFileReposExtdCaptureMibGroups 2 }
+
+  bwFileReposExtdCaptureBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks FileReposExtdCapture MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        { bwFileReposExtdCaptureRepositoryGroup,
+                                  bwFileReposExtdCaptureReplicationGroup }
+
+    ::= { bwFileReposExtdCaptureMibCompliancy 1 }
+
+END

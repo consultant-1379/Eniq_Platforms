@@ -1,0 +1,1039 @@
+-- File Name : BW-VideoServer.mib
+
+BW-VideoServer DEFINITIONS ::= BEGIN
+  IMPORTS
+    DateAndTime, DisplayString 
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP 
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32, Counter64
+      FROM SNMPv2-SMI;
+
+  broadsoft MODULE-IDENTITY
+    LAST-UPDATED "201406230000Z"
+    ORGANIZATION "Broadsoft, Inc"
+    CONTACT-INFO "Broadsoft, Inc
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+301-977-9440"
+    DESCRIPTION
+      "This is the System Management Information structure for the BroadSoft Video Server."
+
+    REVISION "201406230000Z"
+      DESCRIPTION "Creation of the Video Server MIB."
+    ::= { enterprises 6431 }
+
+  broadworks OBJECT IDENTIFIER
+    ::= { broadsoft 1 }
+
+  videoServer OBJECT IDENTIFIER
+    ::= { broadworks 42 }
+
+  mcp OBJECT IDENTIFIER
+    ::= { videoServer 1 }
+
+  ivr OBJECT IDENTIFIER
+    ::= { mcp 1 }
+
+  rtp OBJECT IDENTIFIER
+    ::= { videoServer 2 }
+
+  receive OBJECT IDENTIFIER
+    ::= { rtp 1 }
+
+  transmit OBJECT IDENTIFIER
+    ::= { rtp 2 }
+
+  system OBJECT IDENTIFIER
+    ::= { videoServer 3 }
+
+  sip OBJECT IDENTIFIER
+    ::= { videoServer 4 }
+
+  http OBJECT IDENTIFIER
+    ::= { videoServer 5 }
+
+  video OBJECT IDENTIFIER
+    ::= { videoServer 6 }
+
+  management OBJECT IDENTIFIER
+    ::= { videoServer 7 }
+
+  interfaces OBJECT IDENTIFIER
+    ::= { videoServer 8 }
+
+  mscmixer OBJECT IDENTIFIER
+    ::= { interfaces 1 }
+
+  cfw OBJECT IDENTIFIER
+    ::= { interfaces 2 }
+
+  mscivr OBJECT IDENTIFIER
+    ::= { interfaces 3 }
+
+  bwUVSMibConformance OBJECT IDENTIFIER
+    ::= { videoServer 1000 }
+
+-- MCP Counters  ...........................................
+    
+  bwUVSPortsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the total number of resource ports currently in use."
+-- @feature:222481
+    ::=  {  mcp  2  }
+
+  bwUVSNoPortAvailableErrors    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of times a request encounters a 'no ports available' condition."
+-- @feature:222481
+    ::=  {  mcp  3  }
+
+  bwUVSG729PortsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the total number of G.729 license ports currently in use."
+-- @feature:222481
+    ::=  {  mcp  4  }
+
+  bwUVSG722PortsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the total number of G.722 license ports currently in use."
+-- @feature:222481
+    ::=  {  mcp  5  }
+
+  bwUVSVideoConferencingPortsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the current number of resource ports consumed for video conferencing.  Different resolutions are weighted differently for resource port consumption."
+-- @feature:222481
+    ::=  {  mcp  6  }
+
+  bwUVSVideoConferencingNoPortAvailableErrors    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of times that resource ports for video conferencing were insufficient to connect a video conferencing party."
+-- @feature:222481
+    ::=  {  mcp  7  }
+
+  bwUVSIvrFreeAudioMemory    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the IVR memory available (in bytes) for media files."
+-- @feature:222481
+    ::=  {  ivr  1  }
+
+  bwUVSIvrAudioMemoryInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the IVR memory in use (in bytes)."
+-- @feature:222481
+    ::=  {  ivr  2  }
+
+  bwUVSRtpSessionsCount    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP sessions that have been handled."
+-- @feature:222481
+    ::=  {  rtp  3  }
+
+  bwUVSRtpSessionsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the current number of active RTP sessions."
+-- @feature:222481
+    ::=  {  rtp  4  }
+
+  bwUVSVideoConferencingRtpSessionsCount    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of video mixer RTP sessions that have been handled."
+-- @feature:222481
+    ::=  {  rtp  5  }
+
+  bwUVSVideoConferencingRtpSessionsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the current number of active video mixer RTP sessions."
+-- @feature:222481
+    ::=  {  rtp  6  }
+
+  bwUVSRtcpSenderReports    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTCP sender reports received."
+-- @feature:222481
+    ::=  {  receive  1  }
+
+  bwUVSRtpPacketsExpected    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets that were expected."
+-- @feature:222481
+    ::=  {  receive  2  }
+
+  bwUVSRtpPacketsReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received."
+-- @feature:222481
+    ::=  {  receive  3  }
+
+  bwUVSRtpOutOfOrder    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received out of order."
+-- @feature:222481
+    ::=  {  receive  4  }
+
+  bwUVSRtpBadPayload    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received that had a bad payload type."
+-- @feature:222481
+    ::=  {  receive  5  }
+
+  bwUVSRtpBadSsrc    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received that had an invalid SSRC."
+-- @feature:222481
+    ::=  {  receive  6  }
+
+  bwUVSRtpReceivedPacketJitter    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total jitter of RTP packets received."
+-- @feature:222481
+    ::=  {  receive  7  }
+
+  bwUVSVideoConferencingRtpPacketsExpected    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of video mixer RTP packets that were expected."
+-- @feature:222481
+    ::=  {  receive  8  }
+
+  bwUVSVideoConferencingRtpPacketsReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received by the video mixer."
+-- @feature:222481
+    ::=  {  receive  9  }
+
+  bwUVSVideoConferencingRtpOutOfOrder    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets received out of order by the video mixer."
+-- @feature:222481
+    ::=  {  receive  10  }
+
+  bwUVSRtpCumulativePacketsLost    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the cumulative count of packets sent but reported lost by remote nodes."
+-- @feature:222481
+    ::=  {  transmit  1  }
+
+  bwUVSRtpPacketsSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets sent."
+-- @feature:222481
+    ::=  {  transmit  2  }
+
+  bwUVSRtpFramesSkipped    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of frames that were skipped because the CPU is overloaded (one frame = one time slice in which all RTP sessions are expected to be processed)."
+-- @feature:222481
+    ::=  {  transmit  3  }
+
+  bwUVSRtpTransmitJitter    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total jitter of packets transmitted, as measured by remote nodes."
+-- @feature:222481
+    ::=  {  transmit  4  }
+
+  bwUVSVideoConferencingRtpCumulativePacketsLost    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the cumulative count of packets sent by the video mixer but reported lost by remote nodes."
+-- @feature:222481
+    ::=  {  transmit  5  }
+
+  bwUVSVideoConferencingRtpPacketsSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of RTP packets sent by the video mixer."
+-- @feature:222481
+    ::=  {  transmit  6  }
+
+  bwUVSMaxCapacityInPorts    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the maximum number of resource ports the Video Server is capable of handling."
+-- @feature:222481
+    ::=  {  system  1  }
+
+  bwUVSNumLicensedPorts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter indicates the maximum number of licensed ports the Video Server is authorized to use according to its license file."
+-- @feature:222481
+    ::=  {  system  2  }
+
+  bwUVSVideoConferencingMaxCapacityInPorts    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the maximum number of resource ports the Video Server is capable of handling for video conferencing.  Different video resolutions are weighted differently for resource port consumption."
+-- @feature:222481
+    ::=  {  system  3  }
+
+  bwUVSSipStatsInviteIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of INVITE requests received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  1  }
+
+  bwUVSSipStatsAckIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of ACK requests received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  2  }
+
+  bwUVSSipStatsByeIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of BYE requests received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  3  }
+
+  bwUVSSipStatsByeOuts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of BYE requests sent by the Video Server."
+-- @feature:222481
+    ::=  {  sip  4  }
+
+  bwUVSSipStatsInfoIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of INFO requests received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  5  }
+
+  bwUVSSipStatsInfoOuts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of INFO requests sent by the Video Server."
+-- @feature:222481
+    ::=  {  sip  6  }
+
+  bwUVSSipStatsOtherIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of unknown requests received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  7  }
+
+  bwUVSSipStatsOtherOuts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of unknown requests sent by the Video Server."
+-- @feature:222481
+    ::=  {  sip  8  }
+
+  bwUVSSipStatsResponsesIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of responses received by the Video Server."
+-- @feature:222481
+    ::=  {  sip  9  }
+
+  bwUVSSipStatsResponsesOuts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of responses sent by the Video Server, excluding retransmissions."
+-- @feature:222481
+    ::=  {  sip  10  }
+
+  bwUVSSipStatsInvite200OKRetransmitsOuts    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of 200 OK responses to a SIP INVITE that were retransmitted by the Video Server."
+-- @feature:222481
+    ::=  {  sip  11  }
+
+  bwUVSSipStatsRequestRetransmittedIns    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of SIP requests retransmitted by a remote SIP user agent to the Video Server."
+-- @feature:222481
+    ::=  {  sip  12  }
+
+  bwUVSTimeOutRouteAdvancesCount    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of times the route advance timer expired for an outgoing SIP request."
+-- @feature:222481
+    ::=  {  sip  13  }
+
+  bwUVSRouteAdvancesCount    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of times the Video Server advanced an outgoing SIP request to the next address."
+-- @feature:222481
+    ::=  {  sip  14  }
+
+  bwUVSFilesDownloaded    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of media files downloaded."
+-- @feature:222481
+    ::=  {  http  1  }
+
+  bwUVSTotalSizeDownloadedFiles    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total size of the downloaded media files."
+-- @feature:222481
+    ::=  {  http  2  }
+
+  bwUVSFilesRetrievedFromCache    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of media files retrieved from cache."
+-- @feature:222481
+    ::=  {  http  3  }
+
+  bwUVSNumH264TranscodingPortsInUse    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the number of H.264 transcoding ports currently in use."
+-- @feature:222481
+    ::=  {  video  1  }
+
+  bwUVSNotEnoughVideoTranscodingPortFailures    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of times that H.264 transcoding ports were not available."
+-- @feature:222481
+    ::=  {  video  2  }
+
+  bwUVSVideoConferencingH264FramesDecode    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of H.264 frames decoded by the video conferencing subsystem."
+-- @feature:222481
+    ::=  {  video  3  }
+
+  bwUVSVideoConferencingH264FramesDecodeSkipped    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of H.264 frames that were not decoded by the video conferencing subsystem due to CPU overload."
+-- @feature:222481
+    ::=  {  video  4  }
+
+  bwUVSVideoConferencingH264FramesEncode    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of H.264 frames encoded by the video conferencing subsystem."
+-- @feature:222481
+    ::=  {  video  5  }
+
+  bwUVSVideoConferencingH264FramesEncodeSkipped    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the number of H.264 frames that were not encoded by the video conferencing subsystem due to CPU overload."
+-- @feature:222481
+    ::=  {  video  6  }
+
+  resetAllUVSCounters    OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "When set to a value other than '0', all the counters in the VideoStreaming application are reset to '0'."
+-- @feature:222481
+    ::=  {  management  1  }
+
+  bwUVSMscMixerCreateConference    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer createconference commands."
+-- @feature:222481
+    ::=  {  mscmixer  1  }
+
+  bwUVSMscMixerCreateConferenceFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer createconference failures."
+-- @feature:222481
+    ::=  {  mscmixer  2  }
+
+  bwUVSMscMixerModifyConference    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer modifyconference commands."
+-- @feature:222481
+    ::=  {  mscmixer  3  }
+
+  bwUVSMscMixerModifyConferenceFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer modifyconference failures."
+-- @feature:222481
+    ::=  {  mscmixer  4  }
+
+  bwUVSMscMixerDestroyConference    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer destroyconference commands."
+-- @feature:222481
+    ::=  {  mscmixer  5  }
+
+  bwUVSMscMixerDestroyConferenceFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer destroyconference failures."
+-- @feature:222481
+    ::=  {  mscmixer  6  }
+
+  bwUVSMscMixerJoin    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer join commands."
+-- @feature:222481
+    ::=  {  mscmixer  7  }
+
+  bwUVSMscMixerJoinFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer join failures."
+-- @feature:222481
+    ::=  {  mscmixer  8  }
+
+  bwUVSMscMixerModifyJoin    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer modifyjoin commands."
+-- @feature:222481
+    ::=  {  mscmixer  9  }
+
+  bwUVSMscMixerModifyJoinFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer modifyjoin failures."
+-- @feature:222481
+    ::=  {  mscmixer  10  }
+
+  bwUVSMscMixerUnjoin    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of received msc-mixer unjoin commands."
+-- @feature:222481
+    ::=  {  mscmixer  11  }
+
+  bwUVSMscMixerUnjoinFailed    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer unjoin failures."
+-- @feature:222481
+    ::=  {  mscmixer  12  }
+
+  bwUVSMscMixerNotificationDeliveryFailure    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-mixer <event> delivery failures."
+-- @feature:222481
+    ::=  {  mscmixer  13  }
+
+  bwUVSMscMixerActiveConferences    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the current number of active msc-mixer conferences."
+-- @feature:222481
+    ::=  {  mscmixer  14  }
+
+  bwUVSMscMixerActiveVideoConferences    OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This gauge indicates the current number of active msc-mixer video conferences."
+-- @feature:222481
+    ::=  {  mscmixer  15  }
+
+  bwUVSCFWChannelCount    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW channels that have been established."
+-- @feature:222481
+    ::=  {  cfw  1  }
+
+  bwUVSCFWErrors    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW envelope errors encountered."
+-- @feature:222481
+    ::=  {  cfw  2  }
+
+  bwUVSCFWUnknownMessage    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of unknown CFW messages received."
+-- @feature:222481
+    ::=  {  cfw  3  }
+
+  bwUVSCFWSyncReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW SYNC messages received."
+-- @feature:222481
+    ::=  {  cfw  4  }
+
+  bwUVSCFWKAliveReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW K-ALIVE messages received."
+-- @feature:222481
+    ::=  {  cfw  5  }
+
+  bwUVSCFWControlReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW CONTROL messages received."
+-- @feature:222481
+    ::=  {  cfw  6  }
+
+  bwUVSCFWResponseReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW response messages received."
+-- @feature:222481
+    ::=  {  cfw  7  }
+
+  bwUVSCFWControlSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW CONTROL messages sent."
+-- @feature:222481
+    ::=  {  cfw  8  }
+
+  bwUVSCFWReportSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW REPORT messages sent."
+-- @feature:222481
+    ::=  {  cfw  9  }
+
+  bwUVSCFWResponseSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of CFW response messages sent."
+-- @feature:222481
+    ::=  {  cfw  10  }
+
+  bwUVSMscIvrErrors    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr parsing errors encountered."
+-- @feature:222481
+    ::=  {  mscivr  1  }
+
+  bwUVSMscIvrUnknownMessage    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of unknown msc-ivr messages received."
+-- @feature:222481
+    ::=  {  mscivr  2  }
+
+  bwUVSMscIvrDialogPrepareReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <dialogprepare> messages received."
+-- @feature:222481
+    ::=  {  mscivr  3  }
+
+  bwUVSMscIvrDialogStartReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <dialogstart> messages received."
+-- @feature:222481
+    ::=  {  mscivr  4  }
+
+  bwUVSMscIvrDialogTerminateReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <dialogterminate> messages received."
+-- @feature:222481
+    ::=  {  mscivr  5  }
+
+  bwUVSMscIvrResponseReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <response> messages received."
+-- @feature:222481
+    ::=  {  mscivr  6  }
+
+  bwUVSMscIvrAuditReceived    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <audit> messages received."
+-- @feature:222481
+    ::=  {  mscivr  7  }
+
+  bwUVSMscIvrEventSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <event> messages sent."
+-- @feature:222481
+    ::=  {  mscivr  8  }
+
+  bwUVSMscIvrResponseSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <response> messages sent."
+-- @feature:222481
+    ::=  {  mscivr  9  }
+
+  bwUVSMscIvrAuditResponseSent    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <auditresponse> messages sent."
+-- @feature:222481
+    ::=  {  mscivr  10  }
+
+  bwUVSMscIvrNotificationDeliveryFailure    OBJECT-TYPE  
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This counter tracks the total number of msc-ivr <event> delivery failures."
+-- @feature:222481
+    ::=  {  mscivr  11  }
+
+-- BroadWorks UVS MIB Conformance Definition  ......................................
+
+  bwUVSMibGroups OBJECT IDENTIFIER 
+    ::= { bwUVSMibConformance 1 }
+
+  bwUVSMibCompliancy OBJECT IDENTIFIER
+    ::= { bwUVSMibConformance 2 }
+
+  bwUVSMCPStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSPortsInUse, bwUVSNoPortAvailableErrors,
+                bwUVSG729PortsInUse, bwUVSG722PortsInUse,
+                bwUVSVideoConferencingPortsInUse, bwUVSVideoConferencingNoPortAvailableErrors
+               }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the MCP statistics."
+    ::= { bwUVSMibGroups 1 }
+   
+  bwUVSIVRStatsGroup OBJECT-GROUP
+    OBJECTS { bwUVSIvrFreeAudioMemory, bwUVSIvrAudioMemoryInUse }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the IVR statistics."
+    ::= { bwUVSMibGroups 2 }
+   
+  bwUVSRTPStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSRtpSessionsCount, bwUVSRtpSessionsInUse,
+                bwUVSRtcpSenderReports, bwUVSRtpPacketsExpected,
+                bwUVSRtpPacketsReceived,bwUVSRtpOutOfOrder,
+                bwUVSRtpBadPayload, bwUVSRtpBadSsrc,
+                bwUVSRtpReceivedPacketJitter, bwUVSVideoConferencingRtpPacketsExpected,
+                bwUVSVideoConferencingRtpPacketsReceived, bwUVSVideoConferencingRtpOutOfOrder,
+                bwUVSRtpCumulativePacketsLost,
+                bwUVSRtpPacketsSent, bwUVSRtpFramesSkipped,
+		bwUVSRtpTransmitJitter, bwUVSVideoConferencingRtpCumulativePacketsLost,
+                bwUVSVideoConferencingRtpPacketsSent }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the RTP statistics."
+    ::= { bwUVSMibGroups 3 }
+   
+  bwUVSSystemStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSMaxCapacityInPorts, bwUVSNumLicensedPorts,
+                bwUVSVideoConferencingMaxCapacityInPorts }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the System statistics."
+    ::= { bwUVSMibGroups 4 }
+   
+  bwUVSSIPStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSSipStatsInviteIns, bwUVSSipStatsAckIns,
+                bwUVSSipStatsByeIns, bwUVSSipStatsByeOuts,
+                bwUVSSipStatsInfoIns, bwUVSSipStatsInfoOuts,
+                bwUVSSipStatsOtherIns, bwUVSSipStatsOtherOuts,
+                bwUVSSipStatsResponsesIns, bwUVSSipStatsResponsesOuts,
+                bwUVSSipStatsInvite200OKRetransmitsOuts, bwUVSSipStatsRequestRetransmittedIns,
+                bwUVSTimeOutRouteAdvancesCount, bwUVSRouteAdvancesCount }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the SIP statistics."
+    ::= { bwUVSMibGroups 5 }
+   
+  bwUVSHTTPStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSFilesDownloaded, bwUVSTotalSizeDownloadedFiles,
+                bwUVSFilesRetrievedFromCache}
+    STATUS current
+    DESCRIPTION 
+        "This group defines the HTTP statistics."
+    ::= { bwUVSMibGroups 6 }
+   
+  bwUVSVideoStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSNumH264TranscodingPortsInUse, bwUVSNotEnoughVideoTranscodingPortFailures,
+                bwUVSVideoConferencingH264FramesDecode, bwUVSVideoConferencingH264FramesDecodeSkipped,
+                bwUVSVideoConferencingH264FramesEncode, bwUVSVideoConferencingH264FramesEncodeSkipped,
+                bwUVSVideoConferencingH264FramesEncodeSkipped}
+    STATUS current
+    DESCRIPTION 
+        "This group defines the Video statistics."
+    ::= { bwUVSMibGroups 7 }
+   
+  bwUVSManagementStatsGroup OBJECT-GROUP
+      OBJECTS { resetAllUVSCounters }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the management statistics."
+    ::= { bwUVSMibGroups 8 }
+   
+  bwUVSMSCMixerStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSMscMixerCreateConference, bwUVSMscMixerCreateConferenceFailed,
+                bwUVSMscMixerModifyConference, bwUVSMscMixerModifyConferenceFailed,
+                bwUVSMscMixerDestroyConference, bwUVSMscMixerDestroyConferenceFailed,
+                bwUVSMscMixerJoin, bwUVSMscMixerJoinFailed,
+                bwUVSMscMixerModifyJoin, bwUVSMscMixerModifyJoinFailed,
+                bwUVSMscMixerUnjoin, bwUVSMscMixerUnjoinFailed,
+                bwUVSMscMixerNotificationDeliveryFailure, bwUVSMscMixerActiveConferences,
+                bwUVSMscMixerActiveVideoConferences}
+    STATUS current
+    DESCRIPTION 
+        "This group defines the MSC Mixer statistics."
+    ::= { bwUVSMibGroups 9 }
+   
+  bwUVSCFWStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSCFWChannelCount, bwUVSCFWErrors,
+                bwUVSCFWUnknownMessage, bwUVSCFWSyncReceived,
+                bwUVSCFWKAliveReceived, bwUVSCFWControlReceived,
+                bwUVSCFWResponseReceived, bwUVSCFWControlSent,
+                bwUVSCFWReportSent, bwUVSCFWResponseSent }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the CFW statistics."
+    ::= { bwUVSMibGroups 10 }
+   
+  bwUVSMSCIVRStatsGroup OBJECT-GROUP
+      OBJECTS { bwUVSMscIvrErrors, bwUVSMscIvrUnknownMessage,
+                bwUVSMscIvrDialogPrepareReceived, bwUVSMscIvrDialogStartReceived,
+                bwUVSMscIvrDialogTerminateReceived, bwUVSMscIvrResponseReceived,
+                bwUVSMscIvrAuditReceived, bwUVSMscIvrEventSent,
+                bwUVSMscIvrResponseSent, bwUVSMscIvrAuditResponseSent,
+                bwUVSMscIvrNotificationDeliveryFailure }
+    STATUS current
+    DESCRIPTION 
+        "This group defines the MSC IVR statistics."
+    ::= { bwUVSMibGroups 11 }
+   
+  bwUVSBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks Video Server MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        
+        { bwUVSMCPStatsGroup, bwUVSIVRStatsGroup,
+          bwUVSRTPStatsGroup, bwUVSSystemStatsGroup,
+          bwUVSSIPStatsGroup, bwUVSHTTPStatsGroup,
+          bwUVSVideoStatsGroup, bwUVSManagementStatsGroup,
+          bwUVSMSCMixerStatsGroup, bwUVSCFWStatsGroup,
+          bwUVSMSCIVRStatsGroup }
+
+    ::= { bwUVSMibCompliancy 1 }
+END

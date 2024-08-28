@@ -1,0 +1,314 @@
+package com.distocraft.dc5000.etl.fls;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+//import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+//import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+//import com.jcraft.jsch.JSchException;
+import java.util.logging.SimpleFormatter;
+
+import com.ericsson.eniq.common.DatabaseConnections;
+
+import ssc.rockfactory.RockFactory;
+import ssc.rockfactory.RockResultSet;
+
+public class Main {
+	
+	//to store id values
+	public Map<String,Long> tokenMap;
+	
+	//To store fls query responses
+	public LinkedBlockingQueue<Runnable> pmQueue;
+	public LinkedBlockingQueue<TopologyJson> topologyQueue;
+	
+	//threadPoolExecutor reference
+	private static ThreadPoolExecutor threadPoolExecutor;
+
+	
+	public static Date lastDate=new Date();
+
+	//to store ENM Server Details
+	ENMServerDetails cache;
+	
+	Logger log;
+	
+	public Main(){
+		tokenMap = new HashMap<String,Long>();
+		pmQueue = new LinkedBlockingQueue<Runnable>();
+		topologyQueue= new LinkedBlockingQueue<TopologyJson>();
+	}
+	
+	//To collect Nodes assigned to each Eniq-S
+public ArrayList<String> getNodeList() throws SQLException
+	{
+		RockFactory dwhdb=null;
+		String selectString=null;
+		final RockResultSet rockResultSet;
+		try{
+			dwhdb = DatabaseConnections.getDwhDBConnection();
+			selectString="select distinct NeType from dc.ENIQ_S_Node_Assignment_Table";
+			rockResultSet = dwhdb.setSelectSQL(selectString);
+			ResultSet rs= rockResultSet.getResultSet();
+			ArrayList<String> returnNodeList=new ArrayList<String>();
+			
+			while(rs.next()){
+				returnNodeList.add(rs.getString(1));
+				System.out.println("resilt value **********"+rs.getString(1));
+			}
+			
+			dwhdb.getConnection().close();
+			return returnNodeList;
+					
+		}catch(Exception e){
+			System.out.println(e+"exception");
+			return null;
+		}
+		
+		
+	}
+	
+	
+
+	
+	//main method
+	public static void main(String[] args) throws SecurityException, IOException  {
+		
+		
+		final Main main=new Main();
+				
+		//log file creation for Fls querying process
+		
+		main.log=Logger.getLogger("FLSLog");
+		FileHandler fileHandler=new FileHandler("FlsSymbolicLink.log");
+		main.log.addHandler(fileHandler);
+
+		fileHandler.setFormatter(new SimpleFormatter());
+		fileHandler.setLevel(Level.ALL);
+		main.log.setLevel(Level.ALL);
+		
+		
+		//cache initialization(enm server details)
+		HashMap<String, ENMServerDetails> enmServerDetails=CacheENMServerDetails.getInstance(main.log);
+		
+		Process pFLS = Runtime.getRuntime().exec("cat /eniq/installation/config/fls_conf");
+		BufferedReader inputFLS = new BufferedReader(new InputStreamReader(pFLS.getInputStream()));
+		
+		String line;
+		String[]  fls_elabled_enm=null;
+		while ((line = inputFLS.readLine()) != null) {
+			 fls_elabled_enm= line.split("\\s+");
+		}
+		
+		if(fls_elabled_enm.length>0){
+		
+		main.cache=enmServerDetails.get(fls_elabled_enm[0]);
+		}else{
+			
+			main.log.info("fls_elabled_enm server oss id not found");
+			System.exit(0);
+		}
+		
+		
+		
+	/*	
+		//time for querying topology
+		Timer topologyTimer=new Timer();
+		final int topologyQueryInterval=15*60*1000;
+		final int topologyStartDelay=15*30*1000;
+		topologyTimer.schedule(new TimerTask(){
+		
+			FlsQueryTopology flsQueryTopology=FlsQueryTopology.getInstance(main.cache,main.log,main.topologyQueue);
+	
+			int preId,postId;
+			
+			@Override
+			public void run() {
+				
+					if(main.tokenMap.containsKey("TOPOLOGY")){
+						//topology fls request when id is available in map
+						
+						preId=main.tokenMap.get("TOPOLOGY").intValue();
+						main.log.info("id value of Topology before querying:\t"+preId);
+						postId=flsQueryTopology.queryTopology(true,preId);
+						
+						//storing last id in map
+						main.log.info("id value of topology after querying"+postId);
+						if(postId>preId){
+							main.tokenMap.put("TOPOLOGY",new Integer(postId));
+						}
+					}
+					else{
+						//topology fls request when id is available in map
+						
+						main.log.info("topology request for first time");
+						postId=flsQueryTopology.queryTopology(false,-1);
+						
+						//storing last id in map
+						main.log.info("id value of topology after querying"+postId);
+						if(postId>preId){
+							main.tokenMap.put("TOPOLOGY",new Integer(postId));
+						}
+					}
+					
+					//to create symbolic link for topology files
+					Thread t=new Thread(new TopologyQueueHandler(Main.topologyQueue),"toplogyhandler");
+					t.start();
+				}
+			},topologyStartDelay,topologyQueryInterval);
+				
+		//timer for scheduling to query 
+	*/	
+		Timer pmTimer=new Timer();
+		final int pmQueryInterval=3*60*1000;
+		final int pmStartDelay=1*10*1000;
+		main.log.info("calling timer ::");
+		pmTimer.schedule(new TimerTask(){
+			FlsQueryPm flsQueryPM=FlsQueryPm.getInstance(main.cache,main.log,main.pmQueue);
+			long preId,postId;
+			
+			@Override
+			public void run() {
+				// to storelist node types for subscription
+				ArrayList<String> nodeTypeList= new ArrayList<String>();
+
+				{
+					main.pmQueue=flsQueryPM.pmQueue;
+					try {
+						nodeTypeList=main.getNodeList();
+					} catch (SQLException e) {
+						main.log.info("exception in node type list  "+e);
+					}
+				}
+			
+				
+				//to do subscription for every nodetype
+				for(String nodeType:nodeTypeList){
+						if( !main.tokenMap.isEmpty() && main.tokenMap.containsKey(nodeType)){
+							//pm fls request when id is available in map
+							preId=main.tokenMap.get(nodeType).intValue();
+							main.log.info("pm request for node :\t"+nodeType+"\t id before get request preId  :"+preId);
+							
+							postId=flsQueryPM.queryPM(nodeType,false,preId);
+							main.pmQueue=flsQueryPM.pmQueue;
+							//storing last id in map
+							main.log.info("pm request for node :\t"+nodeType+"\t id  after successive get request postId :"+postId);
+							if(postId>preId){
+								main.tokenMap.put(nodeType,postId);
+								
+							}
+						}
+
+					else{
+						//pm fls request when id is not available in map
+						main.log.info("first time pm request for node :\t"+nodeType);
+						preId=-1;
+						postId=flsQueryPM.queryPM(nodeType,true,-1);	
+						
+						main.pmQueue=flsQueryPM.pmQueue;
+						//storing last id in map
+						
+						main.log.info("pm request for node :\t"+nodeType+"\t id first time pm request after get request:"+postId);
+						if(postId > preId){
+							main.tokenMap.put(nodeType,postId);
+						}
+					}
+				}
+				
+			}
+			
+		}, pmStartDelay, pmQueryInterval);
+		
+		//to run blocking queue forscreating symbolic link for pm files
+//		final int coreSize = Integer.parseInt(StaticProperties.getProperty("jmsConsumerThreadPoolCoreSize", "15"));
+//		final int maxSize = Integer.parseInt(StaticProperties.getProperty("jmsConsumerThreadPoolMaxSize", "30"));
+		
+		final int coreSize = 15;
+		final int maxSize = 30;
+		
+		threadPoolExecutor = new ThreadPoolExecutor(coreSize,maxSize,100001, TimeUnit.MILLISECONDS, main.pmQueue);
+		threadPoolExecutor.prestartAllCoreThreads();
+
+		//Timer for scheduling id to serialized for every one hour
+		Timer idTimer=new Timer();
+		
+		final int persistedIdInterval=3*60*1000;
+		final int persistedstartDelay=1*10*1000;
+        
+        idTimer.schedule(new TimerTask(){
+        
+              PersistedToken persistedToken=new PersistedToken(main.tokenMap);
+              
+              @Override
+              public void run() {
+                          try{
+                          final FileOutputStream fout=new FileOutputStream("Persistedid.ser");  
+                          final ObjectOutputStream out=new ObjectOutputStream(fout);
+                            
+                          persistedToken.setTokenMap(main.tokenMap);      
+                          main.log.info("token map value "+main.tokenMap.toString()+"\t at \t"+new Date());
+                          main.log.info(" before persisting token map value "+persistedToken.getTokenMap()+"\t at \t"+new Date());
+                          out.writeObject(persistedToken);
+                          out.flush();
+                          out.close();
+                          fout.close();
+                          
+                          final FileInputStream fin=new FileInputStream("Persistedid.ser");  
+                          final ObjectInputStream in=new ObjectInputStream(fin);
+                          persistedToken=(PersistedToken)in.readObject();
+                          in.close();
+                          fin.close();
+                          main.log.info("after persisting token map value "+persistedToken.tokenMap.toString()+"\t at \t"+new Date());
+                          }
+                          catch(Exception e){
+                                main.log.warning("exception at persisisted id time"+e);
+                          }                    
+                    }
+              },persistedstartDelay,persistedIdInterval);		
+	}
+	
+	boolean enableFLService() {
+		boolean enableFLService = false;
+		try{
+		Process pFLS = Runtime.getRuntime().exec("cat /eniq/installation/config/fls_conf");
+		BufferedReader inputFLS = new BufferedReader(new InputStreamReader(pFLS.getInputStream()));
+		
+		String line;
+		String[]  fls_elabled_enm=null;
+		while ((line = inputFLS.readLine()) != null) {
+			 fls_elabled_enm= line.split("\\s+");
+		}
+		 
+		if(fls_elabled_enm.length>0){
+			enableFLService = true;
+		
+		}else{
+			log.info("FLS mode is not configured in the server");
+		}
+		} catch (Exception e) {
+			log.info("Exception occured while reading the file :: /eniq/installation/config/fls_conf  \n "
+					+ e.getMessage());
+			e.printStackTrace();
+		}		
+		return enableFLService;
+	}
+}

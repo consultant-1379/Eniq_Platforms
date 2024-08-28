@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ide_unittest" default="run" basedir=".">
+
+	<echo message="${ant.version}" />	
+
+	<description>
+		This ANT build file runs TechPack IDE GUI tests...
+		Pre-requisit: ide_build.properties must be updated and 
+					  variables must point to vob on user's local machine.
+	</description>
+	
+	<property name="report.dir"  value="${user.home}/TPIDE_guiTest_Report"/>	
+	<property name="report.html.dir"  value="${report.dir}/junit-html"/>	
+	<property name="report.xml.dir"  value="${report.dir}/junit-xml"/>
+	<property name="coverage.dir"  value="${report.dir}/coverage" />
+	<property name="coverage.html.dir"  value="${coverage.dir}/cobertura-html" />
+	<property name="instrumented.dir"  value="${coverage.dir}/instrumented" />
+	<property name="browser" location="C:/Program Files/Internet Explorer/iexplore.exe"/>
+	<property name="file" location="${report.html.dir}/index.html"/>
+
+
+	
+	<property file="ide_build.properties" />
+
+	<!-- ENIQ Jars -->
+	<property name="eniq.3gpp32435.dir" value="${view.dir}/adapters/build/3GPP32435" />
+	<property name="eniq.alarm.dir" value="${view.dir}/alarm_module/build/alarm_module" />
+	<property name="eniq.ascii.dir" value="${view.dir}/adapters/build/ascii" />
+	<property name="eniq.asn1.dir" value="${view.dir}/adapters/build/asn1" />
+	<property name="eniq.common.dir" value="${view.dir}/common_utilities/build/common_utilities" />
+	<property name="eniq.csexport.dir" value="${view.dir}/adapters/build/csexport" />
+	<property name="eniq.ebs.dir" value="${view.dir}/adapters/build/ebs" />
+	<property name="eniq.engine.dir" value="${view.dir}/etl_controller/build/engine" />
+	<property name="eniq.mdc.dir" value="${view.dir}/adapters/build/mdc" />
+	<property name="eniq.nossdb.dir" value="${view.dir}/adapters/build/nossdb" />
+	<property name="eniq.parser.dir" value="${view.dir}/adapters/build/parser" />
+	<property name="eniq.sasn.dir" value="${view.dir}/adapters/build/sasn" />
+	<property name="eniq.scheduler.dir" value="${view.dir}/etl_controller/build/scheduler" />
+	<property name="eniq.stfiop.dir" value="${view.dir}/adapters/build/stfiop" />
+	<property name="eniq.xml.dir" value="${view.dir}/adapters/build/xml" />
+
+	<property name="eniq.dwhmanager.dir" value="${view.dir}/management/build/dwh_manager" />
+	<property name="eniq.export.dir" value="${view.dir}/mediation/build/export" />
+	<property name="eniq.repository.dir" value="${view.dir}/installer/build/repository" />
+	<property name="eniq.installer.dir" value="${view.dir}/installer/build/installer" />
+	<property name="eniq.testhelper.dir" value="${view.dir}/tools/testhelper/build" />
+	
+	
+	<property name="3pp.ddlutilsdist.dir" value="${view.dir}/eniq_3pp/apache/ddl-utils/v1.0/prod/dist"/>
+	<property name="3pp.ddlutilslib.dir" value="${view.dir}/eniq_3pp/apache/ddl-utils/v1.0/prod/lib"/>
+	
+	
+	<property name="eniq.ddlutils.dir" value="${view.dir}/eniq_3pp/apache/ddl-utils/v1.0/prod" />
+	<property name="3pp.ddlutilsdist.dir" value="${eniq.ddlutils.dir}/dist"/>
+	<property name="3pp.ddlutilslib.dir" value="${eniq.ddlutils.dir}/lib"/>
+	
+	<!-- DC5000 Jars -->
+	<property name="eniq.alcatellucent.dir" value="${view.dir}/tp_ide/3pp/dc5000" />
+	<property name="eniq.ct.dir" value="${view.dir}/tp_ide/3pp/dc5000" />
+	<property name="eniq.spf.dir" value="${view.dir}/tp_ide/3pp/dc5000" />
+
+	<!-- 3PP Jars -->
+	<property name="3pp.ant.dir" value="${view.dir}/eniq_3pp/apache/ant/v1_6_2/prod" />
+	<property name="3pp.dbunit.dir" value="${view.dir}/eniq_3pp/dbunit/dbunit/v2_4_7/prod" />
+	<property name="3pp.hsqldb.dir" value="${view.dir}/eniq_3pp/hsqldb/prod" />
+	<property name="3pp.jcalendar.dir" value="${view.dir}/eniq_3pp/toedter/jcalendar/prod" />
+	<property name="3pp.jconn3.dir" value="${view.dir}/eniq_3pp/sybase/sybase_iq/v12_7/client/prod" />	
+	<property name="3pp.appframework.dir" value="${view.dir}/eniq_3pp/appframework/prod" />
+	<property name="3pp.swingworker.dir" value="${view.dir}/eniq_3pp/idk/swing_worker/prod" />
+	<property name="3pp.velocity.dir" value="${view.dir}/eniq_3pp/apache/jakarta_velocity/v1_5/prod" />
+	<property name="3pp.xerces.dir" value="${view.dir}/eniq_3pp/apache/xerces_parser/v2_6_2/prod" />
+	<property name="3pp.xmlapi.dir" value="${view.dir}/eniq_3pp/apache/xml_commons/v1_1/prod" />
+	<property name="3pp.common_net.dir" value="${view.dir}/eniq_3pp/apache/comm_net/v3_0" />
+	<property name="3pp.common_io.dir" value="${view.dir}/eniq_3pp/apache/common_io/v2_0" />
+	<property name="3pp.junit.dir" value="${view.dir}/eniq_3pp/junit/v4_5/prod"/>
+	<property name="3pp.dbcp.dir" value="${view.dir}/eniq_3pp/apache/dbcp/v1_0/prod"/>
+	<property name="3pp.jsch.dir" value="${view.dir}/eniq_3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod"/>
+	<property name="3pp.jmock.dir" value="${view.dir}/eniq_3pp/jmock-2.5.1"/>
+	
+	
+	<!-- 3pp Test components -->
+	<property name="3pp.slf4j.dir" value="${view.dir}/tp_ide/3pp/slf4j-1.5.6" />
+	<property name="3pp.fest.dir" value="${view.dir}/tp_ide/3pp/fest-swing-1.1" />
+	
+	
+
+	<!-- Test components -->
+	<property name="eniq.unittesting.dir" value="${view.dir}/tp_ide/3pp/unittesting" />
+	
+	<target name="pre_compile">
+		<echo message="Compiling TechPack IDE and TestHelper first for dependencies "/>
+		<echo message="Starting to build a jar file" />	
+		<mkdir dir="${classes.dir}/testhelper" />		
+		<javac srcdir="${view.dir}/tools/testhelper/src" source="1.6" destdir="${classes.dir}/testhelper" debug="true" debuglevel="lines,vars,source" >
+			<classpath>							
+				<fileset dir="${eniq.common.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${eniq.repository.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${eniq.engine.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.jsch.dir}">
+			    	<include name="**/*.jar"/>
+			    </fileset>				
+				<fileset dir="${3pp.jmock.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.hsqldb.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.dbunit.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.junit.dir}">
+				    <include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.dbcp.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.ddlutilsdist.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${3pp.ddlutilslib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>								
+			</classpath>
+		</javac>		
+		<copy todir="${classes.dir}/testhelper">
+			<fileset dir="${view.dir}/tools/testhelper/conf">
+				<include name="*/**" />
+			</fileset>
+		</copy>
+		
+		<jar destfile="${jar.dir}/testhelper.jar" basedir="${classes.dir}/testhelper" />			
+		
+	</target>
+
+	<path id="ide_unittest.classpath">		
+		<fileset dir="${junit.dir}">
+			<include name="junit.jar" />
+		</fileset>
+
+		<!-- Hamcrest needed to be separately included, since does not come with junit 
+		<fileset dir="${hamcrest.dir}">
+			<include name="org.hamcrest.core_1.1.0.v20090501071000.jar" />
+		</fileset>
+		-->
+		<fileset dir="${eniq.repository.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+		<fileset dir="${dbunit.dir}">
+			<include name="dbunit-2.3.0.jar" />
+		</fileset>
+		
+		<!--fileset dir="${eniq.testhelper.dir}">
+			<include name="**/*.jar" />
+		</fileset-->
+		
+		<fileset dir="${jar.dir}">
+			<include name="**/testhelper.jar"/>
+		</fileset>
+		
+		<fileset dir="${3pp.junit.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+			
+		<fileset dir="${eniq.ddlutils.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		
+		<fileset dir="${3pp.ddlutilslib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+		
+		<fileset dir="${3pp.ddlutilsdist.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+
+		<fileset dir="${eniq.3gpp32435.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.alarm.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.alcatellucent.dir}">
+			<include name="**/alcatellucent.jar" />
+		</fileset>
+		<fileset dir="${3pp.appframework.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.ascii.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.asn1.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.common.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.csexport.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.ct.dir}">
+			<include name="**/ct.jar" />
+		</fileset>
+		<fileset dir="${eniq.dwhmanager.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.ebs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.engine.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.export.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.mdc.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.nossdb.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.parser.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.repository.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.sasn.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.scheduler.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.spf.dir}">
+			<include name="**/spf.jar" />
+		</fileset>
+		<fileset dir="${eniq.stfiop.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.unittesting.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.xml.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		
+		<fileset dir="${3pp.hsqldb.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.jcalendar.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.jconn3.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.swingworker.dir}">
+			<include name="**/*.jar" />
+		</fileset>		
+		<fileset dir="${3pp.velocity.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.xerces.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.xmlapi.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${eniq.installer.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${fest.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.slf4j.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.common_net.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${3pp.common_io.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${srcfiles.dir}">
+			<include name="lib/**/*.jar" />
+		</fileset>
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+		
+		<!-- Include tpide jar to get the properties and images -->
+		<fileset dir="${view.dir}/tp_ide/build/tp_ide">
+			<include name="**/techpackide.jar" />
+		</fileset>		
+	</path>
+	
+	<!--taskdef classpathref="ide_unittest.classpath" resource="tasks.properties" />-->
+	
+	<!-- ================================= 
+	          target: init              
+	     ================================= -->
+
+	<target name="init" description="Create required directories for jar, classes and reports" >
+		
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${report.xml.dir}" />
+		<mkdir dir="${report.html.dir}" />
+		<mkdir dir="${coverage.dir}" />
+		<mkdir dir="${coverage.html.dir}" />
+		<mkdir dir="${instrumented.dir}" />
+	
+	</target>
+	
+	<!-- ================================= 
+	          target: clean              
+	     ================================= -->
+		
+	<target name="clean" >
+		<echo message=" Remove all files created by the build/test process." />	
+		<delete dir="${report.dir}" />
+		<delete dir="${classes.dir}" />
+		<delete dir="${jar.dir}" />	
+	</target>
+	
+	<!-- ================================= 
+		          target: delete_classes              
+		 ================================= -->
+			
+		<target name="delete_classes" >
+			<echo message=" Removing only the class files for specific tests." />			
+			<delete dir="${classes.dir}" />
+			<delete dir="${jar.dir}" />	
+		</target>
+	
+	<!-- ================================= 
+	          target: compile              
+	     ================================= -->
+	
+	<target name="compile" depends="init" description="Compile all test clases and dependent packages">						
+		<echo message="Starting to compile with java.version=${java.version}" />
+		<javac srcdir="${srcfiles.dir}" source="1.6" destdir="${classes.dir}" debug="true" debuglevel="lines,vars,source" includeAntRuntime="false">
+			<classpath refid="ide_unittest.classpath" />
+			<exclude name = "**/ZipEncrypter.java"/>
+			<include name="**/*.java"/>					
+		</javac>
+	</target>
+	
+	<!-- ================================= 
+	          target: jar (not used in test)              
+	     ================================= -->
+	<target name="jar" depends="compile">
+			<mkdir dir="${srcfiles.dir}/jar" />						
+			<echo message="Starting to build a jar file" />				
+			<jar destfile="${srcfiles.dir}/build/jar/${ant.project.name}.jar" basedir="${classes.dir}" >					
+				<manifest>
+					   <attribute name="Main-Class" value="com.ericsson.eniq.techpacksdk.unittest.utils.TechPackIdeStarter"/>
+				</manifest>
+
+			</jar>
+	</target>
+	
+	<!-- ================================= 
+	          target: runn_ALL              
+	     ================================= -->
+
+	<target name="run_ALL" depends="clean,init,pre_compile,compile">
+		<echo message="Starting to execute TechPackIDE GUI tests...." />		
+		<junit printsummary="true" errorProperty="test.failed" failureProperty="test.failed">
+			<jvmarg value="-Xmx1024M" />
+			<!--jvmarg value="-DTPIDE.startWithLog=true" />-->
+			<classpath>
+				<path refid="ide_unittest.classpath" />
+				<!--
+				<path location="${srcfiles.dir}/jar/${ant.project.name}.jar" />
+				-->
+				<path location="${classes.dir}" />
+				
+			</classpath>
+			<!--formatter type="brief" usefile="false" /-->
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${report.dir}">
+				<fileset dir="${srcfiles.dir}/${src.dir}" >
+					<include name="**/AllTests.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<!-- ================================= 
+          target: report              
+         ================================= -->
+    <target name="report" description="Generate report of the Test cases" >
+    	<echo message="Starting to generate html and xml reports" />		
+        <junitreport todir="${report.xml.dir}" >
+    	<fileset dir="${report.dir}" includes="TEST-*.xml" />
+        <report format="frames" todir="${report.html.dir}" />
+    	<!-- report todir="${report.dir}" />   	-->
+    	</junitreport>
+    	<antcall target="open_report">
+    	</antcall>
+    	<fail message="Tests failed. Check log and/or reports."
+    		if="test.failed"/>    	
+    </target>
+	
+	<!-- ================================= 
+	          target: Open report              
+	     ================================= -->
+	    <target name="open_report" description="Open report in internet explorer" >
+		<exec executable="${browser}" spawn="true">
+	    		<arg value="${file}"/>
+		</exec>
+	</target>
+
+	
+	<!-- ================================= 
+	          target: run specific tests              
+	     ================================= -->
+	
+	<target name="run_specified_test" depends="init,pre_compile,compile">
+		<echo message="Starting to execute TechPackIDE ${classname} GUI tests...." />		
+		<junit printsummary="false" errorProperty="test.failed" failureProperty="test.failed">
+				<jvmarg value="-Xmx1024M" />
+				<!--jvmarg value="-DTPIDE.startWithLog=true" />-->
+				<classpath>
+					<path refid="ide_unittest.classpath" />
+					<!--
+					<path location="${srcfiles.dir}/jar/${ant.project.name}.jar" />
+					-->
+					<path location="${classes.dir}" />
+						
+				</classpath>
+				<!--formatter type="brief" usefile="false"/-->
+				<formatter type="xml" />
+				<batchtest fork="yes" todir="${report.dir}">
+					<fileset dir="${srcfiles.dir}/${src.dir}" >
+						<include name="**/${classname}.java" />
+					</fileset>
+				</batchtest>
+			</junit>
+		<antcall target="report">
+		</antcall>		
+		<!--antcall target="html-coverage-report">
+		</antcall-->		
+	</target>
+	
+	<!-- ================================= 
+	target: run specific tests( for testing purpose)
+	
+		This is not executed in build              
+		 ================================= -->
+		
+		<target name="test_specified_testRun" depends="init,pre_compile,compile">
+			<echo message="Starting to execute TechPackIDE ${classname} GUI tests...." />		
+				<junit printsummary="false" errorProperty="test.failed" failureProperty="test.failed">
+					<jvmarg value="-Xmx1024M" />
+					<jvmarg value="-DTPIDE.startWithLog=true" />
+					<classpath location="${instrumented.dir}" />
+					<classpath location="${classes.dir}" />
+
+					<classpath>
+						<path refid="ide_unittest.classpath" />
+						<!--
+						<path location="${srcfiles.dir}/jar/${ant.project.name}.jar" />
+						-->
+						<path location="${classes.dir}" />
+							
+					</classpath>
+					<formatter type="brief" usefile="false"/>
+					<formatter type="xml" />
+					<batchtest fork="yes" todir="${report.dir}">
+						<fileset dir="${srcfiles.dir}/${src.dir}" >
+							<include name="**/IdeGeneralTest.java" />
+						</fileset>
+					</batchtest>
+				</junit>
+			<antcall target="report">
+			</antcall>
+			<!--antcall target="html-coverage-report">
+			</antcall-->
+		</target>
+	
+	<target name="html-coverage-report">
+		<!--
+			Generate a series of HTML files containing the coverage
+			data in a user-readable form using nested source filesets.
+		-->
+		<cobertura-report destdir="${coverage.html.dir}">
+		<fileset dir="${srcfiles.dir}">
+			<include name="**/*.java" />
+		</fileset>
+		<fileset dir="${tpide.dir}/src">
+			<include name="**/*.java" />
+		</fileset>
+		</cobertura-report>
+	</target>
+	
+	<target name="instrument" depends="init,compile">		
+		<delete file="cobertura.ser" />
+		<delete dir="${instrumented.dir}" />			
+		<cobertura-instrument todir="${instrumented.dir}">		
+			<ignore regex="org.apache.log4j.*" />
+
+			<fileset dir="${classes.dir}">
+				<!--
+					Instrument all the application classes, but
+					don't instrument the test classes.
+				-->				
+				<include name="**/*.class*" />
+				<exclude name="**/*Test*.class" />
+				<exclude name="*unittest/*.class" />					
+				<exclude name="**/unittest/**/*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
+	<target name="run" depends="clean,init,pre_compile,compile,run_ALL,report" description="Generate directories, compile, run GUI Tests and finally generate report">
+		<delete dir="${classes.dir}" />
+		<delete dir="${jar.dir}" />
+	</target>
+</project>

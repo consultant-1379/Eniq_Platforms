@@ -1,0 +1,53 @@
+<project name="parser" default="compile">
+
+  <property name="pack.name" value="scheduler"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!--- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/etl_controller/dev/scheduler"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.common.dir" value="/vobs/eniq/design/plat/common_utilities/build/common_utilities"/>
+  <property name="eniq.repository.dir" value="/vobs/eniq/design/plat/installer/build/repository"/>
+
+  <!-- 3PP Jars -->  
+  <property name="3pp.sybase.dir" value="/vobs/eniq/3pp/sybase/sybase_iq"/>
+
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+  	<mkdir dir="${pack.dir}/jar"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="on" optimize="on" deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		 <fileset dir="${eniq.common.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.repository.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.sybase.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+      </classpath>
+    </javac>
+  <rmic classname="com.distocraft.dc5000.etl.scheduler.Scheduler" base="${pack.dir}/classes">
+    <classpath>
+        <pathelement path="${classpath}"/>
+		 <fileset dir="${eniq.common.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.repository.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.sybase.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+    </classpath>
+  </rmic>
+
+  </target>
+  <target name="postcompile"/>
+
+</project>

@@ -1,0 +1,40 @@
+<project name="libs" default="compile">
+
+  <property name="pack.name" value="statlibs"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="/vobs/eniq/design/plat/installer/dev/statlibs" />
+
+  <!-- 3PP Jars -->
+  <property name="3pp.httpclient.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.httpcore.dir" value="/vobs/eniq/3pp/apache/comm_httpclient/v4_4_1/prod"/>
+  <property name="3pp.icetar.dir" value="/vobs/eniq/3pp/icetar/icetar/v2-3/prod"/>  
+  <property name="3pp.commons_net.dir" value="/vobs/eniq/3pp/apache/comm_net/v1_3/prod"/>
+  <property name="3pp.jakarataoro.dir" value="/vobs/eniq/3pp/apache/jakarta_oro/v2_0_8/prod"/>
+  <property name="3pp.prog_friend.dir" value="/vobs/eniq/3pp/prog_friend/prog_friend/v3_0/prod"/>
+  <property name="3pp.maverick.dir" value="/vobs/eniq/3pp/maverick/dist/java/"/>
+  <property name="3pp.adventnet.dir" value="/vobs/eniq/3pp/adventnet/"/>
+  <property name="3pp.slf4j.dir" value="/vobs/eniq/3pp/slf4j-1.5.11/"/>
+ 
+
+  <target name="precompile"/>
+  
+  <target name="compile"/>
+
+  <target name="postcompile" depends="compile">
+    <mkdir dir="${pack.dir}/dclib" />
+    <copy file="${3pp.httpclient.dir}/httpclient-4.4.1.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.httpcore.dir}/httpcore-4.4.1.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.icetar.dir}/tar.jar" todir="${pack.dir}/dclib"/>   
+    <copy file="${3pp.commons_net.dir}/commons-net-1.3.0.jar" todir="${pack.dir}/dclib"/>
+    <copy file="${3pp.jakarataoro.dir}/jakarta-oro-2.0.8.jar" todir="${pack.dir}/dclib"/>    
+    <copy file="${3pp.prog_friend.dir}/pf.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.maverick.dir}/maverick-all.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.adventnet.dir}/AdventNetLogging.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.adventnet.dir}/AdventNetSnmp.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.slf4j.dir}/slf4j-log4j12-1.5.11.jar" todir="${pack.dir}/dclib"/>
+	<copy file="${3pp.slf4j.dir}/slf4j-api-1.5.11.jar" todir="${pack.dir}/dclib"/>
+	
+  </target>
+
+</project>

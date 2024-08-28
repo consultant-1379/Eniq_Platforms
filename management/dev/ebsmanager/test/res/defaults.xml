@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<techpack>
+    <Versioning VERSIONID="" DESCRIPTION="" STATUS="" TECHPACK_NAME="" TECHPACK_VERSION="" TECHPACK_TYPE=""
+                PRODUCT_NUMBER="" LOCKEDBY="" LOCKDATE="" BASEDEFINITION="" BASEVERSION="" INSTALLDESCRIPTION=""
+                UNIVERSENAME="" UNIVERSEEXTENSION="" ENIQ_LEVEL="" DiffStatus=""/>
+    <Measurementtypeclass TYPECLASSID="" VERSIONID="" DESCRIPTION="" DiffStatus=""/>
+    <Measurementtype TYPEID="" TYPECLASSID="" TYPENAME="" VENDORID="" FOLDERNAME="" DESCRIPTION="" STATUS=""
+                     VERSIONID="" OBJECTID="" OBJECTNAME="" OBJECTVERSION="" OBJECTTYPE="" JOINABLE="" SIZING=""
+                     TOTALAGG="" ELEMENTBHSUPPORT="" RANKINGTABLE="" DELTACALCSUPPORT="" PLAINTABLE=""
+                     UNIVERSEEXTENSION="" VECTORSUPPORT="" DATAFORMATSUPPORT="" DiffStatus=""/>
+    <Measurementkey TYPEID="" DATANAME="" DESCRIPTION="" ISELEMENT="" UNIQUEKEY="" COLNUMBER="" DATATYPE="" DATASIZE=""
+                    DATASCALE="" UNIQUEVALUE="" NULLABLE="" INDEXES="" INCLUDESQL="" UNIVOBJECT="" JOINABLE=""
+                    DiffStatus=""/>
+    <Measurementobjbhsupport TYPEID="" OBJBHSUPPORT="" DiffStatus=""/>
+    <Measurementcounter DATAID="" TYPEID="" DATANAME="" DESCRIPTION="" TIMEAGGREGATION="''" GROUPAGGREGATION="''"
+                        COUNTAGGREGATION="''" COLNUMBER="" DATATYPE="" DATASIZE="" DATASCALE="" INCLUDESQL=""
+                        UNIVOBJECT="" UNIVCLASS="''" COUNTERTYPE="" COUNTERPROCESS="" DiffStatus=""/>
+    <Measurementtable MTABLEID="" TABLELEVEL="" TYPEID="" BASETABLENAME="" DEFAULT_TEMPLATE="" PARTITIONPLAN=""
+                      DiffStatus=""/>
+    <Measurementvector TYPEID="" DATANAME="" VENDORRELEASE="" VINDEX="" VFROM="" VTO="" MEASURE="" DiffStatus=""/>
+    <Measurementdeltacalcsupport TYPEID="" VENDORRELEASE="" DELTACALCSUPPORT="" VERSIONID="" DiffStatus=""/>
+    <Measurementcolumn MTABLEID="" DATANAME="" COLNUMBER="" DATATYPE="" DATASIZE="" DATASCALE="" UNIQUEVALUE=""
+                       NULLABLE="" INDEXES="" DESCRIPTION="" DATAID="" RELEASEID="" UNIQUEKEY="" INCLUDESQL=""
+                       COLTYPE="" DiffStatus=""/>
+    <Referencetable TYPEID="" VERSIONID="" TYPENAME="" OBJECTID="" OBJECTNAME="" OBJECTVERSION="" OBJECTTYPE=""
+                    DESCRIPTION="" STATUS="" UPDATE_POLICY="" TABLE_TYPE="" DATAFORMATSUPPORT="" DiffStatus=""/>
+    <Referencecolumn TYPEID="" DATANAME="" COLNUMBER="" DATATYPE="" DATASIZE="" DATASCALE="" UNIQUEVALUE="" NULLABLE=""
+                     INDEXES="" UNIQUEKEY="" INCLUDESQL="" INCLUDEUPD="" COLTYPE="" DESCRIPTION="" UNIVERSECLASS=""
+                     UNIVERSEOBJECT="" UNIVERSECONDITION="" DiffStatus=""/>
+    <Dataformat DATAFORMATID="" TYPEID="" VERSIONID="" OBJECTTYPE="" FOLDERNAME="" DATAFORMATTYPE="" DiffStatus=""/>
+    <Defaulttags TAGID="" DATAFORMATID="" DESCRIPTION="" DiffStatus=""/>
+    <Dataitem DATAFORMATID="" DATANAME="" COLNUMBER="" DATAID="" PROCESS_INSTRUCTION="" DiffStatus=""/>
+    <Versioning VERSIONID="" DESCRIPTION="" STATUS="" TECHPACK_NAME="" TECHPACK_VERSION="" TECHPACK_TYPE=""
+                PRODUCT_NUMBER="" LOCKEDBY="" LOCKDATE="" BASEDEFINITION="" BASEVERSION="" INSTALLDESCRIPTION=""
+                UNIVERSENAME="" UNIVERSEEXTENSION="" ENIQ_LEVEL="" DiffStatus=""/>
+    <Aggregation AGGREGATION="" VERSIONID="" AGGREGATIONSET="" AGGREGATIONGROUP="" REAGGREGATIONSET=""
+                 REAGGREGATIONGROUP="" GROUPORDER="" AGGREGATIONORDER="" AGGREGATIONTYPE="" AGGREGATIONSCOPE=""
+                 DiffStatus=""/>
+    <Externalstatement VERSIONID="" STATEMENTNAME="" EXECUTIONORDER="" DBCONNECTION="" STATEMENT="" DiffStatus=""/>
+    <Transformer TRANSFORMERID="" VERSIONID="" DESCRIPTION="" TYPE="" DiffStatus=""/>
+    <Transformation TRANSFORMERID="" ORDERNO="" TYPE="" SOURCE="" TARGET="" CONFIG="" DESCRIPTION="" DiffStatus=""/>
+    <Supportedvendorrelease VERSIONID="" VENDORRELEASE="" DiffStatus=""/>
+    <Techpackdependency VERSIONID="" TECHPACKNAME="" VERSION="" DiffStatus=""/>
+    <Vectorcounter MTABLEID="" DATANAME="" VENDORRELEASE="" VINDEX="" VFROM="" VTO="" MEASURE="" DiffStatus=""/>
+    <Universeclass VERSIONID="" CLASSNAME="" UNIVERSEEXTENSION="" DESCRIPTION="" PARENT="" OBJ_BH_REL="" ELEM_BH_REL=""
+                   INHERITANCE="" ORDERNRO="" DiffStatus=""/>
+    <Verificationobject VERSIONID="" OBJNAME="" TYPE="" QUALIFICATION="" CLASSNAME="" AGGREGATION="" OBJSELECT=""
+                        OBJWHERE="" DESCRIPTION="" DiffStatus=""/>
+    <Verificationcondition VERSIONID="" CLASSNAME="" CONDITION="" CONDWHERE="" DESCRIPTION="" DiffStatus=""/>
+    <Universetable VERSIONID="" TABLENAME="" UNIVERSEEXTENSION="" OWNER="" ALIAS="" OBJ_BH_REL="" ELEM_BH_REL=""
+                   INHERITANCE="" DiffStatus=""/>
+    <Universename VERSIONID="" UNIVERSENAME="" UNIVERSEEXTENSION="" DiffStatus=""/>
+    <Universejoin VERSIONID="" SOURCETABLE="" SOURCELEVEL="" SOURCECOLUMN="" TARGETTABLE="" TARGETLEVEL=""
+                  TARGETCOLUMN="" EXPRESSION="" CARDINALITY="" CONTEXT="" EXCLUDEDCONTEXTS="" DiffStatus=""/>
+    <Universeobject VERSIONID="" CLASSNAME="" UNIVERSEEXTENSION="" OBJECTNAME="" DESCRIPTION="" OBJECTTYPE=""
+                    QUALIFICATION="" AGGREGATION="" OBJSELECT="" OBJWHERE="" PROMPTHIERARCHY="" OBJ_BH_REL=""
+                    ELEM_BH_REL="" INHERITANCE="" DiffStatus=""/>
+    <Universecomputedobject ORDERNRO="" VERSIONID="" CLASSNAME="" UNIVERSEEXTENSION="" OBJECTNAME="" DESCRIPTION=""
+                            OBJECTTYPE="" QUALIFICATION="" AGGREGATION="" OBJSELECT="" OBJWHERE="" PROMPTHIERARCHY=""
+                            OBJ_BH_REL="" ELEM_BH_REL="" INHERITANCE="" DiffStatus=""/>
+    <Universecondition VERSIONID="" CLASSNAME="" UNIVERSEEXTENSION="" UNIVERSECONDITION="" DESCRIPTION="" CONDWHERE=""
+                       AUTOGENERATE="" CONDOBJCLASS="" CONDOBJECT="" PROMPTTEXT="" MULTISELECTION="" FREETEXT=""
+                       OBJ_BH_REL="" ELEM_BH_REL="" INHERITANCE="" DiffStatus=""/>
+    <Universeformulas VERSIONID="" TECHPACK_TYPE="" NAME="" FORMULA="" OBJECTTYPE="" QUALIFICATION="" AGGREGATION=""
+                      DiffStatus=""/>
+    <Universeparameters TYPENAME="" VERSIONID="" CLASSNAME="" OBJECTNAME="" UNIVERSEEXTENSION="" ORDERNRO="" NAME=""
+                        DiffStatus=""/>
+</techpack>

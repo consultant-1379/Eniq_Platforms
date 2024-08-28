@@ -1,0 +1,28 @@
+<project name="install" basedir="." default="all">
+
+	<target name="install" depends="copyTmpToDeploy">
+		<if>
+  		  <available file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/export.jar"/>
+  		  <then>
+  			<delete file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/export.jar"/>
+			<copy todir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib" flatten="true">
+				<fileset dir="${dc.platform.dir}">
+  					<include name="**/dclib/export.jar"/>
+  				</fileset>
+  			</copy>
+  		  </then>
+  		  <else/>
+  	    </if>
+		
+		<copy file="${dc.installer.dir}/tmp/bin/gpmgt" toFile="${dc.bin.dir}/gpmgt" overwrite="true"/>
+		<chmod perm="ug+x" file="${dc.bin.dir}/gpmgt"/>
+		<copy file="${dc.installer.dir}/tmp/conf/gpmgt.properties" toFile="${dc.conf.dir}/gpmgt.properties" overwrite="true" />
+		
+		<copy file="${dc.installer.dir}/tmp/bin/csvexport" toFile="${dc.bin.dir}/csvexport" overwrite="true"/>
+		<chmod perm="ug+x" file="${dc.bin.dir}/csvexport"/>
+		<copy file="${dc.installer.dir}/tmp/conf/csvexport.properties" toFile="${dc.conf.dir}/csvexport.properties" overwrite="true" />
+	</target>
+
+	<target name="update" depends="moveToObsolete,install"/>
+
+</project>

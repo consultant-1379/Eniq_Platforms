@@ -1,0 +1,28 @@
+<project name="export" default="test_all">
+    <property name="module.name" value="export"/>
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.base" value="${module.export.base}"/>
+	<property name="module.build" value="${module.export.build}"/>
+    <property name="module.dependants" value="${module.export.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+
+    <property name="mods.needed" value="repository"/>
+	
+	 <path id="export.lib.classpath">
+	 	  <path refid="plaform.lib.classpath"/>	 	  	 	  
+	 	  <path location="${module.repository.pkg}"/>
+	 	  <path location="${module.common_utilities.pkg}"/>
+	 	  <path location="${module.dwh_manager.pkg}"/>
+	 </path>
+	 <path id="export.test.classpath">
+	 	  <path refid="platform.test.classpath"/>
+		  <path refid="h2"/>
+	      <path refid="export.lib.classpath"/>
+		<path location="${module.test.source}"/>
+		<path location="${module.base}/jar"/>
+	 </path>
+
+</project>

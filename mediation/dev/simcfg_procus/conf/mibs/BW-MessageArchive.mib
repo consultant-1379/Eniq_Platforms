@@ -1,0 +1,224 @@
+--===============================================================
+-- File Name : BW-MessageArchive.mib
+-- Date      : 06/17/2014
+-- Author    : BroadSoft Inc.
+--===============================================================
+
+BW-MessageArchive  DEFINITIONS ::= BEGIN
+  IMPORTS
+    DisplayString
+      FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP          
+      FROM SNMPv2-CONF
+    enterprises, MODULE-IDENTITY, NOTIFICATION-TYPE, OBJECT-TYPE, Gauge32, Counter32, Integer32, Unsigned32
+      FROM SNMPv2-SMI;
+  
+  broadsoft  MODULE-IDENTITY
+    LAST-UPDATED  "201406170000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION    
+        "This MIB contains the performance measurements related to the BroadWorks
+         Message Archive application."
+    REVISION    "201406170000Z"
+      DESCRIPTION "Creation of the MIB"
+    ::=  {  enterprises  6431  }
+
+  broadworks  OBJECT IDENTIFIER
+    ::=  {  broadsoft  1  }
+
+  messageArchive  OBJECT IDENTIFIER
+    ::=  {  broadworks  45  }
+
+  repository  OBJECT IDENTIFIER
+    ::=  {  messageArchive  1  }
+
+  replication  OBJECT IDENTIFIER
+    ::=  {  messageArchive  2  }
+
+  bwMessageArchiveMibConformance  OBJECT IDENTIFIER
+    ::=  {  messageArchive  1000  }
+
+-- repository modules  ...........................................
+
+  bwMessageArchiveCacheIndexedDirectories  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of indexed cached directories."
+-- @feature:218189
+    ::=  {  repository  1  }
+
+  bwMessageArchiveCacheSize  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the size of the look up table."
+-- @feature:218189
+    ::=  {  repository  2  }
+
+  bwMessageArchiveCacheCapacity  OBJECT-TYPE  
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the look up table capacity."
+-- @feature:218189
+    ::=  {  repository  3  }
+
+  bwMessageArchiveCacheLookUpCount  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of look up performed."
+-- @feature:218189
+    ::=  {  repository  4  }
+
+  bwMessageArchiveCacheLookUpHits  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of look up which returned a match."
+-- @feature:218189
+    ::=  {  repository  5  }
+
+  bwMessageArchiveCacheEvictions  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of entries that were evicted from the cache."
+-- @feature:218189
+    ::=  {  repository  6  }
+
+-- Replication modules  ...........................................
+
+  bwMessageArchiveReplicationStatsTable  OBJECT-TYPE
+    SYNTAX    SEQUENCE  OF  BwMessageArchiveReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "This table contains counters for MessageArchive replication."
+    ::=  { replication  1 }
+
+  bwMessageArchiveReplicationStatsEntry  OBJECT-TYPE
+    SYNTAX    BwMessageArchiveReplicationStatsEntry
+    MAX-ACCESS  not-accessible
+    STATUS    current
+    DESCRIPTION
+      "Definition of the entries for bwMessageArchiveReplicationStatsTable."
+    INDEX    {  bwMessageArchiveReplicationStatsIndex  }
+    ::=  { bwMessageArchiveReplicationStatsTable 1 }
+
+  BwMessageArchiveReplicationStatsEntry  ::=  SEQUENCE {
+    bwMessageArchiveReplicationStatsIndex    Unsigned32,
+    bwMessageArchiveReplicationPeer          DisplayString,
+    bwMessageArchiveReplicationRxSuccessful  Counter32,
+    bwMessageArchiveReplicationRxFailed      Counter32,
+    bwMessageArchiveReplicationTxSuccessful  Counter32,
+    bwMessageArchiveReplicationTxFailed      Counter32
+    }
+
+  bwMessageArchiveReplicationStatsIndex  OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This integer represents an index in table bwMessageArchiveReplicationStatsTable. The index represents a peer entry in the table."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  1  }
+
+  bwMessageArchiveReplicationPeer  OBJECT-TYPE  
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION    
+        "This is the peer IP."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  2  }
+
+  bwMessageArchiveReplicationRxSuccessful  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of successful replication request."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  3  }
+
+  bwMessageArchiveReplicationRxFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of failed replication request."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  4  }
+
+  bwMessageArchiveReplicationTxSuccessful  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of successful replication attempts."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  5  }
+
+  bwMessageArchiveReplicationTxFailed  OBJECT-TYPE  
+    SYNTAX      Counter32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION    
+        "This is the number of failed replication attempts."
+-- @feature:218189
+    ::=  {  bwMessageArchiveReplicationStatsEntry  6  }
+
+-- BroadWorks File Repos MIB Conformance Definition  
+
+  bwMessageArchiveMibGroups OBJECT IDENTIFIER 
+    ::= { bwMessageArchiveMibConformance 1 }
+
+  bwMessageArchiveMibCompliancy OBJECT IDENTIFIER
+    ::= { bwMessageArchiveMibConformance 2 }
+
+  bwMessageArchiveRepositoryGroup OBJECT-GROUP
+    OBJECTS     { bwMessageArchiveCacheIndexedDirectories, bwMessageArchiveCacheSize,
+                  bwMessageArchiveCacheCapacity, bwMessageArchiveCacheLookUpCount,
+                  bwMessageArchiveCacheLookUpHits, bwMessageArchiveCacheEvictions
+                }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the MessageArchive Repository."
+    ::= { bwMessageArchiveMibGroups 1 }
+
+  bwMessageArchiveReplicationGroup OBJECT-GROUP
+    OBJECTS     { bwMessageArchiveReplicationStatsIndex, bwMessageArchiveReplicationPeer,   
+                  bwMessageArchiveReplicationRxSuccessful, bwMessageArchiveReplicationRxFailed,
+                  bwMessageArchiveReplicationTxSuccessful, bwMessageArchiveReplicationTxFailed
+                }
+    STATUS      current
+    DESCRIPTION 
+        "This group defines the statistics for the MessageArchive Replication."
+    ::= { bwMessageArchiveMibGroups 2 }
+
+  bwMessageArchiveBasicCompliance MODULE-COMPLIANCE
+    STATUS      current
+    DESCRIPTION 
+        "BroadWorks MessageArchive MIB compliance"
+
+    MODULE      -- this module
+
+        MANDATORY-GROUPS        { bwMessageArchiveRepositoryGroup,
+                                  bwMessageArchiveReplicationGroup }
+
+    ::= { bwMessageArchiveMibCompliancy 1 }
+
+END

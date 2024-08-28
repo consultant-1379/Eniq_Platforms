@@ -1,0 +1,34 @@
+<project name="glassfish" default="compile">
+
+  <property name="pack.name" value="glassfish"/>
+  <property name="pack.version" value="5-0-0"/>
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there -->
+  <property name="pack.dir" value="/vobs/eniq/design/plat/installer/dev/glassfish"/>
+    <!-- 3PP Jars -->
+  <property name="3pp.glassfish.dir" value="/vobs/eniq/3pp/java_sun/glassfish/v3_1_2_2/prod"/>
+  <property name="3pp.glassfish.patch.dir" value="/vobs/eniq/3pp/java_sun/glassfish/v3_1/prod/patch"/>
+
+  <target name="precompile">
+
+  	<mkdir dir="${pack.dir}/glassfish"/>
+  	<copy todir="${pack.dir}/glassfish">
+      	<fileset dir="${3pp.glassfish.dir}">
+			<include name="**/*.zip"/>
+      	</fileset>
+	</copy>
+
+  </target>
+
+  <target name="compile">   <!-- glassfish_config.jar -->
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes" failonerror="true" debug="true"/>
+    <jar destfile="${pack.dir}/bin/glassfish_config.jar">
+      <fileset dir="${pack.dir}/classes"/>
+    </jar>
+  </target>
+
+  <target name="postcompile">
+  	<mkdir dir="${pack.dir}/install"/>
+  </target>
+
+</project>

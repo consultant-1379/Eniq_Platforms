@@ -1,0 +1,110 @@
+#!/bin/bash
+
+nawk=/usr/bin/nawk
+date=/usr/bin/date
+echo=/usr/bin/echo
+find=/usr/bin/find
+grep=/usr/bin/grep
+mkdir=/usr/bin/mkdir
+ps=/usr/ucb/ps
+tee=/usr/bin/tee
+
+
+if [ -z "${CONF_DIR}" ] ; then
+  $echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+if [ ! -f ${CONF_DIR}/niq.rc ] ; then
+	$echo "ERROR: ${CONF_DIR}/niq.rc not found"
+  exit 1
+fi
+. ${CONF_DIR}/niq.rc
+PNAME=lwphelper
+
+LOGD=${LOG_DIR}/engine/lwphelper
+$mkdir -p $LOGD
+
+_common_=`find ${PLATFORM_DIR}/common-*/dclib/common.jar`
+
+_classpath_=$_common_
+_codebase_=-Djava.rmi.server.codebase=file:///$_common_
+_ignore_stubs_=-Djava.rmi.server.ignoreStubClasses=true
+_main_class_=com.ericsson.eniq.common.lwp.LwpServer
+
+#_debug_=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=55123
+
+get_pid()
+{
+	_process_=`$ps -auxwww | $grep -v $grep | $grep pname=${PNAME}`
+	if [ $? -ne 0 ] ; then
+		$echo "LWPH isnt running"
+		return 1
+	fi
+	$echo ${_process_} | $nawk '{print $2}'
+	return 0
+}
+
+status()
+{
+	get_pid > /dev/null
+	if [ $? -ne 0 ] ; then
+		$echo "LWPH is not running"
+		return 1
+	fi
+	# ping the rmi objects..
+	${RT_DIR}/java/bin/java -Dpname=${PNAME} $_debug_ \
+		$_ignore_stubs_ $_codebase_ -DCONF_DIR=${CONF_DIR} \
+		-cp $_classpath_ $_main_class_ "ping"
+
+	_return_=$?
+	echo "LDWPH is running"
+	return $_return_
+}
+
+start()
+{
+	_log_=${LOGD}/start_lwph_`$date '+%y%m%d_%H%M%S'`.log
+	_pid_=`get_pid`
+	if [ $? -eq 0 ] ; then
+		$echo "LWPH already running as process $_pid_" | $tee -a $_log_
+		return
+	fi
+	${RT_DIR}/java/bin/java -Dpname=${PNAME} $_debug_ \
+		$_ignore_stubs_ $_codebase_ -DCONF_DIR=${CONF_DIR} -DLOG_DIR=${LOG_DIR} \
+		-Djava.util.logging.config.file=${CONF_DIR}/engineLogging.properties \
+		-cp $_classpath_ $_main_class_ & >> $_log_ 2>&1
+	$echo "LWPH started" | $tee -a $_log_
+}
+
+stop(){
+	_log_=${LOGD}/stop_lwph_`$date '+%y%m%d_%H%M%S'`.log
+	_pid_=`get_pid`
+	if [ $? -eq 1 ] ; then
+		$echo "LWPH is not running" | $tee -a $_log_
+		return
+	fi
+	$echo "Stopping pid $_pid_" | $tee -a $_log_
+	COUNT=1
+	while kill "$_pid_" > /dev/null 2>&1 ; do
+		if [ $COUNT -le 10 ] ; then
+               COUNT='expr $COUNT + 1'
+		sleep 1
+         else
+			kill -9 "$_pid_" > /dev/null 2>&1 
+		fi	
+	done
+	echo "LWPH process ${_pid_} stopped." | $tee -a $_log_
+}
+
+case "$1" in
+	start)	start
+			;;
+	stop)	stop
+			;;
+	status)	status
+			exit $?
+			;;
+	*)		echo "Usage: $0 start|stop|status"
+			exit 2
+esac

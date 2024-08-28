@@ -1,0 +1,23 @@
+<project name="adminui_userdb" default="test_all">
+	<property name="module.name" value="adminui_userdb" />
+	<property file="${user.home}/EniqBuild/BH/build.properties" />
+	<property name="ant.common" value="${cc.base}/tools/ant_common" />
+	<property file="${ant.common}/common.properties" />
+	<property name="module.base" value="${module.adminui_userdb.base}" />
+	<property name="module.build" value="${module.adminui_userdb.build}" />
+	<property name="module.dependants" value="${module.adminui_userdb.dependants}" />
+	<import file="${ant.common}/common.xml" />
+	<property name="tests.to.run" value="**/*Test.class" />
+    <property name="tests.to.exclude" value=""/>
+
+	<property name="mods.needed" value="" />
+
+	<path id="adminui_userdb.lib.classpath">
+		<path refid="plaform.lib.classpath" />
+		<path refid="servlet_api" />
+	</path>
+	<path id="adminui_userdb.test.classpath">
+		<path refid="platform.test.classpath" />
+		<path refid="adminui_userdb.lib.classpath" />
+	</path>
+</project>

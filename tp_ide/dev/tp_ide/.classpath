@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/ETLC_TestHelper"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/comm_net/v3_0/commons-net-3.0.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/apache/common_io/v2_0/commons-io-2.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/hsqldb/v2_2_2/prod/hsqldb.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/idk/swing_worker/prod/swing-worker.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/dbunit/dbunit/v2_1/prod/dbunit-2.1_dc.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/sybase/sybase_iq/v15_1/client/prod/jconn3.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/toedter/jcalendar/prod/jcalendar.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/apache/jakarta_velocity/v1_5/prod/velocity-dep-1.5.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/apache/xml_commons/v1_1/prod/xml-apis.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/appframework/prod/appframework.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_etl_controller/build/engine/engine.jar" sourcepath="VIEW_PATH/etl_controller/dev/engine"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_etl_controller/build/scheduler/scheduler.jar" sourcepath="VIEW_PATH/etl_controller/dev/scheduler"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_tp_ide/3pp/dc5000/alcatellucent.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_tp_ide/3pp/dc5000/spf.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_tp_ide/3pp/javaws/javaws.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/apache/ant/v1_6_2/prod/ant.jar"/>
+	<classpathentry exported="true" kind="var" path="VIEW_PATH/eniq_3pp/apache/xerces_parser/v2_6_2/prod/xerces-2.6.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/easymock/cglib/cglib-nodep-2.2.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/easymock/easymock-2.5/easymock-2.5.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/easymock/easymockclassextension2.4/easymockclassextension.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/junit/v4_5/prod/junit-4.5.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/bsh-core-2.0b4.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/hamcrest-library-1.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-junit3-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-junit4-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-legacy-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/jmock-script-2.5.1.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/jmock-2.5.1/objenesis-1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/repository"/>
+	<classpathentry kind="src" path="/common"/>
+	<classpathentry kind="src" path="/export"/>
+	<classpathentry kind="src" path="/DWHManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/parser"/>
+	<classpathentry kind="src" path="/installer"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_common_utilities/build/common_utilities/common.jar"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_design_plat_management/build/dwh_manager/dwhmanager.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
+	<classpathentry kind="lib" path="//Client/D$/java_source/Jars/common.jar"/>
+	<classpathentry kind="lib" path="M:/xashgup_stat/eniq_design_plat_installer/build/repository/repository.jar"/>
+	<classpathentry kind="lib" path="M:/xashgup_stat/eniq_3pp/apache/ant/v1_8_1/prod/ant.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

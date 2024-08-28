@@ -1,0 +1,158 @@
+-- File Name : BW-LicenseManagerFault.mib
+BW-LicenseManagerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npNFMFqdn, npLicenseId, npBroadWorksRelease, npDate, npGraceAction, npHours
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201409100000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks license manager daemon."
+    REVISION    "201409100000Z"
+                DESCRIPTION     "Creation of the Fault MIB."
+    ::=  {  common  1  }
+
+  bwPMlmdLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the license manager daemon has started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMlmdLaunched, bwPMlmdShutDown, bwPMlmdRestarted, bwPMlmdDeath, and bwPMlmdOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LicenseController process"
+-- @feature:217550
+    ::=  {  systemFaults 15801  }
+
+  bwPMlmdShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the license manager daemon has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMlmdLaunched, bwPMlmdShutDown, bwPMlmdRestarted, bwPMlmdDeath, and bwPMlmdOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LicenseController process"
+-- @feature:217550
+    ::=  {  systemFaults 15802  }
+
+  bwPMlmdRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the license manager daemon restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMlmdLaunched, bwPMlmdShutDown, bwPMlmdRestarted, bwPMlmdDeath, and bwPMlmdOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LicenseController process"
+-- @feature:217550
+    ::=  {  systemFaults 15803  }
+
+  bwPMlmdDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the license manager daemon has abnormally terminated.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMlmdLaunched, bwPMlmdShutDown, bwPMlmdRestarted, bwPMlmdDeath, and bwPMlmdOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the LicenseController process"
+-- @feature:217550
+    ::=  {  systemFaults 15804  }
+    
+bwPMlmdOutOfMemory  NOTIFICATION-TYPE
+     OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+     STATUS      current
+     DESCRIPTION
+         "This notification provides the date and time when the license manager daemon ran out of memory.
+ @severity:high
+ @subcomponent:processmonitor
+ @correlationrules:bwPMlmdLaunched, bwPMlmdShutDown, bwPMlmdRestarted, bwPMlmdDeath, and bwPMlmdOutOfMemory can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the ProvisioningServerXSTAS process."
+-- @feature:217550
+    ::=  {  systemFaults 15805  }
+
+  bwLicensingNFMCommunicationLoss  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npNFMFqdn }
+    STATUS      current
+    DESCRIPTION
+        "There is a communication loss with the Network Function Manager.
+@severity:high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15806  }
+    
+  bwLicensingLMCommunicationLoss  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "There is a communication loss with the license manager.
+@severity:high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15807  }
+    
+  bwLicensingViolation  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, npLicenseId, npBroadWorksRelease, npDate }
+    STATUS      current
+    DESCRIPTION
+        "There is a license usage violation.
+@severity:high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15808  }
+    
+  bwLicensingOverAllocation  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "An application reports a license over-allocation.
+@severity:high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15809  }
+    
+  bwLicensingNFMCommunicationLossGrace  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npGraceAction, npHours }
+    STATUS      current
+    DESCRIPTION
+        "There is a communication loss grace period.
+@severity:low to critical
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15810  }
+    
+  bwLicensingLMCommunicationLossGrace  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npGraceAction, npHours }
+    STATUS      current
+    DESCRIPTION
+        "There is a communication loss grace period.
+@severity:low to critical
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15811  }
+    
+  bwLicensingViolationGrace  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npGraceAction, npHours }
+    STATUS      current
+    DESCRIPTION
+        "There is a licensing violation grace period.
+@severity:low to high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15812  }
+    
+  bwOverAllocationViolationGrace  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText, npGraceAction, npHours }
+    STATUS      current
+    DESCRIPTION
+        "There is a licensing over-allocation grace period.
+@severity:low to high
+@subcomponent:licensing"
+-- @feature:217550
+    ::=  {  systemFaults 15813  }
+    
+END

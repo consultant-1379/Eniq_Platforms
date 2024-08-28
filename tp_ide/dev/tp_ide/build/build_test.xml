@@ -1,0 +1,51 @@
+<project name="tpide_junit" default="test_all">
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="module.name" value="tpide_junit"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.base" value="${module.tpide_junit.base}"/>
+	<property name="module.build" value="${module.tpide_junit.build}"/>
+    <property name="module.dependants" value="${module.tpide_junit.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="junitp.testFileDir" value="${module.test.source}"/>
+    <property name="junitp.templateDir" value="5.2"/>
+    <property name="tests.to.run" value="**/*Test.class"/>
+    <property name="tests.to.exclude" value="**/com/ericsson/eniq/techpacksdk/view/etlSetHandling/setWizards/CreateRestoreSetTest.class"/> <!--This excludes the Swing (GUI) related tests-->
+    <property name="mods.needed" value=""/>
+	<property name="rep.src" value="${module.repository.base}/src"/>
+	<property name="rep.cls" value="${module.build}/repo"/>
+
+	<target name="pre_compile">
+		<echo message="Recompiling repository to remove signer info (easymock doesnt like it....)"/>
+		<delete dir="${rep.cls}" verbose="false"/>
+		<mkdir dir="${rep.cls}"/>
+		<mcompile destdir="${rep.cls}" srcpath="${rep.src}" classpathref="tpide_junit.lib.classpath" include="**/*.java"/>
+	</target>
+
+    <path id="tpide_junit.lib.classpath">
+		<path refid="plaform.lib.classpath"/>
+        <path location="${rep.cls}"/>
+        <path location="${module.common_utilities.pkg}"/>
+        <path location="${module.installer.pkg}"/>
+        <path location="${module.dwh_manager.pkg}"/>
+        <path location="${module.engine.pkg}"/>
+        <path location="${module.scheduler.pkg}"/>
+        <path location="${module.parser.pkg}"/>
+        <path location="${module.export.pkg}"/>
+        <path location="${module.parser_debugger_component.pkg}"/>
+        <path location="${module.table_tree_component.pkg}"/>
+        <path refid="appframework"/>
+        <path refid="jcalendar"/>
+    </path>
+    <path id="tpide_junit.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="tpide_junit.lib.classpath"/>
+	<path location="${module.test.source}/"/>
+	<path location="${module.tpide_junit.base}/jar/"/> <!-- templates -->
+	<path id="sourceSQL">
+        	<fileset dir="${module.test.source}" includes="**/*.sql"/>
+    	</path>
+    </path>
+	
+    
+</project>

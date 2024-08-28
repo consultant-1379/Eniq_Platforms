@@ -1,0 +1,64 @@
+#!/bin/bash
+
+JSTACK=/eniq/sw/runtime/jdk/bin/jstack
+NAWK=/usr/bin/nawk
+
+#Set LOG Dir
+LOG_DIR=/eniq/home/dcuser/runtime
+
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+DBAPASSWORD=`inigetpassword DWH -v DBAPassword -f ${CONF_DIR}/niq.ini`
+
+mkdir -p $LOG_DIR_`date +%Y_%m_%d_%H%M%S`
+
+is_multi=`cat /eniq/installation/config/installed_server_type`
+if [ $is_multi == "stats_coordinator" ]; then
+        server_type="multi"
+else
+        server_type="single"
+fi
+
+#Get JStack of EngineThread
+if [ $server_type == "multi" ]; then
+        ssh engine "ps -aef | grep -i ETLCEngine | grep -v grep" > $LOG_DIR/engine_thread
+        engine_pid=`cat $LOG_DIR/engine_thread | tail -1 | $NAWK -F" " '{print $2}'`
+        #echo "Engine PID is $engine_pid"
+        ssh engine "$JSTACK $engine_pid > $LOG_DIR/Engine_JStack.log"
+else
+        engine_pid=`ps -aef | grep -i ETLCEngine | grep -v grep | $NAWK -F" " '{print $2}'`
+        #echo "Engine PID is $engine_pid"
+        $JSTACK $engine_pid > $LOG_DIR/Engine_JStack.log
+fi
+
+#Get Jstack of Scheduler Thread
+scheduler_pid=`ps -aef | grep -i ETLCScheduler | grep -v grep | $NAWK -F" " '{print $2}'`
+$JSTACK $scheduler_pid > $LOG_DIR/Scheduler_JStack.log
+
+#Get ExecutionSlot details
+engine -e showSetsInExecutionSlots > $LOG_DIR/ExecutionSlots.log
+
+#Get PrioirtyQueue details
+engine -e showSetsInQueue > $LOG_DIR/SetsInQueue.log
+
+#CPU Usage
+top > $LOG_DIR/CPU_Usage.log
+
+#All Std Sybase procedures
+isql -UDBA -P$DBAPASSWORD  -Srepdb -b <<EOF_Repdb > $LOG_DIR/REPDB_IQ_CONNECTION.log
+sp_iqconnection
+go
+EOF_Repdb
+
+isql -UDBA -P$DBAPASSWORD  -Sdwhdb -b <<EOF_Dwhdb > $LOG_DIR/DWHDB_IQ_CONNECTION.log
+sp_iqconnection
+go
+EOF_Dwhdb
+
+

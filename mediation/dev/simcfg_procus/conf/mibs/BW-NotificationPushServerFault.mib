@@ -1,0 +1,50 @@
+--===============================================================
+-- File Name : BW-NotificationPushServerFault.mib
+-- Author    : BroadSoft Inc.
+-- Copyright 2000-2015, BroadSoft, Inc. All rights reserved.
+-- Proprietary Property of BroadSoft, Inc. Gaithersburg, MD.
+--===============================================================
+BW-NotificationPushServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+      FROM SNMPv2-SMI
+    alarmName, alarmState, common, component, correlationParameter, identifier, npApplicationId, problemText, recommendedActionsText, severity, subcomponent, systemName, timeStamp
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201506250000Z"
+    ORGANIZATION  "BroadSoft, Inc."
+    CONTACT-INFO  "BroadSoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg, MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks Notification Push Server Application."
+    REVISION    "201506250000Z"
+                DESCRIPTION    "Creation of the Fault MIB."
+    ::=  {  common 1  }
+
+
+  bwAPNSConnectionError  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npApplicationId }
+    STATUS      current
+    DESCRIPTION
+        "There was a problem connecting to the APNS for an application id for an extended period of time. The NPS will continue to try to create a connection.
+@severity:medium
+@subcomponent:apns"
+-- @feature:BW-7193
+    ::=  {  systemFaults 17501  }
+
+  bwGCMConnectionError  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npApplicationId }
+    STATUS      current
+    DESCRIPTION
+        "There was a problem performing an HTTP POST to the GCM for an application id for an extended period of time. The NPS will continue to try to post the message.
+@severity:medium
+@subcomponent:gcm"
+-- @feature:BW-7193
+    ::=  {  systemFaults 17502  }
+
+
+END

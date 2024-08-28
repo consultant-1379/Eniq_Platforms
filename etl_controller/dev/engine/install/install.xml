@@ -1,0 +1,394 @@
+<project name="install" basedir="." default="all">
+
+  <property name="dcinstall.require.common" value="> 5-0-0b58"/>
+  <property name="dcinstall.require.repository" value="> 5-0-0b184"/>
+
+  <target name="install" depends="copyTmpToDeploy">
+
+    <trycatch property="msg1">
+      <try>
+        <forcedelete file="${dc.bin.dir}/engine"/>
+      </try>
+      <catch/>
+    </trycatch>
+
+    <mkdir dir="${dc.log.dir}/engine"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/engine" toFile="${dc.bin.dir}/engine"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/engine"/>
+
+    <if>
+      <available file="${dc.admin.bin}/manage_eniq_backup.bsh"/>
+    <then>
+      <delete file="${dc.admin.bin}/manage_eniq_backup.bsh"/>
+    </then>
+    </if>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/manage_eniq_backup.bsh" toFile="${dc.admin.bin}/manage_eniq_backup.bsh"/>
+	<chmod perm="ug+x" file="${dc.admin.bin}/manage_eniq_backup.bsh"/>
+
+    <if>
+      <available file="${dc.admin.bin}/engine"/>
+      <then>
+        <delete file="${dc.admin.bin}/engine"/>
+      </then>
+    </if>
+
+    <copy file="${dc.installer.dir}/tmp/smf/engine" toFile="${dc.admin.bin}/engine"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/engine"/>
+
+    <if>
+      <available file="${dc.admin.bin}/regenerateslots"/>
+      <then>
+        <delete file="${dc.admin.bin}/regenerateslots"/>
+      </then>
+    </if>
+
+    <copy file="${dc.installer.dir}/tmp/smf/regenerateslots" toFile="${dc.admin.bin}/regenerateslots"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/regenerateslots"/>
+
+    <if>
+      <available file="${dc.bin.dir}/generate_dirchecker_sch_commands.bsh"/>
+      <then>
+        <delete file="${dc.bin.dir}/generate_dirchecker_sch_commands.bsh"/>
+      </then>
+    </if>
+
+    <copy file="${dc.installer.dir}/tmp/bin/generate_dirchecker_sch_commands.bsh" toFile="${dc.bin.dir}/generate_dirchecker_sch_commands.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/generate_dirchecker_sch_commands.bsh"/>
+
+    <if>
+      <available file="${dc.admin.bin}/cleanup_after_restore.bsh"/>
+      <then>
+        <delete file="${dc.admin.bin}/cleanup_after_restore.bsh"/>
+      </then>
+    </if>
+
+    <trycatch property="msg1">
+      <try>
+        <forcedelete file="${dc.admin.bin}/disableCounters.bsh"/>
+        <forcedelete file="${dc.admin.bin}/disableCounters.xml"/>
+        <forcedelete file="${dc.admin.bin}/enableCounters.bsh"/>
+        <forcedelete file="${dc.admin.bin}/enableCounters.xml"/>
+      </try>
+      <catch/>
+    </trycatch>
+
+    <copy file="${dc.installer.dir}/tmp/bin/cleanup_after_restore.bsh" toFile="${dc.admin.bin}/cleanup_after_restore.bsh"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/cleanup_after_restore.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/disableCounters.bsh" toFile="${dc.admin.bin}/disableCounters.bsh"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/disableCounters.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/disableCounters.xml" toFile="${dc.admin.bin}/disableCounters.xml"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/disableCounters.xml"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/enableCounters.bsh" toFile="${dc.admin.bin}/enableCounters.bsh"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/enableCounters.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/enableCounters.xml" toFile="${dc.admin.bin}/enableCounters.xml"/>
+    <chmod perm="ug+x" file="${dc.admin.bin}/enableCounters.xml"/>
+
+    <trycatch property="msg1">
+      <try>
+        <forcedelete file="${dc.bin.dir}/copy_dst"/>
+        <forcedelete file="${dc.bin.dir}/startDayOfTheWeek.bsh"/>
+        <forcedelete file="${dc.bin.dir}/updateDatabase.bsh"/>
+        <forcedelete file="${dc.bin.dir}/updateDIM_WEEKDAY.bsh"/>
+        <forcedelete file="${dc.bin.dir}/updateLoggAggStatus.bsh"/>
+        <forcedelete file="${dc.bin.dir}/alter_dc_e_cudb_neid.bsh"/>
+        <forcedelete file="${dc.bin.dir}/addWifiInCrontab.bsh"/>
+        <forcedelete file="${dc.bin.dir}/alter_dc_e_cudb_neid.sql"/>
+        <forcedelete file="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.bsh"/>
+        <forcedelete file="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.sql"/>
+        <forcedelete file="${dc.bin.dir}/remove_cp_bh_ims.bsh"/>
+        <forcedelete file="${dc.bin.dir}/remove_cp_bh_ims.sql"/>
+        <forcedelete file="${dc.bin.dir}/addTWAMPInCrontab.bsh"/>
+        <forcedelete file="${dc.bin.dir}/addHiddenFilesScriptInCrontab.bsh"/>
+        <forcedelete file="${dc.bin.dir}/addNetAnFileHandlerCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addHeapUsageCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addConnectionsCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addCacheUsageCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addMovedFailedLoaderFileInCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addDiskManagerSetInCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addLogUsageCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addSchedulerCheckCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addFileSystemChecktoCrontab.bsh"/>
+		<forcedelete file="${dc.bin.dir}/addDeleteOldFilesScriptToCrontab.bsh"/>
+		<forcedelete file="${dc.conf.dir}/loglevelcheck.sh"/>
+		<forcedelete file="${dc.conf.dir}/backupdata.bsh"/>
+		<forcedelete file="${dc.conf.dir}/backupaggregation.bsh"/>
+		
+      </try>
+      <catch/>
+    </trycatch>
+
+    <copy file="${dc.installer.dir}/tmp/bin/copy_dst" toFile="${dc.bin.dir}/copy_dst"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/copy_dst"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/startDayOfTheWeek.bsh" toFile="${dc.bin.dir}/startDayOfTheWeek.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/startDayOfTheWeek.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/updateDatabase.bsh" toFile="${dc.bin.dir}/updateDatabase.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/updateDatabase.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/updateDIM_WEEKDAY.bsh" toFile="${dc.bin.dir}/updateDIM_WEEKDAY.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/updateDIM_WEEKDAY.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/updateLoggAggStatus.bsh" toFile="${dc.bin.dir}/updateLoggAggStatus.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/updateLoggAggStatus.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/alter_dc_e_cudb_neid.bsh" toFile="${dc.bin.dir}/alter_dc_e_cudb_neid.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/alter_dc_e_cudb_neid.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/sql/alter_dc_e_cudb_neid.sql" toFile="${dc.bin.dir}/alter_dc_e_cudb_neid.sql"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/alter_dc_e_cudb_neid.sql"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/addWifiInCrontab.bsh" toFile="${dc.bin.dir}/addWifiInCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addWifiInCrontab.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/remove_key_dc_e_bss_bscbh.bsh" toFile="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/sql/remove_key_dc_e_bss_bscbh.sql" toFile="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.sql"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.sql"/>
+
+
+
+    <copy file="${dc.installer.dir}/tmp/bin/remove_cp_bh_ims.bsh" toFile="${dc.bin.dir}/remove_cp_bh_ims.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/remove_cp_bh_ims.bsh"/>
+
+    <copy file="${dc.installer.dir}/tmp/sql/remove_cp_bh_ims.sql" toFile="${dc.bin.dir}/remove_cp_bh_ims.sql"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/remove_cp_bh_ims.sql"/>
+
+    <copy file="${dc.installer.dir}/tmp/bin/addHiddenFilesScriptInCrontab.bsh" toFile="${dc.bin.dir}/addHiddenFilesScriptInCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addHiddenFilesScriptInCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addNetAnFileHandlerCrontab.bsh" toFile="${dc.bin.dir}/addNetAnFileHandlerCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addNetAnFileHandlerCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addHeapUsageCrontab.bsh" toFile="${dc.bin.dir}/addHeapUsageCrontab.bsh"/>
+   	<chmod perm="ug+x" file="${dc.bin.dir}/addHeapUsageCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addConnectionsCrontab.bsh" toFile="${dc.bin.dir}/addConnectionsCrontab.bsh"/>
+   	<chmod perm="ug+x" file="${dc.bin.dir}/addConnectionsCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addCacheUsageCrontab.bsh" toFile="${dc.bin.dir}/addCacheUsageCrontab.bsh"/>
+   	<chmod perm="ug+x" file="${dc.bin.dir}/addCacheUsageCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addMovedFailedLoaderFileInCrontab.bsh" toFile="${dc.bin.dir}/addMovedFailedLoaderFileInCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addMovedFailedLoaderFileInCrontab.bsh"/>
+
+	<copy file="${dc.installer.dir}/tmp/bin/addDiskManagerSetInCrontab.bsh" toFile="${dc.bin.dir}/addDiskManagerSetInCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addDiskManagerSetInCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addLogUsageCrontab.bsh" toFile="${dc.bin.dir}/addLogUsageCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addLogUsageCrontab.bsh"/>
+    <copy file="${dc.installer.dir}/tmp/bin/loglevelcheck.sh" toFile="${dc.conf.dir}/loglevelcheck.sh"/>
+    <chmod perm="ug+x" file="${dc.conf.dir}/loglevelcheck.sh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addFileSystemChecktoCrontab.bsh" toFile="${dc.bin.dir}/addFileSystemChecktoCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addFileSystemChecktoCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addDeleteOldFilesScriptToCrontab.bsh" toFile="${dc.bin.dir}/addDeleteOldFilesScriptToCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addDeleteOldFilesScriptToCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/addSchedulerCheckCrontab.bsh" toFile="${dc.bin.dir}/addSchedulerCheckCrontab.bsh"/>
+    <chmod perm="ug+x" file="${dc.bin.dir}/addSchedulerCheckCrontab.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/backupdata.bsh" toFile="${dc.bin.dir}/backupdata.bsh"/>
+	<chmod perm="ug+x" file="${dc.bin.dir}/backupdata.bsh"/>
+	
+	<copy file="${dc.installer.dir}/tmp/bin/backupaggregation.bsh" toFile="${dc.bin.dir}/backupaggregation.bsh"/>
+	<chmod perm="ug+x" file="${dc.bin.dir}/backupaggregation.bsh"/>
+	
+    <antcall target="run_one_sql">
+          <param name="dbname" value="etlrep"/>
+          <param name="sqlfile" value="executionProfile.sql"/>
+    </antcall>
+
+
+    <antcall target="run_one_sql">
+          <param name="dbname" value="etlrep"/>
+          <param name="sqlfile" value="newExecutionProfile.sql"/>
+    </antcall>
+
+    <if>
+      <available file="${dc.conf.dir}/engineLogging.properties"/>
+      <then>
+          <UpdateProperties propertiesFile="${dc.conf.dir}/engineLogging.properties" action="update" value="INFO" key="etlengine.level"/>
+          <UpdateProperties propertiesFile="${dc.conf.dir}/engineLogging.properties" action="update" value="INFO" key="etlengine.priorityqueue.level"/>
+      </then>
+      <else>
+        <copy file="${dc.installer.dir}/tmp/conf/engineLogging.properties" toFile="${dc.conf.dir}/engineLogging.properties"/>
+      </else>
+    </if>
+
+    <if>
+      <available file="${dc.conf.dir}/engineAdminLogging.properties"/>
+      <then/>
+      <else>
+        <copy file="${dc.installer.dir}/tmp/conf/engineAdminLogging.properties" toFile="${dc.conf.dir}/engineAdminLogging.properties"/>
+      </else>
+    </if>
+
+    <if>
+      <available file="${dc.conf.dir}/engine.log4j.properties"/>
+      <then/>
+      <else>
+        <copy file="${dc.installer.dir}/tmp/conf/engine.log4j.properties" toFile="${dc.conf.dir}/engine.log4j.properties"/>
+      </else>
+    </if>
+
+    <if>
+      <available file="${dc.conf.dir}/static.properties"/>
+      <then>
+        <UpdateProperties propertiesFile="${dc.conf.dir}/static.properties" action="remove" key="DuplicateCheck.default"/>
+        <UpdateProperties propertiesFile="${dc.conf.dir}/static.properties" action="remove" key="PriorityQueue.maxAmountOfLoadersForSameTypeInQueue"/>
+        <UpdateProperties propertiesFile="${dc.conf.dir}/static.properties" action="remove" key="PriorityQueue.unremovableSetTypes"/>
+        <UpdateProperties propertiesFile="${dc.conf.dir}/static.properties" action="remove" key="Adapter.TimestampCheck"/>
+		<UpdateProperties propertiesFile="${dc.conf.dir}/static.properties" action="remove" key="statsdefaultQueryTimeOutInMins"/>
+        <MergeProperties inputfile="${dc.installer.dir}/tmp/conf/static.part.properties" outputfile="${dc.conf.dir}/static.properties"/>
+      </then>
+    </if>
+    <!-- exec script to make NE_ID columns nullable in DC_E_CUDB tables. This is temporary solution and will be removed in later track -->
+    <if>
+      <available file="${dc.bin.dir}/alter_dc_e_cudb_neid.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="alter_dc_e_cudb_neid.bsh">
+        </exec>
+      </then>
+    </if>
+    <if>
+      <available file="${dc.bin.dir}/addWifiInCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addWifiInCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+
+    <if>
+      <available file="${dc.bin.dir}/addHiddenFilesScriptInCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addHiddenFilesScriptInCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+    
+     <if>
+      <available file="${dc.bin.dir}/addNetAnFileHandlerCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addNetAnFileHandlerCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+	
+	<if>
+  	      <available file="${dc.bin.dir}/addHeapUsageCrontab.bsh"/>
+  	      <then>
+  	         <exec dir="${dc.bin.dir}" executable="addHeapUsageCrontab.bsh">
+  	 	    </exec>
+  	      </then>
+  	</if>
+	
+	<if>
+  	      <available file="${dc.bin.dir}/addConnectionsCrontab.bsh"/>
+  	      <then>
+  	         <exec dir="${dc.bin.dir}" executable="addConnectionsCrontab.bsh">
+  	 	    </exec>
+  	      </then>
+  	</if>
+	
+	<if>
+  	      <available file="${dc.bin.dir}/addCacheUsageCrontab.bsh"/>
+  	      <then>
+  	         <exec dir="${dc.bin.dir}" executable="addCacheUsageCrontab.bsh">
+  	 	    </exec>
+  	      </then>
+  	</if>
+	   
+    <!-- exec script to make MOID and SN columns nullable in DC_E_BSS_BSCBH tables. This is temporary solution and will be removed in later track -->
+    <if>
+      <available file="${dc.bin.dir}/remove_key_dc_e_bss_bscbh.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="remove_key_dc_e_bss_bscbh.bsh">
+        </exec>
+      </then>
+    </if>
+
+    <!-- exec script to remove custom placeholders for IMS . This is temporary solution and will be removed in later track -->
+    <if>
+      <available file="${dc.bin.dir}/remove_cp_bh_ims.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="remove_cp_bh_ims.bsh">
+        </exec>
+      </then>
+    </if>
+
+	<if>
+      <available file="${dc.bin.dir}/addMovedFailedLoaderFileInCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addMovedFailedLoaderFileInCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+	
+	<if>
+      <available file="${dc.bin.dir}/addDiskManagerSetInCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addDiskManagerSetInCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+    <if>
+      <available file="${dc.bin.dir}/addLogUsageCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addLogUsageCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+	<if>
+      <available file="${dc.bin.dir}/addFileSystemChecktoCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addFileSystemChecktoCrontab.bsh">
+		</exec>
+      </then>
+    </if>
+	<if>
+      <available file="${dc.bin.dir}/addDeleteOldFilesScriptToCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addDeleteOldFilesScriptToCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+	<if>
+      <available file="${dc.bin.dir}/addSchedulerCheckCrontab.bsh"/>
+      <then>
+        <exec dir="${dc.bin.dir}" executable="addSchedulerCheckCrontab.bsh">
+        </exec>
+      </then>
+    </if>
+	
+    <antcall target="run_one_sql">
+          <param name="dbname" value="etlrep"/>
+          <param name="sqlfile" value="deactivate_template_interfaces.sql"/>
+    </antcall>
+
+    <if>
+      <available file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/engine.jar"/>
+      <then>
+       <delete file="${dc.runtime.dir}/tomcat/webapps/techpackide/lib/engine.jar"/>
+       <copy todir="${dc.runtime.dir}/tomcat/webapps/techpackide/lib" flatten="true">
+            <fileset dir="${dc.platform.dir}">
+                <include name="**/dclib/engine.jar"/>
+            </fileset>
+       </copy>
+      </then>
+      <else/>
+    </if>
+
+  </target>
+
+  <target name="update" depends="moveToObsolete,install"/>
+
+</project>

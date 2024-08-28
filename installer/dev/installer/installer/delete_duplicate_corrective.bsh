@@ -1,0 +1,121 @@
+#!/bin/bash
+# ******************************************************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ******************************************************************************************************
+#
+# (c) Ericsson Radio Systems AB 2016 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ******************************************************************************************************
+# Name    		: delete_duplicate_corrective.bsh
+# Date    		: 11/05/2016
+# Usage  		: ./delete_duplicate_corrective.bsh 
+# Created By	:  Fayazdeen Akbar
+# ******************************************************************************************************
+#
+# Command Section
+#
+# ******************************************************************************************************
+
+INSTALLER_DIR=/eniq/sw/installer
+IQ_DIR=/eniq/sybase_iq
+DATE=/usr/bin/date
+HOME_DIR=/eniq/local_logs/iq
+IQISQL=${IQ_DIR}/${SYBASE_OCS}/bin/isql
+STARTTIMESTAMP=`$DATE '+%y%m%d_%H%M%S'`
+
+CONF_DIR=/eniq/sw/conf
+
+if [ -s /eniq/admin/lib/common_functions.lib ]; then
+    . /eniq/admin/lib/common_functions.lib
+else
+        echo "Could not find /eniq/admin/lib/common_functions.lib"
+        exit 1
+fi
+
+DWHDBPASSWORD=`inigetpassword DWH -v DCPassword -f ${CONF_DIR}/niq.ini`
+
+#Affected Tables added in the array
+TAB=(DIM_E_LTE_EUREL DIM_E_LTE_EUCELL_CELL DIM_E_LTE_GERANCELLRELATION DIM_E_LTE_ULINTERFERENCEREP DIM_E_LTE_GIGABITETHERNET DIM_E_LTE_ENODEBFUNCTION DIM_E_LTE_UTRANCELLRELATION DIM_E_LTE_SECTORCARRIER DIM_E_LTE_BBPROCESSINGRESOURCE DIM_E_LTE_EUCELL DIM_E_LTE_PAGING)
+FDN=(EUCELLREL_FDN EUTRANCELL_FDN GERANCELLRELATION_FDN ULINTERFERENCE_FDN GIGABITETHERNET_FDN ENODEB_FDN UTRANCELLRELATION_FDN SECTORCARRIER_FDN BBPROCESSING_FDN EUTRANCELL_FDN PAGING_FDN)
+
+#Creating directory to store the back up G1 data
+mkdir $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}
+chmod 777 $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}
+
+a=0
+#Iterating the 10 affected tables to remove the Duplicate G1 entries in the Topology tables
+while [ $a -lt 11 ]
+
+do  
+#Taking the back up of the  G1 entries in the Topology tables which will be deleted 
+echo "SELECT * from   ${TAB[$a]}  WHERE ${FDN[$a]} IN(SELECT
+	N.${FDN[$a]}
+	FROM  ${TAB[$a]} N,${TAB[$a]} L
+	WHERE
+	SUBSTRING(N.${FDN[$a]}, 1, CHARINDEX(',ManagedElement',N.${FDN[$a]})-1) =
+	SUBSTRING(L.${FDN[$a]}, 1, CHARINDEX(',ManagedElement', L.${FDN[$a]})-1)
+	AND
+	SUBSTRING(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]})),CHARINDEX(',',SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))),LEN(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))))=
+	SUBSTRING(SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]})),CHARINDEX(',',SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]}))),LEN(SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]}))))
+	AND
+	N.${FDN[$a]} <> L.${FDN[$a]}
+	AND
+	N.${FDN[$a]} like '%,ManagedElement=1%'
+	GROUP BY
+	N.${FDN[$a]},
+	SUBSTRING(N.${FDN[$a]}, 1, CHARINDEX(',ManagedElement',N.${FDN[$a]})-1),
+	SUBSTRING(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]})),CHARINDEX(',',SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))),LEN(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]})))))" > $INSTALLER_DIR/query1.txt
+echo "go" >> $INSTALLER_DIR/query1.txt
+echo "Saving backup of G1 entries of  ${TAB[$a]} " 
+$IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -i ${INSTALLER_DIR}/query1.txt | grep "[0-9]" > $HOME_DIR/G1_backup_data_${STARTTIMESTAMP}/${TAB[$a]}.txt
+echo "Done saving of G1 entries of ${TAB[$a]} "
+echo "-----------------------------------------------"
+
+#Storing the delete query in temporary file
+ echo " DELETE FROM  ${TAB[$a]}  WHERE ${FDN[$a]} IN
+	 (SELECT
+	N.${FDN[$a]}
+	FROM  ${TAB[$a]} N,${TAB[$a]} L
+	WHERE
+	SUBSTRING(N.${FDN[$a]}, 1, CHARINDEX(',ManagedElement',N.${FDN[$a]})-1) =
+	SUBSTRING(L.${FDN[$a]}, 1, CHARINDEX(',ManagedElement', L.${FDN[$a]})-1)
+	AND
+	SUBSTRING(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]})),CHARINDEX(',',SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))),LEN(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))))=
+	SUBSTRING(SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]})),CHARINDEX(',',SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]}))),LEN(SUBSTRING(L.${FDN[$a]}, CHARINDEX('ManagedElement', L.${FDN[$a]}),LEN(L.${FDN[$a]}))))
+	AND
+	N.${FDN[$a]} <> L.${FDN[$a]}
+	AND
+	N.${FDN[$a]} like '%,ManagedElement=1%'
+	GROUP BY
+	N.${FDN[$a]},
+	SUBSTRING(N.${FDN[$a]}, 1, CHARINDEX(',ManagedElement',N.${FDN[$a]})-1),
+	SUBSTRING(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]})),CHARINDEX(',',SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))),LEN(SUBSTRING(N.${FDN[$a]}, CHARINDEX('ManagedElement',N.${FDN[$a]}),LEN(N.${FDN[$a]}))))) " > $INSTALLER_DIR/query.txt
+ echo "go" >> $INSTALLER_DIR/query.txt
+  
+ echo "Deleting duplicate G1 entries in  ${TAB[$a]} " 
+ #Executing the query in Database
+ $IQISQL -Udc -P${DWHDBPASSWORD} -Sdwhdb -i ${INSTALLER_DIR}/query.txt | grep "[0-9]"
+  
+ echo "Done deletion for ${TAB[$a]} " 
+ echo "---------------------------------------------------" 
+ a=`expr $a + 1`
+ 
+done	
+#Cleanup steps
+rm -rf query.txt query1.txt
+	
+ 
+   
+    
+
+
+
+
+

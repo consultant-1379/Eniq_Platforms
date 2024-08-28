@@ -1,0 +1,27 @@
+<project name="engine" default="export">
+
+    <target name="export">
+       <java failonerror="true" classname="com.distocraft.dc5000.etl.importexport.SimpleExport">
+       	 <sysproperty key="CONF_DIR" value="${conf_dir}/"/>
+         <arg line="${a1} ${a2} ${a3} ${a4} ${a5} ${a6} ${a7} ${a8} ${a9}"/>
+         <classpath>
+           <fileset dir="${dc.deploy.dir}/">
+             <include name="**/dclib/*.jar"/>
+           </fileset>
+         </classpath>
+       </java>
+    </target>
+
+    <target name="import">
+       <java failonerror="true" classname="com.distocraft.dc5000.etl.importexport.SimpleImport">
+       	<sysproperty key="CONF_DIR" value="${conf_dir}/"/>
+	    <arg line="${a1} ${a2} ${a3} ${a4} ${a5} ${a6} ${a7} ${a8} ${a9}"/>
+        <classpath>
+          <fileset dir="${dc.deploy.dir}/">
+            <include name="**/dclib/*.jar"/>
+          </fileset>
+        </classpath>
+       </java>
+    </target>
+
+</project>

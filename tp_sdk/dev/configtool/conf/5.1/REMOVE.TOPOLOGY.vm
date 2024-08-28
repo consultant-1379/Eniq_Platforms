@@ -1,0 +1,45 @@
+## 
+## REMOVE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+trg.STATUS = 'DEACTIVE'
+WHERE 
+##
+## Checking number of unique keys
+## when one then NOT IN used in insert
+## when more then NOT EXISTS used in insert
+##
+#set($first = true)
+#set($one = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if ($first)  
+#set($first = false)
+#else 
+#set($one = false) 
+#end
+#end
+#end
+#set($first = true)
+#foreach($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1)
+#if($first)  
+#if($one)  
+trg.$ref.getDataname() NOT IN (SELECT distinct $ref.getDataname() FROM ${TABLE}_CURRENT
+#else
+NOT EXISTS (SELECT trg.$ref.getDataname() FROM ${TABLE}_CURRENT src
+WHERE src.$ref.getDataname() = trg.$ref.getDataname()
+#end
+#set($first = false)
+#else
+#if($one == false)
+AND src.$ref.getDataname() = trg.$ref.getDataname()
+#end
+#end
+#end
+#end
+)
+;
+commit;

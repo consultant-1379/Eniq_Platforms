@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+# ----------------------------------------------------------------------
+# Ericsson Network IQ utility script for reading properties-files
+#
+# Usage: propertiesget propertiesfile key
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if ($#ARGV != 1) {
+  print "Usage: propertiesget propertiesfile key\n";
+  exit 1;
+}
+
+sub trim($) {
+  my $string = shift;
+  $string =~ s/^\s+//;
+  $string =~ s/\s+$//;
+  return $string;
+}
+
+open(FILE,$ARGV[0]);
+
+@lines = <FILE>;
+
+foreach $line (@lines) {
+
+  if ($line !~ /#.*/) {
+
+    chop($line); # Remove new line char
+
+    @oneliner = split(/=/,$line);
+
+    $key=trim($oneliner[0]);
+
+    if ( $key eq $ARGV[1] ) {
+      $value=trim($oneliner[1]);
+      print $value;
+      exit 0;
+    }
+
+  }
+
+}
+exit 2;

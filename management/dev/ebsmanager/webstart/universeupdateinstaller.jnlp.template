@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File -->
+
+<jnlp spec="1.0" codebase="https://@@SERVER@@.athtem.eei.ericsson.se:8443/universeupdateinstaller/">
+	<information>
+    	<title>Ericsson Network IQ Web TechpackIDE</title>
+    	<vendor>Ericsson, Ltd</vendor>
+    	<homepage href="http://www.ericsson.com"/>
+    	<description>Ericsson Network IQ Web Universe Updater</description>
+    	<icon href="ericsson_logo.gif"/>
+    	<icon kind="splash" href="eniq_blue_banner.gif"/>
+	</information>
+	<resources>
+		<jar href="lib/universeupdateinstaller.jar"/>
+		<jar href="lib/bointf.jar"/>
+		<j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+		@@TECHPACKS@@
+		@@BASETECHPACKS@@
+	</resources>
+	<security>
+		<all-permissions/>
+	</security>
+	<application-desc main-class="com.ericsson.eniq.etl.ebsHandler.universeupdatelauncher.UniverseUpdateLauncherApp"/>
+</jnlp>

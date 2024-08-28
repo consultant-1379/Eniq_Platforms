@@ -1,0 +1,113 @@
+
+-- File Name : BW-WebRTCServerFault.mib
+BW-WebRTCServerFault DEFINITIONS ::= BEGIN
+  IMPORTS
+    NOTIFICATION-TYPE, MODULE-IDENTITY
+      FROM SNMPv2-SMI
+    common, faultFields, identifier, timeStamp, alarmName, systemName, severity, alarmState, component, subcomponent, problemText, recommendedActionsText, correlationParameter, npExceptionMessage, npMessage, npRemoteAddress, npDeviceAddress, npError, npMacAddress, npConfiguredAddress
+      FROM BroadworksFault;
+
+  systemFaults MODULE-IDENTITY
+    LAST-UPDATED  "201306170000Z"
+    ORGANIZATION  "Broadsoft, Inc"
+    CONTACT-INFO  "Broadsoft, Inc.
+9737 Washingtonian Blvd
+Suite 350
+Gaithersburg , MD 20878
+Tel: +1-301-977-9440"
+    DESCRIPTION
+        "This MIB defines the faults for the BroadWorks WebRTC Server."
+    REVISION    "201306170000Z"
+                DESCRIPTION     "WebRTC Server MIB creation"
+    ::=  {  common  1  }
+
+  bwPMgwcoreLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the webrtc-gwcore has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMgwcoreLaunched, bwPMgwcoreShutDown, bwPMgwcoreRestarted, and bwPMgwcoreDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13151  }
+
+  bwPMgwcoreShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the webrtc-gwcore has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMgwcoreLaunched, bwPMgwcoreShutDown, bwPMgwcoreRestarted, and bwPMgwcoreDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13152  }
+
+  bwPMgwcoreRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the webrtc-gwcore restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMgwcoreLaunched, bwPMgwcoreShutDown, bwPMgwcoreRestarted, and bwPMgwcoreDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13153  }
+
+  bwPMgwcoreDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the webrtc-gwcore death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMgwcoreLaunched, bwPMgwcoreShutDown, bwPMgwcoreRestarted, and bwPMgwcoreDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13154  }    
+    
+  bwPMipcfeLaunched  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the webrtc-ipcfe has been started.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMipcfeLaunched, bwPMipcfeShutDown, bwPMipcfeRestarted, and bwPMipcfeDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13155  }
+
+  bwPMipcfeShutDown  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification indicates that the webrtc-ipcfe has been manually shut down.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMipcfeLaunched, bwPMipcfeShutDown, bwPMipcfeRestarted, and bwPMipcfeDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13156  }
+
+  bwPMipcfeRestarted  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the webrtc-ipcfe restart.
+@severity:informational
+@subcomponent:processmonitor
+@correlationrules:bwPMipcfeLaunched, bwPMipcfeShutDown, bwPMipcfeRestarted, and bwPMipcfeDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13157  }
+
+  bwPMipcfeDeath  NOTIFICATION-TYPE
+    OBJECTS     { identifier, timeStamp, alarmName, systemName, severity, component, subcomponent, problemText, recommendedActionsText }
+    STATUS      current
+    DESCRIPTION
+        "This notification provides the date and time of the webrtc-ipcfe death.
+@severity:critical
+@subcomponent:processmonitor
+@correlationrules:bwPMipcfeLaunched, bwPMipcfeShutDown, bwPMipcfeRestarted, and bwPMipcfeDeath can be correlated into a single alarm.  These events have to be considered as a transition of the state machine for the management of the AMS process running on the BroadWorks Application Server"
+-- @feature:165352
+    ::=  {  systemFaults 13158  }    
+    
+       
+END

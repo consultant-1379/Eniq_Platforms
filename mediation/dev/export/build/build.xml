@@ -1,0 +1,69 @@
+<project name="export" default="compile">
+  <property name="base" value="/vobs/eniq/design/plat"/>
+  <property name="3pp" value="/vobs/eniq/3pp"/>
+
+  <property name="pack.name" value="export"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="${base}/mediation/dev/export"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.repository.dir" value="${base}/installer/build/repository"/>
+  <property name="eniq.common.dir" value="${base}/common_utilities/build/common_utilities"/>
+  <property name="eniq.dwhmanager.dir" value="${base}/management/build/dwh_manager"/>
+
+  <!-- 3PP Jars -->
+  <property name="3pp.dbunit.dir" value="${3pp}/dbunit/dbunit/v2_4_7/prod"/>
+  <property name="3pp.xerces.dir" value="${3pp}/apache/xerces_parser/v2_6_2/prod"/>
+  <property name="3pp.velocity.dir" value="${3pp}/apache/jakarta_velocity/v1_4/prod"/>
+
+	<property name="schema.package" value="com.distocraft.dc5000.etl.importexport.gpmgt"/>
+	<property name="schema.file" value="${pack.dir}/jar/xsd/group_management.xsd"/>
+
+	<target name="compile_schema">
+		<mkdir dir="${pack.dir}/classes}"/>
+		<exec executable="xjc">
+			<arg value="-d"/>
+			<arg value="${pack.dir}/src"/>
+			<arg value="-p"/>
+			<arg value="${schema.package}"/>
+			<arg value="${schema.file}"/>
+		</exec>
+	</target>
+
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+		debug="on" failonerror="true" deprecation="off">
+      <classpath>
+        <pathelement path="${classpath}"/>
+		 <fileset dir="${eniq.repository.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.common.dir}">
+			<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${eniq.dwhmanager.dir}">
+			<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.dbunit.dir}">
+				<include name="**/*.jar"/>
+		 </fileset>
+		 <fileset dir="${3pp.velocity.dir}">
+				<include name="velocity-dep-1.4.jar"/>
+		 </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="postcompile">
+    <copy file="${3pp.dbunit.dir}/dbunit-2.4.7.jar" todir="${pack.dir}/dclib"/>
+    <copy todir="${pack.dir}/classes">
+		<fileset dir="${pack.dir}/jar"/> 
+    </copy>
+  </target>
+
+</project>

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE doc PUBLIC "-//ERICSSON//DTD XSEIF 1/FAD 110 05 R5//EN" "XSEIF_R5.dtd" [<!ENTITY cright "&copy; Ericsson AB $year - All Rights Reserved">
+<!ENTITY discl "<p>No part of this document may be reproduced in any form without the written permission of the copyright owner.</p><p>The contents of this document are subject to revision without notice due to continued progress in methodology, design, and manufacturing. Ericsson shall have no liability for any error or damage of any kind resulting from the use of this document.</p>">]>
+<?Pub Inc?><doc new-page-level="npl1" version="XSEIF R5" xmlns="urn:x-ericsson:r2:reg-doc:1551-fad.110.05:en:*">
+<?Pub Caret1?>
+<meta-data>
+	<confidentiality class="ericsson-internal" />
+		<doc-name>DESCRIPTION</doc-name>
+		<doc-info></doc-info>
+		<doc-id>
+			<doc-no type="registration">$productNumber</doc-no>
+			<language code="en" />
+			<rev>$revision</rev>
+			<date><y>$year</y><m>$month</m><d>$day</d></date>
+		</doc-id>
+		<company-id>
+			<business-unit>LMF/M</business-unit>
+			<company-name>Ericsson AB</company-name>
+			<company-symbol logotype="ericsson"></company-symbol>
+		</company-id>
+		<title>Technology Package Description, $description</title>
+		<drafted-by>
+			<person>
+				<name>username</name>
+				<signature>username</signature>
+				<location>LA</location>
+				<company></company>
+				<department></department>
+				<phone>
+					<ecn-code></ecn-code>
+					<extension></extension>
+				</phone>
+			</person>
+		</drafted-by>
+		<approved-by approved="yes">
+			<person>
+				<name>name</name>
+				<signature></signature>
+				<location>LA</location>
+				<company> LMF</company>
+				<department> LMF/M</department>
+				<phone>
+					<ecn-code></ecn-code>
+					<extension></extension>
+				</phone>
+			</person>
+		</approved-by>
+		<checked-by checked="no">
+			<person>
+				<name></name>
+				<signature></signature>
+				<location></location>
+				<company></company>
+				<department></department>
+			</person>
+		</checked-by>
+		<factual-supervisor responsible="department">
+			<person>
+				<name></name>
+				<signature></signature>
+				<location>&amp;lt;LA&gt;</location>
+				<company>LMF</company>
+				<department>&amp;lt;Department/Section&gt;</department>
+			</person>
+		</factual-supervisor>
+</meta-data>
+<front>
+	<title-page>
+		<copyright>
+			<p> Ericsson AB $year - All Rights Reserved</p>
+		</copyright>
+		<disclaimer>
+			<p>No part of this document may be reproduced in any form without the written permission of the copyright owner.</p>
+			<p>The contents of this document are subject to revision without notice due to continued progress in methodology, design, and manufacturing. Ericsson shall have no liability for any error or damage of any kind resulting from the use of this document.</p>
+		</disclaimer>
+		<trademark-list>
+			<tm-item>
+				<trademark>Ericsson</trademark>
+				<owner>is a trademark owned by Telefonaktiebolaget LM Ericsson.</owner>
+			</tm-item>
+			<tm-item>
+				<trademark></trademark>
+				<owner>All other product or service names mentioned in this User Description are trademarks of their respective companies.</owner>
+			</tm-item>
+		</trademark-list>
+	</title-page>
+</front>
+
+<body>
+	<chl1>
+    	<title>Introduction</title>
+        	<p>Technology Package: $description</p>
+			<p>Supported Vendor Releases: $releases</p>
+			<p>Product Number and Version: $productNumberAndRelease</p>
+	</chl1>
+      
+	<chl1>
+		<title>Fact tables</title>
+			<p>This chapter describes fact tables included in the Technology Package.</p>
+#foreach ($factTable in $factTableData.keySet())
+	#set($dataMap = $factTableData.get($factTable))
+
+		<chl2>
+			<title>$factTable</title>
+            <p>Fact Table: $factTable</p>
+            <p>Size: $dataMap.get("size")</p>
+            <p>One Minute Aggregation: $dataMap.get("OneMinuteAggregation")</p>
+            <p>Fifteen Minute Aggregation: $dataMap.get("FifteenMinuteAggregation")</p>
+            <p>Total Aggregation: $dataMap.get("totalAggregation")</p>
+            <p>Object Busy Hour Support: $dataMap.get("objectBusyHourSupport")</p>
+            <p>Element Busy Hour Support: $dataMap.get("elementBusyHourSupport")</p>
+            <p>Delta Calculation: $dataMap.get("deltaCalculation")</p>
+
+			<table>
+				<caption>Keys for $factTable</caption>
+				<tgroup cols="3">
+					<tbody>
+						<row>
+							<entry valign="top">
+            					<tp><emph>Name</emph></tp>
+            				</entry>
+							<entry valign="top">
+								<tp><emph>Data Type</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Duplicate Constraint</emph></tp>
+							</entry>
+						</row>
+	#set ($keyRows = $dataMap.get($factTable.concat("_keys")))
+	#foreach ($keyRow in $keyRows)
+				
+						<row>
+							<entry>
+							<tp>$keyRow.get("name")</tp>
+							</entry>
+							<entry>
+								<tp>$keyRow.get("dataType")</tp>
+							</entry>
+							<entry>
+								<tp>$keyRow.get("duplicateConstraint")</tp>
+							</entry>
+						</row>
+	#end 
+
+					</tbody>
+				</tgroup>
+			</table>            
+
+			<p></p>
+			<table>
+			       #if($dataMap.get("size")=="bulk_cm")
+	                         <caption>Attributes for $factTable</caption>
+	                       #else
+                                 <caption>Counters for $factTable</caption>
+	                       #end
+				<tgroup cols="5">
+					<tbody>
+						<row>
+							<entry valign="top">
+								<tp><emph>Name</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Data Type</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Time Aggregation</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Group Aggregation</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Type</emph></tp>
+							</entry>
+						</row>
+	#set ($counterRows = $dataMap.get($factTable.concat("_counters")))
+	#foreach ($counterRow in $counterRows)
+
+						<row>
+							<entry>
+								<tp>$counterRow.get("name")</tp>
+							</entry>
+							<entry>
+								<tp>$counterRow.get("dataType")</tp>
+							</entry>
+							<entry>
+							        #if($counterRow.get("timeAggregation"))
+                                                                  <tp>$counterRow.get("timeAggregation")</tp>
+								#else
+                                                                  <tp></tp>
+                                                                #end
+							</entry>
+							<entry>
+							        #if($counterRow.get("groupAggregation"))
+                                                                  <tp>$counterRow.get("groupAggregation")</tp>
+								#else
+                                                                  <tp></tp>
+                                                                #end
+							</entry>
+							<entry>
+							        #if($counterRow.get("type"))
+                                                                  <tp>$counterRow.get("type")</tp>
+								#else
+                                                                  <tp></tp>
+                                                                #end
+							</entry>
+						</row>
+	#end
+					</tbody>
+				</tgroup>
+			</table>
+		</chl2>
+#end
+	</chl1>
+	
+	<chl1>
+		<title>Groups</title>
+		<p>This chapter describes the Groups included in the Technology Package.</p>
+		#foreach ($groupType in $groupDefData.keySet())
+			#set($keyList = $groupDefData.get($groupType))
+			<chl2>
+				<title>$groupType</title>
+				<table>
+					<caption>Keys for $groupType</caption>
+					<tgroup cols="3">
+						<tbody>
+						<row>
+							<entry valign="top">
+								<tp>
+									<emph>Key Name</emph>
+								</tp>
+							</entry>
+							<entry valign="top">
+								<tp>
+									<emph>Data Type</emph>
+								</tp>
+							</entry>
+							<entry valign="top">
+								<tp>
+									<emph>Data Size</emph>
+								</tp>
+							</entry>
+						</row>
+							#foreach ($key in $keyList)
+							<row>
+								<entry>
+									<tp>$key.getDataname()</tp>
+								</entry>
+								<entry>
+									<tp>$key.getDatatype()</tp>
+								</entry>
+								<entry>
+									<tp>$key.getDatasize()</tp>
+								</entry>
+							</row>
+							#end
+						</tbody>
+					</tgroup>
+				</table>
+			</chl2>
+		#end
+	</chl1>
+	
+	<chl1>
+      <title>Busy Hours</title>
+      	<p>This chapter describes busy hours included in the Technology Package.</p>
+#foreach ( $bhLevel in $busyHourData.keySet())
+					<chl2>
+					<title>$bhLevel</title>
+#set($phList = $busyHourData.get($bhLevel))
+#foreach ( $placeholder in $phList)
+#set($newBhFormat = $placeholder.get("bhVersion"))
+#if( $newBhFormat == "1" )
+						<p><emph>Placeholder $placeholder.get("bhType")</emph>
+#else
+						<p><emph>$placeholder.get("bhType")</emph>
+#end
+#if( $placeholder.get("defined") == "false" )
+<emph type="high">(Undefined)</emph>
+#end
+</p>
+							<p>Description: $placeholder.get("description")</p>
+							<p>Busy Hour Type: $placeholder.get("aggregationType")</p>
+      				<p>Criteria: $placeholder.get("criteria")</p>
+      				<p>Source: $placeholder.get("source")</p>
+      				<p>Where condition: $placeholder.get("whereCondition")</p>
+#if( $newBhFormat  == "1" )
+      				<p>Mapped Types: $placeholder.get("bhMappings")</p>
+      				<p>Rank Keys: $placeholder.get("rankKeys")</p>
+#end
+      				<p></p>
+#end
+      		</chl2>
+#end
+	</chl1>		 
+	<chl1>
+		<title>Topology tables</title>
+		<p>This chapter describes topology tables included in the Technology Package.</p>
+		<p></p>
+
+#foreach ($dimensionTable in $dimensionTableData.keySet())
+	#set($dataMap = $dimensionTableData.get($dimensionTable))
+
+		<chl2>
+			<title>$dimensionTable</title>
+			<p>Topology Table: $dimensionTable</p>
+			<p>Type: $dataMap.get("type")</p>
+			<p>Update Method: $dataMap.get("updateMethod")</p>
+			<table>
+				<caption>Columns for $dimensionTable</caption>
+				<tgroup cols="3">
+					<tbody>
+						<row>
+							<entry valign="top">
+								<tp><emph>Name</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Data Type</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Included in updates</emph></tp>
+							</entry>
+						</row>
+	#set ($dimensionColumns = $dataMap.get($dimensionTable.concat("_columns")))
+	#foreach ($column in $dimensionColumns)
+						<row>
+							<entry>
+								<tp>$column.get("name")</tp>
+							</entry>
+							<entry>
+								<tp>$column.get("dataType")</tp>
+							</entry>
+							<entry>
+								<tp>$column.get("includedInUpdates")</tp>
+							</entry>
+						</row>
+	#end						
+					</tbody>
+				</tgroup>
+			</table>
+		</chl2>
+#end
+</chl1>
+<chl1>
+	<title>Interfaces</title>
+	<p>This chapter describes interfaces included in the Technology Package.</p>
+	<table>
+		<caption>Interfaces</caption>
+		<tgroup cols="2">
+			<tbody>			
+				<row>
+					<entry valign="top">
+						<tp><emph>Name</emph></tp>
+					</entry>
+					<entry valign="top">
+						<tp><emph>Type</emph></tp>
+					</entry>
+				</row>
+
+#foreach ($interface in $interfaceData.keySet())
+	#set($ifMap = $interfaceData.get($interface))
+				
+				<row>
+					<entry>
+						<tp>$ifMap.get("name")</tp>
+					</entry>
+					<entry>
+						<tp>$ifMap.get("type")</tp></entry>
+				</row>
+#end				
+			</tbody>
+		</tgroup>
+	</table>
+</chl1>
+<chl1>
+	<title>SQL Interface</title>
+		<p>This chapter describes SQL Interface included in the Technology Package.</p>
+		<p></p>
+
+#foreach ($sqlInterface in $sqlInterfaceData.keySet())		
+		<p><emph>$sqlInterface</emph></p>
+			<table>
+				<caption>Columns</caption>
+				<tgroup cols="2">
+					<tbody>
+						<row>
+							<entry valign="top">
+								<tp><emph>Name</emph></tp>
+							</entry>
+							<entry valign="top">
+								<tp><emph>Data Type</emph></tp>
+							</entry>
+						</row>
+
+	#set($colList = $sqlInterfaceData.get($sqlInterface))
+	#foreach ($col in $colList)
+						<row>
+							<entry>
+								<tp>$col.get("name")</tp>
+							</entry>
+							<entry>
+								<tp>$col.get("type")</tp>
+							</entry>
+						</row>
+	#end
+					</tbody>
+				</tgroup>
+			</table>
+			<p></p>
+#end
+			
+			<p></p>
+		</chl1>
+	</body>
+	<back>
+		<glossary>
+			<glossary-list>
+				<gl-item>
+					<term>ENIQ</term>
+					<expansion><p>Ericsson Network IQ</p></expansion>
+				</gl-item>
+			</glossary-list>
+		</glossary>
+		<reference>
+			<reference-list>
+				<rf-subsection></rf-subsection>
+				<rf-item xml:id="rf-OSSGlossary">
+					<rf-title>
+						<ulink xlink:type="simple" xlink:href="urn:x-ericsson:r2:reg-doc:*0033-*:*:*?title=Operations Support System (OSS) Glossary" xlink:title="Operations Support System (OSS) Glossary" xmlns:xlink="http://www.w3.org/1999/xlink">
+						</ulink>
+					</rf-title>
+				</rf-item>
+			</reference-list>
+		</reference>
+	</back>
+</doc>

@@ -1,0 +1,32 @@
+<project name="install" basedir="." default="all">
+	
+	<target name="install" depends="copyTmpToDeploy">
+	  	<mkdir dir="${dc.log.dir}/licensemanager"/>
+
+		<copy overwrite="true" file="${dc.installer.dir}/tmp/smf/licmgr" toFile="${dc.admin.bin}/licmgr"/>
+	  	<chmod perm="ug+x" file="${dc.admin.bin}/licmgr"/>
+    	<copy overwrite="true" file="${dc.installer.dir}/tmp/bin/licmgr" toFile="${dc.bin.dir}/licmgr"/>
+    	<chmod perm="ug+x" file="${dc.bin.dir}/licmgr"/>
+    	<copy overwrite="true" file="${dc.installer.dir}/tmp/bin/licserv" toFile="${dc.bin.dir}/licserv"/>
+    	<chmod perm="ug+x" file="${dc.bin.dir}/licserv"/>
+
+	    <if>
+	      <available file="${dc.conf.dir}/licensingLogging.properties"/>
+	      <then/>
+	      <else>
+	        <copy file="${dc.installer.dir}/tmp/conf/licensingLogging.properties" toFile="${dc.conf.dir}/licensingLogging.properties"/>
+	      </else>
+	    </if>
+	    <if>
+	      <available file="${dc.conf.dir}/licensingAdminLogging.properties"/>
+	      <then/>
+	      <else>
+	        <copy file="${dc.installer.dir}/tmp/conf/licensingAdminLogging.properties" toFile="${dc.conf.dir}/licensingAdminLogging.properties"/>
+	      </else>
+	    </if>
+
+	</target>
+
+	<target name="update" depends="moveToObsolete,install"/>
+
+</project>

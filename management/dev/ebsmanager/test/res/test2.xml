@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pm xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='PM-MOM.xsd'>
+
+    <pmMimVersion>1.0</pmMimVersion>
+    <applicationVersion>6</applicationVersion>
+    <measurements>
+        <measObjClass name="trx">
+            <group name="FFAX">
+                <counter>
+                    <measType>
+                        <measName>c14</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c15</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <counter>
+                    <measType>
+                        <measName>c16</measName>
+                    </measType>
+                    <description/>
+                    <measResult>
+                        <unit>Number of</unit>
+                    </measResult>
+                    <storage>
+                        <size>numeric(18,0)</size>
+                        <aggregation>SUM</aggregation>
+                        <type>PEG</type>
+                    </storage>
+                </counter>
+                <formula name="FFAXNumberofObservations">
+                    <function>IDENTITY</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXAverageRxLevDifference">
+                    <function>MEAN</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXFaultIndication">
+                    <function>FFAX_INDICATION</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                    <argument seq="3">
+                        <measName>c16</measName>
+                    </argument>
+                </formula>
+                <formula name="FFAXStandardDeviationofRxLevDifference">
+                    <function>FFAX_STDDEV</function>
+                    <argument seq="1">
+                        <measName>c14</measName>
+                    </argument>
+                    <argument seq="2">
+                        <measName>c15</measName>
+                    </argument>
+                    <argument seq="3">
+                        <measName>c16</measName>
+                    </argument>
+                </formula>
+            </group>
+        </measObjClass>
+    </measurements>
+</pm>

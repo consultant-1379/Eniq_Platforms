@@ -1,0 +1,118 @@
+<project name="afjmanager" default="compile">
+
+	<property name="pack.name" value="afjmanager" />
+	<property name="pack.version" value="5-0-0" />
+	<!-- Attention! pack.dir have to be under tmp-dir because the actual build 
+		is done there -->
+	<property name="platform.dir" value="/vobs/eniq/design/plat" />
+	<property name="3pp.dir" value="/vobs/eniq/3pp" />
+	<property name="pack.dir" value="${platform.dir}/management/dev/afj_manager" />
+	<property name="schema.package" value="com.ericsson.eniq.afj.schema" />
+	<property name="schema.package.ims" value="com.ericsson.ims.mim" />
+	<property name="schema.file" value="${pack.dir}/xsd/oss_rc_pm_mim_PA5.xsd" />
+	<property name="schema.file.ims" value="${pack.dir}/xsd/pm_mim_xsd.xsd" />
+	<property name="classes" value="${pack.dir}/classes" />
+	<property name="gen.src" value="${pack.dir}/gen-src" />
+	<property name="jar.dir" value="${pack.dir}/jar" />
+	<property name="conf.src" value="${pack.dir}/conf" />
+	
+
+	<!-- Eniq Jars -->
+	<property name="eniq.common.dir"
+		value="${platform.dir}/common_utilities/build/common_utilities" />
+	<property name="eniq.engine.dir" value="${platform.dir}/etl_controller/build/engine" />
+	<property name="eniq.scheduler.dir" value="${platform.dir}/etl_controller/build/scheduler" /> 
+	<property name="eniq.repository.dir" value="${platform.dir}/installer/build/repository" />
+	<property name="eniq.dwhmanager.dir" value="${platform.dir}/management/build/dwh_manager" />
+	<property name="eniq.tpide.dir" value="${platform.dir}/tp_ide/build/tp_ide" />
+	<property name="eniq.parser.dir" value="/vobs/eniq/design/plat/adapters/build/parser" />
+
+
+	<!-- 3PP Jars -->
+	<property name="3pp.dbunit.dir" value="${3pp.dir}/dbunit/dbunit/v2_1/prod" />
+	<property name="3pp.velocity.dir" value="${3pp.dir}/apache/jakarta_velocity/v1_5/prod" />
+	<property name="3pp.junit.dir" value="${3pp.dir}/junit/v4_5/prod" />
+	<property name="3pp.commons_logging.dir" value="${3pp.dir}/apache/comm_logging/v1_1/prod" />
+	<property name="3pp.jaxb.dir" value="${3pp.dir}/java_sun/jaxb/21" />
+
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${3pp.jaxb.dir}" >
+				<include name="**/*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>	
+
+	<target name="compile.schema">
+		<mkdir dir="${classes}" />
+		<exec executable="/vobs/eniq/3pp/java/jdk1.7.0_80/bin/xjc" os="Linux">
+			<arg value="-d" />
+			<arg value="${gen.src}" />
+			<arg value="-p" />
+			<arg value="${schema.package}" />
+			<arg value="${schema.file}" />
+		</exec>
+		<exec executable="/vobs/eniq/3pp/java/jdk1.7.0_80/bin/xjc" os="Linux">
+			<arg value="-d" />
+			<arg value="${gen.src}" />
+			<arg value="-p" />
+			<arg value="${schema.package.ims}" />
+			<arg value="${schema.file.ims}" />
+		</exec>
+		<javac destdir="${classes}" debug="true">
+			<src path="${gen.src}" />
+		</javac>
+	</target>
+
+	<target name="precompile" depends="compile.schema" />
+
+	<target name="compile" depends="precompile">
+		<javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+			failonerror="true" debug="on" optimize="off" deprecation="off">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${eniq.dwhmanager.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.common.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.engine.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.scheduler.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.repository.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.dbunit.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.velocity.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.junit.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${3pp.commons_logging.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.parser.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${eniq.tpide.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+	
+	<target name="postcompile">
+		<copy todir="${pack.dir}/classes">
+			<fileset dir="${pack.dir}/jar" />
+		</copy>
+	</target>
+</project>

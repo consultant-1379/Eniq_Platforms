@@ -1,0 +1,247 @@
+-- ***************************************************************************
+--  Copyright © 2000 - 2003 VERITAS Software Corporation.
+--  All Rights Reserved 
+--  
+--	The right to change this MIB without notification is retained.
+--
+--	VERITAS Software Corporation
+--	mailstop
+--	350 Ellis Street
+--	P.O. Box 7011
+--	Mountain View CA 94043-2237
+-- ***************************************************************************
+
+
+
+VERITAS-FILE-SYSTEM-MIB DEFINITIONS ::= BEGIN
+ 
+IMPORTS
+	enterprises
+    	FROM RFC1155-SMI
+	OBJECT-TYPE
+		FROM RFC-1212
+	TRAP-TYPE
+		FROM RFC-1215
+	DisplayString			
+		FROM RFC1213-MIB;
+
+--	A private MIB module for the VERITAS File System.
+
+--
+--	Node definations
+--
+
+veritas		OBJECT IDENTIFIER	::= { enterprises 1302 }
+products		OBJECT IDENTIFIER	::= { veritas 3 }
+
+veritasfs	OBJECT IDENTIFIER	::= { products 21 }
+veritasfsux	OBJECT IDENTIFIER	::= { veritasfs 1 }
+
+-- veritasfsux MODULE-IDENTITY
+--	LAST-UPDATED		"1302031800Z"
+--	ORGANIZATION		"VERITAS Software Corporation"
+--	CONTACT-INFO		"VERITAS Software Corporation
+-- 						 mailstop
+-- 						 350 Ellis Street
+-- 						 P.O. Box 7011
+-- 					 	 Mountain View CA 94043-2237
+-- 					 	 Tel: +1 650 318 4464
+-- 					 	 Email: support@veritas.com"
+
+
+--	
+--	The branch of the VERITAS File System MIB containing
+--	File System objects information.
+--
+
+fsObjectBranch		OBJECT IDENTIFIER	::= { veritasfsux 1 }
+
+
+--
+--	The branch of the VERITAS File System MIB containing
+--	trap information.
+--
+
+fsTrapBranch		OBJECT IDENTIFIER	::= { veritasfsux 2 }
+
+
+--
+-- Trap variables
+--
+
+fsTrapVars		OBJECT IDENTIFIER	::= { fsTrapBranch 1 }
+
+sourceComputer OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Name of the machine where the alert originated."
+	::= { fsTrapVars 1 }
+
+friendlyAlertName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Friendly alert name."
+	::= { fsTrapVars 2 }
+
+classificationName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Friendly alert classification name."
+	::= { fsTrapVars 3 }
+
+alertSeverity OBJECT-TYPE
+	SYNTAX	INTEGER
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Severity - 1=critical,2=error,3=warning,4=info."
+	::= { fsTrapVars 4 }
+
+alertMsg OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Description of the reason for the alert."
+	::= { fsTrapVars 5 }
+
+recommendedAction OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Recommended action(s) to resolve the alert."
+	::= { fsTrapVars 6 }
+
+
+mountPoint OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Mount Point"
+	::= { fsTrapVars 7 }
+
+fileSystemType OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"File System Type"
+	::= { fsTrapVars 8 }
+
+
+diskGroupName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Disk Group Name"
+	::= { fsTrapVars 9 }
+
+volumeName OBJECT-TYPE
+	SYNTAX	DisplayString
+	ACCESS	read-only
+	STATUS	mandatory
+	DESCRIPTION
+		"Volume Name"
+	::= { fsTrapVars 10 }
+
+
+
+--
+--	Trap definations
+--
+
+fsTrapDefs		OBJECT IDENTIFIER	::= { fsTrapBranch 2 }
+
+
+fsDisabled TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"File system was disabled."
+	::=	1
+
+fsCapmonThresholdCrossed TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"File system capacity threshold was crossed."
+	::=	2
+
+fsIOError TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction }
+	DESCRIPTION
+		"File system encountered an I/O error."
+	::=	3
+
+vxfsMetaError TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction }
+	DESCRIPTION
+		"VxFS file system encountered a Meta Data Error."
+	::=	4
+
+vxfsCHKPTQuotaSLimitReached TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"VxFS storage checkpoint soft limit reached on the file system."
+	::=	5
+
+vxfsCHKPTQuotaHLimitReached TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"VxFS storage checkpoint hard limit reached on the file system."
+	::=	6
+
+
+vxfsIOErrorDev TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction }
+	DESCRIPTION
+		"VxFS file system encountered an I/O Error."
+	::=	7
+
+vxfsFCLBad TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction }
+	DESCRIPTION
+		"VxFS file system encountered an I/O Error."
+	::=	8
+
+vxfsDisabled TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"Veritas File system was disabled."
+	::=	9
+
+vxfsCapmonThresholdCrossed TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"Veritas File system capacity threshold was crossed."
+	::=	10
+
+vxfsCapmonSpaceExhausted TRAP-TYPE
+	ENTERPRISE	fsTrapDefs
+	VARIABLES	{ sourceComputer, friendlyAlertName, classificationName, alertSeverity, alertMsg, recommendedAction, mountPoint, fileSystemType, diskGroupName, volumeName }
+	DESCRIPTION
+		"Veritas File system capacity was exhausted."
+	::=	11
+
+END
+
+--
+--   End VERITAS-FILE-SYSTEM-MIB
+--

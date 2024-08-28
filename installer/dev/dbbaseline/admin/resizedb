@@ -1,0 +1,146 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ database resize script
+#
+# Usage: resizedb [-v] DWH|REP 
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+VERBOSE=0
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+TIMESTAMP=`date +%d.%m.%y_%H:%M:%S`
+
+. ${CONF_DIR}/niq.rc
+
+if [ "$1" = "-v" ] ; then
+  VERBOSE=1
+  shift 1
+fi
+
+if [ "$1" = "REP" -o "$1" = "DWH" ] ; then
+  DB=$1  
+  if [ ${VERBOSE} = 1 ] ; then
+    echo "Resizing database ${DB}"
+  fi
+else
+  echo "Usage: resizedb [-v] DWH|REP"
+  exit 10
+fi
+
+LOGFILE=${LOG_DIR}/platform_installer/resizedb_${TIMESTAMP}.log
+
+if [ -f "/tmp/crt_dbspace" ] ; then
+  rm /tmp/crt_dbspace
+  touch /tmp/crt_dbspace
+fi
+
+CPATH="${INSTALLER_DIR}/lib/installer.jar"
+INSTALLER_JARPATH="${CPATH}"
+
+if [ ! -r "${CPATH}" ] ; then
+  echo "ERROR: Jar file "installer.jar" is not readable at ${CPATH}"
+  exit 2
+fi
+
+DIRS=`ls ${PLATFORM_DIR}`
+
+for file in $DIRS
+do
+  if [ -d ${PLATFORM_DIR}/$file/dclib ]
+  then
+    JARS=`ls ${PLATFORM_DIR}/$file/dclib/*.jar`
+
+    for jar in $JARS
+    do
+      CPATH="${CPATH}:${jar}"
+    done
+  fi
+done
+
+JAVA_HOME=${RT_DIR}/java
+export JAVA_HOME
+
+for STOREID in `${BIN_DIR}/iniget ${DB}_DBSPACES_MAIN -f ${CONF_DIR}/niq.ini`
+do
+
+  STOREPATH=`${BIN_DIR}/iniget ${STOREID} -v Path -f ${CONF_DIR}/niq.ini`
+  STORETYPE=`${BIN_DIR}/iniget ${STOREID} -v Type -f ${CONF_DIR}/niq.ini`
+  STORESIZE=`${BIN_DIR}/iniget ${STOREID} -v Size -f ${CONF_DIR}/niq.ini`
+
+  if [ ${VERBOSE} = 1 ] ; then
+    echo "Main dbspace ${STOREID}: ${STORETYPE} @ ${STOREPATH} size ${STORESIZE}"
+  fi
+
+  echo "IF (SELECT count(*) FROM SYS.SYSFILE WHERE file_name='${STOREPATH}') = 0" > /tmp/crt_dbspace_${STOREID}
+  echo "BEGIN" >> /tmp/crt_dbspace_${STOREID}
+  echo " CREATE DBSPACE ${STOREID} AS '${STOREPATH}' IQ STORE" >> /tmp/crt_dbspace_${STOREID}
+  if [ ! -z "${STORESIZE}" ] ; then
+    echo " SIZE ${STORESIZE}" >> /tmp/crt_dbspace_${STOREID}
+  fi
+  echo "END" >> /tmp/crt_dbspace_${STOREID}
+
+  if [ "${VERBOSE}" = 1 ] ; then
+    echo "Executing create command:"
+    cat /tmp/crt_dbspace_${STOREID}
+  fi
+
+  if [ "${DB}" = "DWH" ] ; then
+    DBNAME="dwh"
+  elif [ "${DB}" = "REP" ] ; then
+    DBNAME="dwhrep"
+  fi
+
+  ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_install_utils.xml -lib ${CPATH} -Ddc.installer.dir=${INSTALLER_DIR} -Ddbname=${DBNAME} -Dsqlfile=/tmp/crt_dbspace_${STOREID} -Dcon_type=DBA -Ddc.installer.dir=${INSTALLER_DIR} -Ddc.conf.dir=${CONF_DIR} -Ddc.platform.dir=${PLATFORM_DIR} execute_sql
+
+  rm /tmp/crt_dbspace_${STOREID}
+done
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Done creating Main db spaces"
+fi
+
+for STOREID in `${BIN_DIR}/iniget ${DB}_DBSPACES_TEMP -f ${CONF_DIR}/niq.ini`
+do
+
+  STOREPATH=`${BIN_DIR}/iniget ${STOREID} -v Path -f ${CONF_DIR}/niq.ini`
+  STORETYPE=`${BIN_DIR}/iniget ${STOREID} -v Type -f ${CONF_DIR}/niq.ini`
+  STORESIZE=`${BIN_DIR}/iniget ${STOREID} -v Size -f ${CONF_DIR}/niq.ini`
+
+  if [ ${VERBOSE} = 1 ] ; then
+    echo "Temporary dbspace ${STOREID}: ${STORETYPE} @ ${STOREPATH} size ${STORESIZE}"
+  fi
+
+  echo "IF (SELECT count(*) FROM SYS.SYSFILE WHERE file_name='${STOREPATH}') = 0" > /tmp/crt_dbspace_${STOREID}
+  echo "BEGIN" >> /tmp/crt_dbspace_${STOREID}
+  echo " CREATE DBSPACE ${STOREID} AS '${STOREPATH}' IQ TEMPORARY STORE" >> /tmp/crt_dbspace_${STOREID}
+  if [ ! -z "${STORESIZE}" ] ; then
+    echo " SIZE ${STORESIZE}" >> /tmp/crt_dbspace_${STOREID}
+  fi
+  echo "END" >> /tmp/crt_dbspace_${STOREID}
+
+  if [ "${VERBOSE}" = 1 ] ; then
+    echo "Executing create command:"
+    cat /tmp/crt_dbspace_${STOREID}
+  fi
+
+  if [ "${DB}" = "DWH" ] ; then
+    DBNAME="dwh"
+  elif [ "${DB}" = "REP" ] ; then
+    DBNAME="dwhrep"
+  fi
+
+  ${RT_DIR}/ant/bin/ant -f ${INSTALLER_DIR}/tasks_install_utils.xml -lib ${CPATH} -Ddc.installer.dir=${INSTALLER_DIR} -Ddbname=${DBNAME} -Dsqlfile=/tmp/crt_dbspace_${STOREID} -Dcon_type=DBA -Ddc.installer.dir=${INSTALLER_DIR} -Ddc.conf.dir=${CONF_DIR} -Ddc.platform.dir=${PLATFORM_DIR} execute_sql
+
+  rm /tmp/crt_dbspace_${STOREID}
+done
+
+if [ ${VERBOSE} = 1 ] ; then
+  echo "Done creating Temporary db spaces"
+fi

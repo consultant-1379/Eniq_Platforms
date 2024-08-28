@@ -1,0 +1,21 @@
+<project name="glassfish" default="test_all">
+    <property name="module.name" value="glassfish"/>
+    <property file="${user.home}/EniqBuild/BH/build.properties"/>
+    <property name="ant.common" value="${cc.base}/tools/ant_common"/>
+    <property file="${ant.common}/common.properties"/>
+    <property name="module.build" value="${module.glassfish.build}"/>
+    <property name="module.base" value="${module.glassfish.base}"/>
+    <property name="module.dependants" value="${module.glassfish.dependants}"/>
+    <import file="${ant.common}/common.xml"/>
+    <property name="tests.to.run" value="**/RecordedHashMapTest.class"/>
+
+    <property name="mods.needed" value=""/>
+    <path id="glassfish.lib.classpath">
+        <path refid="plaform.lib.classpath"/>
+        <path location="${module.repository.pkg}"/>
+    </path>
+    <path id="glassfish.test.classpath">
+        <path refid="platform.test.classpath"/>
+        <path refid="glassfish.lib.classpath"/>
+    </path>
+</project>

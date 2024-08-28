@@ -1,0 +1,3 @@
+IF (SELECT count(*) FROM SYSTABLE WHERE table_name='$tableToDelete' and table_type='BASE') > 0 THEN
+  DROP TABLE dc.$tableToDelete;
+END IF;

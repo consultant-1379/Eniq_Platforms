@@ -1,0 +1,43 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Events script for checking if it is possible to connect to the Postgres database. 
+#
+# 
+# Usage:  checkDBCon ${1}
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2011 AB Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+
+if [ -z "$CONF_DIR" ] ; then
+  echo "ERROR: CONF_DIR is not set"
+  exit 1
+fi
+
+. ${CONF_DIR}/niq.rc
+
+if [ -z "$PGDATA" ] ; then
+  echo "ERROR: PGDATA is not set"
+  exit 1
+fi
+
+if [ "${1}" == "" ]; then
+  echo "Usage is: checkPostgresDBCon \${LOG_FILE}"
+  exit 1
+fi
+
+#Check if it is possible to connect to the Postgres database. 
+log_File=${1}
+TEMP_LOG_FILE=/tmp/postgres_status.log
+
+su eniq_adm -c "pg_ctl -D ${PGDATA} status" | tee -a ${TEMP_LOG_FILE} 2>&1
+SUC=`cat ${TEMP_LOG_FILE} | grep "server is running"`
+rm ${TEMP_LOG_FILE}
+if [ -z "$SUC" ]; then 
+	echo "Postgres for ${PGDATA} is not running" | tee -a ${log_File}
+	exit 1
+else
+	echo "Postgres for ${PGDATA} is running OK" | tee -a ${log_File}
+	echo "Database connection available" | tee -a ${log_File}
+fi 
+exit 0

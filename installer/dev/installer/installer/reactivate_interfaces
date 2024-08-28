@@ -1,0 +1,260 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# Ericsson Network IQ Interface reactivation script
+#
+# Usage: reactivate_interface -f <file_path>
+#
+# Author: Mairtin Deady
+#
+# ----------------------------------------------------------------------
+# Copyright (c) 1999 - 2006 AB LM Ericsson Oy  All rights reserved.
+# ----------------------------------------------------------------------
+#
+#Usage: reactivate_interfaces -f <file path> -m <file_path> [-r <file_path>} [ -o alias ]
+#
+#This script activates the interfaces found in file provided by -f argument, and activates interfaces of tech packs found in same file. 
+#The expected format of file is one tech pack or interface name per line. The script can handle them being tpi files name. Aliases are not
+#expected in the file
+#
+#Another file provided by -m argument is required. It will have the interface-alias mapping (e.g. the OSS Id's). Interface names found in
+#the -f file will be looked up in this mapping, and activation of interfaces in -f will be limited to what is found in this mapping. This
+#mapping will not be used in conjuction with tech packs founs in the -f file. 
+#
+#In the case of tech packs in the -f file, the interfaces and aliases are found using the 
+#/eniq/sw/installer/get_active_interfaces -t <tech pack name> command, and activation is limited to aliases found in this.
+#
+#To account for cases where an interface in newly installed (and therefore not found in the -m file), an optional file can be provided with
+#the -r argument giving Feature Mapping - a mapping of features to interfaces. If this argument is not provided then such interfaces will 
+#not be activated.
+#
+#NB: there is an optional argument -o for this script. It is used for providing an alias (e.g. an OSS Id) that further limits 
+#activation of interface instances.
+#
+
+ECHO=/usr/bin/echo
+GEGREP=/usr/sfw/bin/gegrep
+NAWK=/usr/bin/nawk
+
+### Function: usage_msg ###
+#
+#   Print out the usage message
+#
+# Arguments:
+#	none
+# Return Values:
+#	none
+usage_msg() 
+{
+	echo ""
+	echo "Usage: `basename $0` -f <interfaces and tech pack list filepath> -m <alias mapping filepath> [-r <feature mapping file>] [-n] [-s] [-o <alias>]"
+	echo "options:"
+	echo "-f  : Path to file containing list of interfaces and/or tech packs to be activated."
+	echo "-m  : Path to file containing list of interface instances (interface to alias mapping)"
+	echo "-r  : Path to feature mapping file (file on media containing feature to interface mapping)."
+	echo "-n  : Activate interfaces only. No sets will be copied."
+	echo "-s  : Create snapshots before activating an interface."
+	echo "-o  : An alias: only interface instances with this alias (e.g. an oss id) will be activated."
+}
+
+### Main body of program ###
+
+LOG_DIR="/eniq/log/sw_log"
+
+if [ ! -d ${LOG_DIR}/tp_installer ]; then
+  mkdir ${LOG_DIR}/tp_installer
+fi
+
+TIMESTAMP=`date +%Y.%m.%d_%H:%M:%S`
+
+REACT_LOGFILE=${LOG_DIR}/tp_installer/${TIMESTAMP}_reactivate_interface.log
+
+touch ${REACT_LOGFILE}
+
+INSTALLER_DIR=/eniq/sw/installer
+if [ -z "$INSTALLER_DIR" ] ; then
+    echo "Environment variable INSTALLER_DIR is not set or empty. Interface activation aborted." > >(tee -a ${REACT_LOGFILE})
+    exit 4
+fi
+
+MINUS_N=""
+MINUS_S=""
+
+while getopts ":f:m:r:n:s:o" Option
+do
+  case $Option in
+    f) INTF_AND_TP_LIST_FILE="$OPTARG"
+       ;;
+	m) ALIAS_MAPPING_FILE="$OPTARG"
+       ;;
+	r) FEATURE_MAP_FILE="$OPTARG"
+       ;;
+    n) MINUS_N="-n"
+       ;;
+    s) MINUS_S="-s"
+       ;;
+    o) OSS_ID="$OPTARG"
+	if [ -z "${OSS_ID}" ]; then
+		echo "A value for -o arg was not provided"
+		usage_msg
+		exit 1
+	fi
+       ;;
+   \?) usage_msg
+       exit 6 
+       ;;
+  esac
+done
+
+# Check that -f parameter was provided
+if [ -z "${INTF_AND_TP_LIST_FILE}" ]; then
+	echo "A value for -f arg was not provided"  > >(tee -a ${REACT_LOGFILE})
+	usage_msg
+	exit 1
+fi
+
+# Checking argument provided is a existing file.
+if [ ! -f "${INTF_AND_TP_LIST_FILE}" ] ; then
+	echo "Can't read file ${INTF_AND_TP_LIST_FILE}"  > >(tee -a ${REACT_LOGFILE})
+	exit 2
+fi
+# Checking argument provided is a existing file.
+if [ ! -f "${ALIAS_MAPPING_FILE}" ] ; then
+	echo "Can't read file ${ALIAS_MAPPING_FILE}"  > >(tee -a ${REACT_LOGFILE})
+	exit 2
+fi
+
+
+# Source the common functions
+ENIQ_ROOT_DIR=/eniq
+		
+if [ -s ${ENIQ_ROOT_DIR}/admin/lib/common_functions.lib ]; then
+    . ${ENIQ_ROOT_DIR}/admin/lib/common_functions.lib
+else
+	_err_msg_="File ${ENIQ_ROOT_DIR}/admin/lib/common_functions.lib not found"
+	abort_script "$_err_msg_"
+fi
+
+
+#Go through the list of interfaces and tech packs
+# - if it is an interface then write it to list of interfaces to activate.  
+# - if it is a tech pack then get its current active interfaces and write them to the same list
+echo "List of interfaces and tech packs to activate:" > >(tee -a ${REACT_LOGFILE})
+cat "${INTF_AND_TP_LIST_FILE}" > >(tee -a ${REACT_LOGFILE})
+echo "" > >(tee -a ${REACT_LOGFILE})
+ALIAS_MAPPING=`cat $ALIAS_MAPPING_FILE`
+echo "Interface-alias mapping:" > >(tee -a ${REACT_LOGFILE})
+echo "${ALIAS_MAPPING}" > >(tee -a ${REACT_LOGFILE})
+
+while read line; do
+	INTERFACE_OR_TECHPACK_NAME=`echo ${line} | $NAWK '{print $1}'`
+	echo "Looking up ${INTERFACE_OR_TECHPACK_NAME} in interface-alias mapping." > >(tee -a ${REACT_LOGFILE})
+	#Going to handle it is an interface first
+	if [ -z "${OSS_ID}" ] ; then
+		MATCH=`echo "${ALIAS_MAPPING}" | grep -w "$INTERFACE_OR_TECHPACK_NAME"`
+	else
+		#Filter on oss id (optional)
+		MATCH=`echo "${ALIAS_MAPPING}" | grep -w "$INTERFACE_OR_TECHPACK_NAME" | grep -w "${OSS_ID}"`
+	fi
+	if [ -z "${MATCH}" ] ; then 
+		#It's not an active interface. It's a tech pack or an inactive interface. Will handle it now as tech pack and
+		#see if it has active interfaces 
+		echo "${INTERFACE_OR_TECHPACK_NAME} ${OSS_ID} not found in alias mapping. Checking if it is a tech pack..." > >(tee -a ${REACT_LOGFILE})
+		if [ -z "${OSS_ID}" ] ; then
+			echo "get_active_interfaces -t ${INTERFACE_OR_TECHPACK_NAME}" > >(tee -a ${REACT_LOGFILE})
+			found_active_interfaces=`get_active_interfaces -t "${INTERFACE_OR_TECHPACK_NAME}"` 
+		else
+			echo "get_active_interfaces -t ${INTERFACE_OR_TECHPACK_NAME} | grep -w ${OSS_ID}" > >(tee -a ${REACT_LOGFILE})
+			found_active_interfaces=`get_active_interfaces -t "${INTERFACE_OR_TECHPACK_NAME}" | grep -w "${OSS_ID}"`
+		fi
+		if [ -z "${found_active_interfaces}" ] ; then
+			echo "It is not a tech pack with active interfaces." > >(tee -a ${REACT_LOGFILE})
+		fi
+	else
+		#It's an interface with at least one active instance
+		found_active_interfaces=`echo "${MATCH}"`
+	fi
+	if [ -n "${found_active_interfaces}" ] ; then
+		echo "These active interfaces were found for ${INTERFACE_OR_TECHPACK_NAME}:" > >(tee -a ${REACT_LOGFILE})
+		echo "${found_active_interfaces}" > >(tee -a ${REACT_LOGFILE})
+		echo "Appending to /tmp/interfaces_to_reactivate_${TIMESTAMP}." > >(tee -a ${REACT_LOGFILE})
+		echo "${found_active_interfaces}" >> /tmp/interfaces_to_reactivate_${TIMESTAMP}
+	else
+		
+		#It is not in interface-alias mapping provided, and is it in a tech pack. Might be a newly installed interface. 
+		#Going to try find it by way of feature mapping.
+
+		echo "Interface activation not required for ${INTERFACE_OR_TECHPACK_NAME}. Checking feature mapping in:
+${FEATURE_MAP_FILE}"
+		
+		#Get file path containing list of installed features mapped to aliases
+		ENIQ_INI=niq.ini
+		ENIQ_CONF_DIR=${ENIQ_ROOT_DIR}/installation/config
+		feature_output_file=`iniget FEATURE_INFO -f ${ENIQ_CONF_DIR}/${ENIQ_INI} -v Feature_Output_File` #/eniq/admin/managed_oss/total_feature_install_list
+		
+		#Get what feature(s) this interface belongs to
+		FEATURES=`$GEGREP -w ${INTERFACE_OR_TECHPACK_NAME} ${FEATURE_MAP_FILE}`
+		if [ -n "${FEATURES}" ] ; then
+			#For each feature it belongs to, get the alias (OSS ID)
+			while read line; do
+				_feature_=`$ECHO ${line} | $NAWK -F"::" '{print $1}'`
+				echo "${INTERFACE_OR_TECHPACK_NAME} is of feature: ${_feature_}" > >(tee -a ${REACT_LOGFILE})
+				#Get the alias(es) of this feautre(OSS ID)
+				feature_oss_list=`$GEGREP -w $_feature_ ${feature_output_file}`
+				if [ -n "${feature_oss_list}" ] ; then
+					echo "Found this/these alias mapping(s) for ${_feature_} in ${feature_output_file}:" > >(tee -a ${REACT_LOGFILE})
+					echo "${feature_oss_list}" > >(tee -a ${REACT_LOGFILE})
+					#Parse each alias
+					while read feature_oss; do
+						oss=`echo "${feature_oss}" | $NAWK -F"::" '{print $3}'`
+						if [ -n "${oss}" ] ; then
+							interface_oss="${INTERFACE_OR_TECHPACK_NAME} ${oss}"
+							echo "This interface instance identified: ${interface_oss}" > >(tee -a ${REACT_LOGFILE})
+							echo "Appending it to /tmp/interfaces_to_reactivate_${TIMESTAMP}" > >(tee -a ${REACT_LOGFILE})
+							echo "${interface_oss}" >> /tmp/interfaces_to_reactivate_${TIMESTAMP}
+						else
+							echo "Empty alias found." > >(tee -a ${REACT_LOGFILE})
+						fi
+					done <<< "${feature_oss_list}"
+				else
+					echo "But ${_feature_} not an installed feature. It's not found in ${feature_output_file}" > >(tee -a ${REACT_LOGFILE})
+				fi
+
+			done <<< "${FEATURES}"
+		else
+			echo "${INTERFACE_OR_TECHPACK_NAME} not found in feature mapping." > >(tee -a ${REACT_LOGFILE})
+		fi
+		
+	fi
+done < ${INTF_AND_TP_LIST_FILE}
+
+if [ -s /tmp/interfaces_to_reactivate_${TIMESTAMP} ] ; then
+	echo "Here are all the interfaces to be reactivated:" > >(tee -a ${REACT_LOGFILE})
+	cat /tmp/interfaces_to_reactivate_${TIMESTAMP}  #It may have duplicates, these will be removed by the active_interface script
+	echo "Going to activate interfaces:" > >(tee -a ${REACT_LOGFILE})
+	cd /eniq/sw/installer
+	echo "activate_interface -f /tmp/interfaces_to_reactivate_${TIMESTAMP} ${MINUS_N} ${MINUS_S}" > >(tee -a ${REACT_LOGFILE})
+	activate_interface -f /tmp/interfaces_to_reactivate_${TIMESTAMP} ${MINUS_N} ${MINUS_S}
+	ACTIVATE_INTERFACE_EXIT_STATUS=$?
+else
+	echo "There are no interfaces to reactivate." > >(tee -a ${REACT_LOGFILE})
+	if [ -f /tmp/interfaces_to_reactivate_${TIMESTAMP} ] ; then
+		rm /tmp/interfaces_to_reactivate_${TIMESTAMP}
+	fi
+	exit 0
+fi
+
+if [ -f /tmp/interfaces_to_reactivate_${TIMESTAMP} ] ; then
+		rm /tmp/interfaces_to_reactivate_${TIMESTAMP}
+fi
+
+if [ ${ACTIVATE_INTERFACE_EXIT_STATUS} = "0" ] ; then
+	echo "Interface re-activation completed successfully" > >(tee -a ${REACT_LOGFILE})
+else
+	echo "Interface re-activation was not successful" > >(tee -a ${REACT_LOGFILE})
+	exit ${ACTIVATE_INTERFACE_EXIT_STATUS}
+fi
+
+exit 0
+
+
+

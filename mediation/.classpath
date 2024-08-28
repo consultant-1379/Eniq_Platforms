@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="dev/export/src"/>
+	<classpathentry kind="src" path="dev/mediation/src"/>
+	<classpathentry kind="src" path="dev/uncompress/src"/>
+	<classpathentry kind="lib" path="build/export/export.jar"/>
+	<classpathentry kind="lib" path="build/mediation/mediation.jar"/>
+	<classpathentry kind="lib" path="build/uncompress/uncompress.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

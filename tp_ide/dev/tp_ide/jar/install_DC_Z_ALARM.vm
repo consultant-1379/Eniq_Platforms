@@ -1,0 +1,76 @@
+<project name="imported_tech_pack_targets" basedir=".">
+				
+	<property name="doBusyhourActivation" value="true"/>
+		
+	<target name="pre_preinstall_check" depends="">
+	</target>
+
+	<target name="post_preinstall_check" depends="preinstall_check">
+	</target>
+
+	<target name="pre_metadata_installation" depends="post_preinstall_check">
+	</target>
+
+	<target name="post_metadata_installation" depends="metadata_installation">
+	</target>
+
+	<target name="pre_ETL_set_installation" depends="post_metadata_installation">
+	</target>
+
+	<target name="post_ETL_set_installation" depends="ETL_set_installation">
+	</target>
+
+	<target name="pre_tech_pack_and_type_activation" depends="post_ETL_set_installation">
+	</target>
+
+	<target name="post_tech_pack_and_type_activation" depends="tech_pack_and_type_activation">
+	</target>
+
+	<target name="pre_ETL_interface_metadata_installation" depends="post_tech_pack_and_type_activation">
+	</target>
+
+	<target name="post_ETL_interface_metadata_installation" depends="ETL_interface_metadata_installation">
+	</target>
+
+	<target name="pre_ETL_interface_set_installation" depends="post_ETL_interface_metadata_installation">
+	</target>
+
+	<target name="post_ETL_interface_set_installation" depends="ETL_interface_set_installation">
+	</target>
+
+	<target name="pre_directory_checker_and_DWHM_install" depends="post_ETL_interface_set_installation">
+	</target>
+
+	<target name="post_directory_checker_and_DWHM_install" depends="directory_checker_and_DWHM_install">
+		
+		<if>
+			<isset property="skipInstallationPhases" />
+			<then>
+				<echo message="Tech pack is already installed. Directory_Checkers will not be executed." />
+			</then>
+			<else>
+				<echo message="Inserting or updating AlarmInterface entries..." />
+				<InsertAlarmInterface interfaceId="AlarmInterface_RD" status="active" queueNumber="0" description="Alarm interface for reduced delay alarms." configurationDirectory="${configurationDirectory}" />
+ 				<UpdateAlarmInterface interfaceId="AlarmInterface_RD" status="active" queueNumber="0" description="Alarm interface for reduced delay alarms." configurationDirectory="${configurationDirectory}" />
+ 				<echo message="Finished inserting/updating AlarmInterface entries..." />
+ 				
+				<echo message="Starting custom execution of DC_Z_ALARM Directory Checkers..." />
+				<echo message="Starting execution of Directory_Checker_AlarmInterface_RD" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet DC_Z_ALARM Directory_Checker_AlarmInterface_RD" />
+				</exec>
+				<echo message="Starting execution of Directory_Checker_DC_Z_ALARM" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e startSet DC_Z_ALARM Directory_Checker_DC_Z_ALARM" />
+				</exec>
+				<echo message="DC_Z_ALARM Directory Checkers executed." />
+				<echo message="Reloading alarm cache" />
+				<exec dir="${binDirectory}" executable="engine">
+					<arg line="-e reloadAlarmCache" />
+				</exec>
+				<echo message="Finished reloading alarm cache." />				
+			</else>
+		</if>
+	</target>
+
+</project>

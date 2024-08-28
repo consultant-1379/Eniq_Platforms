@@ -1,0 +1,59 @@
+<project name="common" default="compile">
+
+  <property name="pack.name" value="common"/>
+  <property name="pack.version" value="5-0-0"/>
+
+  <property name="vobs.plat" value="/vobs/eniq/design/plat"/>
+  <property name="vobs.3pp" value="/vobs/eniq/3pp"/>
+
+  <!-- Attention! pack.dir have to be under tmp-dir because the actual build is done there --> 
+  <property name="pack.dir" value="${vobs.plat}/common_utilities/dev"/>
+
+  <!-- ENIQ Jars -->
+  <property name="eniq.repository.dir" value="${vobs.plat}/installer/build/repository"/>
+  <property name="eniq.tpide.dir" value="${vobs.plat}/tp_ide/build/tp_ide" />
+  <property name="eniq.tabletree.dir" value="${vobs.plat}/tp_ide/build/table_tree_component" />
+	
+  <!-- 3PP Jars -->
+  <property name="3pp.velocity.dir" value="${vobs.3pp}/apache/jakarta_velocity/v1_5/prod"/>
+  <property name="3pp.jsch.dir" value="/vobs/eniq/3pp/jsch_ssh2/jsch_ssh2/v0_1_51/prod/" />
+  <property name="3pp.commonslogging.dir" value="/vobs/eniq/3pp/apache/comm_logging/v1_1/prod/" />
+
+  <target name="precompile"/>
+  
+  <target name="compile">
+    <mkdir dir="${pack.dir}/classes"/>
+    <javac srcdir="${pack.dir}/src" destdir="${pack.dir}/classes"
+           failonerror="true"
+           debug="true"
+           deprecation="off">
+      <classpath>
+		<fileset dir="${3pp.velocity.dir}">
+      	  <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${3pp.jsch.dir}">
+      	  <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${3pp.commonslogging.dir}">
+      	  <include name="**/*.jar"/>
+        </fileset>
+		<fileset dir="${eniq.repository.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="postcompile">
+	<copy todir="${pack.dir}/classes">
+		<fileset dir="${pack.dir}/jar">
+			<include name="*/**" />
+		</fileset>
+	</copy>
+  	
+  	<!-- techpackide for afj- and ebsmanagers are installed with common package --> 
+	<copy file="${eniq.tpide.dir}/techpackide.jar" todir="${pack.dir}/dclib" />
+	<copy file="${eniq.tabletree.dir}/tableTree.jar" todir="${pack.dir}/dclib" />
+  </target>
+
+</project>

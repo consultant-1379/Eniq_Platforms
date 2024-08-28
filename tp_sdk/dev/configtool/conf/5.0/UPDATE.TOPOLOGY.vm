@@ -1,0 +1,38 @@
+## 
+## UPDATE.TOPOLOGY.vm
+## 
+## 
+Update $TABLE trg
+SET
+#set($first = true)
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() != 1) 
+#if ( $velocityCount == 1 ) trg.$ref.getDataname() = src.$ref.getDataname()
+#else 
+,trg.$ref.getDataname() = src.$ref.getDataname()
+#end
+#end
+#end
+FROM ${TABLE}_CURRENT src, $TABLE trg
+WHERE 
+(
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() != 1) 
+#if ( $velocityCount == 1 ) trg.$ref.getDataname() <> src.$ref.getDataname()
+#else 
+OR trg.$ref.getDataname() <> src.$ref.getDataname()
+#end
+#end
+#end
+)
+AND
+#foreach ($ref in $referencecolumn)
+#if ($ref.getUniquekey() == 1) 
+#if ( $velocityCount == 1 ) trg.$ref.getDataname() = src.$ref.getDataname()
+#else 
+AND trg.$ref.getDataname() = src.$ref.getDataname()
+#end
+#end
+#end
+;
+commit;

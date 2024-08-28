@@ -1,0 +1,7 @@
+MSP_AFG_Plugin
+MSP_CORE_Plugin
+Test_Plugin
+EMMOMServerInfo_Plugin
+EMMOMMeters_Plugin
+EMMOMCounter_Plugin
+EMMFE_Plugin

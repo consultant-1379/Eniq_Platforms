@@ -1,0 +1,113 @@
+#!/bin/bash
+# ********************************************************************
+# Ericsson Radio Systems AB                                     SCRIPT
+# ********************************************************************
+#
+# (c) Ericsson Radio Systems AB 2015 - All rights reserved.
+#
+# The copyright to the computer program(s) herein is the property
+# of Ericsson Radio Systems AB, Sweden. The programs may be used
+# and/or copied only with the written permission from Ericsson Radio
+# Systems AB or in accordance with the terms and conditions stipulated
+# in the agreement/contract under which the program(s) have been
+# supplied.
+#
+# ********************************************************************
+# Name    : FileSystemCheck.bsh
+# Date    : 09/06/2016
+# Purpose : Script to check when ENIQ log file system capacity reaches 
+#			80%,any log file under engine or scheduler folder whose 
+#			size is higher than 1GB and older than 3 days is deleted 
+#			and when any file system capacity reaches 90% ,engine is 
+#			set to NoLoads.	     
+# Usage   : FileSystemCheck.bsh
+#
+# ********************************************************************
+#
+# Command Section
+#
+# ********************************************************************
+
+NAWK=/usr/bin/nawk
+DATE=/usr/bin/date
+ECHO=/usr/bin/echo
+FGREP=/usr/bin/fgrep
+GREP=/usr/bin/grep
+RM=/usr/bin/rm
+CP=/usr/bin/cp
+FIND=/usr/bin/find
+WC=/usr/bin/wc
+
+INSTALLER_DIR=/eniq/sw/installer
+export INSTALLER_DIR
+
+LOGFILE=/eniq/log/sw_log/engine/FileSystemCheck-`$DATE +%Y_%m_%d`.log
+export LOGFILE
+
+TEMP=/eniq/sw/installer/tempFileSysCheck-`$DATE +%Y_%m_%d`.txt
+export TEMP
+
+engine_status=`ssh dcuser@engine  ". ~/.profile; engine status" | $GREP "Current Profile"`
+engine_profile=`echo $engine_status | cut -d: -f2`
+
+
+if [[ $engine_status == *Normal ]]; then
+	flag=0
+else
+	flag=1
+fi
+
+
+if [[ $flag -eq 0 ]]; then 
+	line=`df -k | $GREP /eniq/log | $NAWK '{print $5,$6}'`
+	$ECHO "$line"
+	cap=`$ECHO $line | cut -d' ' -f1`
+	cap1=`$ECHO $cap | cut -d% -f1`
+	dirname=`$ECHO $line | cut -d' ' -f2`
+		# Checks whether capacity of /eniq/log is greater than 80%
+		if [[ $cap1 -gt 80 ]]; then  
+			$ECHO "$dirname has consumed $cap1 % of the file system" >> ${LOGFILE}
+		
+			# Deletes log files whose size is greater than 1GB and older than 3 days under engine folder
+			count1=`$FIND /eniq/log/sw_log/engine -name '*.log' -mtime +3 -size +1000000k | $WC -l`
+			if [[ $count1 -gt 0 ]];then
+				$ECHO "`$DATE '+%Y_%m_%d_%H:%M:%S'` : The below log files under engine folder are deleted." >> ${LOGFILE}
+			fi
+			$FIND /eniq/log/sw_log/engine -name '*.log' -mtime +3 -size +1000000k >> ${LOGFILE}
+			$FIND /eniq/log/sw_log/engine -name '*.log' -mtime +3 -size +1000000k | xargs $RM
+		
+			# Deletes log files whose size is greater than 1GB and older than 3 days under scheduler folder
+			count2=`$FIND /eniq/log/sw_log/scheduler -name '*.log' -mtime +3 -size +1000000k | $WC -l`
+			if [[ $count2 -gt 0 ]];then
+				$ECHO "`$DATE '+%Y_%m_%d_%H:%M:%S'` : The below log files under scheduler folder are deleted." >> ${LOGFILE}
+			fi
+			$FIND /eniq/log/sw_log/scheduler -name '*.log' -mtime +3 -size +1000000k >> ${LOGFILE}
+			$FIND /eniq/log/sw_log/scheduler -name '*.log' -mtime +3 -size +1000000k | xargs $RM
+
+			cnt=0
+			df -k | $NAWK '{print $5,$6}' | $FGREP -v  /net/ > ${TEMP}
+			while IFS= read line 
+			do
+				$ECHO "$line"
+				capacity_tmp=`$ECHO $line | cut -d' ' -f1`
+				dirName=`$ECHO $line | cut -d' ' -f2`
+				capacity=`$ECHO $capacity_tmp | cut -d% -f1`
+				# If capacity of any file system is greater than 90%,engine is set to NoLoads							
+				if [[ $capacity -gt 90 ]] && [[ $cnt -eq 0 ]]; then
+					cnt=1
+					$ECHO  "`$DATE '+%Y_%m_%d_%H:%M:%S'` : WARNING! $dirName directory has consumed $capacity % of the File system" >> ${LOGFILE}
+					ssh dcuser@engine  ". ~/.profile; engine -e changeProfile NoLoads"	
+					$ECHO "`$DATE '+%Y_%m_%d_%H:%M:%S'` : Engine successfully set to NoLoads" >> ${LOGFILE}
+				fi
+	
+			done < <(more +2 ${TEMP})
+		else 
+			$ECHO "`$DATE '+%Y_%m_%d_%H:%M:%S'` : FileSystem utilization is Normal" >> ${LOGFILE}
+		fi
+	$RM -rf ${TEMP}
+fi
+
+
+	
+
+
